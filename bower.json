@@ -1,0 +1,30 @@
+{
+    "name": "cie2",
+    "description": "CIE",
+    "main": "main.js",
+    "authors": [
+        "Jorge Veliz"
+    ],
+    "license": "MIT",
+    "homepage": "",
+    "dependencies":
+    {
+        "angular": "~1.6.x",
+        "requirejs": "~2.2.0",
+        "angularAMD": "~0.2.1",
+        "angular-ui-router": "^0.4.2"
+    },
+    "resolutions":
+    {
+        "requirejs": "~2.2.0",
+        "angular": "~1.6.x",
+        "angular-ui-router": "^0.4.2"
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "frontend/bower_components",
+        "test",
+        "tests"
+    ]
+}

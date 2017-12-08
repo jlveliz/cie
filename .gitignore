@@ -1,0 +1,8 @@
+.phpintel/
+sftp-config.json
+local/storage/
+node/node_modules/
+frontend/bower_components/
+local/
+backend/.env
+nodejs/npm-debug.log
