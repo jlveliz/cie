@@ -1,0 +1,25 @@
+<div class="container body">
+    <div class="main_container">
+    	<!-- left -->
+    	<div ui-view="leftNav" class="col-md-3 left_col"></div>
+    	<!-- /left -->
+    	
+    	<!-- top navigation -->
+        <div ui-view="topNav" class="top_nav"></div>
+    	<!-- /top navigation -->
+        
+        <!-- content -->
+        <div ui-view="content" class="right_col" resize-right-column role="main">
+        </div>
+        <!-- /content -->
+        
+        <!-- footer content -->
+        <footer>
+            <div class="pull-right">
+                {{title}} - Gobierno Provincial del guayas
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+    </div>
+</div>
