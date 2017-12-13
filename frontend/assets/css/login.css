@@ -1,0 +1,50 @@
+html,
+body {
+    padding: 0px;
+    margin: 0px;
+    background-color: #183450!important;
+}
+
+.header-container {
+    background-color: #f8f8f8;
+}
+
+.logo-container {
+    text-align: center;
+    padding: 50px 0px;
+}
+
+h1.logo-intro {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+    display: inline-block;
+    width: 100%;
+    max-width: 450px;
+    height: 170px;
+    min-height: 72px;
+}
+
+.logo-intro {
+    background-image: url("../images/logo_prefectura.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 75%
+}
+
+.content-body {
+    height: 100%;
+}
+
+.text-wellcome {
+    color: #ffffff;
+    text-align: center;
+    font-size: 22px;
+}
+
+.content-login {
+    padding-top: 50px;
+    padding-left: 50px;
+}

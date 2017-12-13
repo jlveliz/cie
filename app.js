@@ -1,9 +1,17 @@
 "use strict";
 
-define(['angularAMD', 'angular', 'angular-ui-router', 'angular-resource','angular-ui-router-styles'], function(angularAMD) {
+define([
+    'angularAMD',
+    'angular',
+    'angular-ui-router',
+    'angular-resource',
+    'angular-ui-router-styles'
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource']);
+], function(angularAMD) {
 
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles']);
+
+    cie.constant('appName', 'CIE');
 
     cie.provider('apiResource', function() {
         return {
@@ -356,6 +364,11 @@ define(['angularAMD', 'angular', 'angular-ui-router', 'angular-resource','angula
                 pageTitle: "No encontrado"
             }
         }));
+    }]);
+
+    cie.run(['appName', '$rootScope', function(appName, $rootScope) {
+
+    	$rootScope.appname = appName;
 
     }]);
 
