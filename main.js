@@ -7,6 +7,8 @@ require.config({
         'angular-ui-router': 'frontend/bower_components/angular-ui-router/release/angular-ui-router',
         'angular-resource': 'frontend/bower_components/angular-resource/angular-resource.min',
         'angular-ui-router-styles': 'frontend/bower_components/angular-ui-router-styles/ui-router-styles',
+        'satellizer': 'frontend/bower_components/satellizer/dist/satellizer.min',
+        'angular-environments': 'frontend/bower_components/angular-environment/dist/angular-environment.min'
     },
     shim: {
         'jquery': {
@@ -27,6 +29,12 @@ require.config({
             deps: ['angular'],
         },
         'angular-ui-router-styles': {
+            deps: ['angular']
+        },
+        'satellizer': {
+            deps: ['angular']
+        },
+        'angular-environments': {
             deps: ['angular']
         }
     },
