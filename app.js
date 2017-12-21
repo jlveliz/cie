@@ -10,10 +10,20 @@ define([
     'angular-environments',
     'angular-validation',
     'angular-permission',
-    'bootstrap'
+    'bootstrap',
+    'angular-datatables'
 ], function(angularAMD) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', ]);
+    var cie = angular.module('cieApp', [
+        'ui.router', 
+        'ngResource', 
+        'uiRouterStyles', 
+        'satellizer', 
+        'environment', 
+        'ngValidate', 
+        'permission', 
+        'angular-datatables'
+    ]);
 
     cie.constant('appName', 'CIE');
 
@@ -641,7 +651,7 @@ define([
             url: 'dashboard',
             controllerUrl: 'frontend/components/dashboard/dashboard',
             views: {
-                "content@rootAdmin": {
+                "content@root": {
                     templateUrl: 'frontend/components/dashboard/dashboard.html',
                     controller: 'DashboardCtrl'
                 }
@@ -661,7 +671,7 @@ define([
             url: 'users',
             controllerUrl: 'frontend/components/user/user',
             views: {
-                "content@rootAdmin": {
+                "content@root": {
                     templateUrl: 'frontend/components/user/index.html',
                     controller: 'UserIdxCtrl'
                 }

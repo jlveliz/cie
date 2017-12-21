@@ -1,1 +1,50 @@
-<h1>Hola {{title}}</h1>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>{{title}}</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <h4 class="text-center" ng-if="loadingUsers">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Cargando...</span>
+                </h4>
+                <uib-tabset active="0" ng-if="!loadingUsers">
+                    <uib-tab index="0">
+                        <uib-tab-heading>
+                            <h5><b><i class="fa fa-list"></i> Listado</b></h5>
+                        </uib-tab-heading>
+                        <table datatable="ng" dt-options="dtOptions" id="user-list" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Ultimo acceso</th>
+                                    <th>F. Creación/Modificación</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="user in users">
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.person.nombre | capitalize:'oneLetter'}}</td>
+                                    <td><span am-time-ago="user.last_access"></span></td>
+                                    <td>{{user.created_at | filterTimestamp }} - {{user.updated_at | filterTimestamp }}</td>
+                                    <td>
+                                        <a ui-sref="rootAdmin.users.show({userId:user.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-eye"></i> Ver</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <a ui-sref="rootAdmin.users.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                        </uib-tab-heading>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>
