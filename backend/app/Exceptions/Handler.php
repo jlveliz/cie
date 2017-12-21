@@ -44,7 +44,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        if (app('app.debug')) {
+            return parent::render($request, $exception);
+        }
+        return $this->handle($request, $exception);
     }
 
     /**
@@ -61,5 +64,15 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest('login');
+    }
+
+
+
+    private function handle($request, Exception $exception)
+    {
+        $this->report($exception);
+        $data = $exception->getMessage();
+        $status = $exception->getCode();
+        return response()->json($data, $status);        
     }
 }
