@@ -1,5 +1,5 @@
 <?php
-namespace 
+namespace Cie\Exceptions;
 
 /**
 * 
@@ -7,8 +7,10 @@ namespace
 class AuthenticateException extends AppException
 {
 	
-	function __construct(argument)
+	public function __construct(array $params,$status)
 	{
-		# code...
+		$this->status = $status;
+		$message = $this->build($params);
+		parent::__construct($message);
 	}
 }

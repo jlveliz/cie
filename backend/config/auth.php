@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => Cie\User::class,
+            'model' => Cie\Models\User::class,
         ],
 
         // 'users' => [

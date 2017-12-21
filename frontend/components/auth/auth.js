@@ -42,7 +42,7 @@ define(['app'], function(app) {
                 }
                 authFactory.login(credentials).then(function(success) {
                         $scope.loading = false;
-                        // $state.go('rootAdmin.dashboard');
+                        $state.go('root.dashboard');
                     },
                     function(reason) {
                         $scope.loading = false;

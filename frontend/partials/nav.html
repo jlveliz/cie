@@ -1,0 +1,18 @@
+<div class="menu_section" ng-repeat="nav in navElements">
+    <h3>{{nav.section}}</h3>
+    <ul class="nav side-menu">
+        <li ng-repeat="(key, value) in nav.navEls" ng-class="{active:shouldBeActive(value.sref),'has-childs':value.children.length > 0}">
+            
+            <!-- tiene hijos -->
+            <a ng-if="value.children" title="{{value.desc}}"><i class="fa {{value.icon}}"></i> {{value.label}}  <span class="fa fa-chevron-down"></span></a>
+            <ul ng-if="value.children.length" class="nav child_menu">
+                <li ng-repeat="(key, value) in value.children" ng-class="{'current-page':shouldBeActive(value.sref)}">
+                    <a ui-sref="{{value.sref}}" title="{{value.desc}}">{{value.label}}</a>
+                </li>
+            </ul>
+
+            <!-- no tiene hijos -->
+            <a ng-if="value.sref" ui-sref="{{value.sref}}" title="{{value.desc}}"><i class="fa {{value.icon}}" ng-click=""></i> {{value.label}}</a>
+        </li>
+    </ul>
+</div>

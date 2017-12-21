@@ -20,6 +20,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+        AppException::class,
     ];
 
     /**
@@ -32,6 +33,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        dd($exception);
         parent::report($exception);
     }
 
@@ -44,6 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        dd("entra");
         if (app('app.debug')) {
             return parent::render($request, $exception);
         }

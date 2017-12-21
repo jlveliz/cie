@@ -317,23 +317,6 @@ define([
         }
     });
 
-    cie.directive('title', ['$rootScope', '$timeout',
-        function($rootScope, $timeout) {
-            return {
-                link: function() {
-                    $rootScope.title = "Ingreso";
-                    var listener = function(event, toState) {
-                        $timeout(function() {
-                            $rootScope.title = (toState.data && toState.data.pageTitle) ? toState.data.pageTitle : 'Default title';
-                        });
-                    };
-
-                    $rootScope.$on('$stateChangeSuccess', listener);
-                }
-            };
-        }
-    ]);
-
     cie.factory('authFactory', ['$auth', '$http', 'envService', 'PermissionStore', '$q', '$rootScope', function($auth, $http, envService, PermissionStore, $q, $rootScope) {
 
 
@@ -394,10 +377,73 @@ define([
         };
     }])
 
-    cie.run(['appName', '$rootScope', function(appName, $rootScope) {
+    cie.directive('title', ['$rootScope', '$timeout',
+        function($rootScope, $timeout) {
+            return {
+                link: function() {
+                    $rootScope.title = "Ingreso";
+                    var listener = function(event, toState) {
+                        $timeout(function() {
+                            $rootScope.title = (toState.data && toState.data.pageTitle) ? toState.data.pageTitle : 'Default title';
+                        });
+                    };
+
+                    $rootScope.$on('$stateChangeSuccess', listener);
+                }
+            };
+        }
+    ]);
+
+    cie.filter('capitalize', function() {
+        return function(input, param) {
+            if (!input) return false;
+            if (param) {
+
+                if (param == 'oneLetter') {
+                    var newImput = "";
+                    angular.forEach(input.split(" "), function(val, idx) {
+                        if (val.length <= 1) {
+                            newImput += val.toLowerCase() + ' '
+                        } else {
+                            newImput += val.charAt(0).toUpperCase() + val.substr(1).toLowerCase() + ' '
+                        }
+                    })
+                    return newImput;
+                }
+
+            } else {
+                return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+            }
+        }
+    });
+
+    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', function(appName, $rootScope, PermissionStore, authFactory) {
 
         $rootScope.appname = appName;
 
+        PermissionStore.definePermission('isloggedin', function(stateParams) {
+            if (authFactory.authenticated()) {
+                return true; // Is loggedin
+            }
+            return false;
+        });
+
+
+        PermissionStore.definePermission('anonymous', function(stateParams) {
+            if (!authFactory.authenticated()) {
+                return true; // Is loggedin
+            }
+            return false;
+        });
+
+        $rootScope.isMenuCollapsed = false; //menu collapsed
+
+        $rootScope.auth = {};
+
+        var userInStorage = localStorage.getItem('user');
+        if (userInStorage != "undefined") {
+            $rootScope.currentUser = JSON.parse(localStorage.getItem('user'));
+        }
     }]);
 
     cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
@@ -440,10 +486,29 @@ define([
 
 
 
-        $urlRouterProvider.otherwise('/admin/errors/404');
+        $urlRouterProvider.otherwise('/errors/404');
+
+        $stateProvider.state('index', angularAMD.route({
+            url: '/',
+            data: {
+                permissions: {
+                    except: ['isloggedin', 'anonymous'],
+                    redirectTo: {
+                        isloggedin: {
+                            state: "root.dashboard"
+                        },
+                        anonymous: {
+                            state: 'adminAuth'
+                        },
+                        default: 'adminAuth'
+                    }
+                },
+                pageTitle: "Ingreso"
+            }
+        }));
 
         $stateProvider.state('adminAuth', angularAMD.route({
-            url: '/',
+            url: '/login',
             controllerUrl: 'frontend/components/auth/auth',
             views: {
                 "@": {
@@ -453,21 +518,66 @@ define([
             },
             data: {
                 css: ['frontend/assets/css/login.css'],
-                // permissions: {
-                //     except: ['isloggedin'],
-                //     // redirectTo: "rootAdmin.dashboard"
-                // },
+                permissions: {
+                    except: ['isloggedin'],
+                    redirectTo: "root.dashboard"
+                },
                 pageTitle: "Ingreso"
             }
         }));
 
-        $stateProvider.state('errorsAdmin.404', angularAMD.route({
-            url: '/404',
+        $stateProvider.state('errors.404', angularAMD.route({
+            url: '/errors/404',
             templateUrl: "frontend/components/errors/404.html",
             data: {
                 pageTitle: "No encontrado"
             }
         }));
+
+
+        $stateProvider.state('root', angularAMD.route({
+            url: '/',
+            abstract: true,
+            views: {
+                "root": {
+                    templateUrl: 'frontend/layouts/master.html'
+                },
+                "leftNav@root": {
+                    templateUrl: 'frontend/partials/left.html'
+                },
+                "topNav@root": {
+                    templateUrl: 'frontend/partials/top.html'
+                }
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/assets/css/custom.css', 'frontend/assets/css/animate.css'],
+            }
+        }));
+
+
+        $stateProvider.state('root.dashboard', angularAMD.route({
+            url: 'dashboard',
+            controllerUrl: 'frontend/components/dashboard/dashboard',
+            views: {
+                "content@rootAdmin": {
+                    templateUrl: 'frontend/components/dashboard/dashboard.html',
+                    controller: 'DashboardCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Escritorio"
+            }
+        }));
+
     }]);
 
 

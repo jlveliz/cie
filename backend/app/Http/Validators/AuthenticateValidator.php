@@ -1,9 +1,9 @@
 <?php 
 namespace Cie\Http\Validators;
 
+use Cie\Exceptions\AuthenticateException;
 use Illuminate\Http\Request;
 use Validator;
-use Exception;
 /**
 * 
 */
@@ -12,14 +12,11 @@ class AuthenticateValidator extends Validator implements ValidatorInterface
 	
 	public function make(Request $request){
 		$credentials = $request->only('username','password');
-
-		$validator =  parent::make($credentials,$this->rules($request->method()),$this->messages($request->method()));
+		$validator =  parent::make($credentials,$this->rules(),$this->messages());
         if ($validator->fails()){
-        	throw new Exception(['title'=>'Error de validación','detail'=>$validator->errors()->first('username'),'level'=>'error'],422);        
+        	throw new AuthenticateException(['title'=>'Error de validación','detail'=>$validator->errors()->first('username'),'level'=>'error'],422);        
         } else {
-
         	return true;
-
         } 
 	}
 

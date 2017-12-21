@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h3 class="modal-title"> {{modalContent.title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="col-md-4 text-center">
+        <h4><i class="fa fa-times fa-5x text-danger" aria-hidden="true"></i></h4>
+    </div>
+    <div class="col-md-8">
+        <h4 class="text-justify">{{modalContent.text}} </h4>
+        <strong ng-if="modalContent.note">{{modalContent.note}}</strong>
+    </div>
+    <div style="clear:both"></div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="delete()">Aceptar</button>
+    <button class="btn btn-default" type="button" ng-click="$dismiss()">Cancelar</button>
+</div>

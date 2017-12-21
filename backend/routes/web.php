@@ -14,3 +14,14 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::group(['prefix'=>'api'],function() {
+
+	Route::group(['prefix'=>'authenticate'],function(){
+		Route::post('login','Auth\LoginController@login');
+		// Route::post('logout','Auth\AuthenticateController@logout');
+		Route::get('verify','Auth\LoginController@verify');
+		Route::get('refresh','Auth\LoginController@refresh');
+	});
+});

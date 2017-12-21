@@ -1,0 +1,19 @@
+<div class="nav_menu">
+    <nav>
+        <div class="nav toggle">
+            <a id="menu_toggle" ng-click="$parent.$parent.isMenuCollapsed = !$parent.$parent.isMenuCollapsed"><i class="fa fa-bars"></i></a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img ng-if="!currentUser.photo" src="/frontend/admin/assets/images/user.png" alt="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" title="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" alt="">
+                    <img ng-if="currentUser.photo" ng-src="data:image/png;base64,{{currentUser.photo}}" alt="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" title="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" alt="">{{currentUser.person.name | capitalize }} {{currentUser.person.last_name | capitalize}}
+                    <span class=" fa fa-angle-down"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a ng-click="logout()"><i class="fa fa-sign-out pull-right"></i> Salir</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

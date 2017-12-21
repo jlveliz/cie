@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'Cie\Events\SomeEvent' => [
             'Cie\Listeners\EventListener',
         ],
+        'Illuminate\Auth\Events\Login' => [
+            'Cie\Listeners\RegisterLastLogin'
+        ]
     ];
 
     /**
