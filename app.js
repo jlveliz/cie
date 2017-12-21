@@ -9,9 +9,10 @@ define([
     'satellizer',
     'angular-environments',
     'angular-validation',
+    'angular-permission',
 ], function(angularAMD) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', ]);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', ]);
 
     cie.constant('appName', 'CIE');
 

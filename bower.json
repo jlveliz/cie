@@ -20,7 +20,8 @@
         "angular-ui-router-styles": "~1.1.0",
         "satellizer": "^0.15.5",
         "angular-environment": "^1.0.4",
-        "jpkleemans-angular-validate": "^1.1.1" 
+        "jpkleemans-angular-validate": "^1.1.1",
+        "angular-permission": "~2.3.0"
     },
     "resolutions":
     {

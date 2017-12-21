@@ -2,8 +2,8 @@
  ** Auth controller
  **/
 define(['app'], function(app) {
-
-    app.register.controller('LoginCtrl', ['$scope', '$state', function($scope, $state) {
+    
+    app.register.controller('LoginCtrl', ['$scope', '$state', 'authFactory', function($scope, $state, authFactory) {
 
         $scope.auth = {};
         $scope.loading = false;
@@ -40,18 +40,18 @@ define(['app'], function(app) {
                     username: $scope.auth.username,
                     password: $scope.auth.password
                 }
-                // authFactory.login(credentials).then(function(success) {
-                //         $scope.loading = false;
-                //         $state.go('rootAdmin.dashboard');
-                //     },
-                //     function(reason) {
-                //         $scope.loading = false;
-                //         $scope.existError = true;
-                //         $scope.messages.title = reason.data.message;
-                //         $scope.messages.detail = reason.data.detail;
-                //         $scope.auth.password = null;
+                authFactory.login(credentials).then(function(success) {
+                        $scope.loading = false;
+                        // $state.go('rootAdmin.dashboard');
+                    },
+                    function(reason) {
+                        $scope.loading = false;
+                        $scope.existError = true;
+                        $scope.messages.title = reason.data.message;
+                        $scope.messages.detail = reason.data.detail;
+                        $scope.auth.password = null;
 
-                //     });
+                    });
 
             } else {
                 $scope.formInvalidate = true;

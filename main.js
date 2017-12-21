@@ -10,7 +10,8 @@ require.config({
         'angular-ui-router-styles': 'frontend/bower_components/angular-ui-router-styles/ui-router-styles',
         'satellizer': 'frontend/bower_components/satellizer/dist/satellizer.min',
         'angular-environments': 'frontend/bower_components/angular-environment/dist/angular-environment.min',
-        'angular-validation': 'frontend/bower_components/jpkleemans-angular-validate/src/angular-validate'
+        'angular-validation': 'frontend/bower_components/jpkleemans-angular-validate/src/angular-validate',
+        'angular-permission': 'frontend/bower_components/angular-permission/dist/angular-permission.min'
     },
     shim: {
         'jquery': {
@@ -41,7 +42,10 @@ require.config({
         },
         'angular-validation': {
             exports: 'angular-validation',
-            deps: ['angular','jquery-validation'],
+            deps: ['angular', 'jquery-validation'],
+        },
+        'angular-permission': {
+            deps: ['angular']
         }
     },
     deps: ['app']
