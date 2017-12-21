@@ -8,6 +8,7 @@ define(['app'], function(app) {
         $scope.auth = {};
         $scope.loading = false;
         $scope.existError = false;
+        $scope.formInvalidate = false;
         $scope.messages = {};
 
 
@@ -33,6 +34,7 @@ define(['app'], function(app) {
 
         $scope.login = function(form) {
             if (form.validate()) {
+                $scope.formInvalidate = false;
                 $scope.loading = true;
                 var credentials = {
                     username: $scope.auth.username,
@@ -51,6 +53,8 @@ define(['app'], function(app) {
 
                 //     });
 
+            } else {
+                $scope.formInvalidate = true;
             }
         }
 

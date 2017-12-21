@@ -8,10 +8,10 @@ define([
     'angular-ui-router-styles',
     'satellizer',
     'angular-environments',
-
+    'angular-validation',
 ], function(angularAMD) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', ]);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', ]);
 
     cie.constant('appName', 'CIE');
 
@@ -333,64 +333,6 @@ define([
         }
     ]);
 
-    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider) {
-
-        $locationProvider.html5Mode(true);
-
-        envServiceProvider.config({
-            domains: {
-                development: ['cie2.local']
-            },
-            vars: {
-                development: {
-                    authorization: 'http://cie2.local/backend/api/authenticate/login',
-                    api: 'http://cie2.local/backend/api/',
-                }
-            }
-        });
-
-        //check Environments
-        envServiceProvider.check();
-
-        $authProvider.loginUrl = envServiceProvider.read('authorization');
-
-
-
-
-
-
-
-
-        $urlRouterProvider.otherwise('/admin/errors/404');
-
-        $stateProvider.state('adminAuth', angularAMD.route({
-            url: '/',
-            controllerUrl: 'frontend/components/auth/auth',
-            views: {
-                "@": {
-                    templateUrl: "frontend/components/auth/login.html",
-                    controller: 'LoginCtrl'
-                }
-            },
-            data: {
-                css: ['frontend/assets/css/login.css'],
-                // permissions: {
-                //     except: ['isloggedin'],
-                //     // redirectTo: "rootAdmin.dashboard"
-                // },
-                pageTitle: "Ingreso"
-            }
-        }));
-
-        $stateProvider.state('errorsAdmin.404', angularAMD.route({
-            url: '/404',
-            templateUrl: "frontend/components/errors/404.html",
-            data: {
-                pageTitle: "No encontrado"
-            }
-        }));
-    }]);
-
     cie.factory('authFactory', ['$auth', '$http', 'envService', 'PermissionStore', '$q', '$rootScope', function($auth, $http, envService, PermissionStore, $q, $rootScope) {
 
 
@@ -441,11 +383,11 @@ define([
             verify: function() {
                 var deferred = $q.defer();
                 $http.get(envService.read('api') + 'authenticate/verify')
-                .then(function(success) {
-                    deferred.resolve(success)
-                }, function(error) {
-                    deferred.reject(error)
-                });
+                    .then(function(success) {
+                        deferred.resolve(success)
+                    }, function(error) {
+                        deferred.reject(error)
+                    });
                 return deferred.promise;
             }
         };
@@ -456,6 +398,78 @@ define([
         $rootScope.appname = appName;
 
     }]);
+
+    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
+
+        $locationProvider.html5Mode(true);
+
+        envServiceProvider.config({
+            domains: {
+                development: ['cie2.local']
+            },
+            vars: {
+                development: {
+                    authorization: 'http://cie2.local/backend/api/authenticate/login',
+                    api: 'http://cie2.local/backend/api/',
+                }
+            }
+        });
+
+
+        //validators to
+        $validatorProvider.setDefaults({
+            errorElement: 'span',
+            errorClass: 'help-block',
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorPlacement: function(error, element) {
+                error.insertAfter(element);
+
+            }
+        });
+
+        //check Environments
+        envServiceProvider.check();
+
+        $authProvider.loginUrl = envServiceProvider.read('authorization');
+
+
+
+        $urlRouterProvider.otherwise('/admin/errors/404');
+
+        $stateProvider.state('adminAuth', angularAMD.route({
+            url: '/',
+            controllerUrl: 'frontend/components/auth/auth',
+            views: {
+                "@": {
+                    templateUrl: "frontend/components/auth/login.html",
+                    controller: 'LoginCtrl'
+                }
+            },
+            data: {
+                css: ['frontend/assets/css/login.css'],
+                // permissions: {
+                //     except: ['isloggedin'],
+                //     // redirectTo: "rootAdmin.dashboard"
+                // },
+                pageTitle: "Ingreso"
+            }
+        }));
+
+        $stateProvider.state('errorsAdmin.404', angularAMD.route({
+            url: '/404',
+            templateUrl: "frontend/components/errors/404.html",
+            data: {
+                pageTitle: "No encontrado"
+            }
+        }));
+    }]);
+
+
 
     angularAMD.bootstrap(cie);
 

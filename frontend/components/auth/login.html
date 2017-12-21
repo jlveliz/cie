@@ -24,7 +24,7 @@
                     <p class="text-center"><small>{{messages.detail}}</small></p>
                 </div>
             </div>
-            <h2 class="text-wellcome">Administración</h2>
+            <h2 class="text-wellcome">Ingreso</h2>
             <div class="row">
                 <form name="loginForm" ng-submit="login(loginForm)" class="form-inline" ng-validate="validationOptions">
                     <div class="form-group">
@@ -40,6 +40,7 @@
                             <span ng-if="!loading">Ingresar</span>
                             <span ng-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Cargando...</span>
                         </button>
+                        <p ng-if="formInvalidate">&nbsp;</p>
                     </div>
                 </form>
             </div>
