@@ -5,11 +5,13 @@ define([
     'angular',
     'angular-ui-router',
     'angular-resource',
-    'angular-ui-router-styles'
+    'angular-ui-router-styles',
+    'satellizer',
+    'angular-environments',
 
 ], function(angularAMD) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles']);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', ]);
 
     cie.constant('appName', 'CIE');
 
@@ -314,7 +316,6 @@ define([
         }
     });
 
-
     cie.directive('title', ['$rootScope', '$timeout',
         function($rootScope, $timeout) {
             return {
@@ -332,9 +333,33 @@ define([
         }
     ]);
 
-    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider) {
+    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider) {
 
         $locationProvider.html5Mode(true);
+
+        envServiceProvider.config({
+            domains: {
+                development: ['cie2.local']
+            },
+            vars: {
+                development: {
+                    authorization: 'http://cie2.local/backend/api/authenticate/login',
+                    api: 'http://cie2.local/backend/api/',
+                }
+            }
+        });
+
+        //check Environments
+        envServiceProvider.check();
+
+        $authProvider.loginUrl = envServiceProvider.read('authorization');
+
+
+
+
+
+
+
 
         $urlRouterProvider.otherwise('/admin/errors/404');
 
@@ -366,9 +391,69 @@ define([
         }));
     }]);
 
+    cie.factory('authFactory', ['$auth', '$http', 'envService', 'PermissionStore', '$q', '$rootScope', function($auth, $http, envService, PermissionStore, $q, $rootScope) {
+
+
+        return {
+            login: function(credentials) {
+                var deferred = $q.defer();
+                $auth.login(credentials).then(function(success) {
+                    $http.get(envService.read('api') + 'authenticate/verify').then(function(response) {
+                        var user = JSON.stringify(response.data);
+                        localStorage.setItem('user', user);
+                        $rootScope.currentUser = response.data;
+                        deferred.resolve();
+                    });
+                }, function(reason) {
+                    deferred.reject(reason);
+                });
+                return deferred.promise;
+            },
+            logout: function() {
+                var deferred = $q.defer();
+                $auth.logout().then(function() {
+                    // RoleStore.clearStore(); //remove roles from user
+                    localStorage.removeItem('user');
+                    $rootScope.currentUser = null;
+                    deferred.resolve();
+                });
+                return deferred.promise;
+            },
+            authenticated: function() {
+                if ($auth.isAuthenticated()) {
+                    return true;
+                } else {
+                    localStorage.removeItem('user');
+                    $rootScope.currentUser = null;
+                    return false;
+                }
+            },
+            refreshToken: function() {
+                var deferred = $q.defer();
+                $http.get(envService.read('api') + 'authenticate/refresh').then(function(response) {
+                    $auth.setToken(response.data.token)
+                    deferred.resolve();
+                }, function(reason) {
+                    deferred.reject(reason);
+                });
+                return deferred.promise;
+            },
+            verify: function() {
+                var deferred = $q.defer();
+                $http.get(envService.read('api') + 'authenticate/verify')
+                .then(function(success) {
+                    deferred.resolve(success)
+                }, function(error) {
+                    deferred.reject(error)
+                });
+                return deferred.promise;
+            }
+        };
+    }])
+
     cie.run(['appName', '$rootScope', function(appName, $rootScope) {
 
-    	$rootScope.appname = appName;
+        $rootScope.appname = appName;
 
     }]);
 
