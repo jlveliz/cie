@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .left_col {
-    background: #183450;
+    background: #1C3B6A;
 }
 
 .nav-sm .container.body .col-md-3.left_col {
@@ -256,7 +256,7 @@ body .container.body .right_col {
 .nav_title {
     width: 230px;
     float: left;
-    background: #183450;
+    background: #1C3B6A;
     border-radius: 0;
     height: 57px;
 }
@@ -420,7 +420,7 @@ body .container.body .right_col {
 
 body {
     color: #353535;
-    background: #183450;
+    background: #1C3B6A;
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -428,7 +428,7 @@ body {
 }
 
 .main_container {
-    background: #183450;
+    background: #1C3B6A;
 }
 
 .main_container .top_nav {
@@ -789,7 +789,7 @@ a:focus {
 
 .nav.side-menu>li.active>a {
     text-shadow: rgba(0, 0, 0, 0.25) 0 -1px 0;
-    background: linear-gradient(#183450, #183450), #2A3F54;
+    background: linear-gradient(#1C3B6A, #1C3B6A), #2A3F54;
     box-shadow: rgba(0, 0, 0, 0.25) 0 1px 0, inset rgba(255, 255, 255, 0.16) 0 1px 0;
 }
 

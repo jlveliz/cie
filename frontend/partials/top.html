@@ -6,7 +6,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li class="">
                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img ng-if="!currentUser.photo" src="/frontend/admin/assets/images/user.png" alt="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" title="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" alt="">
+                    <img ng-if="!currentUser.photo" src="/frontend/assets/images/user.png" alt="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" title="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" alt="">
                     <img ng-if="currentUser.photo" ng-src="data:image/png;base64,{{currentUser.photo}}" alt="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" title="{{currentUser.person.name | capitalize}} {{currentUser.person.last_name | capitalize}}" alt="">{{currentUser.person.name | capitalize }} {{currentUser.person.last_name | capitalize}}
                     <span class=" fa fa-angle-down"></span>
                 </a>

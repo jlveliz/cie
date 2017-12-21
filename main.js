@@ -11,7 +11,8 @@ require.config({
         'satellizer': 'frontend/bower_components/satellizer/dist/satellizer.min',
         'angular-environments': 'frontend/bower_components/angular-environment/dist/angular-environment.min',
         'angular-validation': 'frontend/bower_components/jpkleemans-angular-validate/src/angular-validate',
-        'angular-permission': 'frontend/bower_components/angular-permission/dist/angular-permission.min'
+        'angular-permission': 'frontend/bower_components/angular-permission/dist/angular-permission.min',
+        'bootstrap': 'frontend/bower_components/bootstrap/dist/js/bootstrap',
     },
     shim: {
         'jquery': {
@@ -46,6 +47,10 @@ require.config({
         },
         'angular-permission': {
             deps: ['angular']
+        },
+        'bootstrap': {
+            exports: 'bootstrap',
+            deps: ['jquery'],
         }
     },
     deps: ['app']

@@ -2,7 +2,7 @@ html,
 body {
     padding: 0px;
     margin: 0px;
-    background-color: #183450!important;
+    background-color: #1C3B6A!important;
 }
 
 .header-container {
@@ -22,13 +22,13 @@ h1.logo-intro {
     border: 0;
     display: inline-block;
     width: 100%;
-    max-width: 450px;
-    height: 170px;
+    max-width: 408px;
+    height: 230px;
     min-height: 72px;
 }
 
 .logo-intro {
-    background-image: url("../images/logo_prefectura.png");
+    background-image: url("../images/cie.png");
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-size: 75%

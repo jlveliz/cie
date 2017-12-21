@@ -10,6 +10,7 @@ define([
     'angular-environments',
     'angular-validation',
     'angular-permission',
+    'bootstrap'
 ], function(angularAMD) {
 
     var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', ]);
@@ -318,8 +319,6 @@ define([
     });
 
     cie.factory('authFactory', ['$auth', '$http', 'envService', 'PermissionStore', '$q', '$rootScope', function($auth, $http, envService, PermissionStore, $q, $rootScope) {
-
-
         return {
             login: function(credentials) {
                 var deferred = $q.defer();
@@ -394,6 +393,78 @@ define([
         }
     ]);
 
+    cie.directive('backendMenu', ['$state', function($state) {
+        return {
+            restrict: 'E',
+            templateUrl: "frontend/partials/nav.html",
+            link: function(scope, iElement, iAttrs) {
+
+                scope.navElements = [{
+                    section: 'General',
+                    navEls: [{
+                        label: 'Inicio',
+                        icon: 'fa-home',
+                        desc: 'Inicio de la administración',
+                        sref: 'root.dashboard',
+                    }]
+                }, {
+                    section: 'Configuración',
+                    navEls: [{
+                        label: 'Usuarios',
+                        icon: 'fa-users',
+                        desc: 'Usuarios',
+                        sref: 'root.user',
+                    }]
+                }];
+
+                var elem = $(iElement);
+                elem.on('click', 'a', function(event) {
+
+                    $('ul.side-menu li').each(function(index, el) {
+                        var $el = $(el);
+                        if ($el.hasClass('active') && $el.hasClass('has-childs')) {
+                            $('ul:first', $el).slideUp();
+                            $el.removeClass('active')
+                        } else {
+                            $el.removeClass('active')
+                        }
+                    });
+
+                    var $liparent = $(this).parent();
+                    if ($liparent.hasClass('has-childs')) {
+                        if ($liparent.hasClass('active') && $el.hasClass('has-childs')) {
+                            $liparent.removeClass('active');
+                            $('ul:first', $liparent).slideUp();
+                        } else {
+                            $liparent.addClass('active');
+                            $('ul:first', $liparent).slideDown();
+                        }
+                    } else {
+                        $liparent.parents('li').addClass('active')
+                    }
+                });
+
+
+                scope.shouldBeActive = function(state) {
+                    return $state.includes(state);
+                }
+
+
+            }
+        };
+    }]);
+
+    cie.directive('resizeRightColumn', function() {
+        return function(scope, element) {
+            var element = $(element);
+            element.css("min-height", $(window).height());
+            $(window).resize(function() {
+                element.css("min-height", $(window).height());
+            });
+        }
+    });
+
+
     cie.filter('capitalize', function() {
         return function(input, param) {
             if (!input) return false;
@@ -417,9 +488,16 @@ define([
         }
     });
 
-    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', function(appName, $rootScope, PermissionStore, authFactory) {
+    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state) {
 
         $rootScope.appname = appName;
+
+        $rootScope.logout = function() {
+            authFactory.logout().then(function() {
+                apiResource.clearAllCache(); // clear all cache
+                $state.go('adminAuth');
+            });
+        }
 
         PermissionStore.definePermission('isloggedin', function(stateParams) {
             if (authFactory.authenticated()) {
@@ -575,6 +653,26 @@ define([
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Escritorio"
+            }
+        }));
+
+
+        $stateProvider.state('root.user', angularAMD.route({
+            url: 'users',
+            controllerUrl: 'frontend/components/user/user',
+            views: {
+                "content@rootAdmin": {
+                    templateUrl: 'frontend/components/user/index.html',
+                    controller: 'UserIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Usuarios"
             }
         }));
 
