@@ -14,16 +14,7 @@ define([
     'angular-datatables'
 ], function(angularAMD) {
 
-    var cie = angular.module('cieApp', [
-        'ui.router', 
-        'ngResource', 
-        'uiRouterStyles', 
-        'satellizer', 
-        'environment', 
-        'ngValidate', 
-        'permission', 
-        'angular-datatables'
-    ]);
+    var cie = angular.module('cieApp', ['ui.router','ngResource','uiRouterStyles','satellizer','environment','ngValidate','permission', 'datatables']);
 
     cie.constant('appName', 'CIE');
 
@@ -540,12 +531,17 @@ define([
 
         envServiceProvider.config({
             domains: {
-                development: ['cie2.local']
+                development: ['cie2.local'],
+                home : ['cie.local']
             },
             vars: {
                 development: {
                     authorization: 'http://cie2.local/backend/api/authenticate/login',
                     api: 'http://cie2.local/backend/api/',
+                },
+                home: {
+                    authorization: 'http://cie.local/backend/api/authenticate/login',
+                    api: 'http://cie.local/backend/api/',
                 }
             }
         });
