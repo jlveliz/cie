@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        dd("entra",app('app.debug'));
+       
         if (app('app.debug')) {
             return parent::render($request, $exception);
         }
@@ -73,6 +73,7 @@ class Handler extends ExceptionHandler
 
     private function handle($request, Exception $exception)
     {
+        dd($exception);
         $this->report($exception);
         $data = $exception->getMessage();
         $status = $exception->getCode();

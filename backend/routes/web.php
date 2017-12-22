@@ -24,4 +24,7 @@ Route::group(['prefix'=>'api'],function() {
 		Route::get('verify','Auth\LoginController@verify');
 		Route::get('refresh','Auth\LoginController@refresh');
 	});
+
+
+	Route::resource('users','System\UserController',['only'=>['index','show','update']]);
 });

@@ -14,7 +14,9 @@ require.config({
         'angular-validation': 'frontend/bower_components/jpkleemans-angular-validate/src/angular-validate',
         'angular-permission': 'frontend/bower_components/angular-permission/dist/angular-permission.min',
         'bootstrap': 'frontend/bower_components/bootstrap/dist/js/bootstrap',
-        'angular-datatables': 'frontend/bower_components/angular-datatables/dist/angular-datatables.min'
+        'angular-datatables': 'frontend/bower_components/angular-datatables/dist/angular-datatables.min',
+        'angular-bootstrap': 'frontend/bower_components/angular-bootstrap/ui-bootstrap-tpls',
+         'angular-datatables-bootstrap': 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min',
     },
     shim: {
         'jquery': {
@@ -57,6 +59,10 @@ require.config({
         'angular-datatables': {
             exports: 'angular-datatables',
             deps: ['jquery-datatables','angular'],
+        },
+        'angular-bootstrap': {
+            exports: 'angular-bootstrap',
+            deps: ['angular'],
         }
     },
     deps: ['app']

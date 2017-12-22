@@ -11,10 +11,11 @@ define([
     'angular-validation',
     'angular-permission',
     'bootstrap',
-    'angular-datatables'
+    'angular-datatables',
+    'angular-bootstrap',
 ], function(angularAMD) {
 
-    var cie = angular.module('cieApp', ['ui.router','ngResource','uiRouterStyles','satellizer','environment','ngValidate','permission', 'datatables']);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', ]);
 
     cie.constant('appName', 'CIE');
 
@@ -489,7 +490,10 @@ define([
         }
     });
 
-    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state) {
+    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService) {
+
+        DTDefaultOptions.setLanguageSource('frontend/assets/js/datatables/es.json');
+        DTDefaultOptions.setOption("processing", true);
 
         $rootScope.appname = appName;
 
@@ -523,6 +527,17 @@ define([
         if (userInStorage != "undefined") {
             $rootScope.currentUser = JSON.parse(localStorage.getItem('user'));
         }
+
+
+        /**
+            RESOURCES
+        **/
+        
+        //users
+        apiResource.resource("users", envService.read('api') + 'users/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
@@ -532,7 +547,7 @@ define([
         envServiceProvider.config({
             domains: {
                 development: ['cie2.local'],
-                home : ['cie.local']
+                home: ['cie.local']
             },
             vars: {
                 development: {
@@ -638,7 +653,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/assets/css/custom.css', 'frontend/assets/css/animate.css'],
+                css: ['frontend/assets/css/custom.css', 'frontend/assets/css/animate.css', 'frontend/bower_components/angular-bootstrap/ui-bootstrap-csp.css'],
             }
         }));
 
@@ -678,10 +693,10 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Usuarios"
             }
         }));
-
     }]);
 
 

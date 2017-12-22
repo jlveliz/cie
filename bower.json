@@ -22,7 +22,8 @@
         "angular-environment": "^1.0.4",
         "jpkleemans-angular-validate": "^1.1.1",
         "angular-permission": "~2.3.0",
-        "angular-datatables": "0.6.0"
+        "angular-datatables": "0.6.0",
+        "angular-bootstrap": "^2.5.0"
     },
     "resolutions":
     {

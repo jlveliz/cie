@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        //User
+        $this->app->bind('Cie\Repository\UserRepositoryInterface','Cie\Repository\UserRepository');
     }
 }
