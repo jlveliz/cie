@@ -15,28 +15,39 @@
                         <uib-tab-heading>
                             <h5><b><i class="fa fa-list"></i> Listado</b></h5>
                         </uib-tab-heading>
-                        <table datatable="ng" dt-options="dtOptions" id="user-list" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Usuario</th>
-                                    <th>Nombre</th>
-                                    <th>Ultimo acceso</th>
-                                    <th>F. Creación/Modificación</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="user in users">
-                                    <td>{{user.username}}</td>
-                                    <td>{{user.person.name | capitalize:'oneLetter'}} {{user.person.last_name | capitalize:'oneLetter'}}</td>
-                                    <td>{{user.last_access | filterTimestamp }}</td>
-                                    <td>{{user.created_at | filterTimestamp }} - {{user.updated_at | filterTimestamp }}</td>
-                                    <td>
-                                        <a ui-sref="rootAdmin.users.show({userId:user.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-eye"></i> Ver</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="tab-index">
+                            <div class="row" ng-if="existError || hasMessage">
+                                <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <ul ng-if="messages.details.length > 0">
+                                        <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                    </ul>
+                                    <p ng-if="hasMessage">{{messages.title}}</p>
+                                </div>
+                            </div>
+                            <table datatable="ng" dt-options="dtOptions" id="user-list" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Nombre</th>
+                                        <th>Ultimo acceso</th>
+                                        <th>F. Creación/Modificación</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="user in users">
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.person.name | capitalize:'oneLetter'}} {{user.person.last_name | capitalize:'oneLetter'}}</td>
+                                        <td>{{user.last_access | filterTimestamp }}</td>
+                                        <td>{{user.created_at | filterTimestamp }} - {{user.updated_at | filterTimestamp }}</td>
+                                        <td>
+                                            <a ui-sref="root.user.edit({userId:user.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-eye"></i> Ver</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </uib-tab>
                     <uib-tab index="1">
                         <uib-tab-heading>

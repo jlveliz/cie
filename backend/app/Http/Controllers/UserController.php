@@ -40,7 +40,7 @@ class UserController extends Controller
         try {
             $data = $request->all();
             $user = $this->userRepo->save($data);
-            return response()->json(['data'=>$user],200);
+            return response()->json($user,200);
         } catch (UserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -57,7 +57,7 @@ class UserController extends Controller
         
         try {
             $user = $this->userRepo->find($id);
-            return response()->json(['data'=>$user],200);
+            return response()->json($user,200);
         } catch (UserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }

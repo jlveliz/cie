@@ -76,19 +76,9 @@ define([
                                     },
                                     update: {
                                         method: "PUT",
-                                        // transformRequest: formDataObject,
-                                        // headers: {
-                                        //     'Content-Type': undefined,
-                                        //     'enctype': 'multipart/form-data'
-                                        // }
                                     },
                                     save: {
-                                        method: "POST",
-                                        // transformRequest: formDataObject,
-                                        // headers: {
-                                        //     'Content-Type': undefined,
-                                        //     'enctype': 'multipart/form-data'
-                                        // }
+                                        method: "POST",                                        
                                     },
                                     get: {
                                         method: "GET",
@@ -737,6 +727,26 @@ define([
                 "content@root": {
                     templateUrl: 'frontend/components/user/create.html',
                     controller: 'UserCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Usuarios"
+            }
+        }));
+
+        $stateProvider.state('root.user.edit', angularAMD.route({
+            url: '/{userId:int}/edit',
+            controllerUrl: 'frontend/components/user/user',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/user/edit.html',
+                    controller: 'UserEditCtrl'
                 }
 
             },

@@ -9,7 +9,7 @@
                 <uib-tabset active="1">
                     <uib-tab index="0">
                         <uib-tab-heading>
-                            <a ui-sref="root.users" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
+                            <a ui-sref="root.user" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
                         </uib-tab-heading>
                     </uib-tab>
                     <uib-tab index="1">
@@ -22,32 +22,41 @@
                         </h4>
                         <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
                             <div class="tab-index">
+                                <div class="row" ng-if="existError || hasMessage">
+                                    <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <ul ng-if="messages.details.length > 0">
+                                            <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                        </ul>
+                                        <p ng-if="hasMessage">{{messages.title}}</p>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Usuario</label>
-                                        <input id="username" type="text" class="form-control" name="username" ng-model="model.username" autofocus="">
+                                        <input ng-disabled="saving" id="username" type="text" class="form-control" name="username" ng-model="model.username" autofocus="">
                                     </div>
                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Contraseña</label>
-                                        <input id="password" type="password" class="form-control" name="password" ng-model="model.password">
+                                        <input ng-disabled="saving" id="password" type="password" class="form-control" name="password" ng-model="model.password">
                                     </div> 
                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Rep. Contraseña</label>
-                                        <input id="repeat_password" type="password" class="form-control" name="repeat_password" ng-model="model.repeat_password">
+                                        <input ng-disabled="saving" id="repeat_password" type="password" class="form-control" name="repeat_password" ng-model="model.repeat_password">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Nombre</label>
-                                        <input type="text" class="form-control" name="name" ng-model="model.name">
+                                        <input ng-disabled="saving" type="text" class="form-control" name="name" ng-model="model.name">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Apellido</label>
-                                        <input type="text" class="form-control" name="last_name" ng-model="model.last_name">
+                                        <input ng-disabled="saving" type="text" class="form-control" name="last_name" ng-model="model.last_name">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Email</label>
-                                        <input type="email" class="form-control" name="email" ng-model="model.email">
+                                        <input ng-disabled="saving" type="email" class="form-control" name="email" ng-model="model.email">
                                     </div>
                                 </div>
                             </div>
