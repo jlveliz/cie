@@ -16,7 +16,10 @@ require.config({
         'bootstrap': 'frontend/bower_components/bootstrap/dist/js/bootstrap',
         'angular-datatables': 'frontend/bower_components/angular-datatables/dist/angular-datatables.min',
         'angular-bootstrap': 'frontend/bower_components/angular-bootstrap/ui-bootstrap-tpls',
-         'angular-datatables-bootstrap': 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min',
+        'angular-datatables-bootstrap': 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min',
+        'angular-moment': 'frontend/bower_components/angular-moment/angular-moment.min',
+        'moment': 'frontend/bower_components/moment/min/moment-with-locales',
+        'underscore': 'frontend/bower_components/underscore/underscore-min',
     },
     shim: {
         'jquery': {
@@ -58,11 +61,23 @@ require.config({
         },
         'angular-datatables': {
             exports: 'angular-datatables',
-            deps: ['jquery-datatables','angular'],
+            deps: ['jquery-datatables', 'angular'],
         },
         'angular-bootstrap': {
             exports: 'angular-bootstrap',
             deps: ['angular'],
+        },
+        'angular-datatables-bootstrap': {
+            exports: 'angular-datatables-bootstrap',
+            deps: ['angular-datatables'],
+        },
+        'moment': {
+            exports: 'moment',
+            deps: ['jquery'],
+        },
+        'underscore': {
+            exports: 'underscore',
+            deps: ['jquery'],
         }
     },
     deps: ['app']

@@ -6,11 +6,11 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <h4 class="text-center" ng-if="loadingUsers">
+                <h4 class="text-center" ng-if="loading">
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
                     <span class="sr-only">Cargando...</span>
                 </h4>
-                <uib-tabset active="0" ng-if="!loadingUsers">
+                <uib-tabset active="0" ng-if="!loading">
                     <uib-tab index="0">
                         <uib-tab-heading>
                             <h5><b><i class="fa fa-list"></i> Listado</b></h5>
@@ -28,8 +28,8 @@
                             <tbody>
                                 <tr ng-repeat="user in users">
                                     <td>{{user.username}}</td>
-                                    <td>{{user.person.nombre | capitalize:'oneLetter'}}</td>
-                                    <td><span am-time-ago="user.last_access"></span></td>
+                                    <td>{{user.person.name | capitalize:'oneLetter'}} {{user.person.last_name | capitalize:'oneLetter'}}</td>
+                                    <td>{{user.last_access | filterTimestamp }}</td>
                                     <td>{{user.created_at | filterTimestamp }} - {{user.updated_at | filterTimestamp }}</td>
                                     <td>
                                         <a ui-sref="rootAdmin.users.show({userId:user.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-eye"></i> Ver</a>
@@ -40,7 +40,7 @@
                     </uib-tab>
                     <uib-tab index="1">
                         <uib-tab-heading>
-                            <a ui-sref="rootAdmin.users.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                            <a ui-sref="root.user.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>
                     </uib-tab>
                 </uib-tabset>

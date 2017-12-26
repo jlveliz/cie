@@ -1,7 +1,7 @@
 <?php
-namespace Cie\RespositoryInterface;
+namespace Cie\RepositoryInterface;
 
-use Cie\RespositoryInterface\CoreRepositoryInterface;
+// use Cie\RespositoryInterface\CoreRepositoryInterface;
 
 
 interface UserRepositoryInterface extends CoreRepositoryInterface {

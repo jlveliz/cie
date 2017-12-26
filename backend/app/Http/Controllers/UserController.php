@@ -3,8 +3,9 @@
 namespace Cie\Http\Controllers;
 
 use Cie\RepositoryInterface\UserRepositoryInterface;
-use Illuminate\Http\Request;
+use Cie\Http\Validators\UserValidator;
 use Cie\Exceptions\UserException;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -34,7 +35,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserValidator $validator, Request $request)
     {
         try {
             $data = $request->all();

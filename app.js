@@ -2,7 +2,11 @@
 
 define([
     'angularAMD',
+    'moment',
+    'jquery',
+    'underscore',
     'angular',
+    'jquery-validation',
     'angular-ui-router',
     'angular-resource',
     'angular-ui-router-styles',
@@ -13,9 +17,11 @@ define([
     'bootstrap',
     'angular-datatables',
     'angular-bootstrap',
-], function(angularAMD) {
+    'angular-datatables-bootstrap',
+    'angular-moment',
+], function(angularAMD, moment, $) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', ]);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap']);
 
     cie.constant('appName', 'CIE');
 
@@ -490,6 +496,12 @@ define([
         }
     });
 
+    cie.filter('filterTimestamp', function() {
+        return function(value) {
+            return moment(value).format("l");
+        }
+    });
+
     cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService) {
 
         DTDefaultOptions.setLanguageSource('frontend/assets/js/datatables/es.json');
@@ -532,7 +544,7 @@ define([
         /**
             RESOURCES
         **/
-        
+
         //users
         apiResource.resource("users", envService.read('api') + 'users/:id', {
             id: '@id'
@@ -543,6 +555,7 @@ define([
     cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
 
         $locationProvider.html5Mode(true);
+
 
         envServiceProvider.config({
             domains: {
@@ -562,6 +575,13 @@ define([
         });
 
 
+
+
+        //check Environments
+        envServiceProvider.check();
+
+        $authProvider.loginUrl = envServiceProvider.read('authorization');
+
         //validators to
         $validatorProvider.setDefaults({
             errorElement: 'span',
@@ -578,11 +598,23 @@ define([
             }
         });
 
-        //check Environments
-        envServiceProvider.check();
 
-        $authProvider.loginUrl = envServiceProvider.read('authorization');
+        $validatorProvider.addMethod("unique", function(value, element, arg) {
+            var success = false;
+            var params = arg.split(',');
+            var table = params[0];
+            var column = params[1];
+            $.ajax({
+                url: envServiceProvider.read('api') + 'validator/unique?table=' + table + '&columnname=' + column + '&value=' + value ,
+                type: 'GET',
+                async: false, 
+                success: function(result) {
+                    success = result === "ok" ? true : false ;
+                }
 
+            });
+            return success;
+        }, "Already exist.");
 
 
         $urlRouterProvider.otherwise('/errors/404');
@@ -685,6 +717,26 @@ define([
                 "content@root": {
                     templateUrl: 'frontend/components/user/index.html',
                     controller: 'UserIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Usuarios"
+            }
+        }));
+
+        $stateProvider.state('root.user.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/user/user',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/user/create.html',
+                    controller: 'UserCreateCtrl'
                 }
 
             },

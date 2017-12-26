@@ -4,7 +4,7 @@ namespace Cie\Repository;
 use Cie\RepositoryInterface\UserRepositoryInterface;
 use Cie\Exceptions\UserException;
 use Cie\Models\User;
-
+use Cie\Models\Person;
 /**
 * 
 */
@@ -50,17 +50,25 @@ class UserRepository implements UserRepositoryInterface
 	//TODO
 	public function save($data)
 	{
-		$user = new User();
-
-		$data['password'] = \Hash::make($data['password']);
-
-		$user->fill($data);
-		if ($user->save()) {
-			// $user->groups()->sync($data['groups']);
-			$key = $user->getKey();
-			return  $this->find($key);
-		} 
-		throw new UserException(['title'=>'Ha ocurrido un error al guardar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		$person = new Person();
+		$person->fill($data);
+		if ($person->save()) {
+			$personId = $person->getKey();
+			$data['password'] = \Hash::make($data['password']);
+			$data['person_id'] = $personId;
+			$user = new User();
+			$user->fill($data);
+			if ($user->save()) {
+				// $user->groups()->sync($data['groups']);
+				$key = $user->getKey();
+				return  $this->find($key);
+		} else {
+			throw new UserException(['title'=>'Ha ocurrido un error al guardar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		}
+		
+		} else {
+			throw new UserException(['title'=>'Ha ocurrido un error al guardar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		}
 		
 	}
 

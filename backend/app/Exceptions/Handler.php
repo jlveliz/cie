@@ -5,6 +5,7 @@ namespace Cie\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 
 class Handler extends ExceptionHandler
 {
@@ -23,6 +24,13 @@ class Handler extends ExceptionHandler
         AppException::class,
     ];
 
+    public $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     /**
      * Report or log an exception.
      *
@@ -33,8 +41,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        dd($exception);
-        parent::report($exception);
+        $this->render($this->request, $exception);
     }
 
     /**
@@ -46,8 +53,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-       
-        if (app('app.debug')) {
+        if (config('app.debug')) {
             return parent::render($request, $exception);
         }
         return $this->handle($request, $exception);
