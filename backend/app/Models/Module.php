@@ -13,4 +13,9 @@ class Module extends Model
     protected $fillable = [
     	'name',
     ];
+
+    public function permissions()
+    {
+    	return $this->hasMany('Cie\Models\Permission','module_id');
+    }
 }

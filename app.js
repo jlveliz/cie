@@ -415,9 +415,13 @@ define([
                             desc: 'Administrar los usuarios del Sistema',
                             sref: 'root.user',
                         }, {
-                            label: 'Listado de Módulos',
+                            label: 'Módulos',
                             desc: 'Administrar los Módulos del Sistema',
                             sref: 'root.module',
+                        }, {
+                            label: 'Permisos',
+                            desc: 'Administrar los Permisos del Sistema',
+                            sref: 'root.permission',
                         }],
                     }]
                 }];
@@ -641,6 +645,11 @@ define([
             id: '@id'
         }).register();
 
+        //permissions
+        apiResource.resource("permissions", envService.read('api') + 'permissions/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
@@ -842,7 +851,6 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Usuarios"
             }
         }));
@@ -862,10 +870,10 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Usuarios"
             }
         }));
+        
         /**
             MODULE
         **/
@@ -904,7 +912,6 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Módulos"
             }
         }));
@@ -924,8 +931,68 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Módulos"
+            }
+        }));
+
+         /**
+            PERMISSION
+        **/
+        $stateProvider.state('root.permission', angularAMD.route({
+            url: 'permissions',
+            controllerUrl: 'frontend/components/permission/permission',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/permission/index.html',
+                    controller: 'PermissionIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Permisos"
+            }
+        }));
+
+        $stateProvider.state('root.permission.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/permission/permission',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/permission/create.html',
+                    controller: 'PermissionCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Permisos"
+            }
+        }));
+
+        $stateProvider.state('root.permission.edit', angularAMD.route({
+            url: '/{permissionId:int}/edit',
+            controllerUrl: 'frontend/components/permission/permission',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/permission/create.html',
+                    controller: 'PermissionEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Permisos"
             }
         }));
     }]);
