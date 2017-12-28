@@ -410,8 +410,15 @@ define([
                     navEls: [{
                         label: 'Usuarios',
                         icon: 'fa-users',
-                        desc: 'Usuarios',
-                        sref: 'root.user',
+                        children: [{
+                            label: 'Listado de Usuarios',
+                            desc: 'Administrar los usuarios del Sistema',
+                            sref: 'root.user',
+                        }, {
+                            label: 'Listado de Módulos',
+                            desc: 'Administrar los Módulos del Sistema',
+                            sref: 'root.module',
+                        }],
                     }]
                 }];
 
@@ -554,6 +561,8 @@ define([
 
             modalInstance.result.then(function() {
                 deferred.resolve();
+            }).catch(function() {
+                deferred.reject();
             })
 
             return deferred.promise;
@@ -581,6 +590,8 @@ define([
 
             modalInstance.result.then(function() {
                 deferred.resolve();
+            }).catch(function() {
+                deferred.reject();
             })
 
             return deferred.promise;
@@ -608,6 +619,8 @@ define([
 
             modalInstance.result.then(function() {
                 deferred.resolve();
+            }).catch(function() {
+                deferred.reject();
             })
 
             return deferred.promise;
@@ -620,6 +633,11 @@ define([
 
         //users
         apiResource.resource("users", envService.read('api') + 'users/:id', {
+            id: '@id'
+        }).register();
+
+        //modules
+        apiResource.resource("modules", envService.read('api') + 'modules/:id', {
             id: '@id'
         }).register();
 
@@ -786,7 +804,9 @@ define([
             }
         }));
 
-
+        /**
+            USER
+        **/
         $stateProvider.state('root.user', angularAMD.route({
             url: 'users',
             controllerUrl: 'frontend/components/user/user',
@@ -844,6 +864,68 @@ define([
                 },
                 css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Usuarios"
+            }
+        }));
+        /**
+            MODULE
+        **/
+        $stateProvider.state('root.module', angularAMD.route({
+            url: 'modules',
+            controllerUrl: 'frontend/components/module/module',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/module/index.html',
+                    controller: 'ModuleIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Módulos"
+            }
+        }));
+
+        $stateProvider.state('root.module.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/module/module',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/module/create.html',
+                    controller: 'ModuleCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Módulos"
+            }
+        }));
+
+        $stateProvider.state('root.module.edit', angularAMD.route({
+            url: '/{moduleId:int}/edit',
+            controllerUrl: 'frontend/components/module/module',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/module/create.html',
+                    controller: 'ModuleEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Módulos"
             }
         }));
     }]);

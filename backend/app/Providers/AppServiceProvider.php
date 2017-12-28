@@ -25,5 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //User
         $this->app->bind('Cie\RepositoryInterface\UserRepositoryInterface','Cie\Repository\UserRepository');
+        //Module
+        $this->app->bind('Cie\RepositoryInterface\ModuleRepositoryInterface','Cie\Repository\ModuleRepository');
     }
 }

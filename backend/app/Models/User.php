@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'person_id', 'username', 'password',
+        'person_id', 'username', 'password','permission'
     ];
 
     /**
@@ -42,5 +42,15 @@ class User extends Authenticatable
         static::deleted(function($user){
             $user->person()->delete();
         });
+    }
+
+    public function setPermissionAttribute($permissions)
+    {
+        $this->attributes['permission']  = serialize($permissions);
+    }
+
+     public function getPermissionAttribute($permissions)
+    {
+        return unserialize($permissions);
     }
 }
