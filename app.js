@@ -78,7 +78,7 @@ define([
                                         method: "PUT",
                                     },
                                     save: {
-                                        method: "POST",                                        
+                                        method: "POST",
                                     },
                                     get: {
                                         method: "GET",
@@ -488,11 +488,12 @@ define([
 
     cie.filter('filterTimestamp', function() {
         return function(value) {
+            if (!value) return '-';
             return moment(value).format("l");
         }
     });
 
-    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService) {
+    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', '$q', '$uibModal', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService, $q, $uibModal) {
 
         DTDefaultOptions.setLanguageSource('frontend/assets/js/datatables/es.json');
         DTDefaultOptions.setOption("processing", true);
@@ -528,6 +529,88 @@ define([
         var userInStorage = localStorage.getItem('user');
         if (userInStorage != "undefined") {
             $rootScope.currentUser = JSON.parse(localStorage.getItem('user'));
+        }
+
+        $rootScope.openSuccessModal = function(params) {
+            var deferred = $q.defer();
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: false,
+                templateUrl: 'frontend/partials/modal-success.html',
+                resolve: {
+                    modalContent: function() {
+                        return params
+                    }
+                },
+                controller: function($scope, modalContent, $uibModalInstance) {
+                    $scope.modalContent = modalContent;
+                    $scope.ok = function() {
+                        $uibModalInstance.close();
+                        deferred.resolve();
+                    }
+                }
+
+            });
+
+            modalInstance.result.then(function() {
+                deferred.resolve();
+            })
+
+            return deferred.promise;
+        }
+
+        $rootScope.openErrorModal = function(params) {
+            var deferred = $q.defer();
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: false,
+                templateUrl: 'frontend/partials/modal-error.html',
+                resolve: {
+                    modalContent: function() {
+                        return params
+                    }
+                },
+                controller: function($scope, modalContent, $uibModalInstance) {
+                    $scope.modalContent = modalContent;
+                    $scope.ok = function() {
+                        $uibModalInstance.close();
+                        deferred.resolve();
+                    }
+                }
+            });
+
+            modalInstance.result.then(function() {
+                deferred.resolve();
+            })
+
+            return deferred.promise;
+        }
+
+        $rootScope.openDelteModal = function(params) {
+            var deferred = $q.defer();
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: false,
+                templateUrl: 'frontend/partials/modal-delete.html',
+                resolve: {
+                    modalContent: function() {
+                        return params
+                    }
+                },
+                controller: function($scope, modalContent, $uibModalInstance) {
+                    $scope.modalContent = modalContent;
+
+                    $scope.delete = function(model) {
+                        $uibModalInstance.close();
+                    }
+                }
+            });
+
+            modalInstance.result.then(function() {
+                deferred.resolve();
+            })
+
+            return deferred.promise;
         }
 
 
@@ -594,12 +677,16 @@ define([
             var params = arg.split(',');
             var table = params[0];
             var column = params[1];
+            var id = null;
+            if (typeof params[2] != 'undefined') {
+                id = params[2];
+            }
             $.ajax({
-                url: envServiceProvider.read('api') + 'validator/unique?table=' + table + '&columnname=' + column + '&value=' + value ,
+                url: envServiceProvider.read('api') + 'validator/unique?table=' + table + '&columnname=' + column + '&value=' + value + '&id=' + id,
                 type: 'GET',
-                async: false, 
+                async: false,
                 success: function(result) {
-                    success = result === "ok" ? true : false ;
+                    success = result === "ok" ? true : false;
                 }
 
             });

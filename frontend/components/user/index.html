@@ -39,10 +39,12 @@
                                     <tr ng-repeat="user in users">
                                         <td>{{user.username}}</td>
                                         <td>{{user.person.name | capitalize:'oneLetter'}} {{user.person.last_name | capitalize:'oneLetter'}}</td>
-                                        <td>{{user.last_access | filterTimestamp }}</td>
+                                        <td>{{user.last_login | filterTimestamp }}</td>
                                         <td>{{user.created_at | filterTimestamp }} - {{user.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ui-sref="root.user.edit({userId:user.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-eye"></i> Ver</a>
+                                            <a ng-hide="user.$deleting" ui-sref="root.user.edit({userId:user.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
+                                            <a ng-hide="user.$deleting" ng-click="delete(user.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <p ng-show="user.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
                                 </tbody>

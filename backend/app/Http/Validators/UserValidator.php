@@ -9,10 +9,16 @@ use Validator;
 */
 class UserValidator extends Validator implements ValidatorInterface
 {
-	
+	private $request;
+
+	public function __construct(Request $request)
+	{
+		$this->make($this->request = $request);
+	}
+
+
 	public function make(Request $request){
-		$credentials = $request->only('username','password');
-		$validator =  parent::make($credentials,$this->rules(),$this->messages());
+		$validator =  parent::make($request->all(),$this->rules($request->method()),$this->messages($request->method()));
         if ($validator->fails()){
         	throw new UserException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
         } else {
@@ -26,12 +32,15 @@ class UserValidator extends Validator implements ValidatorInterface
 			'last_name'=>'required',
 			'username'=>'required|unique:user,username',
 			'password'=>'required',
-			'repeat_password'=>'required|same:required',
+			'repeat_password'=>'required|same:password',
 			'email'=>'required|email|unique:person,email'
 		];
 
 		if ($method == 'PUT') {
-			$rules['email'] = 'required|email|unique:person,email';
+			$rules['email'] = 'required|email|unique:person,email,'.$this->request->get('person_id');
+			$rules['username'] = 'required|unique:user,username,'.$this->request->get('key');
+			$rules['password'] = 'required_with:password';
+			$rules['repeat_password'] = 'required_with:password|same:password';
 		}
 
 		return $rules;

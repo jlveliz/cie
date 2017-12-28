@@ -71,11 +71,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserValidator $validator, Request $request, $id)
     {
         try {
             $user = $this->userRepo->edit($id, $request->all());
-            return response()->json(['data'=>$user],200);
+            return response()->json($user,200);
         } catch (UserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }

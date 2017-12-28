@@ -26,7 +26,7 @@ Route::group(['prefix'=>'api'],function() {
 	});
 
 
-	Route::resource('users','UserController',['only'=>['index','store','show','update']]);
+	Route::resource('users','UserController',['except'=>['create']]);
 
 	Route::get('validator/{method}','HelperController@validation');
 });

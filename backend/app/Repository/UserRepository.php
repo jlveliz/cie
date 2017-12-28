@@ -77,6 +77,10 @@ class UserRepository implements UserRepositoryInterface
 		$user = User::find($id);
 
 		if ($user) {
+			if(!empty($data['password'])) {
+				$data['password'] = \Hash::make($data['password']); 
+   			}
+   			$user->person->fill($data)->update();
 			$user->fill($data);
 			if($user->update()){
 				// $user->groups()->sync($data['groups']);

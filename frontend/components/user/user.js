@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('UserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'UserService', function($scope, apiResource, $stateParams, DTOptionsBuilder, UserService) {
+    app.register.controller('UserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'UserService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, UserService, $rootScope) {
 
         $scope.users = [];
         $scope.loading = true;
@@ -42,6 +42,28 @@ define(['app'], function(app) {
                 UserService.messageFlag = {};
             }
         });
+
+        $scope.delete = function(id) {
+            apiResource.resource('users').getCopy(id).then(function(object) {
+                var params = {
+                    title: 'Atención',
+                    text: 'Desea eliminar el usuario ' + object.username + '.?'
+                }
+                $rootScope.openDelteModal(params).then(function() {
+                    var idx = _.findIndex($scope.users, function(el) {
+                        return el.id == object.id;
+                    });
+                    if (idx > -1) {
+                        $scope.users[idx].$deleting = true;
+                        object.$delete(function() {
+                            $scope.users.splice(idx, 1);
+                            apiResource.resource('users').removeFromCache(object.id);
+                            $scope.groups[users].$deleting = false;
+                        })
+                    }
+                })
+            });
+        }
 
     }]);
 
@@ -112,7 +134,6 @@ define(['app'], function(app) {
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
-                debugger;
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
                     apiResource.resource('users').setOnCache(data);
@@ -152,6 +173,7 @@ define(['app'], function(app) {
     app.register.controller('UserEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', function($scope, apiResource, $stateParams, $state, UserService) {
 
         var userId = $stateParams.userId;
+        
 
         $scope.loading = true;
         $scope.model = {};
@@ -163,6 +185,7 @@ define(['app'], function(app) {
             $scope.model.name = $scope.model.person.name;
             $scope.model.last_name = $scope.model.person.last_name;
             $scope.model.email = $scope.model.person.email;
+            $scope.validateOptions.rules.email.unique = 'person,email,' + $scope.model.person.id
             $scope.messages = UserService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
@@ -176,16 +199,12 @@ define(['app'], function(app) {
                 name: {
                     required: true,
                 },
-                password: {
-                    required: true,
-                },
                 repeat_password: {
-                    required: true,
                     equalTo: "#password"
                 },
                 username: {
                     required: true,
-                    unique: 'user,username'
+                    unique: 'user,username,' + userId
                 },
                 last_name: {
                     required: true
@@ -193,7 +212,7 @@ define(['app'], function(app) {
                 email: {
                     required: true,
                     email: true,
-                    unique: 'person,email'
+                    unique: 'person,email,'
                 }
             },
 
@@ -227,15 +246,20 @@ define(['app'], function(app) {
             $scope.messages = {};
             if (form.validate()) {
                 $scope.saving = true;
-                $scope.model.$save(function(data) {
+                $scope.model.key = userId;
+                $scope.model.$update(userId, function(data) {
+                    $scope.saving = false;
+                    $scope.hasMessage = true;
+                    $scope.model.name = $scope.model.person.name;
+                    $scope.model.last_name = $scope.model.person.last_name;
+                    $scope.model.email = $scope.model.person.email;
                     apiResource.resource('users').setOnCache(data);
-                    UserService.messageFlag.title = "Usuario creado correctamente";
+                    UserService.messageFlag.title = "Usuario " + $scope.model.name + " Actualizado correctamente";
                     UserService.messageFlag.type = "info";
+                    $scope.messages = UserService.messageFlag;
                     if (returnIndex) {
                         $state.go('root.user');
                     }
-
-
                 }, function(reason) {
                     $scope.saving = false;
                     $scope.existError = true;

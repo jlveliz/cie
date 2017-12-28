@@ -35,4 +35,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo('Cie\Models\Person','person_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleted(function($user){
+            $user->person()->delete();
+        });
+    }
 }
