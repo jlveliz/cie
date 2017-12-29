@@ -944,7 +944,7 @@ define([
             controllerUrl: 'frontend/components/module/module',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/module/create.html',
+                    templateUrl: 'frontend/components/module/edit.html',
                     controller: 'ModuleEditCtrl'
                 }
 
@@ -1005,7 +1005,7 @@ define([
             controllerUrl: 'frontend/components/permission/permission',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/permission/create.html',
+                    templateUrl: 'frontend/components/permission/edit.html',
                     controller: 'PermissionEditCtrl'
                 }
 
@@ -1066,7 +1066,7 @@ define([
             controllerUrl: 'frontend/components/tpermission/tpermission',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/tpermission/create.html',
+                    templateUrl: 'frontend/components/tpermission/edit.html',
                     controller: 'TPermissionEditCtrl'
                 }
 

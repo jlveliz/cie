@@ -54,7 +54,7 @@ define(['app'], function(app) {
                     if (idx > -1) {
                         $scope.permissions[idx].$deleting = true;
                         object.$delete(function() {
-                            PermissionService.messageFlag.title = "Módulo eliminado correctamente";
+                            PermissionService.messageFlag.title = "Permiso eliminado correctamente";
                             PermissionService.messageFlag.type = "info";
                             $scope.messages = PermissionService.messageFlag;
                             $scope.hasMessage = true;
@@ -143,13 +143,13 @@ define(['app'], function(app) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
                     apiResource.resource('permissions').setOnCache(data);
-                    PermissionService.messageFlag.title = "Módulo creado correctamente";
+                    PermissionService.messageFlag.title = "Permiso creado correctamente";
                     PermissionService.messageFlag.type = "info";
                     if (returnIndex) {
-                        $state.go('root.module');
+                        $state.go('root.permission');
                     } else {
-                        $state.go('root.module.edit', {
-                            moduleId: data.id
+                        $state.go('root.permission.edit', {
+                            permissionId: data.id
                         })
                     }
 
@@ -260,11 +260,11 @@ define(['app'], function(app) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
                     apiResource.resource('permissions').setOnCache(data);
-                    PermissionService.messageFlag.title = "Módulo " + $scope.model.name + " Actualizado correctamente";
+                    PermissionService.messageFlag.title = "Permiso " + $scope.model.name + " Actualizado correctamente";
                     PermissionService.messageFlag.type = "info";
                     $scope.messages = PermissionService.messageFlag;
                     if (returnIndex) {
-                        $state.go('root.module');
+                        $state.go('root.permission');
                     }
                 }, function(reason) {
                     $scope.saving = false;
