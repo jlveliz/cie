@@ -15,13 +15,16 @@ class HelperController extends Controller
 		
 		switch ($method) {
 			case 'unique':
-				$exist = $this->verifyUnique($request->get('table'),$request->get('columnname'),$request->get('value'),$request->get('id'));
-				if ($exist) {
+				$unique = $this->verifyUnique($request->get('table'),$request->get('columnname'),$request->get('value'),$request->get('id'));
+				if ($unique) {
 					return response()->json('exist',200);
 				}
 				return response()->json('ok',200);
 				break;
-			
+			case 'exists': 
+				$exists = $this->verifyExist($request->get('table'),$request->get('value'));
+				if ($exists) return response()->json('ok',200);
+				return response()->json('no-exist',200);
 			default:
 				# code...
 				break;
@@ -37,5 +40,11 @@ class HelperController extends Controller
 		}
 		if($exist) return true;
 		return false;
+	}
+
+	public function verifyExist($tableName,$value)
+	{
+		$exist = DB::table($tableName)->where('id',$value)->first();
+		return $exist;
 	}
 }

@@ -29,9 +29,9 @@ class PermissionValidator extends Validator implements ValidatorInterface
 	public function rules($method = null) {
 		$rules = [
 			'name' => 'required|unique:permission,name',
-			'module_id' => 'required|exists:module',
-			'parent_id' => 'exists:permission,parent_id',
-			'type' => 'required',
+			'module_id' => 'required|exists:module,id',
+			'parent_id' => 'exists:permission,id',
+			'type_id' => 'required|exists:permission_type,id',
 			'description' => 'required',
 		];
 
@@ -49,7 +49,7 @@ class PermissionValidator extends Validator implements ValidatorInterface
 			'module_id.required'=> 'El módulo es requerido',
 			'module_id.exists'=> 'El módulo es inválido',
 			'parent_id.exists'=> 'El permiso padre es inválido',
-			'type.required' => 'El tipo es requerido',
+			'type_id.required' => 'El tipo es requerido',
 			'description.required' => 'La descripción es requerida'
 		];
 	}

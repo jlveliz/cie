@@ -2,7 +2,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>{{title}}</h2>
+                <h2>Usuarios</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -34,29 +34,29 @@
                                 <div class="tab-index">
                                     <div class="row">
                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Usuario</label>
+                                            <label class="control-label">Usuario  <span class="text-danger">*</span></label>
                                             <input ng-disabled="saving" id="username" type="text" class="form-control" name="username" ng-model="model.username" autofocus="">
                                         </div>
                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Contraseña</label>
+                                            <label class="control-label">Contraseña  <span class="text-danger">*</span></label>
                                             <input ng-disabled="saving" id="password" type="password" class="form-control" name="password" ng-model="model.password">
                                         </div>
                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Rep. Contraseña</label>
+                                            <label class="control-label">Rep. Contraseña  <span class="text-danger">*</span></label>
                                             <input ng-disabled="saving" id="repeat_password" type="password" class="form-control" name="repeat_password" ng-model="model.repeat_password">
                                         </div>
                                         <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Nombre</label>
+                                            <label class="control-label">Nombre  <span class="text-danger">*</span></label>
                                             <input ng-disabled="saving" type="text" class="form-control" name="name" ng-model="model.name">
                                         </div>
                                         <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Apellido</label>
+                                            <label class="control-label">Apellido  <span class="text-danger">*</span></label>
                                             <input ng-disabled="saving" type="text" class="form-control" name="last_name" ng-model="model.last_name">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Email</label>
+                                            <label class="control-label">Email  <span class="text-danger">*</span></label>
                                             <input ng-disabled="saving" type="email" class="form-control" name="email" ng-model="model.email">
                                         </div>
                                     </div>

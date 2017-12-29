@@ -2,19 +2,19 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Usuarios</h2>
+                <h2>Tipo de Permisos</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <uib-tabset active="1">
                     <uib-tab index="0">
                         <uib-tab-heading>
-                            <a ui-sref="root.user" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
+                            <a ui-sref="root.module" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
                         </uib-tab-heading>
                     </uib-tab>
                     <uib-tab index="1">
                         <uib-tab-heading>
-                            <h5><b><i class="fa fa-plus"></i> Crear</b></h5>
+                            <h5><b><i class="fa fa-edit"></i> Editar</b></h5>
                         </uib-tab-heading>
                         <h4 class="text-center" ng-if="loading">
                             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -32,31 +32,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Usuario  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="username" type="text" class="form-control" name="username" ng-model="model.username" autofocus="">
-                                    </div>
-                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Contraseña  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="password" type="password" class="form-control" name="password" ng-model="model.password">
-                                    </div> 
-                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Rep. Contraseña  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="repeat_password" type="password" class="form-control" name="repeat_password" ng-model="model.repeat_password">
-                                    </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Nombre  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" type="text" class="form-control" name="name" ng-model="model.name">
-                                    </div>
-                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Apellido  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" type="text" class="form-control" name="last_name" ng-model="model.last_name">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Email  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" type="email" class="form-control" name="email" ng-model="model.email">
+                                        <label class="control-label">Nombre</label>
+                                        <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
                                     </div>
                                 </div>
                             </div>

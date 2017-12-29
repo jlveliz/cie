@@ -14,7 +14,7 @@ class Permission extends Model
     	'name',
     	'module_id',
     	'parent_id',
-    	'type',
+    	'type_id',
     	'resource',
     	'description'
     ];

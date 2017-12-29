@@ -2,7 +2,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Permisos</h2>
+                <h2>Tipo de Permisos</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -10,14 +10,17 @@
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
                     <span class="sr-only">Cargando...</span>
                 </h4>
-                <uib-tabset active="0" ng-if="!loading">
+                <uib-tabset active="1" ng-if="!loading">
                     <uib-tab index="0">
-                        <uib-tab-heading><a ui-sref="root.permission"><h5><b>PERMISOS</b></h5></a></uib-tab-heading>
+                        <uib-tab-heading><a ui-sref="root.permission" title="Permisos"><h5><b>PERMISOS</b></h5></a></uib-tab-heading>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading><a ui-sref="root.tpermission" title="Tipos"><h5><b>TIPOS</b></h5></a></uib-tab-heading>
                         <div class="tab-index">
                             <uib-tabset active="1">
                                 <uib-tab index="0">
                                     <uib-tab-heading>
-                                        <a ui-sref="root.permission" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
+                                        <a ui-sref="root.tpermission" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
                                     </uib-tab-heading>
                                 </uib-tab>
                                 <uib-tab index="1">
@@ -40,34 +43,9 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
-                                                    <label class="control-label">Nombre <span class="text-danger">*</span></label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Nombre  <span class="text-danger">*</span></label>
                                                     <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
-                                                </div>
-                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
-                                                    <label class="control-label">Módulos <span class="text-danger">*</span></label>
-                                                    <select ng-disabled="saving" class="form-control" name="module_id" id="module_id" ng-model="model.module_id" ng-options="module.id as module.name for module in modules">
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
-                                                    <label class="control-label">Tipo <span class="text-danger">*</span></label>
-                                                    <select ng-disabled="saving" class="form-control" name="type_id" id="type_id" ng-model="model.type_id" ng-options="type.id as type.name for type in tPermissions">
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
-                                                    <label class="control-label">Elemento Padre</label>
-                                                    <select ng-disabled="saving" class="form-control" name="parent_id" id="parent_id" ng-model="model.parent_id">
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
-                                                    <label class="control-label">Descripción <span class="text-danger">*</span></label>
-                                                    <input ng-disabled="saving" type="text" class="form-control" name="description" id="description" ng-model="model.description">
-                                                </div>
-                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
-                                                    <label class="control-label">Recurso</label>
-                                                    <input ng-disabled="saving" type="text" class="form-control" name="resource" id="resource" ng-model="model.resource">
                                                 </div>
                                             </div>
                                         </div>
@@ -83,15 +61,12 @@
                                                 <span ng-if="!saving"><i class="fa fa-save"></i> Guardar y cerrar</span>
                                                 <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
                                             </button>
-                                            <a class="btn btn-link" ui-sref="root.permission">Cancelar</a>
+                                            <a class="btn btn-link" ui-sref="root.tpermission">Cancelar</a>
                                         </div>
                                     </form>
                                 </uib-tab>
                             </uib-tabset>
                         </div>
-                    </uib-tab>
-                    <uib-tab index="1">
-                        <uib-tab-heading><a ui-sref="root.tpermission"><h5><b>TIPOS</b></h5></a></uib-tab-heading>
                     </uib-tab>
                 </uib-tabset>
             </div>

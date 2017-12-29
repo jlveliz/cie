@@ -648,6 +648,11 @@ define([
         //permissions
         apiResource.resource("permissions", envService.read('api') + 'permissions/:id', {
             id: '@id'
+        }).register(); 
+
+        //tpermissions
+        apiResource.resource("tpermissions", envService.read('api') + 'typepermissions/:id', {
+            id: '@id'
         }).register();
 
     }]);
@@ -675,8 +680,6 @@ define([
         });
 
 
-
-
         //check Environments
         envServiceProvider.check();
 
@@ -698,6 +701,10 @@ define([
             }
         });
 
+        $validatorProvider.addMethod("valueNotEquals", function(value, element, arg) {
+            return value !== arg;
+        }, "Value must not equal arg.");
+
 
         $validatorProvider.addMethod("unique", function(value, element, arg) {
             var success = false;
@@ -716,6 +723,22 @@ define([
                     success = result === "ok" ? true : false;
                 }
 
+            });
+            return success;
+        }, "Not Unique.");
+
+        $validatorProvider.addMethod("exists", function(value, element, arg) {
+            var success = false;
+            var table = arg;
+            var value = value.split(':');
+            value = value[1];
+            $.ajax({
+                url: envServiceProvider.read('api') + 'validator/exists?table=' + table + '&value=' + value,
+                type: 'GET',
+                async: false,
+                success: function(result) {
+                    success = result === "ok" ? true : false;
+                }
             });
             return success;
         }, "Already exist.");
@@ -873,7 +896,7 @@ define([
                 pageTitle: "Usuarios"
             }
         }));
-        
+
         /**
             MODULE
         **/
@@ -935,7 +958,7 @@ define([
             }
         }));
 
-         /**
+        /**
             PERMISSION
         **/
         $stateProvider.state('root.permission', angularAMD.route({
@@ -995,6 +1018,68 @@ define([
                 pageTitle: "Permisos"
             }
         }));
+
+         /**
+            MODULE
+        **/
+        $stateProvider.state('root.tpermission', angularAMD.route({
+            url: 'type-permissions',
+            controllerUrl: 'frontend/components/tpermission/tpermission',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/tpermission/index.html',
+                    controller: 'TPermissionIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Tipos de Permisos"
+            }
+        }));
+
+        $stateProvider.state('root.tpermission.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/tpermission/tpermission',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/tpermission/create.html',
+                    controller: 'TPermissionCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Tipos de Permisos"
+            }
+        }));
+
+        $stateProvider.state('root.tpermission.edit', angularAMD.route({
+            url: '/{tPermissionId:int}/edit',
+            controllerUrl: 'frontend/components/tpermission/tpermission',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/tpermission/create.html',
+                    controller: 'TPermissionEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Tipos de Permisos"
+            }
+        }));
+
     }]);
 
 

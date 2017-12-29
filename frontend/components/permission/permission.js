@@ -69,33 +69,69 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('PermissionCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PermissionService', function($scope, apiResource, $stateParams, $state, PermissionService) {
+    app.register.controller('PermissionCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PermissionService', '$q', function($scope, apiResource, $stateParams, $state, PermissionService, $q) {
 
         $scope.loading = true;
         $scope.saving = false;
         $scope.model = {};
         $scope.modules = [];
+        $scope.tPermissions = [];
         $scope.listpermissions = [];
         $scope.messages = [];
 
-        apiResource.resource('modules').queryCopy().then(function(modules){
-            $scope.modules = modules;
-            $scope.loading = false;
+        var deps = $q.all([
+            apiResource.resource('modules').queryCopy().then(function(modules) {
+                $scope.modules = modules;
+            }),
+            apiResource.resource('tpermissions').queryCopy().then(function(tPermissions) {
+                $scope.tPermissions = tPermissions;
+            }),
+        ]);
+
+        deps.then(function() {
             $scope.model = apiResource.resource('permissions').create();
+            $scope.loading = false;
         })
+
 
 
         $scope.validateOptions = {
             rules: {
+                module_id: {
+                    required: true,
+                    valueNotEquals: '?',
+                    exists: 'module'
+                },
+                type_id: {
+                    required: true,
+                    valueNotEquals: '?',
+                    exists: 'permission_type'
+                },
                 name: {
                     required: true,
                     unique: 'module,name'
+                },
+                description: {
+                    required: true,
                 }
             },
             messages: {
+                module_id: {
+                    required: "El módulo es requerido",
+                    valueNotEquals: "El módulo es requerido",
+                    exists: 'El módulo es inválido'
+                },
+                type_id: {
+                    required: "El tipo es requerido",
+                    valueNotEquals: "El tipo es requerido",
+                    exists: 'El tipo es inválido'
+                },
                 name: {
-                    required: "Campo requerido",
+                    required: "Nombre requerido",
                     unique: 'El módulo ya fue tomado'
+                },
+                description: {
+                    required: "La descripción es requerida",
                 }
             }
 
@@ -140,37 +176,76 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('PermissionEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PermissionService', function($scope, apiResource, $stateParams, $state, PermissionService) {
+    app.register.controller('PermissionEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PermissionService', '$q', function($scope, apiResource, $stateParams, $state, PermissionService, $q) {
 
-        var moduleId = $stateParams.moduleId;
+        var permissionId = $stateParams.permissionId;
 
-
+        $scope.modules = [];
+        $scope.tPermissions = [];
         $scope.loading = true;
         $scope.model = {};
         $scope.messages = {};
         $scope.existError = false;
 
-        apiResource.resource('permissions').getCopy(moduleId).then(function(model) {
-            $scope.model = model;
-            $scope.messages = PermissionService.messageFlag;
-            if (!_.isEmpty($scope.messages)) {
-                $scope.hasMessage = true;
-                PermissionService.messageFlag = {};
-            }
-            $scope.loading = false;
-        });
+        var deps = $q.all([
+            apiResource.resource('modules').queryCopy().then(function(modules) {
+                $scope.modules = modules;
+            }),
+            apiResource.resource('tpermissions').queryCopy().then(function(tPermissions) {
+                $scope.tPermissions = tPermissions;
+            }),
+        ]);
+
+        deps.then(function() {
+            apiResource.resource('permissions').getCopy(permissionId).then(function(model) {
+                $scope.model = model;
+                $scope.messages = PermissionService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    PermissionService.messageFlag = {};
+                }
+                $scope.loading = false;
+            });
+        })
+
 
         $scope.validateOptions = {
             rules: {
+                module_id: {
+                    required: true,
+                    valueNotEquals: '?',
+                    exists: 'module'
+                },
+                type_id: {
+                    required: true,
+                    valueNotEquals: '?',
+                    exists: 'permission_type'
+                },
                 name: {
                     required: true,
-                    unique: 'module,name,' + moduleId
+                    unique: 'module,name,' + permissionId
+                },
+                description: {
+                    required: true,
                 }
             },
             messages: {
+                module_id: {
+                    required: "El módulo es requerido",
+                    valueNotEquals: "El módulo es requerido",
+                    exists: 'El módulo es inválido'
+                },
+                type_id: {
+                    required: "El tipo es requerido",
+                    valueNotEquals: "El tipo es requerido",
+                    exists: 'El tipo es inválido'
+                },
                 name: {
-                    required: "Campo requerido",
+                    required: "Nombre requerido",
                     unique: 'El módulo ya fue tomado'
+                },
+                description: {
+                    required: "La descripción es requerida",
                 }
             }
 
@@ -180,8 +255,8 @@ define(['app'], function(app) {
             $scope.messages = {};
             if (form.validate()) {
                 $scope.saving = true;
-                $scope.model.key = moduleId;
-                $scope.model.$update(moduleId, function(data) {
+                $scope.model.key = permissionId;
+                $scope.model.$update(permissionId, function(data) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
                     apiResource.resource('permissions').setOnCache(data);
