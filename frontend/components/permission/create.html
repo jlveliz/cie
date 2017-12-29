@@ -33,6 +33,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Módulos</label>
+                                        <!-- <input ng-disabled="saving" id="module" type="text" class="form-control" name="module" ng-model="model.module.id" autofocus=""> -->
+                                        <select name="" id="" ng-options="select as label for value in modules"></select>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Nombre</label>
                                         <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
                                     </div>
