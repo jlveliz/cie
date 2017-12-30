@@ -1,13 +1,13 @@
 <?php 
 namespace Cie\Http\Validators;
 
-use Cie\Exceptions\ModuleException;
+use Cie\Exceptions\RoleException;
 use Illuminate\Http\Request;
 use Validator;
 /**
 * 
 */
-class ModuleValidator extends Validator implements ValidatorInterface
+class RoleValidator extends Validator implements ValidatorInterface
 {
 	private $request;
 
@@ -20,7 +20,7 @@ class ModuleValidator extends Validator implements ValidatorInterface
 	public function make(Request $request){
 		$validator =  parent::make($request->all(),$this->rules($request->method()),$this->messages($request->method()));
         if ($validator->fails()){
-        	throw new ModuleException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
+        	throw new RoleException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
         } else {
         	return true;
         } 

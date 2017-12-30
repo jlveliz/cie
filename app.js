@@ -6,6 +6,7 @@ define([
     'jquery',
     'underscore',
     'angular',
+    'angular-material',
     'jquery-validation',
     'angular-ui-router',
     'angular-resource',
@@ -21,7 +22,7 @@ define([
     'angular-moment',
 ], function(angularAMD, moment, $) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap']);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial']);
 
     cie.constant('appName', 'CIE');
 
@@ -422,6 +423,10 @@ define([
                             label: 'Permisos',
                             desc: 'Administrar los Permisos del Sistema',
                             sref: 'root.permission',
+                        }, {
+                            label: 'Roles',
+                            desc: 'Administrar los Roles del Sistema',
+                            sref: 'root.role',
                         }],
                     }]
                 }];
@@ -648,10 +653,15 @@ define([
         //permissions
         apiResource.resource("permissions", envService.read('api') + 'permissions/:id', {
             id: '@id'
-        }).register(); 
+        }).register();
 
         //tpermissions
         apiResource.resource("tpermissions", envService.read('api') + 'typepermissions/:id', {
+            id: '@id'
+        }).register();
+
+        //roles
+        apiResource.resource("roles", envService.read('api') + 'roles/:id', {
             id: '@id'
         }).register();
 
@@ -1019,8 +1029,8 @@ define([
             }
         }));
 
-         /**
-            MODULE
+        /**
+            TYPE PERMISSION
         **/
         $stateProvider.state('root.tpermission', angularAMD.route({
             url: 'type-permissions',
@@ -1077,6 +1087,67 @@ define([
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Tipos de Permisos"
+            }
+        }));
+
+        /**
+            ROLES
+        **/
+        $stateProvider.state('root.role', angularAMD.route({
+            url: 'roles',
+            controllerUrl: 'frontend/components/role/role',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/role/index.html',
+                    controller: 'RoleIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Roles"
+            }
+        }));
+
+        $stateProvider.state('root.role.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/role/role',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/role/create.html',
+                    controller: 'RoleCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Roles"
+            }
+        }));
+
+        $stateProvider.state('root.role.edit', angularAMD.route({
+            url: '/{roleId:int}/edit',
+            controllerUrl: 'frontend/components/role/role',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/role/edit.html',
+                    controller: 'RoleEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Roles"
             }
         }));
 

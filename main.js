@@ -18,6 +18,10 @@ require.config({
         'angular-bootstrap': 'frontend/bower_components/angular-bootstrap/ui-bootstrap-tpls',
         'angular-datatables-bootstrap': 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min',
         'angular-moment': 'frontend/bower_components/angular-moment/angular-moment.min',
+        'angular-animate': 'frontend/bower_components/angular-animate/angular-animate',
+        'angular-messages': 'frontend/bower_components/angular-messages/angular-messages.min',
+        'angular-aria': 'frontend/bower_components/angular-aria/angular-aria.min',
+        'angular-material': 'frontend/bower_components/angular-material/angular-material',
         'moment': 'frontend/bower_components/moment/min/moment-with-locales',
         'underscore': 'frontend/bower_components/underscore/underscore-min',
     },
@@ -78,6 +82,22 @@ require.config({
         'underscore': {
             exports: 'underscore',
             deps: ['jquery'],
+        },
+        'angular-messages': {
+            exports: 'angular-messages',
+            deps: ['angular'],
+        },
+        'angular-animate': {
+            exports: 'angular-animate',
+            deps: ['angular'],
+        },
+        'angular-aria': {
+            exports: 'angular-aria',
+            deps: ['angular'],
+        },
+        'angular-material': {
+            exports: 'angular-material',
+            deps: ['angular-animate', 'angular-aria', 'angular-messages'],
         }
     },
     deps: ['app']

@@ -30,11 +30,14 @@ class PermissionValidator extends Validator implements ValidatorInterface
 		$rules = [
 			'name' => 'required|unique:permission,name',
 			'module_id' => 'required|exists:module,id',
-			'parent_id' => 'exists:permission,id',
+			// 'parent_id' => 'exists:permission,id',
 			'type_id' => 'required|exists:permission_type,id',
 			'description' => 'required',
 		];
 
+		if ($method == 'POST') {
+			$rules['parent_id'] = 'exists:permission,id';
+		}
 		if ($method == 'PUT') {
 			$rules['name'] = 'required|unique:permission,name,'.$this->request->get('key');
 		}

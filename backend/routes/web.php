@@ -30,6 +30,7 @@ Route::group(['prefix'=>'api'],function() {
 	Route::resource('modules','ModuleController',['except'=>['create']]);
 	Route::resource('permissions','PermissionController',['except'=>['create']]);
 	Route::resource('typepermissions','PermissionTypeController',['except'=>['create']]);
+	Route::resource('roles','RoleController',['except'=>['create']]);
 
 	Route::get('validator/{method}','HelperController@validation');
 });

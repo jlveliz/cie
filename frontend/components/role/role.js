@@ -1,18 +1,18 @@
 /**
- ** Permission controller
+ ** Role controller
  **/
 define(['app'], function(app) {
 
-    app.register.service('PermissionService', function() {
+    app.register.service('RoleService', function() {
 
         var _this = this;
 
         _this.messageFlag = {};
     })
 
-    app.register.controller('PermissionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PermissionService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PermissionService, $rootScope) {
+    app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope) {
 
-        $scope.permissions = [];
+        $scope.roles = [];
         $scope.loading = true;
         $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
         $scope.messages = {};
@@ -27,40 +27,41 @@ define(['app'], function(app) {
             order: [
                 [0, 'asc'],
                 [1, 'asc'],
+                [2, 'asc'],
             ],
             responsive: true
         });
 
-        apiResource.resource('permissions').query().then(function(results) {
+        apiResource.resource('roles').query().then(function(results) {
             $scope.loading = false;
-            $scope.permissions = results;
-            $scope.messages = PermissionService.messageFlag;
+            $scope.roles = results;
+            $scope.messages = RoleService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
-                PermissionService.messageFlag = {};
+                RoleService.messageFlag = {};
             }
         });
 
         $scope.delete = function(id) {
-            apiResource.resource('permissions').getCopy(id).then(function(object) {
+            apiResource.resource('roles').getCopy(id).then(function(object) {
                 var params = {
                     title: 'Atención',
-                    text: 'Desea eliminar el permiso ' + object.name + '.?'
+                    text: 'Desea eliminar el rol ' + object.name + '.?'
                 }
                 $rootScope.openDelteModal(params).then(function() {
-                    var idx = _.findIndex($scope.permissions, function(el) {
+                    var idx = _.findIndex($scope.roles, function(el) {
                         return el.id == object.id;
                     });
                     if (idx > -1) {
-                        $scope.permissions[idx].$deleting = true;
+                        $scope.roles[idx].$deleting = true;
                         object.$delete(function() {
-                            PermissionService.messageFlag.title = "Permiso eliminado correctamente";
-                            PermissionService.messageFlag.type = "info";
-                            $scope.messages = PermissionService.messageFlag;
+                            RoleService.messageFlag.title = "Rol eliminado correctamente";
+                            RoleService.messageFlag.type = "info";
+                            $scope.messages = RoleService.messageFlag;
                             $scope.hasMessage = true;
-                            $scope.permissions.splice(idx, 1);
-                            apiResource.resource('permissions').removeFromCache(object.id);
-                            $scope.permissions[idx].$deleting = false;
+                            $scope.roles.splice(idx, 1);
+                            apiResource.resource('roles').removeFromCache(object.id);
+                            $scope.roles[idx].$deleting = false;
                         })
                     }
                 })
@@ -69,27 +70,22 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('PermissionCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PermissionService', '$q', function($scope, apiResource, $stateParams, $state, PermissionService, $q) {
+    app.register.controller('RoleCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'RoleService', '$q', function($scope, apiResource, $stateParams, $state, RoleService, $q) {
 
         $scope.loading = true;
         $scope.saving = false;
         $scope.model = {};
-        $scope.modules = [];
-        $scope.tPermissions = [];
-        $scope.listpermissions = [];
+        $scope.permissions = [];
         $scope.messages = [];
 
         var deps = $q.all([
-            apiResource.resource('modules').queryCopy().then(function(modules) {
-                $scope.modules = modules;
-            }),
-            apiResource.resource('tpermissions').queryCopy().then(function(tPermissions) {
-                $scope.tPermissions = tPermissions;
+            apiResource.resource('permissions').queryCopy().then(function(permissions) {
+                $scope.permissions = permissions;
             }),
         ]);
 
         deps.then(function() {
-            $scope.model = apiResource.resource('permissions').create();
+            $scope.model = apiResource.resource('roles').create();
             $scope.loading = false;
         })
 
@@ -142,9 +138,9 @@ define(['app'], function(app) {
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
-                    apiResource.resource('permissions').setOnCache(data);
-                    PermissionService.messageFlag.title = "Permiso creado correctamente";
-                    PermissionService.messageFlag.type = "info";
+                    apiResource.resource('roles').setOnCache(data);
+                    RoleService.messageFlag.title = "Permiso creado correctamente";
+                    RoleService.messageFlag.type = "info";
                     if (returnIndex) {
                         $state.go('root.permission');
                     } else {
@@ -176,12 +172,12 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('PermissionEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PermissionService', '$q', function($scope, apiResource, $stateParams, $state, PermissionService, $q) {
+    app.register.controller('RoleEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'RoleService', '$q', function($scope, apiResource, $stateParams, $state, RoleService, $q) {
 
         var permissionId = $stateParams.permissionId;
 
         $scope.modules = [];
-        $scope.tPermissions = [];
+        $scope.tRoles = [];
         $scope.loading = true;
         $scope.model = {};
         $scope.messages = {};
@@ -191,18 +187,18 @@ define(['app'], function(app) {
             apiResource.resource('modules').queryCopy().then(function(modules) {
                 $scope.modules = modules;
             }),
-            apiResource.resource('tpermissions').queryCopy().then(function(tPermissions) {
-                $scope.tPermissions = tPermissions;
+            apiResource.resource('troles').queryCopy().then(function(tRoles) {
+                $scope.tRoles = tRoles;
             }),
         ]);
 
         deps.then(function() {
-            apiResource.resource('permissions').getCopy(permissionId).then(function(model) {
+            apiResource.resource('roles').getCopy(permissionId).then(function(model) {
                 $scope.model = model;
-                $scope.messages = PermissionService.messageFlag;
+                $scope.messages = RoleService.messageFlag;
                 if (!_.isEmpty($scope.messages)) {
                     $scope.hasMessage = true;
-                    PermissionService.messageFlag = {};
+                    RoleService.messageFlag = {};
                 }
                 $scope.loading = false;
             });
@@ -259,10 +255,10 @@ define(['app'], function(app) {
                 $scope.model.$update(permissionId, function(data) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
-                    apiResource.resource('permissions').setOnCache(data);
-                    PermissionService.messageFlag.title = "Permiso " + $scope.model.name + " Actualizado correctamente";
-                    PermissionService.messageFlag.type = "info";
-                    $scope.messages = PermissionService.messageFlag;
+                    apiResource.resource('roles').setOnCache(data);
+                    RoleService.messageFlag.title = "Permiso " + $scope.model.name + " Actualizado correctamente";
+                    RoleService.messageFlag.type = "info";
+                    $scope.messages = RoleService.messageFlag;
                     if (returnIndex) {
                         $state.go('root.permission');
                     }

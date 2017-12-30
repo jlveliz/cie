@@ -8,6 +8,8 @@ class Permission extends Model
 {
     protected $table = "permission";
 
+    protected $with = ['module','type'];
+
     protected $primaryKey = "id";
 
     protected $fillable = [
@@ -20,8 +22,18 @@ class Permission extends Model
     ];
 
 
-    public function Module()
+    public function module()
     {
-    	return $this->belongsTo('Cie\Models\Module','module_id');
+        return $this->belongsTo('Cie\Models\Module','module_id');
+    }
+
+    public function type()
+    {
+    	return $this->belongsTo('Cie\Models\PermissionType','type_id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany('Cie\Models\Role','role_id');
     }
 }

@@ -24,7 +24,8 @@
         "angular-permission": "~2.3.0",
         "angular-datatables": "0.6.0",
         "angular-bootstrap": "^2.5.0",
-        "angular-moment": "^1.0.1"
+        "angular-moment": "^1.0.1",
+        "angular-material": "^1.1.4"
     },
     "resolutions":
     {

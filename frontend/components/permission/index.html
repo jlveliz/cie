@@ -43,7 +43,7 @@
                                                 <tr ng-repeat="permission in permissions">
                                                     <td>{{permission.name | capitalize:'oneLetter'}}</td>
                                                     <td>{{permission.module.name}}</td>
-                                                    <td>{{permission.type}}</td>
+                                                    <td>{{permission.type.name}}</td>
                                                     <td>{{permission.created_at | filterTimestamp }} - {{permission.updated_at | filterTimestamp }}</td>
                                                     <td>
                                                         <a ng-hide="permission.$deleting" ui-sref="root.permission.edit({permissionId:permission.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
