@@ -27,14 +27,14 @@ class RoleRepository implements RoleRepositoryInterface
 	{
 		if (is_array($field)) {
 			if (array_key_exists('name', $field)) { 
-				$role = Role::where('name',$field['name'])->first();	
+				$role = Role::with('permissions')->where('name',$field['name'])->first();	
 			} else {
 
 				throw new RoleException(['title'=>'No se puede buscar el rol','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			$role = Role::where('id',$field)->first();
+			$role = Role::with('permissions')->where('id',$field)->first();
 		} else {
 			throw new RoleException(['title'=>'Se ha producido un error al buscar el rol','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
@@ -51,6 +51,7 @@ class RoleRepository implements RoleRepositoryInterface
 		$role = new Role();
 		$role->fill($data);
 		if ($role->save()) {
+			$role->permissions()->sync($data['permissions']);
 			$key = $role->getKey();
 			return  $this->find($key);
 		} else {
@@ -60,10 +61,11 @@ class RoleRepository implements RoleRepositoryInterface
 
 	public function edit($id,$data)
 	{
-		$role = Role::find($id);
+		$role = $this->find($id);
 		if ($role) {
 			$role->fill($data);
 			if($role->update()){
+				$role->permissions()->sync($data['permissions']);
 				$key = $role->getKey();
 				return $this->find($key);
 			}

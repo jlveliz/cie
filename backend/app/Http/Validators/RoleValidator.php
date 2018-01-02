@@ -28,11 +28,13 @@ class RoleValidator extends Validator implements ValidatorInterface
 
 	public function rules($method = null) {
 		$rules = [
-			'name' => 'required|unique:module,name',
+			'name' => 'required|unique:role,name',
+			'code' => 'required|unique:role,code',
 		];
 
 		if ($method == 'PUT') {
-			$rules['name'] = 'required|unique:module,name,'.$this->request->get('key');
+			$rules['name'] = 'required|unique:role,name,'.$this->request->get('key');
+			$rules['code'] = 'required|unique:role,code,'.$this->request->get('key');
 		}
 
 		return $rules;
@@ -42,6 +44,8 @@ class RoleValidator extends Validator implements ValidatorInterface
 		return [
 			'name.required' => 'El nombre es requerido',
 			'name.unique'=>'El nombre de módulo ya fue tomado',
+			'code.required' => 'El Código es requerido',
+			'code.unique' => 'El Código ya fue tomado',
 			
 		];
 	}

@@ -2,7 +2,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Módulos</h2>
+                <h2>Roles</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -32,13 +32,42 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Código <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.code" autofocus="">
+                                    </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Nombre  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
+                                        <label class="control-label">Nombre <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name">
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Descripción  <span class="text-danger">*</span></label>
+                                        <label class="control-label">Descripción <span class="text-danger">*</span></label>
                                         <input ng-disabled="saving" id="description" type="text" class="form-control" name="description" ng-model="model.description" autofocus="">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                        <label for="permisos" id="permisos" class="form-label">Permisos</label>
+                                        <table class="table" ng-repeat="module in modules">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-md-8 col-sm-6 col-xs-12">{{module.name}}</th>
+                                                    <th class="text-center col-md-4 col-sm-6 col-xs-12">Permitir?</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="(keyPerm, valuePerm) in module.permissions">
+                                                    <td>{{valuePerm.name}}</td>
+                                                    <td colspan="1" class="text-center">
+                                                        <div class="checkbox checkbox-primary" style="margin:0px">
+                                                            <input id="checkbox{{keyMod + keyPerm}}" type="checkbox" ng-model="valuePerm.$selected" ng-change="setPermission(valuePerm.id,valuePerm.$selected)">
+                                                            <label for="checkbox{{keyMod + keyPerm}}">
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +83,7 @@
                                     <span ng-if="!saving"><i class="fa fa-save"></i> Guardar y cerrar</span>
                                     <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
                                 </button>
-                                <a class="btn btn-link" ui-sref="root.module">Cancelar</a>
+                                <a class="btn btn-link" ui-sref="root.role">Cancelar</a>
                             </div>
                         </form>
                     </uib-tab>

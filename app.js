@@ -1128,6 +1128,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
+                css: ['frontend/assets/css/checkbox-bootstrap.css'],
                 pageTitle: "Roles"
             }
         }));
@@ -1147,6 +1148,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
+                css: ['frontend/assets/css/checkbox-bootstrap.css'],
                 pageTitle: "Roles"
             }
         }));
