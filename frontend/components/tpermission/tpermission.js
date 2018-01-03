@@ -58,9 +58,9 @@ define(['app'], function(app) {
                             TPermissionService.messageFlag.type = "info";
                             $scope.messages = TPermissionService.messageFlag;
                             $scope.hasMessage = true;
+                            $scope.tpermissions[idx].$deleting = false;
                             $scope.tpermissions.splice(idx, 1);
                             apiResource.resource('tpermissions').removeFromCache(object.id);
-                            $scope.tpermissions[idx].$deleting = false;
                         })
                     }
                 })
