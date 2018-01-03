@@ -30,6 +30,7 @@ class RoleValidator extends Validator implements ValidatorInterface
 		$rules = [
 			'name' => 'required|unique:role,name',
 			'code' => 'required|unique:role,code',
+			'is_default' => 'required|boolean',
 		];
 
 		if ($method == 'PUT') {

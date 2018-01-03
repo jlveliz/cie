@@ -199,9 +199,10 @@ define([
                                             return item.id == params.id;
                                         });
                                         if (idxArray > -1) {
-                                            arrayCache[idxArray] = params;
+                                           return  arrayCache[idxArray] = params;
                                         } else {
                                             arrayCache.push(params);
+                                            return params
                                         }
                                     }
                                 }

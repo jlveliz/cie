@@ -44,6 +44,13 @@
                                         <label class="control-label">Descripción <span class="text-danger">*</span></label>
                                         <input ng-disabled="saving" id="description" type="text" class="form-control" name="description" ng-model="model.description" autofocus="">
                                     </div>
+                                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                                        <label class="control-label">Predeterminado ?: <span class="text-danger">*</span></label>
+                                        <select name="is_default" ng-model="model.is_default" class="form-control" required>
+                                            <option value="1">Si</option>
+                                            <option value="0" selected>No</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-12 col-sm-12 col-xs-12">

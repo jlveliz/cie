@@ -3,7 +3,7 @@
  **/
 define(['app'], function(app) {
 
-    app.register.service('RoleService', function() {
+    app.register.service('RoleService', ['apiResource', function(apiResource) {
 
         var _this = this;
 
@@ -32,7 +32,23 @@ define(['app'], function(app) {
             return arrayPermissions;
 
         }
-    })
+
+        /**
+            update is_default field in array (roles) if is default (model) is selected after to save
+        **/
+        _this.updateDefaultValue = function(idModel) {
+            apiResource.resource('roles').query().then(function(results) {
+                var grFiltered = _.reject(results, function(item) {
+                    return item.id == idModel;
+                });
+
+                angular.forEach(grFiltered, function(group) {
+                    group.is_default = '0';
+                })
+            })
+
+        }
+    }]);
 
     app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope) {
 
@@ -46,12 +62,13 @@ define(['app'], function(app) {
             orderable: false,
             columnDefs: [{
                 orderable: false,
-                targets: 3
+                targets: 4
             }],
             order: [
                 [0, 'asc'],
                 [1, 'asc'],
                 [2, 'asc'],
+                [3, 'asc'],
             ],
             responsive: true
         });
@@ -117,7 +134,7 @@ define(['app'], function(app) {
 
         deps.then(function() {
             $scope.modules = RoleService.matchPermissions($scope.modules, listPermissions);
-            $scope.model = apiResource.resource('roles').create({ permissions: [] });
+            $scope.model = apiResource.resource('roles').create({ is_default: '0', permissions: [] });
             $scope.loading = false;
         })
 
@@ -195,6 +212,9 @@ define(['app'], function(app) {
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
+                    if (data.is_default == '1') {
+                        needUpdate = RoleService.updateDefaultValue(data.id);
+                    }
                     apiResource.resource('roles').setOnCache(data);
                     RoleService.messageFlag.title = "Permiso creado correctamente";
                     RoleService.messageFlag.type = "info";
@@ -251,7 +271,7 @@ define(['app'], function(app) {
         ]);
 
         deps.then(function() {
-            apiResource.resource('roles').getCopy(roleId).then(function(model) {
+            apiResource.resource('roles').get(roleId).then(function(model) {
                 $scope.modules = RoleService.matchPermissions($scope.modules, listPermissions);
                 $scope.model = model;
                 $scope.model.permissions = RoleService.formatPermissionsGroup($scope.model.permissions);
@@ -316,7 +336,6 @@ define(['app'], function(app) {
         };
 
         $scope.setPermission = function(permissionId, selected) {
-            debugger;
             if (!selected) {
                 var idx = _.indexOf($scope.model.permissions, permissionId);
                 if (idx > -1) $scope.model.permissions.splice(idx, 1);
@@ -329,12 +348,12 @@ define(['app'], function(app) {
             var fPermission = _.find($scope.model.permissions, function(el) {
                 return el == permissionId
             });
-            if (fPermission){
+            if (fPermission) {
                 //hacking :v
                 permissionModule.$selected = true;
                 return true;
-                
-            } 
+
+            }
             return false;
         }
 
@@ -345,9 +364,13 @@ define(['app'], function(app) {
                 $scope.saving = true;
                 $scope.model.key = roleId;
                 $scope.model.$update(roleId, function(data) {
+                    debugger
+                    if (data.is_default == '1') {
+                        RoleService.updateDefaultValue(data.id);
+                    }
                     $scope.saving = false;
                     $scope.hasMessage = true;
-                    apiResource.resource('roles').setOnCache(data);
+                    $scope.model = apiResource.resource('roles').setOnCache(data);
                     $scope.model.permissions = RoleService.formatPermissionsGroup($scope.model.permissions);
                     RoleService.messageFlag.title = "Rol " + $scope.model.name + " Actualizado correctamente";
                     RoleService.messageFlag.type = "info";
