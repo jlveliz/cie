@@ -423,17 +423,17 @@ define([
                             desc: 'Administrar los usuarios del Sistema',
                             sref: 'root.user',
                         }, {
-                            label: 'Módulos',
-                            desc: 'Administrar los Módulos del Sistema',
-                            sref: 'root.module',
+                            label: 'Roles',
+                            desc: 'Administrar los Roles del Sistema',
+                            sref: 'root.role',
                         }, {
                             label: 'Permisos',
                             desc: 'Administrar los Permisos del Sistema',
                             sref: 'root.permission',
                         }, {
-                            label: 'Roles',
-                            desc: 'Administrar los Roles del Sistema',
-                            sref: 'root.role',
+                            label: 'Módulos',
+                            desc: 'Administrar los Módulos del Sistema',
+                            sref: 'root.module',
                         }],
                     }]
                 }];
