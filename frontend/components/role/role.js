@@ -73,7 +73,7 @@ define(['app'], function(app) {
             responsive: true
         });
 
-        apiResource.resource('roles').query().then(function(results) {
+        apiResource.resource('roles').queryCopy().then(function(results) {
             $scope.loading = false;
             $scope.roles = results;
             $scope.messages = RoleService.messageFlag;
@@ -100,9 +100,9 @@ define(['app'], function(app) {
                             RoleService.messageFlag.type = "info";
                             $scope.messages = RoleService.messageFlag;
                             $scope.hasMessage = true;
+                            $scope.roles[idx].$deleting = false;
                             $scope.roles.splice(idx, 1);
                             apiResource.resource('roles').removeFromCache(object.id);
-                            $scope.roles[idx].$deleting = false;
                         })
                     }
                 })
@@ -271,7 +271,7 @@ define(['app'], function(app) {
         ]);
 
         deps.then(function() {
-            apiResource.resource('roles').get(roleId).then(function(model) {
+            apiResource.resource('roles').getCopy(roleId).then(function(model) {
                 $scope.modules = RoleService.matchPermissions($scope.modules, listPermissions);
                 $scope.model = model;
                 $scope.model.permissions = RoleService.formatPermissionsGroup($scope.model.permissions);
@@ -364,20 +364,22 @@ define(['app'], function(app) {
                 $scope.saving = true;
                 $scope.model.key = roleId;
                 $scope.model.$update(roleId, function(data) {
-                    debugger
                     if (data.is_default == '1') {
                         RoleService.updateDefaultValue(data.id);
                     }
-                    $scope.saving = false;
                     $scope.hasMessage = true;
-                    $scope.model = apiResource.resource('roles').setOnCache(data);
-                    $scope.model.permissions = RoleService.formatPermissionsGroup($scope.model.permissions);
-                    RoleService.messageFlag.title = "Rol " + $scope.model.name + " Actualizado correctamente";
-                    RoleService.messageFlag.type = "info";
-                    $scope.messages = RoleService.messageFlag;
-                    if (returnIndex) {
-                        $state.go('root.role');
-                    }
+                    apiResource.resource('roles').setOnCache(data);
+                    apiResource.resource('roles').getCopy(data.id).then(function(copyRe){
+                        $scope.model = copyRe;
+                        $scope.model.permissions = RoleService.formatPermissionsGroup($scope.model.permissions);
+                        RoleService.messageFlag.title = "Rol " + $scope.model.name + " Actualizado correctamente";
+                        RoleService.messageFlag.type = "info";
+                        $scope.messages = RoleService.messageFlag;
+                        $scope.saving = false;
+                        if (returnIndex) {
+                            $state.go('root.role');
+                        }
+                    });
                 }, function(reason) {
                     $scope.saving = false;
                     $scope.existError = true;

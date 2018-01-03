@@ -58,9 +58,9 @@ define(['app'], function(app) {
                             ModuleService.messageFlag.type = "info";
                             $scope.messages = ModuleService.messageFlag;
                             $scope.hasMessage = true;
+                            $scope.modules[idx].$deleting = false;
                             $scope.modules.splice(idx, 1);
                             apiResource.resource('modules').removeFromCache(object.id);
-                            $scope.modules[idx].$deleting = false;
                         })
                     }
                 })

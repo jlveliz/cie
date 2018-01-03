@@ -135,7 +135,8 @@ define([
                                 var deferred = $q.defer();
                                 var copy = [];
                                 this.query(params).then(function(result) {
-                                    copy = angular.copy(result);
+                                    angular.copy(result, copy);
+                                    copy.$original = result;
                                     deferred.resolve(copy);
                                 })
                                 return deferred.promise;
@@ -176,8 +177,11 @@ define([
                                 };
                                 var deferred = $q.defer();
                                 var copy = {};
+                                var _this = this;
                                 this.get(param).then(function(result) {
-                                    copy = angular.copy(result);
+                                    angular.copy(result, copy);
+                                    copy = _this.create(copy);
+                                    copy.$original = result;
                                     deferred.resolve(copy);
                                 })
                                 return deferred.promise;
@@ -199,11 +203,13 @@ define([
                                             return item.id == params.id;
                                         });
                                         if (idxArray > -1) {
-                                           return  arrayCache[idxArray] = params;
+                                            arrayCache[idxArray] = params;
                                         } else {
                                             arrayCache.push(params);
-                                            return params
                                         }
+                                        caching.put(idCookie, arrayCache); //set cache new resource
+                                    } else {
+                                        caching.put(idCookie, [params]);
                                     }
                                 }
                             },
