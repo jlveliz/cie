@@ -67,8 +67,8 @@
                                                     <td>{{valuePerm.name}}</td>
                                                     <td colspan="1" class="text-center">
                                                         <div class="checkbox checkbox-primary" style="margin:0px">
-                                                            <input id="checkbox{{keyMod + keyPerm}}" ng-checked="checkPermission(valuePerm.id, valuePerm)" type="checkbox" ng-model="valuePerm.$selected" ng-change="setPermission(valuePerm.id,valuePerm.$selected)">
-                                                            <label for="checkbox{{keyMod + keyPerm}}">
+                                                            <input id="checkbox{{valuePerm.id + keyPerm}}" ng-checked="checkPermission(valuePerm.id, valuePerm)" type="checkbox" ng-model="valuePerm.$selected" ng-change="setPermission(valuePerm.id,valuePerm.$selected)">
+                                                            <label for="checkbox{{valuePerm.id + keyPerm}}">
                                                             </label>
                                                         </div>
                                                     </td>
