@@ -56,7 +56,7 @@ define(['app'], function(app) {
                     if (idx > -1) {
                         $scope.users[idx].$deleting = true;
                         object.$delete(function() {
-                            $scope.groups[users].$deleting = false;
+                            $scope.users[idx].$deleting = false;
                             $scope.users.splice(idx, 1);
                             apiResource.resource('users').removeFromCache(object.id);
                         })
