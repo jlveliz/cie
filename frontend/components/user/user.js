@@ -67,15 +67,25 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('UserCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', function($scope, apiResource, $stateParams, $state, UserService) {
+    app.register.controller('UserCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', '$q', function($scope, apiResource, $stateParams, $state, UserService, $q) {
 
         $scope.saving = false;
         $scope.model = {};
+        $scope.loading = true;
         $scope.listPermissions = [];
+        $scope.roles = [];
         $scope.messages = [];
 
+        var deps = $q.all([
+            apiResource.resource('roles').queryCopy().then(function(roles) {
+                $scope.roles = roles;
+            })
+        ]);
 
-        $scope.model = apiResource.resource('users').create();
+        deps.then(function() {
+            $scope.loading = false;
+            $scope.model = apiResource.resource('users').create();
+        })
 
         $scope.validateOptions = {
             rules: {
@@ -173,7 +183,7 @@ define(['app'], function(app) {
     app.register.controller('UserEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', function($scope, apiResource, $stateParams, $state, UserService) {
 
         var userId = $stateParams.userId;
-        
+
 
         $scope.loading = true;
         $scope.model = {};
