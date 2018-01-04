@@ -63,11 +63,21 @@
                                                     <input ng-disabled="saving" type="email" class="form-control" name="email" ng-model="model.email">
                                                 </div>
                                             </div>
-
                                             <div class="row">
-                                                <label for="roles" id="roles" class="form-label">Roles</label>
-                                                <ul class="list">
-                                                    <li ng-repeat="(key, value) in roles">{{value.name}}</li>
+                                                <div class="profile_title ng-scope">
+                                                    <h2><b>Roles</b></h2>
+                                                </div>
+                                                <ul class="list-unstyled">
+                                                    <li ng-repeat="(key, value) in roles">
+                                                        <div class="checkbox checkbox-primary" style="margin:0px">
+                                                            <input id="checkbox_role_{{value.id}}" type="checkbox" ng-checked="checkGroup(group.id)" ng-change="setGroup(value.id,value.$selected)" ng-model="value.$selected" class="ng-pristine ng-untouched ng-valid ng-empty" checked="checked" aria-invalid="false">
+                                                            <label for="checkbox_role_{{value.id}}" class="ng-binding">
+                                                                {{value.name}} <small class="ng-binding">({{value.code}})</small>
+                                                                <br>
+                                                                <small class="text-muted ng-binding">{{value.description}}</small>
+                                                            </label>
+                                                        </div>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -75,11 +85,9 @@
                                     <uib-tab index="1">
                                         <uib-tab-heading>Permisos</uib-tab-heading>
                                         <div class="row">
-                                            
                                         </div>
                                     </uib-tab>
                                 </uib-tabset>
-                                
                             </div>
                             <!-- Nav tabs -->
                             <div class="clearfix "></div>
