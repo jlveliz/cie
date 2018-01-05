@@ -64,27 +64,52 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="profile_title ng-scope">
-                                                    <h2><b>Roles</b></h2>
+                                                <div class="col-md-12 col-sm-12 col-xs-12 form-group" ng-if="!loading">
+                                                    <div class="profile_title ng-scope">
+                                                        <h2><b>Roles</b></h2>
+                                                    </div>
+                                                    <ul class="list-unstyled list-roles">
+                                                        <li ng-repeat="(key, value) in roles">
+                                                            <div class="checkbox checkbox-primary" style="margin:0px">
+                                                                <input id="checkbox_role_{{value.id}}" type="checkbox" ng-checked="checkGroup(group.id)" ng-change="setGroup(value.id,value.$selected)" ng-model="value.$selected" class="ng-pristine ng-untouched ng-valid ng-empty" checked="checked" aria-invalid="false">
+                                                                <label for="checkbox_role_{{value.id}}" class="ng-binding">
+                                                                    {{value.name}} <small class="ng-binding">({{value.code}})</small>
+                                                                    <br>
+                                                                    <small class="text-muted ng-binding">{{value.description}}</small>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-                                                <ul class="list-unstyled">
-                                                    <li ng-repeat="(key, value) in roles">
-                                                        <div class="checkbox checkbox-primary" style="margin:0px">
-                                                            <input id="checkbox_role_{{value.id}}" type="checkbox" ng-checked="checkGroup(group.id)" ng-change="setGroup(value.id,value.$selected)" ng-model="value.$selected" class="ng-pristine ng-untouched ng-valid ng-empty" checked="checked" aria-invalid="false">
-                                                            <label for="checkbox_role_{{value.id}}" class="ng-binding">
-                                                                {{value.name}} <small class="ng-binding">({{value.code}})</small>
-                                                                <br>
-                                                                <small class="text-muted ng-binding">{{value.description}}</small>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                </ul>
                                             </div>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="1">
                                         <uib-tab-heading>Permisos</uib-tab-heading>
                                         <div class="row">
+                                            <div class="profile_title ">
+                                            <h2><b>Permisos</b></h2>
+                                        </div>
+                                        <table class="table" ng-repeat="(keyMod, valueMod) in modules">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-md-4 col-xs-6 col-sm-4"><b>{{valueMod.name}}</b></th>
+                                                    <th class="col-md-8 col-xs-6 col-sm-8 text-center" colspan="2"><b>Permitido ? </b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="(keyPerm, valuePerm) in valueMod.permissions">
+                                                    <td>{{valuePerm.name }}</td>
+                                                    <td colspan="2" class="text-center">
+                                                        <md-radio-group ng-model="permissionsUser[keyMod+'.'+keyPerm]" ng-change="checkPermission(keyMod+'.'+keyPerm,permissionsUser[keyMod+'.'+keyPerm])">
+                                                            <md-radio-button ng-checked="true" value="1" class="md-primary radio-perms">Si</md-radio-button>
+                                                            <md-radio-button value="2" class="md-primary radio-perms">Heredado</md-radio-button>
+                                                            <md-radio-button value="0" class="md-primary radio-perms">No</md-radio-button>
+                                                        </md-radio-group>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                         </div>
                                     </uib-tab>
                                 </uib-tabset>

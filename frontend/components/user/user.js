@@ -74,9 +74,13 @@ define(['app'], function(app) {
         $scope.loading = true;
         $scope.listPermissions = [];
         $scope.roles = [];
+        $scope.modules = [];
         $scope.messages = [];
 
         var deps = $q.all([
+            apiResource.resource('modules').queryCopy().then(function(modules) {
+                $scope.modules = modules;
+            }), 
             apiResource.resource('roles').queryCopy().then(function(roles) {
                 $scope.roles = roles;
             })
