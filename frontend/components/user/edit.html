@@ -6,62 +6,108 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <h4 class="text-center" ng-if="loading">
-                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-                    <span class="sr-only">Cargando...</span>
-                </h4>
-                <div class="tab-index" ng-if="!loading">
-                    <uib-tabset active="1">
-                        <uib-tab index="0">
-                            <uib-tab-heading>
-                                <a ui-sref="root.user" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
-                            </uib-tab-heading>
-                        </uib-tab>
-                        <uib-tab index="1">
-                            <uib-tab-heading>
-                                <h5><b><i class="fa fa-edit"></i> Edit</b></h5>
-                            </uib-tab-heading>
-                            <div class="row" ng-if="existError || hasMessage">
-                                <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <ul ng-if="messages.details.length > 0">
-                                        <li ng-repeat="(key, value) in messages.details">{{value}}</li>
-                                    </ul>
-                                    <p ng-if="hasMessage">{{messages.title}}</p>
-                                </div>
-                            </div>
-                            <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
-                                <div class="tab-index">
-                                    <div class="row">
-                                        <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Usuario  <span class="text-danger">*</span></label>
-                                            <input ng-disabled="saving" id="username" type="text" class="form-control" name="username" ng-model="model.username" autofocus="">
+                <uib-tabset active="1">
+                    <uib-tab index="0">
+                        <uib-tab-heading>
+                            <a ui-sref="root.user" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
+                        </uib-tab-heading>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <h5><b><i class="fa fa-edit"></i> Editar</b></h5>
+                        </uib-tab-heading>
+                        <h4 class="text-center" ng-if="loading">
+                            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Cargando...</span>
+                        </h4>
+                        <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
+                            <div class="tab-index">
+                                <uib-tabset active="0">
+                                    <uib-tab index="0">
+                                        <uib-tab-heading>Perfil</uib-tab-heading>
+                                        <div class="tab-index">
+                                            <div class="row" ng-if="existError || hasMessage">
+                                                <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <ul ng-if="messages.details.length > 0">
+                                                        <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                                    </ul>
+                                                    <p ng-if="hasMessage">{{messages.title}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Usuario <span class="text-danger">*</span></label>
+                                                    <input ng-disabled="saving" id="username" type="text" class="form-control" name="username" ng-model="model.username" autofocus="">
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Contraseña <span class="text-danger">*</span></label>
+                                                    <input ng-disabled="saving" id="password" type="password" class="form-control" name="password" ng-model="model.password">
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Rep. Contraseña <span class="text-danger">*</span></label>
+                                                    <input ng-disabled="saving" id="repeat_password" type="password" class="form-control" name="repeat_password" ng-model="model.repeat_password">
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Nombre <span class="text-danger">*</span></label>
+                                                    <input ng-disabled="saving" type="text" class="form-control" name="name" ng-model="model.name">
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Apellido <span class="text-danger">*</span></label>
+                                                    <input ng-disabled="saving" type="text" class="form-control" name="last_name" ng-model="model.last_name">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Email <span class="text-danger">*</span></label>
+                                                    <input ng-disabled="saving" type="email" class="form-control" name="email" ng-model="model.email">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 form-group" ng-if="!loading">
+                                                    <div class="profile_title ng-scope">
+                                                        <h2><b>Roles</b></h2>
+                                                    </div>
+                                                    <ul class="list-unstyled list-roles">
+                                                        <li ng-repeat="(key, value) in roles">
+                                                            <div class="checkbox checkbox-primary" style="margin:0px">
+                                                                <input id="checkbox_role_{{value.id}}" type="checkbox" ng-checked="checkRole(value.id,value)" ng-change="setRole(value.id,value.$selected)" ng-model="value.$selected" class="ng-pristine ng-untouched ng-valid ng-empty" checked="checked" aria-invalid="false">
+                                                                <label for="checkbox_role_{{value.id}}" class="ng-binding">
+                                                                    {{value.name}} <small class="ng-binding">({{value.code}})</small>
+                                                                    <br>
+                                                                    <small class="text-muted ng-binding">{{value.description}}</small>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Contraseña  <span class="text-danger">*</span></label>
-                                            <input ng-disabled="saving" id="password" type="password" class="form-control" name="password" ng-model="model.password">
-                                        </div>
-                                        <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Rep. Contraseña  <span class="text-danger">*</span></label>
-                                            <input ng-disabled="saving" id="repeat_password" type="password" class="form-control" name="repeat_password" ng-model="model.repeat_password">
-                                        </div>
-                                        <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Nombre  <span class="text-danger">*</span></label>
-                                            <input ng-disabled="saving" type="text" class="form-control" name="name" ng-model="model.name">
-                                        </div>
-                                        <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Apellido  <span class="text-danger">*</span></label>
-                                            <input ng-disabled="saving" type="text" class="form-control" name="last_name" ng-model="model.last_name">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                            <label class="control-label">Email  <span class="text-danger">*</span></label>
-                                            <input ng-disabled="saving" type="email" class="form-control" name="email" ng-model="model.email">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Nav tabs -->
+                                    </uib-tab>
+                                    <uib-tab index="1">
+                                        <uib-tab-heading>Permisos</uib-tab-heading>
+                                        <table class="table" ng-repeat="(keyMod, valueMod) in modules">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-md-4 col-xs-6 col-sm-4"><b>{{valueMod.name}}</b></th>
+                                                    <th class="col-md-8 col-xs-6 col-sm-8 text-center" colspan="2"><b>Permitido ? </b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="(keyPerm, valuePerm) in valueMod.permissions">
+                                                    <td>{{valuePerm.name }}</td>
+                                                    <td colspan="2" class="text-center">
+                                                        <md-radio-group ng-model="permissionsUser[keyMod+'.'+keyPerm]" ng-change="checkPermission(keyMod+'.'+keyPerm,permissionsUser[keyMod+'.'+keyPerm])">
+                                                            <md-radio-button ng-checked="true" value="1" class="md-primary radio-perms">Si</md-radio-button>
+                                                            <md-radio-button value="2" class="md-primary radio-perms">Heredado</md-radio-button>
+                                                            <md-radio-button value="0" class="md-primary radio-perms">No</md-radio-button>
+                                                        </md-radio-group>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </uib-tab>
+                                </uib-tabset>
                                 <div class="clearfix "></div>
                                 <div class="ln_solid " ng-if="!loading "></div>
                                 <div class="form-group " ng-if="!loading ">
@@ -75,10 +121,11 @@
                                     </button>
                                     <a class="btn btn-link" ui-sref="root.user">Cancelar</a>
                                 </div>
-                            </form>
-                        </uib-tab>
-                    </uib-tabset>
-                </div>
+                            </div>
+                            <!-- Nav tabs -->
+                        </form>
+                    </uib-tab>
+                </uib-tabset>
             </div>
         </div>
     </div>

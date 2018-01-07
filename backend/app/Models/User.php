@@ -11,7 +11,7 @@ class User extends Authenticatable
 
     protected $table = "user";
 
-    protected $with = "person";
+    protected $with = ["person",'roles'];
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +34,11 @@ class User extends Authenticatable
     public function person()
     {
         return $this->belongsTo('Cie\Models\Person','person_id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany('Cie\Models\Role','user_role','user_id','role_id');
     }
 
     protected static function boot()

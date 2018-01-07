@@ -829,7 +829,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/assets/css/custom.css', 'frontend/assets/css/animate.css', 'frontend/bower_components/angular-bootstrap/ui-bootstrap-csp.css'],
+                css: ['frontend/assets/css/custom.css', 'frontend/assets/css/animate.css', 'frontend/bower_components/angular-bootstrap/ui-bootstrap-csp.css', 'frontend/bower_components/angular-material/angular-material.css'],
             }
         }));
 
@@ -911,6 +911,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
+                css: ['frontend/assets/css/checkbox-bootstrap.css'],
                 pageTitle: "Usuarios"
             }
         }));

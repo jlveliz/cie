@@ -13,7 +13,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 	
 	public function enum($params = null)
 	{
-		$modules = Module::all();
+		$modules = Module::with('permissions')->get();
 
 		if (!$modules) {
 			throw new ModuleException(['title'=>'No se han encontrado el listado de  módulos','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");

@@ -10,8 +10,6 @@ class Module extends Model
 
     protected $primaryKey = "id";
 
-    protected $with = ['permissions'];
-
     protected $fillable = [
     	'name',
     ];

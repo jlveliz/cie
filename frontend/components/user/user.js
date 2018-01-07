@@ -8,6 +8,15 @@ define(['app'], function(app) {
         var _this = this;
 
         _this.messageFlag = {};
+
+        _this.formatRolesUser = function(roles) {
+            var arrayRoles = [];
+            angular.forEach(roles, function(item) {
+                arrayRoles.push(item.id);
+            })
+            return arrayRoles;
+
+        }
     })
 
     app.register.controller('UserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'UserService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, UserService, $rootScope) {
@@ -80,15 +89,18 @@ define(['app'], function(app) {
         var deps = $q.all([
             apiResource.resource('modules').queryCopy().then(function(modules) {
                 $scope.modules = modules;
-            }), 
+            }),
             apiResource.resource('roles').queryCopy().then(function(roles) {
+                angular.forEach(roles, function(role) {
+                    role.$selected = false
+                })
                 $scope.roles = roles;
             })
         ]);
 
         deps.then(function() {
             $scope.loading = false;
-            $scope.model = apiResource.resource('users').create();
+            $scope.model = apiResource.resource('users').create({ roles: [] });
         })
 
         $scope.validateOptions = {
@@ -145,6 +157,16 @@ define(['app'], function(app) {
 
         };
 
+
+        $scope.setRole = function(roleId, selected) {
+            if (!selected) {
+                var idx = _.indexOf($scope.model.roles, roleId);
+                if (idx > -1) $scope.model.roles.splice(idx, 1);
+            } else {
+                $scope.model.roles.push(roleId);
+            }
+        }
+
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
@@ -184,7 +206,7 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('UserEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', function($scope, apiResource, $stateParams, $state, UserService) {
+    app.register.controller('UserEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', '$q', function($scope, apiResource, $stateParams, $state, UserService, $q) {
 
         var userId = $stateParams.userId;
 
@@ -194,19 +216,34 @@ define(['app'], function(app) {
         $scope.messages = {};
         $scope.existError = false;
 
-        apiResource.resource('users').getCopy(userId).then(function(model) {
-            $scope.model = model;
-            $scope.model.name = $scope.model.person.name;
-            $scope.model.last_name = $scope.model.person.last_name;
-            $scope.model.email = $scope.model.person.email;
-            $scope.validateOptions.rules.email.unique = 'person,email,' + $scope.model.person.id
-            $scope.messages = UserService.messageFlag;
-            if (!_.isEmpty($scope.messages)) {
-                $scope.hasMessage = true;
-                UserService.messageFlag = {};
-            }
-            $scope.loading = false;
-        });
+        var deps = $q.all([
+            apiResource.resource('modules').queryCopy().then(function(modules) {
+                $scope.modules = modules;
+            }),
+            apiResource.resource('roles').queryCopy().then(function(roles) {
+                angular.forEach(roles, function(role) {
+                    role.$selected = false
+                })
+                $scope.roles = roles;
+            })
+        ]);
+
+        deps.then(function() {
+            apiResource.resource('users').getCopy(userId).then(function(model) {
+                $scope.model = model;
+                $scope.model.name = $scope.model.person.name;
+                $scope.model.last_name = $scope.model.person.last_name;
+                $scope.model.email = $scope.model.person.email;
+                $scope.model.roles = UserService.formatRolesUser($scope.model.roles);
+                $scope.validateOptions.rules.email.unique = 'person,email,' + $scope.model.person.id
+                $scope.messages = UserService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    UserService.messageFlag = {};
+                }
+                $scope.loading = false;
+            });
+        })
 
         $scope.validateOptions = {
             rules: {
@@ -256,6 +293,28 @@ define(['app'], function(app) {
 
         };
 
+        $scope.setRole = function(roleId, selected) {
+            if (!selected) {
+                var idx = _.indexOf($scope.model.roles, roleId);
+                if (idx > -1) $scope.model.roles.splice(idx, 1);
+            } else {
+                $scope.model.roles.push(roleId);
+            }
+        }
+
+        $scope.checkRole = function(roleId, role) {
+            var fRole = _.find($scope.model.roles, function(el) {
+                return el == roleId
+            });
+            if (fRole) {
+                //hacking :v
+                role.$selected = true;
+                return true;
+            }
+            return false;
+        }
+
+
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
@@ -268,12 +327,18 @@ define(['app'], function(app) {
                     $scope.model.last_name = $scope.model.person.last_name;
                     $scope.model.email = $scope.model.person.email;
                     apiResource.resource('users').setOnCache(data);
-                    UserService.messageFlag.title = "Usuario " + $scope.model.name + " Actualizado correctamente";
-                    UserService.messageFlag.type = "info";
-                    $scope.messages = UserService.messageFlag;
-                    if (returnIndex) {
-                        $state.go('root.user');
-                    }
+                    apiResource.resource('users').getCopy(userId).then(function(result) {
+                        
+                        $scope.model = result;
+                        $scope.model.roles = UserService.formatRolesUser($scope.model.roles);
+                        UserService.messageFlag.title = "Usuario " + $scope.model.username + " Actualizado correctamente";
+                        UserService.messageFlag.type = "info";
+                        $scope.messages = UserService.messageFlag;
+                        if (returnIndex) {
+                            $state.go('root.user');
+                        }
+
+                    })
                 }, function(reason) {
                     $scope.saving = false;
                     $scope.existError = true;

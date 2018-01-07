@@ -146,16 +146,6 @@ define(['app'], function(app) {
                     required: true,
                     unique: 'role,code'
                 },
-                module_id: {
-                    required: true,
-                    valueNotEquals: '?',
-                    exists: 'module'
-                },
-                type_id: {
-                    required: true,
-                    valueNotEquals: '?',
-                    exists: 'permission_type'
-                },
                 name: {
                     required: true,
                     unique: 'module,name'
@@ -168,16 +158,6 @@ define(['app'], function(app) {
                 code: {
                     required: "El código es requerido",
                     unique: 'El código ya fue tomado'
-                },
-                module_id: {
-                    required: "El módulo es requerido",
-                    valueNotEquals: "El módulo es requerido",
-                    exists: 'El módulo es inválido'
-                },
-                type_id: {
-                    required: "El tipo es requerido",
-                    valueNotEquals: "El tipo es requerido",
-                    exists: 'El tipo es inválido'
                 },
                 name: {
                     required: "Nombre requerido",

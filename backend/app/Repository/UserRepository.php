@@ -59,7 +59,7 @@ class UserRepository implements UserRepositoryInterface
 			$user = new User();
 			$user->fill($data);
 			if ($user->save()) {
-				// $user->groups()->sync($data['groups']);
+				$user->roles()->sync($data['roles']);
 				$key = $user->getKey();
 				return  $this->find($key);
 		} else {
@@ -74,7 +74,7 @@ class UserRepository implements UserRepositoryInterface
 
 	public function edit($id,$data)
 	{
-		$user = User::find($id);
+		$user = $this->find($id);
 
 		if ($user) {
 			if(!empty($data['password'])) {
@@ -83,9 +83,10 @@ class UserRepository implements UserRepositoryInterface
    			$user->person->fill($data)->update();
 			$user->fill($data);
 			if($user->update()){
-				// $user->groups()->sync($data['groups']);
+				$user->roles()->sync($data['roles']);
 				$key = $user->getKey();
-				return $this->find($key);
+				$user =  $this->find($key);
+				return $user;
 			}
 		} else {
 			throw new UserException(['title'=>'Ha ocurrido un error al actualizar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
