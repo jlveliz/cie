@@ -60,7 +60,7 @@ define(['app'], function(app) {
                             $scope.hasMessage = true;
                             $scope.modules[idx].$deleting = false;
                             $scope.modules.splice(idx, 1);
-                            apiResource.resource('modules').removeFromCache(object.id);
+                            apiResource.resource('modules').removeFromCache(id);
                         })
                     }
                 })

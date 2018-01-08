@@ -45,7 +45,11 @@
                                             <div class="row">
                                                 <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                     <label class="control-label">Nombre  <span class="text-danger">*</span></label>
-                                                    <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
+                                                    <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="" ng-keyup="makeCode(model.name)">
+                                                </div> 
+                                                <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                    <label class="control-label">Código  <span class="text-danger">*</span></label>
+                                                    <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.code" autofocus="">
                                                 </div>
                                             </div>
                                         </div>

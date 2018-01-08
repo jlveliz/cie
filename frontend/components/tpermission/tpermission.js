@@ -8,6 +8,14 @@ define(['app'], function(app) {
         var _this = this;
 
         _this.messageFlag = {};
+
+        _this.generateCode = function(string) {
+            var newString = '';
+            if (!string) return '';
+            newString = string.replace(' ', '_').toLowerCase();
+            return newString;
+        }
+
     })
 
     app.register.controller('TPermissionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'TPermissionService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, TPermissionService, $rootScope) {
@@ -84,16 +92,28 @@ define(['app'], function(app) {
                 name: {
                     required: true,
                     unique: 'permission_type,name'
+                },
+                code: {
+                    required: true,
+                    unique: 'permission_type,code'
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
                     unique: 'El Tipo de permiso ya fué tomado'
+                },
+                code: {
+                    required: "Campo requerido",
+                    unique: 'El Código ya fué tomado'
                 }
             }
 
         };
+
+        $scope.makeCode = function(name) {
+            $scope.model.code = TPermissionService.generateCode(name);
+        }
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
@@ -169,6 +189,11 @@ define(['app'], function(app) {
             }
 
         };
+
+        $scope.makeCode = function(name) {
+            $scope.model.code = TPermissionService.generateCode(name);
+        }
+
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
