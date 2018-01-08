@@ -100,7 +100,6 @@ define([
                                 throw "Recurso " + nameResource + " no existe";
                             },
                             query: function(params) {
-                                debugger;
                                 var _this = this;
                                 var deferred = $q.defer();
                                 var r = _this.create();
@@ -199,7 +198,6 @@ define([
                                 return deferred.promise;
                             },
                             setOnCache: function(resource, isNested) {
-                                debugger;
                                 if (!names[nameResource]) {
                                     throw "Recurso " + nameResource + " no existe";
                                 }
@@ -220,31 +218,10 @@ define([
                                         } else {
                                             arrayCache.push(resource);
                                         }
-                                    } else {
-                                        // caching.put(nameResource,[resource]);
                                     }
                                 } else {
                                     caching.put(nameResource,resource);
                                 }
-
-                                // if (angular.isArray(resource)) {
-                                // } else if (angular.isObject(resource)) {
-                                //     var objectCache = getFromCache(idCookie);
-                                //     caching.put(idCookie, resource);
-                                // if (arrayCache) {
-                                //     var idxArray = _.findIndex(arrayCache, function(item) {
-                                //         return item.id == params.id;
-                                //     });
-                                //     if (idxArray > -1) {
-                                //         arrayCache[idxArray] = params;
-                                //     } else {
-                                //         arrayCache.push(params);
-                                //     }
-                                //     caching.put(idCookie, arrayCache); //set cache new resource
-                                // } else {
-                                //     caching.put(idCookie, [params]);
-                                // }
-                                // }
                             },
                             removeFromCache: function(itemId, isNested) {
                                 var idCookie = itemId + '_' + nameResource;
@@ -252,7 +229,7 @@ define([
                                 if (!names[nameResource]) {
                                     throw "Recurso " + nameResource + " no existe";
                                 }
-                                
+
                                 var cached = getFromCache(idCookie);
                                 if (cached) {
                                     caching.remove(idCookie);
