@@ -17,6 +17,14 @@ define(['app'], function(app) {
             return arrayRoles;
 
         }
+
+        _this.formatUserPermissions = function(permissions) {
+            var permissionUsers = [];
+                angular.forEach(permissions, function(per){
+                    if (per.type.code == 'opcion')  permissionUsers.push(per.id);
+                })
+            return permissionUsers;
+        }
     })
 
     app.register.controller('UserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'UserService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, UserService, $rootScope) {
@@ -219,6 +227,7 @@ define(['app'], function(app) {
         var deps = $q.all([
             apiResource.resource('modules').queryCopy().then(function(modules) {
                 $scope.modules = modules;
+
             }),
             apiResource.resource('roles').queryCopy().then(function(roles) {
                 angular.forEach(roles, function(role) {
@@ -235,6 +244,7 @@ define(['app'], function(app) {
                 $scope.model.last_name = $scope.model.person.last_name;
                 $scope.model.email = $scope.model.person.email;
                 $scope.model.roles = UserService.formatRolesUser($scope.model.roles);
+                $scope.model.permissions = UserService.formatUserPermissions($scope.model.permissions);
                 $scope.validateOptions.rules.email.unique = 'person,email,' + $scope.model.person.id
                 $scope.messages = UserService.messageFlag;
                 if (!_.isEmpty($scope.messages)) {
@@ -314,6 +324,16 @@ define(['app'], function(app) {
             return false;
         }
 
+        $scope.checkPermission = function(userPermission, permission) {
+            console.log(userPermission, permission)
+            return '2';
+        }
+
+        $scope.filterTypePermission = function(value) {
+            if (value && value.type.code == 'opcion') return value;
+            return false
+        }
+
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
@@ -328,7 +348,7 @@ define(['app'], function(app) {
                     $scope.model.email = $scope.model.person.email;
                     apiResource.resource('users').setOnCache(data);
                     apiResource.resource('users').getCopy(userId).then(function(result) {
-                        
+
                         $scope.model = result;
                         $scope.model.roles = UserService.formatRolesUser($scope.model.roles);
                         UserService.messageFlag.title = "Usuario " + $scope.model.username + " Actualizado correctamente";

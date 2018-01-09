@@ -4,6 +4,7 @@ namespace Cie\Repository;
 use Cie\RepositoryInterface\PermissionRepositoryInterface;
 use Cie\Exceptions\PermissionException;
 use Cie\Models\Permission;
+use DB;
 
 /**
 * 
@@ -13,7 +14,11 @@ class PermissionRepository implements PermissionRepositoryInterface
 	
 	public function enum($params = null)
 	{
-		$permissions = Permission::all();
+		if ($params) {
+			$permissions = Permission::where('type_id','=',DB::raw('( select id from permission_type where code = "'.$params["type"].'")'))->get();
+		} else {
+			$permissions = Permission::all();
+		}
 
 		if (!$permissions) {
 			throw new PermissionException(['title'=>'No se han encontrado el listado de permisos','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");

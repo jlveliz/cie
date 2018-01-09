@@ -23,9 +23,9 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $modules = $this->permissionRepo->enum();
+        $modules = $this->permissionRepo->enum($request->all());
         return response()->json(['data'=>$modules],200);
     }
 

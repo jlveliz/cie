@@ -124,7 +124,7 @@ define(['app'], function(app) {
             apiResource.resource('modules').queryCopy().then(function(modules) {
                 $scope.modules = modules;
             }),
-            apiResource.resource('permissions').queryCopy().then(function(permissions) {
+            apiResource.resource('permissions').queryCopy({ type: 'menu' }).then(function(permissions) {
                 listPermissions = permissions;
                 angular.forEach(listPermissions, function(per) {
                     per.$selected = false;
@@ -349,7 +349,7 @@ define(['app'], function(app) {
                     }
                     $scope.hasMessage = true;
                     apiResource.resource('roles').setOnCache(data);
-                    apiResource.resource('roles').getCopy(data.id).then(function(copyRe){
+                    apiResource.resource('roles').getCopy(data.id).then(function(copyRe) {
                         $scope.model = copyRe;
                         $scope.model.permissions = RoleService.formatPermissionsGroup($scope.model.permissions);
                         RoleService.messageFlag.title = "Rol " + $scope.model.name + " Actualizado correctamente";
