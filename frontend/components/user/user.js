@@ -18,12 +18,56 @@ define(['app'], function(app) {
 
         }
 
-        _this.formatUserPermissions = function(permissions) {
-            var permissionUsers = [];
-                angular.forEach(permissions, function(per){
-                    if (per.type.code == 'opcion')  permissionUsers.push(per.id);
+        _this.checkPermissionByGroupAndPermissions = function(userPermissions, listModules) {
+            var permissionsUser = {};
+            var listPermissions = [];
+
+            angular.forEach(listModules, function(module) {
+                angular.forEach(module.permissions, function(permission) {
+                    if (permission.type.code == 'opcion') listPermissions.push(permission)
                 })
-            return permissionUsers;
+            })
+
+            angular.forEach(listPermissions, function(permission) {
+                if (userPermissions.length > 0) {
+                    var found = _.findWhere(userPermissions, { permission_id: permission.id });
+                    if (found) {
+                        permissionsUser[permission.id] = { allow: found.allow };
+                    } else {
+                        permissionsUser[permission.id] = { allow: 2 };
+
+                    }
+                } else {
+                    permissionsUser[permission.id] = { allow: 2 };
+                }
+
+            })
+            return permissionsUser;
+        }
+
+        _this.formatPermissionsToSave = function(modelId, $permissionModel) {
+            var permissionsToSave = [];
+            angular.forEach($permissionModel, function(object, key) {
+                if (object.allow != 2) {
+                    permissionsToSave.push({
+                        user_id: modelId,
+                        permission_id: key,
+                        allow: object.allow
+                    });
+                }
+            })
+
+            return permissionsToSave;
+        };
+
+        _this.matchPermissionsModules = function(modules, permissions) {
+            angular.forEach(modules, function(module) {
+                module.permissions = [];
+                angular.forEach(permissions, function(permission) {
+                    if (permission.module_id == module.id) module.permissions.push(permission);
+                })
+            })
+            return modules;
         }
     })
 
@@ -81,7 +125,6 @@ define(['app'], function(app) {
                 })
             });
         }
-
     }]);
 
     app.register.controller('UserCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', '$q', function($scope, apiResource, $stateParams, $state, UserService, $q) {
@@ -211,10 +254,9 @@ define(['app'], function(app) {
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
         }
-
     }]);
 
-    app.register.controller('UserEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', '$q', function($scope, apiResource, $stateParams, $state, UserService, $q) {
+    app.register.controller('UserEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', '$q', 'envService', function($scope, apiResource, $stateParams, $state, UserService, $q, envService) {
 
         var userId = $stateParams.userId;
 
@@ -223,11 +265,19 @@ define(['app'], function(app) {
         $scope.model = {};
         $scope.messages = {};
         $scope.existError = false;
+        var reqPermissions = {
+            method: 'GET',
+            url: envService.read('api') + 'permissions?type=opcion'
+        };
+        var permissions = [];
 
         var deps = $q.all([
             apiResource.resource('modules').queryCopy().then(function(modules) {
                 $scope.modules = modules;
 
+            }),
+            apiResource.loadFromApi(reqPermissions).then(function(permissionsAr) {
+                permissions = permissionsAr.data;
             }),
             apiResource.resource('roles').queryCopy().then(function(roles) {
                 angular.forEach(roles, function(role) {
@@ -244,7 +294,8 @@ define(['app'], function(app) {
                 $scope.model.last_name = $scope.model.person.last_name;
                 $scope.model.email = $scope.model.person.email;
                 $scope.model.roles = UserService.formatRolesUser($scope.model.roles);
-                $scope.model.permissions = UserService.formatUserPermissions($scope.model.permissions);
+                UserService.matchPermissionsModules($scope.modules, permissions);
+                $scope.model.permissions = UserService.checkPermissionByGroupAndPermissions($scope.model.permissions, $scope.modules);
                 $scope.validateOptions.rules.email.unique = 'person,email,' + $scope.model.person.id
                 $scope.messages = UserService.messageFlag;
                 if (!_.isEmpty($scope.messages)) {
@@ -324,22 +375,17 @@ define(['app'], function(app) {
             return false;
         }
 
-        $scope.checkPermission = function(userPermission, permission) {
-            console.log(userPermission, permission)
-            return '2';
-        }
-
         $scope.filterTypePermission = function(value) {
             if (value && value.type.code == 'opcion') return value;
             return false
         }
-
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.key = userId;
+                $scope.model.permissions = UserService.formatPermissionsToSave($scope.model.id, $scope.model.permissions);
                 $scope.model.$update(userId, function(data) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
@@ -348,9 +394,9 @@ define(['app'], function(app) {
                     $scope.model.email = $scope.model.person.email;
                     apiResource.resource('users').setOnCache(data);
                     apiResource.resource('users').getCopy(userId).then(function(result) {
-
                         $scope.model = result;
                         $scope.model.roles = UserService.formatRolesUser($scope.model.roles);
+                        $scope.model.permissions = UserService.checkPermissionByGroupAndPermissions($scope.model.permissions, $scope.modules);
                         UserService.messageFlag.title = "Usuario " + $scope.model.username + " Actualizado correctamente";
                         UserService.messageFlag.type = "info";
                         $scope.messages = UserService.messageFlag;
@@ -378,7 +424,6 @@ define(['app'], function(app) {
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
         }
-
     }]);
 
 

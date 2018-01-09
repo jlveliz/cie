@@ -84,6 +84,8 @@ class UserRepository implements UserRepositoryInterface
 			$user->fill($data);
 			if($user->update()){
 				$user->roles()->sync($data['roles']);
+				$user->permissions()->delete();
+				$user->permissions()->createMany($data['permissions']);
 				$key = $user->getKey();
 				$user =  $this->find($key);
 				return $user;

@@ -11,7 +11,7 @@ class User extends Authenticatable
 
     protected $table = "user";
 
-    protected $with = ["person",'roles'];
+    protected $with = ["person",'roles','permissions'];
 
     /**
      * The attributes that are mass assignable.
@@ -41,21 +41,16 @@ class User extends Authenticatable
         return $this->belongsToMany('Cie\Models\Role','user_role','user_id','role_id');
     }
 
+    public function permissions()
+    {
+        return $this->hasMany('Cie\Models\UserPermission','user_id');
+    }
+
     protected static function boot()
     {
         parent::boot();
         static::deleted(function($user){
             $user->person()->delete();
         });
-    }
-
-    public function setPermissionAttribute($permissions)
-    {
-        $this->attributes['permission']  = serialize($permissions);
-    }
-
-     public function getPermissionAttribute($permissions)
-    {
-        return unserialize($permissions);
     }
 }
