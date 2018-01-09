@@ -8,6 +8,11 @@ define(['app'], function(app) {
         var _this = this;
 
         _this.messageFlag = {};
+
+        _this.filterTypePermission = function(value) {
+            if (value && value.type.code == 'menu') return value;
+            return false
+        }
     })
 
     app.register.controller('PermissionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PermissionService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PermissionService, $rootScope) {
@@ -22,11 +27,14 @@ define(['app'], function(app) {
             orderable: false,
             columnDefs: [{
                 orderable: false,
-                targets: 3
+                targets: 4
             }],
             order: [
                 [0, 'asc'],
                 [1, 'asc'],
+                [2, 'asc'],
+                [3, 'asc'],
+                [4, 'asc'],
             ],
             responsive: true
         });
@@ -76,7 +84,7 @@ define(['app'], function(app) {
         $scope.model = {};
         $scope.modules = [];
         $scope.tPermissions = [];
-        $scope.listpermissions = [];
+        $scope.parents = [];
         $scope.messages = [];
 
         var deps = $q.all([
@@ -86,10 +94,14 @@ define(['app'], function(app) {
             apiResource.resource('tpermissions').queryCopy().then(function(tPermissions) {
                 $scope.tPermissions = tPermissions;
             }),
+            apiResource.resource('permissions').queryCopy().then(function(parents) {
+                $scope.parents = parents;
+            }),
+
         ]);
 
         deps.then(function() {
-            $scope.model = apiResource.resource('permissions').create();
+            $scope.model = apiResource.resource('permissions').create({ type_id: null });
             $scope.loading = false;
         })
 
@@ -136,6 +148,18 @@ define(['app'], function(app) {
             }
 
         };
+
+        $scope.disableIfMenu = function() {
+            if (!$scope.model.type_id) return false;
+            var found = _.findWhere($scope.tPermissions, { id: $scope.model.type_id });
+            if (found && found.code == 'menu') return true;
+            $scope.model.fav_icon = '';
+            return false;
+        };
+
+        $scope.filterTypePermission = function(value) {
+            return PermissionService.filterTypePermission(value);
+        }
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
@@ -186,6 +210,7 @@ define(['app'], function(app) {
         $scope.model = {};
         $scope.messages = {};
         $scope.existError = false;
+        $scope.parents = [];
 
         var deps = $q.all([
             apiResource.resource('modules').queryCopy().then(function(modules) {
@@ -194,6 +219,9 @@ define(['app'], function(app) {
             apiResource.resource('tpermissions').queryCopy().then(function(tPermissions) {
                 $scope.tPermissions = tPermissions;
             }),
+            apiResource.resource('permissions').queryCopy().then(function(parents) {
+                $scope.parents = parents;
+            })
         ]);
 
         deps.then(function() {
@@ -250,6 +278,10 @@ define(['app'], function(app) {
             }
 
         };
+
+        $scope.filterTypePermission = function(value) {
+            return PermissionService.filterTypePermission(value);
+        }
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};

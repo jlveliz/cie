@@ -56,7 +56,7 @@
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-12 form-group">
                                                     <label class="control-label">Elemento Padre</label>
-                                                    <select ng-disabled="saving" class="form-control" name="parent_id" id="parent_id" ng-model="model.parent_id">
+                                                     <select ng-disabled="saving || disableIfMenu()" class="form-control" name="parent_id" id="parent_id" ng-model="model.parent_id" ng-options="parent.id as parent.name for parent in parents | filter:filterTypePermission">
                                                     </select>
                                                 </div>
                                             </div>
@@ -68,6 +68,10 @@
                                                 <div class="col-md-3 col-sm-3 col-xs-12 form-group">
                                                     <label class="control-label">Recurso</label>
                                                     <input ng-disabled="saving" type="text" class="form-control" name="resource" id="resource" ng-model="model.resource">
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                                                    <label class="control-label">Fav Icon</label>
+                                                    <input ng-disabled="saving || disableIfMenu()" type="text" class="form-control" name="fav_icon" id="fav_icon" ng-model="model.fav_icon">
                                                 </div>
                                             </div>
                                         </div>

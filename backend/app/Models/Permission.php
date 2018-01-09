@@ -8,7 +8,7 @@ class Permission extends Model
 {
     protected $table = "permission";
 
-    protected $with = ['module','type'];
+    protected $with = ['module','type','parent'];
 
     protected $primaryKey = "id";
 
@@ -18,13 +18,19 @@ class Permission extends Model
     	'parent_id',
     	'type_id',
     	'resource',
-    	'description'
+    	'description',
+        'fav_icon'
     ];
 
 
     public function module()
     {
         return $this->belongsTo('Cie\Models\Module','module_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('Cie\Models\Permission','parent_id');
     }
 
     public function type()

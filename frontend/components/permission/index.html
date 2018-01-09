@@ -33,6 +33,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Nombre</th>
+                                                    <th>El. Padre</th>
                                                     <th>Módulo</th>
                                                     <th>Tipo</th>
                                                     <th>F. Creación/Modificación</th>
@@ -42,6 +43,7 @@
                                             <tbody>
                                                 <tr ng-repeat="permission in permissions">
                                                     <td>{{permission.name | capitalize:'oneLetter'}}</td>
+                                                    <td>{{permission.parent.name}}</td>
                                                     <td>{{permission.module.name}}</td>
                                                     <td>{{permission.type.name}}</td>
                                                     <td>{{permission.created_at | filterTimestamp }} - {{permission.updated_at | filterTimestamp }}</td>
