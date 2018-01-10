@@ -152,8 +152,8 @@ define(['app'], function(app) {
         $scope.disableIfMenu = function() {
             if (!$scope.model.type_id) return false;
             var found = _.findWhere($scope.tPermissions, { id: $scope.model.type_id });
-            if (found && found.code == 'menu') return true;
-            $scope.model.fav_icon = '';
+            if (found && found.code == 'opcion') return true;
+            // $scope.model.fav_icon = '';
             return false;
         };
 

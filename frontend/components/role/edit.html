@@ -63,7 +63,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="(keyPerm, valuePerm) in module.permissions">
+                                                <tr ng-repeat="(keyPerm, valuePerm) in module.permissions | filter:filterTypePermission">
                                                     <td>{{valuePerm.name}}</td>
                                                     <td colspan="1" class="text-center">
                                                         <div class="checkbox checkbox-primary" style="margin:0px">

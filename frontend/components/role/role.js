@@ -48,6 +48,11 @@ define(['app'], function(app) {
             })
 
         }
+
+        _this.filterTypePermission = function(value) {
+            if (value && value.type.code == 'menu') return value;
+            return false
+        }
     }]);
 
     app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope) {
@@ -136,7 +141,7 @@ define(['app'], function(app) {
             $scope.modules = RoleService.matchPermissions($scope.modules, listPermissions);
             $scope.model = apiResource.resource('roles').create({ is_default: '0', permissions: [] });
             $scope.loading = false;
-        })
+        });
 
 
 
@@ -175,6 +180,7 @@ define(['app'], function(app) {
                 var idx = _.indexOf($scope.model.permissions, permissionId);
                 if (idx > -1) $scope.model.permissions.splice(idx, 1);
             } else {
+                
                 $scope.model.permissions.push(permissionId);
             }
         }
@@ -185,6 +191,10 @@ define(['app'], function(app) {
             });
             if (fPermission) return true;
             return false;
+        }
+
+        $scope.filterTypePermission = function(value) {
+            return RoleService.filterTypePermission(value);
         }
 
         $scope.save = function(form, returnIndex) {
@@ -335,6 +345,10 @@ define(['app'], function(app) {
 
             }
             return false;
+        }
+
+        $scope.filterTypePermission = function(value) {
+            return RoleService.filterTypePermission(value);
         }
 
 

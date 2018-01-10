@@ -220,7 +220,7 @@ define([
                                         }
                                     }
                                 } else {
-                                    caching.put(nameResource,resource);
+                                    caching.put(nameResource, resource);
                                 }
                             },
                             removeFromCache: function(itemId, isNested) {
@@ -419,7 +419,7 @@ define([
         }
     ]);
 
-    cie.directive('backendMenu', ['$state', function($state) {
+    cie.directive('backendMenu', ['$state', '$http', function($state, $http) {
         return {
             restrict: 'E',
             templateUrl: "frontend/partials/nav.html",
