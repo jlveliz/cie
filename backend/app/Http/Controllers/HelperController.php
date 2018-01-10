@@ -2,7 +2,10 @@
 namespace Cie\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Cie\RepositoryInterface\ModuleRepositoryInterface;
 use DB;
+use JWTAuth;
+use Auth;
 
 /**
 * 
@@ -10,6 +13,14 @@ use DB;
 class HelperController extends Controller
 {
 	
+	private $moduleRepo;
+
+	public function __construct(ModuleRepositoryInterface $moduleRepo)
+	{
+		$this->middleware('jwt.auth', ['except' => ['login']]);;
+		$this->moduleRepo = $moduleRepo;
+	}
+
 	public function validation(Request $request,$method)
 	{
 		
@@ -46,5 +57,20 @@ class HelperController extends Controller
 	{
 		$exist = DB::table($tableName)->where('id',$value)->first();
 		return $exist;
+	}
+
+
+
+
+	/**
+		LOAD MENU 
+	**/
+	public function loadMenu()
+	{
+		// if (JWTAuth::parseToken()->authenticate()) {
+			$user = Auth::user();
+			$menu = $this->moduleRepo->loadMenu($user->id);
+			return response()->json($menu,200);
+		
 	}
 }

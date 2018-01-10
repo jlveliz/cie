@@ -19,7 +19,8 @@ class Permission extends Model
     	'type_id',
     	'resource',
     	'description',
-        'fav_icon'
+        'fav_icon',
+        'order'
     ];
 
 
@@ -41,5 +42,15 @@ class Permission extends Model
     public function roles()
     {
         return $this->belongsToMany('Cie\Models\Role','role_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($permission){
+            
+            // $modulePer = $permission->module_id;
+
+        });
     }
 }

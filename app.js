@@ -30,7 +30,7 @@ define([
         return {
             $get: ['$resource', "$q", '$cacheFactory', '$http', function($resource, $q, $cacheFactory, $http) {
                 var names = {};
-                var caching = $cacheFactory('novaTickets');
+                var caching = $cacheFactory('cieCache');
                 var getFromCache = function(idCache) {
                     var existCache = caching.get(idCache);
                     if (existCache) return existCache;
@@ -419,44 +419,55 @@ define([
         }
     ]);
 
-    cie.directive('backendMenu', ['$state', '$http', function($state, $http) {
+    cie.directive('backendMenu', ['$state', 'apiResource', '$cacheFactory', 'envService', function($state, apiResource, $cacheFactory, envService) {
         return {
             restrict: 'E',
             templateUrl: "frontend/partials/nav.html",
             link: function(scope, iElement, iAttrs) {
 
-                scope.navElements = [{
-                    section: 'General',
-                    navEls: [{
-                        label: 'Inicio',
-                        icon: 'fa-home',
-                        desc: 'Inicio de la administración',
-                        sref: 'root.dashboard',
-                    }]
-                }, {
-                    section: 'Configuración',
-                    navEls: [{
-                        label: 'Usuarios',
-                        icon: 'fa-users',
-                        children: [{
-                            label: 'Listado de Usuarios',
-                            desc: 'Administrar los usuarios del Sistema',
-                            sref: 'root.user',
-                        }, {
-                            label: 'Roles',
-                            desc: 'Administrar los Roles del Sistema',
-                            sref: 'root.role',
-                        }, {
-                            label: 'Permisos',
-                            desc: 'Administrar los Permisos del Sistema',
-                            sref: 'root.permission',
-                        }, {
-                            label: 'Módulos',
-                            desc: 'Administrar los Módulos del Sistema',
-                            sref: 'root.module',
-                        }],
-                    }]
-                }];
+                var caching = $cacheFactory.get('cieCache');
+                scope.navElements = [];
+
+                var reqPermissions = {
+                    method: 'GET',
+                    url: envService.read('api') + 'menu'
+                };
+
+                apiResource.loadFromApi(reqPermissions).then(function(data) {
+                    console.log(data)
+                    scope.navElements = [{
+                        section: 'General',
+                        navEls: [{
+                            label: 'Inicio',
+                            icon: 'fa-home',
+                            desc: 'Inicio de la administración',
+                            sref: 'root.dashboard',
+                        }]
+                    }, {
+                        section: 'Configuración',
+                        navEls: [{
+                            label: 'Usuarios',
+                            icon: 'fa-users',
+                            children: [{
+                                label: 'Listado de Usuarios',
+                                desc: 'Administrar los usuarios del Sistema',
+                                sref: 'root.user',
+                            }, {
+                                label: 'Roles',
+                                desc: 'Administrar los Roles del Sistema',
+                                sref: 'root.role',
+                            }, {
+                                label: 'Permisos',
+                                desc: 'Administrar los Permisos del Sistema',
+                                sref: 'root.permission',
+                            }, {
+                                label: 'Módulos',
+                                desc: 'Administrar los Módulos del Sistema',
+                                sref: 'root.module',
+                            }],
+                        }]
+                    }];
+                });
 
                 var elem = $(iElement);
                 elem.on('click', 'a', function(event) {

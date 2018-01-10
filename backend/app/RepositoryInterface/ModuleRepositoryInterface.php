@@ -6,4 +6,5 @@ namespace Cie\RepositoryInterface;
 
 interface ModuleRepositoryInterface extends CoreRepositoryInterface {
 	
+	public function loadMenu($userId);
 }

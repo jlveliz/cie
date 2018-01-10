@@ -83,4 +83,20 @@ class ModuleRepository implements ModuleRepositoryInterface
 		}
 		throw new ModuleException(['title'=>'Ha ocurrido un error al eliminar el módulo ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 	}
+
+
+	public function loadMenu($userId)
+	{
+		$query = Module::select('module.*')->leftJoin('permission','permission.module_id','=','module.id')->whereRaw("module.id in (SELECT
+			per.module_id
+		FROM
+			permission per
+		left JOIN role_permission rPer ON rPer.permission_id = per.id
+		left join user_role rolU on rolU.role_id = rPer.role_id
+		left join user on `user`.id = rolU.user_id
+		where user.id = ".$userId.") and permission.type_id = (select id from permission_type where code = 'menu')")
+		->groupBy('module.name')->get();
+
+		return $query;
+	}
 }

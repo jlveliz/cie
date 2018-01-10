@@ -33,4 +33,5 @@ Route::group(['prefix'=>'api'],function() {
 	Route::resource('roles','RoleController',['except'=>['create']]);
 
 	Route::get('validator/{method}','HelperController@validation');
+	Route::get('menu','HelperController@loadMenu');
 });

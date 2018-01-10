@@ -283,6 +283,14 @@ define(['app'], function(app) {
             return PermissionService.filterTypePermission(value);
         }
 
+        $scope.disableIfMenu = function() {
+            if (!$scope.model.type_id) return false;
+            var found = _.findWhere($scope.tPermissions, { id: $scope.model.type_id });
+            if (found && found.code == 'opcion') return true;
+            // $scope.model.fav_icon = '';
+            return false;
+        };
+
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
