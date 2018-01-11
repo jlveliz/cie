@@ -69,7 +69,11 @@ class HelperController extends Controller
 	{
 		if (JWTAuth::parseToken()->authenticate()) {
 			$user = Auth::user();
-			$menu = $this->moduleRepo->loadMenu($user->id);
+			if ($user->super_admin) {
+				$menu = $this->moduleRepo->loadAdminMenu();
+			} else{
+				$menu = $this->moduleRepo->loadMenu($user->id);
+			}
 			return response()->json($menu,200);
 		}
 	}

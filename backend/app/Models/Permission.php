@@ -39,6 +39,11 @@ class Permission extends Model
     	return $this->belongsTo('Cie\Models\PermissionType','type_id');
     }
 
+    public function children()
+    {
+       return $this->hasMany('Cie\Models\Permission','parent_id','id');
+    }
+
     public function roles()
     {
         return $this->belongsToMany('Cie\Models\Role','role_id');
@@ -48,7 +53,7 @@ class Permission extends Model
     {
         parent::boot();
         static::creating(function($permission){
-            
+
             // $modulePer = $permission->module_id;
 
         });

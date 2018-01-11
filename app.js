@@ -434,40 +434,37 @@ define([
                 };
 
                 apiResource.loadFromApi(reqPermissions).then(function(data) {
-                    console.log(data)
-                    scope.navElements = [{
-                        section: 'General',
-                        navEls: [{
-                            label: 'Inicio',
-                            icon: 'fa-home',
-                            desc: 'Inicio de la administración',
-                            sref: 'root.dashboard',
-                        }]
-                    }, {
-                        section: 'Configuración',
-                        navEls: [{
-                            label: 'Usuarios',
-                            icon: 'fa-users',
-                            children: [{
-                                label: 'Listado de Usuarios',
-                                desc: 'Administrar los usuarios del Sistema',
-                                sref: 'root.user',
-                            }, {
-                                label: 'Roles',
-                                desc: 'Administrar los Roles del Sistema',
-                                sref: 'root.role',
-                            }, {
-                                label: 'Permisos',
-                                desc: 'Administrar los Permisos del Sistema',
-                                sref: 'root.permission',
-                            }, {
-                                label: 'Módulos',
-                                desc: 'Administrar los Módulos del Sistema',
-                                sref: 'root.module',
-                            }],
-                        }]
-                    }];
+                    scope.navElements = []
+                    angular.forEach(data, function(module, idx) {
+                        var elemMenu = {
+                            section: module.name,
+                            navEls: []
+                        }
+                        angular.forEach(module.permissions, function(permission) {
+                            elemMenu.navEls.push(formatPermission(permission));
+                        })
+                        scope.navElements.push(elemMenu);
+                    })
+                    console.log( scope.navElements);
                 });
+
+                var formatPermission = function(permission) {
+                    // debugger;
+                    var menuOpt = {
+                        label: permission.name,
+                        icon: permission.fav_icon,
+                        desc: permission.description
+                    };
+                    if (permission.children && permission.children.length) {
+                        menuOpt.children = [];
+                        angular.forEach(permission.children, function(children) {
+                            menuOpt.children.push(formatPermission(children));
+                        })
+                    } else {
+                        menuOpt.sref = permission.resource
+                    }
+                    return menuOpt;
+                };
 
                 var elem = $(iElement);
                 elem.on('click', 'a', function(event) {
