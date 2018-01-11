@@ -17,7 +17,7 @@ class HelperController extends Controller
 
 	public function __construct(ModuleRepositoryInterface $moduleRepo)
 	{
-		$this->middleware('jwt.auth', ['except' => ['login']]);;
+		// $this->middleware('jwt.auth');
 		$this->moduleRepo = $moduleRepo;
 	}
 
@@ -67,10 +67,10 @@ class HelperController extends Controller
 	**/
 	public function loadMenu()
 	{
-		// if (JWTAuth::parseToken()->authenticate()) {
+		if (JWTAuth::parseToken()->authenticate()) {
 			$user = Auth::user();
 			$menu = $this->moduleRepo->loadMenu($user->id);
 			return response()->json($menu,200);
-		
+		}
 	}
 }

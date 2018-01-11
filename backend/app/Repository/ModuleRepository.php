@@ -87,7 +87,9 @@ class ModuleRepository implements ModuleRepositoryInterface
 
 	public function loadMenu($userId)
 	{
-		$query = Module::select('module.*')->leftJoin('permission','permission.module_id','=','module.id')->whereRaw("module.id in (SELECT
+		$query = Module::select('module.*')->with(['permissions'=>function($query){
+			$query->where('permission.type_id = (select id from permission_type where code = "menu")');
+		}])->leftJoin('permission','permission.module_id','=','module.id')->whereRaw("module.id in (SELECT
 			per.module_id
 		FROM
 			permission per
@@ -96,7 +98,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 		left join user on `user`.id = rolU.user_id
 		where user.id = ".$userId.") and permission.type_id = (select id from permission_type where code = 'menu')")
 		->groupBy('module.name')->get();
-
+// dd($query);
 		return $query;
 	}
 }
