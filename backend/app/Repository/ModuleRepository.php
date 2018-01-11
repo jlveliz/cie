@@ -89,7 +89,8 @@ class ModuleRepository implements ModuleRepositoryInterface
 	public function loadMenu($userId)
 	{
 		$query  = Module::select('module.*')->with(['permissions'=>function($query) use($userId){
-						$parents = $query->select('permission.*')->leftJoin('role_permission as rPer','rPer.permission_id','=','permission.id')
+						$query->select('permission.*')
+						->leftJoin('role_permission as rPer','rPer.permission_id','=','permission.id')
 						->leftJoin('user_role as rolU','rolU.role_id','=','rPer.role_id')
 						->leftJoin('user as usr','usr.id','=','rolU.user_id')
 						->whereRaw('usr.id = "'.$userId.'" and permission.type_id = (select id from permission_type where permission_type.code = "menu" and permission.parent_id is null)')
