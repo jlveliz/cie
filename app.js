@@ -445,7 +445,6 @@ define([
                         })
                         scope.navElements.push(elemMenu);
                     })
-                    console.log( scope.navElements);
                 });
 
                 var formatPermission = function(permission) {
@@ -544,10 +543,15 @@ define([
         }
     });
 
-    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', '$q', '$uibModal', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService, $q, $uibModal) {
+    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', '$q', '$uibModal', 'RoleStore', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService, $q, $uibModal, RoleStore) {
 
         DTDefaultOptions.setLanguageSource('frontend/assets/js/datatables/es.json');
         DTDefaultOptions.setOption("processing", true);
+
+        var userInStorage = localStorage.getItem('user');
+        if (userInStorage != "undefined") {
+            $rootScope.currentUser = JSON.parse(localStorage.getItem('user'));
+        }
 
         $rootScope.appname = appName;
 
@@ -558,6 +562,39 @@ define([
             });
         }
 
+
+        /**
+            RESOURCES
+        **/
+
+        //users
+        apiResource.resource("users", envService.read('api') + 'users/:id', {
+            id: '@id'
+        }).register();
+
+        //modules
+        apiResource.resource("modules", envService.read('api') + 'modules/:id', {
+            id: '@id'
+        }).register();
+
+        //permissions
+        apiResource.resource("permissions", envService.read('api') + 'permissions/:id', {
+            id: '@id'
+        }).register();
+
+        //tpermissions
+        apiResource.resource("tpermissions", envService.read('api') + 'typepermissions/:id', {
+            id: '@id'
+        }).register();
+
+        //roles
+        apiResource.resource("roles", envService.read('api') + 'roles/:id', {
+            id: '@id'
+        }).register();
+
+        /** 
+            ===========PERMISSIONS & ROLES ====================
+        **/
         PermissionStore.definePermission('isloggedin', function(stateParams) {
             if (authFactory.authenticated()) {
                 return true; // Is loggedin
@@ -573,14 +610,44 @@ define([
             return false;
         });
 
+        if (authFactory.authenticated()) {
+            var user = $rootScope.currentUser;
+
+            if (user.permissions) {
+                angular.forEach(user.permissions, function(permission) {
+                    PermissionStore.definePermission(permission.name.replace(' ', '_').toLowerCase(), function() {
+                        return true;
+                    })
+                })
+            }
+
+            if (user.roles) {
+                angular.forEach(user.roles, function(role) {
+                    var permissonsName = [];
+                    angular.forEach(role.permissions, function(permission) {
+                        var namePermission = permission.name.replace(' ', '_').toLowerCase();
+                        permissonsName.push(namePermission)
+                    });
+
+                    RoleStore.defineRole(role.code, permissonsName, function() {
+                        return true;
+                    })
+
+                })
+            }
+            console.log(RoleStore.getStore());
+
+        }
+
+        /**
+            ===========PERMISSIONS & ROLES ====================
+        **/
+
         $rootScope.isMenuCollapsed = false; //menu collapsed
 
         $rootScope.auth = {};
 
-        var userInStorage = localStorage.getItem('user');
-        if (userInStorage != "undefined") {
-            $rootScope.currentUser = JSON.parse(localStorage.getItem('user'));
-        }
+
 
         $rootScope.openSuccessModal = function(params) {
             var deferred = $q.defer();
@@ -671,34 +738,9 @@ define([
         }
 
 
-        /**
-            RESOURCES
-        **/
 
-        //users
-        apiResource.resource("users", envService.read('api') + 'users/:id', {
-            id: '@id'
-        }).register();
 
-        //modules
-        apiResource.resource("modules", envService.read('api') + 'modules/:id', {
-            id: '@id'
-        }).register();
 
-        //permissions
-        apiResource.resource("permissions", envService.read('api') + 'permissions/:id', {
-            id: '@id'
-        }).register();
-
-        //tpermissions
-        apiResource.resource("tpermissions", envService.read('api') + 'typepermissions/:id', {
-            id: '@id'
-        }).register();
-
-        //roles
-        apiResource.resource("roles", envService.read('api') + 'roles/:id', {
-            id: '@id'
-        }).register();
 
     }]);
 
@@ -874,6 +916,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['escritorio'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -896,6 +939,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['confUser'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -916,6 +960,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['confUser'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -929,6 +974,7 @@ define([
             controllerUrl: 'frontend/components/user/user',
             views: {
                 "content@root": {
+
                     templateUrl: 'frontend/components/user/edit.html',
                     controller: 'UserEditCtrl'
                 }
@@ -936,6 +982,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['confUser'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1142,6 +1189,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['confRole'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
