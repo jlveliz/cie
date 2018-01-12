@@ -543,29 +543,7 @@ define([
         }
     });
 
-    cie.run(['appName', '$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', '$q', '$uibModal', 'RoleStore', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService, $q, $uibModal, RoleStore) {
-
-        DTDefaultOptions.setLanguageSource('frontend/assets/js/datatables/es.json');
-        DTDefaultOptions.setOption("processing", true);
-
-        var userInStorage = localStorage.getItem('user');
-        if (userInStorage != "undefined") {
-            $rootScope.currentUser = JSON.parse(localStorage.getItem('user'));
-        }
-
-        $rootScope.appname = appName;
-
-        $rootScope.logout = function() {
-            authFactory.logout().then(function() {
-                apiResource.clearAllCache(); // clear all cache
-                $state.go('adminAuth');
-            });
-        }
-
-
-        /**
-            RESOURCES
-        **/
+    cie.run(['apiResource', 'envService', function(apiResource, envService) {
 
         //users
         apiResource.resource("users", envService.read('api') + 'users/:id', {
@@ -591,6 +569,11 @@ define([
         apiResource.resource("roles", envService.read('api') + 'roles/:id', {
             id: '@id'
         }).register();
+
+    }]);
+
+    cie.run(['$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', '$q', '$uibModal', 'RoleStore', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService, $q, $uibModal, RoleStore) {
+
 
         /** 
             ===========PERMISSIONS & ROLES ====================
@@ -624,6 +607,7 @@ define([
             if (user.roles) {
                 angular.forEach(user.roles, function(role) {
                     var permissonsName = [];
+                    permissonsName.push('isloggedin');
                     angular.forEach(role.permissions, function(permission) {
                         var namePermission = permission.name.replace(' ', '_').toLowerCase();
                         permissonsName.push(namePermission)
@@ -643,10 +627,30 @@ define([
             ===========PERMISSIONS & ROLES ====================
         **/
 
+    }]);
+
+    cie.run(['appName', '$rootScope', '$uibModal', '$q', 'DTDefaultOptions', function(appName, $rootScope, $uibModal, $q, DTDefaultOptions) {
+
         $rootScope.isMenuCollapsed = false; //menu collapsed
 
         $rootScope.auth = {};
 
+        DTDefaultOptions.setLanguageSource('frontend/assets/js/datatables/es.json');
+        DTDefaultOptions.setOption("processing", true);
+
+        var userInStorage = localStorage.getItem('user');
+        if (userInStorage != "undefined") {
+            $rootScope.currentUser = JSON.parse(localStorage.getItem('user'));
+        }
+
+        $rootScope.appname = appName;
+
+        $rootScope.logout = function() {
+            authFactory.logout().then(function() {
+                apiResource.clearAllCache(); // clear all cache
+                $state.go('adminAuth');
+            });
+        }
 
 
         $rootScope.openSuccessModal = function(params) {
@@ -737,12 +741,7 @@ define([
             return deferred.promise;
         }
 
-
-
-
-
-
-    }]);
+    }])
 
     cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
 
@@ -916,7 +915,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['escritorio'],
+                    // only: ['escritorio'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -939,7 +938,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['confUser'],
+                    // only: ['confUser'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -960,7 +959,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['confUser'],
+                    // only: ['confUser'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -982,7 +981,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['confUser'],
+                    // only: ['confUser'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
