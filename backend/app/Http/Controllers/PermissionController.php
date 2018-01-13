@@ -15,7 +15,7 @@ class PermissionController extends Controller
 
     public function __construct(PermissionRepositoryInterface $permissionRepo)
     {
-        $this->middleware('jwt.auth');
+        // $this->middleware('jwt.auth');
         $this->permissionRepo = $permissionRepo;
     }
     /**

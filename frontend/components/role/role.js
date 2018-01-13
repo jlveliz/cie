@@ -206,7 +206,7 @@ define(['app'], function(app) {
                         needUpdate = RoleService.updateDefaultValue(data.id);
                     }
                     apiResource.resource('roles').setOnCache(data);
-                    RoleService.messageFlag.title = "Permiso creado correctamente";
+                    RoleService.messageFlag.title = "Rol creado correctamente";
                     RoleService.messageFlag.type = "info";
                     if (returnIndex) {
                         $state.go('root.role');

@@ -344,7 +344,7 @@ define([
         }
     });
 
-    cie.factory('authFactory', ['$auth', '$http', 'envService', 'PermissionStore', '$q', '$rootScope', function($auth, $http, envService, PermissionStore, $q, $rootScope) {
+    cie.factory('authFactory', ['$auth', '$http', 'envService', '$q', '$rootScope', 'apiResource', function($auth, $http, envService, $q, $rootScope, apiResource) {
         return {
             login: function(credentials) {
                 var deferred = $q.defer();
@@ -398,6 +398,45 @@ define([
                         deferred.reject(error)
                     });
                 return deferred.promise;
+            },
+            hasPermission: function(key) {
+                var deferred = $q.defer();
+                if (this.authenticated()) {
+                    var roles = $rootScope.currentUser.roles;
+                    var permUsers = $rootScope.currentUser.permissions;
+
+                    var permissions = [];
+
+                    angular.forEach(roles, function(role) {
+                        angular.forEach(role.permissions, function(perm) {
+                            permissions.push(perm.code);
+                        })
+                    });
+
+                    angular.forEach(permUsers, function(perm) {
+                        permissions.push(perm.code);
+                    })
+
+                    var found = _.findIndex(permissions, function(el) {
+                        if (el == key) return true;
+                    });
+
+                    found > -1 ? deferred.resolve() : deferred.reject();
+
+                    return deferred.promise;
+                }
+            },
+            hasRole: function(keyRol) {
+                var deferred = $q.defer();
+                if (this.authenticated()) {
+                    var rolesUser = $rootScope.currentUser.roles;
+                    var found = _.findIndex(rolesUser, function(el) {
+                        if (el.code == keyRol) return true;
+                    });
+                    found > -1 ? deferred.resolve() : deferred.reject();
+                    return deferred.promise;
+
+                }
             }
         };
     }])
@@ -448,7 +487,6 @@ define([
                 });
 
                 var formatPermission = function(permission) {
-                    // debugger;
                     var menuOpt = {
                         label: permission.name,
                         icon: permission.fav_icon,
@@ -572,13 +610,13 @@ define([
 
     }]);
 
-    cie.run(['$rootScope', 'PermissionStore', 'authFactory', 'apiResource', '$state', 'DTDefaultOptions', 'envService', '$q', '$uibModal', 'RoleStore', function(appName, $rootScope, PermissionStore, authFactory, apiResource, $state, DTDefaultOptions, envService, $q, $uibModal, RoleStore) {
+    /** 
+    ===========PERMISSIONS & ROLES ====================
+    **/
+    cie.run(['$rootScope', 'PermissionStore', 'authFactory', 'RoleStore', 'apiResource', function($rootScope, PermissionStore, authFactory, RoleStore, apiResource) {
 
 
-        /** 
-            ===========PERMISSIONS & ROLES ====================
-        **/
-        PermissionStore.definePermission('isloggedin', function(stateParams) {
+        PermissionStore.definePermission('isloggedin', function(permissionName, transitionProperties) {
             if (authFactory.authenticated()) {
                 return true; // Is loggedin
             }
@@ -586,42 +624,44 @@ define([
         });
 
 
-        PermissionStore.definePermission('anonymous', function(stateParams) {
+        PermissionStore.definePermission('anonymous', function(permissionName, transitionProperties) {
             if (!authFactory.authenticated()) {
                 return true; // Is loggedin
             }
             return false;
         });
 
-        if (authFactory.authenticated()) {
-            var user = $rootScope.currentUser;
 
-            if (user.permissions) {
-                angular.forEach(user.permissions, function(permission) {
-                    PermissionStore.definePermission(permission.name.replace(' ', '_').toLowerCase(), function() {
-                        return true;
-                    })
-                })
+        apiResource.resource('permissions').query().then(function(permissions) {
+            var succesCallback = function() {
+                return true;
             }
 
-            if (user.roles) {
-                angular.forEach(user.roles, function(role) {
-                    var permissonsName = [];
-                    permissonsName.push('isloggedin');
-                    angular.forEach(role.permissions, function(permission) {
-                        var namePermission = permission.name.replace(' ', '_').toLowerCase();
-                        permissonsName.push(namePermission)
-                    });
-
-                    RoleStore.defineRole(role.code, permissonsName, function() {
-                        return true;
-                    })
-
-                })
+            var failCallbacks = function() {
+                return false;
             }
-            console.log(RoleStore.getStore());
 
-        }
+
+
+            angular.forEach(permissions, function(permi) {
+                PermissionStore.definePermission(permi.code, function(permissionName) {
+                    return authFactory.hasPermission(permissionName).then(succesCallback, failCallbacks);
+                })
+            });
+
+            //roles
+            apiResource.resource('roles').query().then(function(roles) {
+                angular.forEach(roles, function(role) {
+                    var permRoles = [];
+                    angular.forEach(role.permissions, function(permRole) {
+                        permRoles.push(permRole.code);
+                    })
+                    RoleStore.defineRole(role.code, permRoles, function(roleName) {
+                        return authFactory.hasRole(role.code)
+                    })
+                })
+            })
+        });
 
         /**
             ===========PERMISSIONS & ROLES ====================
@@ -629,7 +669,7 @@ define([
 
     }]);
 
-    cie.run(['appName', '$rootScope', '$uibModal', '$q', 'DTDefaultOptions', function(appName, $rootScope, $uibModal, $q, DTDefaultOptions) {
+    cie.run(['appName', '$rootScope', '$uibModal', '$q', 'DTDefaultOptions', 'authFactory', 'apiResource', '$state', function(appName, $rootScope, $uibModal, $q, DTDefaultOptions, authFactory, apiResource, $state) {
 
         $rootScope.isMenuCollapsed = false; //menu collapsed
 
@@ -915,7 +955,7 @@ define([
             },
             data: {
                 permissions: {
-                    // only: ['escritorio'],
+                    // only: ['UsNormal', 'admin', 'isloggedin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -938,7 +978,7 @@ define([
             },
             data: {
                 permissions: {
-                    // only: ['confUser'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -959,7 +999,7 @@ define([
             },
             data: {
                 permissions: {
-                    // only: ['confUser'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -981,7 +1021,7 @@ define([
             },
             data: {
                 permissions: {
-                    // only: ['confUser'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1005,6 +1045,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1025,6 +1066,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1044,6 +1086,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1066,6 +1109,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1086,6 +1130,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1105,6 +1150,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1127,6 +1173,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1147,6 +1194,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1166,6 +1214,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1188,7 +1237,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['confRole'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1209,6 +1258,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1229,6 +1279,7 @@ define([
             },
             data: {
                 permissions: {
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
