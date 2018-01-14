@@ -35,5 +35,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('Cie\RepositoryInterface\RoleRepositoryInterface','Cie\Repository\RoleRepository');
         //Patient
         $this->app->bind('Cie\RepositoryInterface\PatientUserRepositoryInterface','Cie\Repository\PatientUserRepository');
+        //Province
+        $this->app->bind('Cie\RepositoryInterface\ProvinceRepositoryInterface','Cie\Repository\ProvinceRepository');
+        //CIty
+        $this->app->bind('Cie\RepositoryInterface\CityRepositoryInterface','Cie\Repository\CityRepository');
+        //Parish
+        $this->app->bind('Cie\RepositoryInterface\ParishRepositoryInterface','Cie\Repository\ParishRepository');
+         //Pathologies
+        $this->app->bind('Cie\RepositoryInterface\PathologyRepositoryInterface','Cie\Repository\PathologyRepository');
     }
 }

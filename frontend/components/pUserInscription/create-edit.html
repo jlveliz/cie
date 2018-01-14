@@ -82,23 +82,18 @@
                                                 <div class="row">
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="province" title="Provincia de Residencia del Usuario">Provincia<span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving" class="form-control" name="province" id="province" ng-model="model.province_id">
-                                                            <option value="M">Masculino</option>
-                                                            <option value="F">Femenino</option>
+                                                        <select ng-disabled="saving" class="form-control" name="province" id="province" ng-model="model.province_id" ng-options="province.id as province.name for province in provinces">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="province" title="Ciudad de Residencia del Usuario">Ciudad<span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving" class="form-control" name="city" id="city" ng-model="model.city_id">
-                                                            <option value="M">Masculino</option>
-                                                            <option value="F">Femenino</option>
+                                                        <select ng-disabled="saving || !model.province_id" class="form-control" name="city" id="city" ng-model="model.city_id">
+                                                            
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="parish" title="Parroquia de Residencia del Usuario">Parroquia <span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving" class="form-control" name="parish" id="parish" ng-model="model.parish_id">
-                                                            <option value="M">Masculino</option>
-                                                            <option value="F">Femenino</option>
+                                                        <select ng-disabled="saving || !model.province_id || !model.city_id" class="form-control" name="parish" id="parish" ng-model="model.parish_id">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -108,27 +103,27 @@
                                                         <p><b>Tipos de discapacidad</b></p>
                                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                             <label class="control-label" for="physical_disability" title="Porcentaje de Discapacidad Física del Usuario">Física<span class="text-danger">*</span></label>
-                                                            <select ng-disabled="saving" class="form-control" name="physical_disability" id="physical_disability" ng-model="model.physical_disability">
+                                                            <select ng-disabled="saving" class="form-control" name="physical_disability" id="physical_disability" ng-model="model.physical_disability" ng-options="item.id as item.value for item in porcentages">
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                             <label class="control-label" for="intellectual_disability" title="Porcentaje de Discapacidad Intelectual del Usuario">Intelectual<span class="text-danger">*</span></label>
-                                                            <select ng-disabled="saving" class="form-control" name="intellectual_disability" id="intellectual_disability" ng-model="model.intellectual_disability">
+                                                            <select ng-disabled="saving" class="form-control" name="intellectual_disability" id="intellectual_disability" ng-model="model.intellectual_disability" ng-options="item.id as item.value for item in porcentages">
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                             <label class="control-label" for="visual_disability" title="Porcentaje de Discapacidad Visual del Usuario">Visual<span class="text-danger">*</span></label>
-                                                            <select ng-disabled="saving" class="form-control" name="visual_disability" id="visual_disability" ng-model="model.visual_disability">
+                                                            <select ng-disabled="saving" class="form-control" name="visual_disability" id="visual_disability" ng-model="model.visual_disability" ng-options="item.id as item.value for item in porcentages">
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                             <label class="control-label" for="hearing_disability" title="Porcentaje de Discapacidad Auditiva del Usuario">Auditiva<span class="text-danger">*</span></label>
-                                                            <select ng-disabled="saving" class="form-control" name="hearing_disability" id="hearing_disability" ng-model="model.hearing_disability">
+                                                            <select ng-disabled="saving" class="form-control" name="hearing_disability" id="hearing_disability" ng-model="model.hearing_disability" ng-options="item.id as item.value for item in porcentages">
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                             <label class="control-label" for="psychosocial_disability" title="Porcentaje de Discapacidad Psicosocial del Usuario">Psicosocial<span class="text-danger">*</span></label>
-                                                            <select ng-disabled="saving" class="form-control" name="psychosocial_disability" id="psychosocial_disability" ng-model="model.psychosocial_disability">
+                                                            <select ng-disabled="saving" class="form-control" name="psychosocial_disability" id="psychosocial_disability" ng-model="model.psychosocial_disability" ng-options="item.id as item.value for item in porcentages">
                                                             </select>
                                                         </div>
                                                     </div>
@@ -156,7 +151,7 @@
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="diagnostic_id" title="Posee Diagnóstico el Usuario">Diagnóstico <span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving || model.has_diagnostic == 0 " class="form-control" name="diagnostic_id" id="diagnostic_id" ng-model="model.diagnostic_id">
+                                                        <select ng-disabled="saving || model.has_diagnostic == 0 " class="form-control" name="diagnostic_id" id="diagnostic_id" ng-model="model.diagnostic_id" ng-options="patho.id as patho.name for patho in pathologies">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
@@ -249,7 +244,7 @@
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Padre del Usuario" for="father_age">Edad <span class="text-danger">*</span></label>
-                                                        <input ng-disabled="saving" maxlength="2" minlength="1" id="father_age" type="text" class="form-control ng-pristine ng-valid ng-empty ng-valid-minlength ng-valid-maxlength ng-touched" name="father_age" ng-model="model.father.age" aria-invalid="false" style="">
+                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control ng-pristine ng-valid ng-empty ng-valid-minlength ng-valid-maxlength ng-touched" name="father_age" ng-model="model.father.age" aria-invalid="false" style="">
                                                     </div>
                                                 </div>
                                                 <div class="row">

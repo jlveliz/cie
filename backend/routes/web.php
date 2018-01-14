@@ -32,6 +32,10 @@ Route::group(['prefix'=>'api'],function() {
 	Route::resource('typepermissions','PermissionTypeController',['except'=>['create']]);
 	Route::resource('roles','RoleController',['except'=>['create']]);
 	Route::resource('pUsers','PatientUserController',['except'=>['create']]);
+	Route::resource('provinces','ProvinceController',['except'=>['create']]);
+	Route::resource('cities','CityController',['except'=>['create']]);
+	Route::resource('parishies','ParishController',['except'=>['create']]);
+	Route::resource('pathologies','PathologyController',['except'=>['create']]);
 
 	Route::get('validator/{method}','HelperController@validation');
 	Route::get('menu','HelperController@loadMenu');

@@ -66,14 +66,59 @@ define(['app'], function(app) {
                 })
             });
         }
+    }]);
+
+    app.register.controller('pUserInscriptionCreateCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'pUserInscriptionService', '$q', function($scope, apiResource, $stateParams, DTOptionsBuilder, pUserInscriptionService, $q) {
+
+        $scope.isEdit = false
+        $scope.loading = true;
+        $scope.model = {};
+        $scope.provinces = [];
+        $scope.cities = [];
+        $scope.parishies = [];
+        $scope.pathologies = [];
+
+
+        $scope.porcentages = [];
+        for (var i = 1; i <= 100; i++) {
+            $scope.porcentages.push({
+                id: i,
+                value: i + ' %'
+            })
+        }
+
+
+        var deps = $q.all([
+            apiResource.resource('provinces').queryCopy().then(function(provinces) {
+                $scope.provinces = provinces;
+            }),
+            apiResource.resource('cities').queryCopy().then(function(cities) {
+                $scope.cities = cities;
+            }),
+            apiResource.resource('parishies').queryCopy().then(function(parishies) {
+                $scope.parishies = parishies;
+            }), 
+            apiResource.resource('pathologies').queryCopy().then(function(pathologies) {
+                $scope.pathologies = pathologies;
+            }),
+        ]);
+
+        deps.then(function() {
+            $scope.model = apiResource.resource('puserinscriptions').create({
+                has_diagnostic: null,
+                city_id: null,
+                parish_id: null,
+                assist_other_therapeutic_center: null,
+                receives_medical_attention: null,
+                schooling: null
+            });
+            $scope.loading = false;
+        });
+
 
 
 
     }]);
-
-    app.register.controller('pUserInscriptionCreateCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'pUserInscriptionService', function($scope, apiResource, $stateParams, DTOptionsBuilder, pUserInscriptionService) {
-
-    }]); 
 
     app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'pUserInscriptionService', function($scope, apiResource, $stateParams, DTOptionsBuilder, pUserInscriptionService) {
 

@@ -608,8 +608,28 @@ define([
             id: '@id'
         }).register();
 
-        //roles
+        //inscriptions
         apiResource.resource("puserinscriptions", envService.read('api') + 'pUsers/:id', {
+            id: '@id'
+        }).register();
+
+        //provinces
+        apiResource.resource("provinces", envService.read('api') + 'provinces/:id', {
+            id: '@id'
+        }).register();
+
+        //cities
+        apiResource.resource("cities", envService.read('api') + 'cities/:id', {
+            id: '@id'
+        }).register();
+
+        //parish
+        apiResource.resource("parishies", envService.read('api') + 'parishies/:id', {
+            id: '@id'
+        }).register();
+
+         //pathologies
+        apiResource.resource("pathologies", envService.read('api') + 'pathologies/:id', {
             id: '@id'
         }).register();
 
