@@ -608,6 +608,11 @@ define([
             id: '@id'
         }).register();
 
+        //roles
+        apiResource.resource("puserinscriptions", envService.read('api') + 'pUsers/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     /** 
@@ -1286,6 +1291,70 @@ define([
                 css: ['frontend/assets/css/checkbox-bootstrap.css'],
                 pageTitle: "Roles"
             }
+        }));
+
+
+         /**
+            INSCRIPCTIONS
+        **/
+        $stateProvider.state('root.inscription', angularAMD.route({
+            url: 'inscriptions',
+            controllerUrl: 'frontend/components/pUserInscription/pUserInscription',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pUserInscription/index.html',
+                    controller: 'pUserInscriptionIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Fichas de Inscripción"
+            }
+        })); 
+
+        $stateProvider.state('root.inscription.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/pUserInscription/pUserInscription',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pUserInscription/create-edit.html',
+                    controller: 'pUserInscriptionCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Creación de Fichas de Inscripción"
+            }
+        
+        })); 
+
+        $stateProvider.state('root.inscription.edit', angularAMD.route({
+             url: '/{pInsId:int}/edit',
+            controllerUrl: 'frontend/components/pUserInscription/pUserInscription',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pUserInscription/create-edit.html',
+                    controller: 'pUserInscriptionEditCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Creación de Fichas de Inscripción"
+            }
+        
         }));
 
     }]);

@@ -16,11 +16,32 @@ class Person extends Model
     	'last_name',
     	'email',
     	'genre',
-    	'date_birth'
+    	'date_birth',
+        'province_id',
+        'city_id',
+        'parish_id',
+        'age',
+        'address',
+        'phone',
+        'mobile',
+        'activity',
+        'has_facebook',
+        'has_twitter',
+        'has_instagram',
     ];
 
-    public function user()
+    public function province()
     {
-    	return $this->hasOne('Cie\Models\User','person_id');
+        return $this->belongsTo('Cie\Models\Province','province_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo('Cie\Models\City','city_id');
+    }
+
+    public function parish()
+    {
+    	return $this->belongsTo('Cie\Models\Parish','city_id');
     }
 }

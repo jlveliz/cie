@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Fichas de Inscripción de Usuarios</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <h4 class="text-center" ng-if="loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Cargando...</span>
+                </h4>
+                <uib-tabset active="0" ng-if="!loading">
+                    <uib-tab index="0">
+                        <uib-tab-heading>
+                            <h5><b><i class="fa fa-list"></i> Listado</b></h5>
+                        </uib-tab-heading>
+                        <div class="tab-index">
+                            <div class="row" ng-if="existError || hasMessage">
+                                <div class="alert col-md-12 col-xs-12 col-sm-12" inscription="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <ul ng-if="messages.details.length > 0">
+                                        <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                    </ul>
+                                    <p ng-if="hasMessage">{{messages.title}}</p>
+                                </div>
+                            </div>
+                            <table datatable="ng" dt-options="dtOptions" id="inscription-list" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Representante</th>
+                                        <th>F. Creación/Modificación</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="inscription in inscriptions">
+                                        <td>{{inscriptions.person.name  | capitalize:'oneLetter'}} {{inscriptions.person.last_name  | capitalize:'oneLetter'}}</td>
+                                        <td>{{inscriptions.representant.name | capitalize:'oneLetter' }}</td> <td>{{inscriptions.representant.last_name | capitalize:'oneLetter'}}</td>
+                                        <td>{{inscriptions.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
+                                        <td>
+                                            <a ng-hide="inscription.$deleting" ui-sref="root.pUserInscriptions.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
+                                            <a ng-hide="inscription.$deleting" ng-click="delete(inscription.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <p ng-show="inscription.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <a ui-sref="root.inscription.create" title="Crear Ficha de Inscripción"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                        </uib-tab-heading>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

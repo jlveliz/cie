@@ -33,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('Cie\RepositoryInterface\PermissionRepositoryInterface','Cie\Repository\PermissionRepository');
         //Role
         $this->app->bind('Cie\RepositoryInterface\RoleRepositoryInterface','Cie\Repository\RoleRepository');
+        //Patient
+        $this->app->bind('Cie\RepositoryInterface\PatientUserRepositoryInterface','Cie\Repository\PatientUserRepository');
     }
 }
