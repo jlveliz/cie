@@ -42,8 +42,8 @@
                                                 <p class="section-inner">Datos Personales</p>
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                                        <label for="num_identification" title="Cedula del Usuario" class="control-label">Cédula <span class="text-danger">*</span></label>
-                                                        <input maxlength="10" minlength="10" ng-disabled="saving" id="num_identification" type="text" class="form-control" name="last_name" ng-model="model.last_name" autofocus="">
+                                                        <label for="num_identification" title="Cedula del Usuario" class="control-label" >Cédula <span class="text-danger">*</span></label>
+                                                        <input maxlength="10" minlength="10" ng-disabled="saving" id="num_identification" type="text" class="form-control" name="num_identification" ng-model="model.num_identification" autofocus="" numbers-only>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="name" title="Nombres del Usuario">Nombres <span class="text-danger">*</span></label>
@@ -55,11 +55,11 @@
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="date_birth" title="Fecha de Nacimiento de  Usuario">Fecha de Nacimiento <span class="text-danger">*</span></label>
-                                                        <input ng-disabled="saving" id="date_birth" type="date" class="form-control" name="date_birth" ng-model="model.date_birth">
+                                                        <input ng-disabled="saving" id="date_birth" type="date" class="form-control" name="date_birth" ng-change="calculateAge(model.date_birth)" ng-model="model.date_birth">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Usuario" for="age">Edad <span class="text-danger">*</span></label>
-                                                        <input ng-disabled="saving" maxlength="2" minlength="1" ng-disabled="saving" id="age" type="text" class="form-control" name="age" ng-model="model.age">
+                                                        <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="age" type="text" class="form-control" name="age" ng-model="model.age">
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -87,13 +87,12 @@
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="province" title="Ciudad de Residencia del Usuario">Ciudad<span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving || !model.province_id" class="form-control" name="city" id="city" ng-model="model.city_id">
-                                                            
+                                                        <select ng-disabled="saving || !model.province_id" class="form-control" name="city" id="city" ng-model="model.city_id" ng-options="city.id as city.name for city in cities | filter:{province_id:model.province_id}">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="parish" title="Parroquia de Residencia del Usuario">Parroquia <span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving || !model.province_id || !model.city_id" class="form-control" name="parish" id="parish" ng-model="model.parish_id">
+                                                        <select ng-disabled="saving || !model.province_id || !model.city_id" class="form-control" name="parish" id="parish" ng-model="model.parish_id"  ng-options="parish.id as parish.name for parish in parishies | filter:{city_id:model.city_id}">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -101,7 +100,7 @@
                                                 <div class="row">
                                                     <div class="col-md-8 col-sm-8 col-xs-12">
                                                         <p><b>Tipos de discapacidad</b></p>
-                                                        <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                        <div class="col-md-2 col-sm-2 col-xs-12 form-group no-padding" ng-if="!loading">
                                                             <label class="control-label" for="physical_disability" title="Porcentaje de Discapacidad Física del Usuario">Física<span class="text-danger">*</span></label>
                                                             <select ng-disabled="saving" class="form-control" name="physical_disability" id="physical_disability" ng-model="model.physical_disability" ng-options="item.id as item.value for item in porcentages">
                                                             </select>
@@ -131,7 +130,7 @@
                                                         <p>
                                                             <br>
                                                         </p>
-                                                        <div class="col-md-6 col-sm-6 col-xs-12 form-group" ng-if="!loading">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12 form-group" ng-if="!loading">
                                                             <label class="control-label" for="grade_of_disability" title="Grado de Discapacidad del Usuario">Grado de Discapacidad<span class="text-danger">*</span></label>
                                                             <select ng-disabled="saving" class="form-control" name="grade_of_disability" id="grade_of_disability" ng-model="model.grade_of_disability">
                                                                 <option value="l">Leve</option>
@@ -149,20 +148,24 @@
                                                             <option value="0">No</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
-                                                        <label class="control-label" for="diagnostic_id" title="Posee Diagnóstico el Usuario">Diagnóstico <span class="text-danger">*</span></label>
+                                                    <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="diagnostic_id" title="Diagnóstico el Usuario">Diagnóstico <span class="text-danger">*</span></label>
                                                         <select ng-disabled="saving || model.has_diagnostic == 0 " class="form-control" name="diagnostic_id" id="diagnostic_id" ng-model="model.diagnostic_id" ng-options="patho.id as patho.name for patho in pathologies">
                                                         </select>
-                                                    </div>
-                                                    <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
-                                                        <label class="control-label" for="cie_ten" title="CIE 10">CIE. 10 <span class="text-danger">*</span></label>
-                                                        <input type="text" ng-disabled="saving || model.has_diagnostic == 0 " class="form-control" name="cie_ten" id="cie_ten" ng-model="model.cie_ten">
                                                     </div>
                                                     <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="entity_send_diagnostic" title="Entidad que emite el diagnóstico al Usuario">Entidad que Emite el diagnóstico <span class="text-danger">*</span></label>
                                                         <input type="text" ng-disabled="saving || model.has_diagnostic == 0 " class="form-control" name="entity_send_diagnostic" id="entity_send_diagnostic" ng-model="model.entity_send_diagnostic">
                                                     </div>
                                                 </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="other_diagnostic" title="Entidad que emite el diagnóstico al Usuario">Otro Diagnóstico</label>
+                                                        <input type="text" ng-disabled="saving || model.has_diagnostic == 0 " class="form-control" name="other_diagnostic" id="other_diagnostic" ng-model="model.other_diagnostic">
+                                                    </div>
+                                                </div>
+
                                                 <div class="row">
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="assist_other_therapeutic_center" title="Asiste a otros centros Terapeuticos">Asiste a otros centros Terapéuticos <span class="text-danger">*</span></label>

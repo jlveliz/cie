@@ -581,6 +581,27 @@ define([
         }
     });
 
+    cie.directive('numbersOnly', function() {
+        return {
+            require: 'ngModel',
+            link: function(scope, element, attr, ngModelCtrl) {
+                function fromUser(text) {
+                    if (text) {
+                        var transformedInput = text.replace(/[^0-9]/g, '');
+
+                        if (transformedInput !== text) {
+                            ngModelCtrl.$setViewValue(transformedInput);
+                            ngModelCtrl.$render();
+                        }
+                        return transformedInput;
+                    }
+                    return undefined;
+                }
+                ngModelCtrl.$parsers.push(fromUser);
+            }
+        };
+    });
+
     cie.run(['apiResource', 'envService', function(apiResource, envService) {
 
         //users
@@ -628,7 +649,7 @@ define([
             id: '@id'
         }).register();
 
-         //pathologies
+        //pathologies
         apiResource.resource("pathologies", envService.read('api') + 'pathologies/:id', {
             id: '@id'
         }).register();
@@ -1314,7 +1335,7 @@ define([
         }));
 
 
-         /**
+        /**
             INSCRIPCTIONS
         **/
         $stateProvider.state('root.inscription', angularAMD.route({
@@ -1328,14 +1349,14 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'UsNormal'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
                 css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Fichas de Inscripción"
             }
-        })); 
+        }));
 
         $stateProvider.state('root.inscription.create', angularAMD.route({
             url: '/create',
@@ -1348,17 +1369,17 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'UsNormal'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Creación de Fichas de Inscripción"
             }
-        
-        })); 
+
+        }));
 
         $stateProvider.state('root.inscription.edit', angularAMD.route({
-             url: '/{pInsId:int}/edit',
+            url: '/{pInsId:int}/edit',
             controllerUrl: 'frontend/components/pUserInscription/pUserInscription',
             views: {
                 "content@root": {
@@ -1368,13 +1389,13 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'UsNormal'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Creación de Fichas de Inscripción"
             }
-        
+
         }));
 
     }]);

@@ -34,7 +34,8 @@ class PatientUser extends Model
         'schooling_name',
         'user_live_with',
         'parent_status_civil',
-        'observation'
+        'observation',
+        'other_diagnostic'
     ];
 
     public function person()

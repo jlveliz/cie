@@ -89,7 +89,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 	public function loadMenu($userId)
 	{
 		$query  = Module::select('module.*')->with(['permissions'=>function($query) use($userId){
-						$query->select('permission.*')
+						$query->selectRaw('distinct permission.*')
 						->leftJoin('role_permission as rPer','rPer.permission_id','=','permission.id')
 						->leftJoin('user_role as rolU','rolU.role_id','=','rPer.role_id')
 						->leftJoin('user as usr','usr.id','=','rolU.user_id')
@@ -119,7 +119,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 	public function loadAdminMenu()
 	{
 		$query = Module::select('module.*')->with(['permissions'=>function($query){
-			$query->select('permission.*')
+			$query->selectRaw('distinct permission.* ')
 			->whereRaw('permission.type_id = (select id from permission_type where permission_type.code = "menu")')
 			->whereNull('permission.parent_id')
 			->with(['children'=>function($query){

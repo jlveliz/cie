@@ -2,12 +2,45 @@
  ** Inscriptions controller
  **/
 define(['app'], function(app) {
-    app.register.service('pUserInscriptionService', function() {
+    app.register.service('pUserInscriptionService', ['$q', function($q) {
 
         var _this = this;
         _this.messageFlag = {};
 
-    });
+        _this.pUserInscriptionService = function(model) {
+
+            var deferred = $q.defer();
+
+            var successCallback = function(model) {
+                deferred.resolve(model);
+            }
+
+            var failCallback = function(error) {
+                deferred.reject(error);
+            }
+
+            if (model.id) {
+                model.$update(model.id, successCallback, failCallback);
+            } else {
+                model.$save(successCallback, failCallback);
+            }
+
+            return deferred.promise;
+        }
+
+        _this.calculateAge = function(dateBirth) {
+            var dateBirth = new Date(dateBirth);
+            var currentDate = new Date();
+            var age = currentDate.getFullYear() - dateBirth.getFullYear();
+            var m = currentDate.getMonth() - dateBirth.getMonth();
+            if (m < 0 || (m === 0 && currentDate.getDate() < dateBirth.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+
+    }]);
 
     app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'pUserInscriptionService', function($scope, apiResource, $stateParams, DTOptionsBuilder, pUserInscriptionService) {
 
@@ -41,6 +74,78 @@ define(['app'], function(app) {
             }
         });
 
+
+    }]);
+
+    app.register.controller('pUserInscriptionCreateCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'pUserInscriptionService', '$q', function($scope, apiResource, $stateParams, DTOptionsBuilder, pUserInscriptionService, $q) {
+
+        $scope.isEdit = false
+        $scope.loading = true;
+        $scope.model = {};
+        $scope.provinces = [];
+        $scope.cities = [];
+        $scope.parishies = [];
+        $scope.pathologies = [];
+
+
+        $scope.porcentages = [];
+        for (var i = 0; i <= 100; i++) {
+            $scope.porcentages.push({
+                id: i,
+                value: i + ' %'
+            })
+        }
+
+
+        var deps = $q.all([
+            apiResource.resource('provinces').queryCopy().then(function(provinces) {
+                $scope.provinces = provinces;
+            }),
+            apiResource.resource('cities').queryCopy().then(function(cities) {
+                $scope.cities = cities;
+            }),
+            apiResource.resource('parishies').queryCopy().then(function(parishies) {
+                $scope.parishies = parishies;
+            }),
+            apiResource.resource('pathologies').queryCopy().then(function(pathologies) {
+                $scope.pathologies = pathologies;
+            }),
+        ]);
+
+        deps.then(function() {
+            $scope.model = apiResource.resource('puserinscriptions').create({
+                has_diagnostic: null,
+                city_id: null,
+                parish_id: null,
+                assist_other_therapeutic_center: null,
+                receives_medical_attention: null,
+                schooling: null
+            });
+            $scope.loading = false;
+        });
+
+
+        $scope.calculateAge = function(dateBirth) {
+            $scope.model.age = pUserInscriptionService.calculateAge(dateBirth);
+        };
+
+        $scope.save = function() {
+
+            $scope.saving = true;
+            var successCallback = function() {
+                $scope.saving = false;
+                $scope.hasMessage = true;
+                apiResource.resource('users').setOnCache(data);
+                return true;
+            }
+
+            var failCallback = function() {
+                $scope.saving = false
+                return false;
+            }
+            pUserInscriptionService.save($scope.model).then(successCallback, failCallback);
+        };
+
         $scope.delete = function(id) {
             apiResource.resource('puserinscriptions').getCopy(id).then(function(object) {
                 var params = {
@@ -65,55 +170,7 @@ define(['app'], function(app) {
                     }
                 })
             });
-        }
-    }]);
-
-    app.register.controller('pUserInscriptionCreateCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'pUserInscriptionService', '$q', function($scope, apiResource, $stateParams, DTOptionsBuilder, pUserInscriptionService, $q) {
-
-        $scope.isEdit = false
-        $scope.loading = true;
-        $scope.model = {};
-        $scope.provinces = [];
-        $scope.cities = [];
-        $scope.parishies = [];
-        $scope.pathologies = [];
-
-
-        $scope.porcentages = [];
-        for (var i = 1; i <= 100; i++) {
-            $scope.porcentages.push({
-                id: i,
-                value: i + ' %'
-            })
-        }
-
-
-        var deps = $q.all([
-            apiResource.resource('provinces').queryCopy().then(function(provinces) {
-                $scope.provinces = provinces;
-            }),
-            apiResource.resource('cities').queryCopy().then(function(cities) {
-                $scope.cities = cities;
-            }),
-            apiResource.resource('parishies').queryCopy().then(function(parishies) {
-                $scope.parishies = parishies;
-            }), 
-            apiResource.resource('pathologies').queryCopy().then(function(pathologies) {
-                $scope.pathologies = pathologies;
-            }),
-        ]);
-
-        deps.then(function() {
-            $scope.model = apiResource.resource('puserinscriptions').create({
-                has_diagnostic: null,
-                city_id: null,
-                parish_id: null,
-                assist_other_therapeutic_center: null,
-                receives_medical_attention: null,
-                schooling: null
-            });
-            $scope.loading = false;
-        });
+        };
 
 
 

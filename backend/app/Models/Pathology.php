@@ -12,6 +12,5 @@ class Pathology extends Model
 
     protected $fillable = [
     	'name',
-        'cie_ten',
     ];
 }

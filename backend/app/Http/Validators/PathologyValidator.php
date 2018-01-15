@@ -29,12 +29,12 @@ class PathologyValidator extends Validator implements ValidatorInterface
 	public function rules($method = null) {
 		$rules = [
 			'name' => 'required|unique:pathology,name',
-			'cie_ten'=>'required|unique:pathology,cie_ten'
+			// 'cie_ten'=>'required|unique:pathology,cie_ten'
 		];
 
 		if ($method == 'PUT') {
 			$rules['name'] = 'required|unique:pathology,name,'.$this->request->get('key');
-			$rules['cie_ten'] = 'required|unique:pathology,cie_ten,'.$this->request->get('key');
+			// $rules['cie_ten'] = 'required|unique:pathology,cie_ten,'.$this->request->get('key');
 		}
 
 
@@ -45,8 +45,8 @@ class PathologyValidator extends Validator implements ValidatorInterface
 		return [
 			'name.required' => 'El nombre es requerido',
 			'name.unique' => 'El nombre de la patología ya existe',
-			'cie_ten.required' => 'El código CIE 10 es requerido',
-			'cie_ten.unique' => 'El código CIE 10 ya fue tomado',
+			// 'cie_ten.required' => 'El código CIE 10 es requerido',
+			// 'cie_ten.unique' => 'El código CIE 10 ya fue tomado',
 		];
 	}
 }
