@@ -1334,6 +1334,72 @@ define([
             }
         }));
 
+        /**
+            PROVINCES
+        **/
+        $stateProvider.state('root.province', angularAMD.route({
+            url: 'provinces',
+            controllerUrl: 'frontend/components/province/province',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/province/index.html',
+                    controller: 'ProvinceIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Provincias"
+            }
+        }));
+
+        $stateProvider.state('root.province.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/province/province',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/province/create-edit.html',
+                    controller: 'ProvinceCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/assets/css/checkbox-bootstrap.css'],
+                pageTitle: "Provincias"
+            }
+        })); 
+
+        $stateProvider.state('root.province.edit', angularAMD.route({
+            url: '/{provinceId:int}/edit',
+            controllerUrl: 'frontend/components/province/province',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/province/create-edit.html',
+                    controller: 'ProvinceEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/assets/css/checkbox-bootstrap.css'],
+                pageTitle: "Provincias"
+            }
+        }));
+
 
         /**
             INSCRIPCTIONS
