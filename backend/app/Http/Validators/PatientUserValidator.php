@@ -20,7 +20,7 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 	public function make(Request $request){
 		$validator =  parent::make($request->all(),$this->rules($request->method()),$this->messages($request->method()));
         if ($validator->fails()){
-        	throw new UserException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
+        	throw new PatientUserException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
         } else {
         	return true;
         } 

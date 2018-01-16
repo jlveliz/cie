@@ -10,9 +10,16 @@ class City extends Model
 
     protected $primaryKey = "id";
 
+    protected $with = "province";
+
     protected $fillable = [
     	'name',
         'slug',
         'province_id'
     ];
+
+    public function province()
+    {
+    	return $this->belongsTo('Cie\Models\Province','province_id');
+    }
 }

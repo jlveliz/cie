@@ -7,7 +7,7 @@ define(['app'], function(app) {
         var _this = this;
         _this.messageFlag = {};
 
-        _this.pUserInscriptionService = function(model) {
+        _this.save = function(model) {
 
             var deferred = $q.defer();
 
@@ -29,6 +29,7 @@ define(['app'], function(app) {
         }
 
         _this.calculateAge = function(dateBirth) {
+            if (!dateBirth) return "";
             var dateBirth = new Date(dateBirth);
             var currentDate = new Date();
             var age = currentDate.getFullYear() - dateBirth.getFullYear();
@@ -124,14 +125,150 @@ define(['app'], function(app) {
             $scope.loading = false;
         });
 
+        $scope.validateOptions = {
+            rules: {
+                num_identification: {
+                    required: true,
+                    min: 10,
+                    max: 10
+                },
+                name: {
+                    required: true
+                },
+                last_name: {
+                    required: true
+                },
+                date_birth: {
+                    required: true,
+                    date: true
+                },
+                age: {
+                    required: true,
+                    number: true,
+                    max: 15
+                },
+                genre: {
+                    valueNotEquals: '? undefined:undefined ?',
+                },
+                address: {
+                    required: true,
+                    min: 10,
+                },
+                province: {
+                    valueNotEquals: '?',
+                },
+                city: {
+                    valueNotEquals: '?',
+                },
+                parish: {
+                    valueNotEquals: '?',
+                },
+                physical_disability: {
+                    valueNotEquals: '?',
+                },
+                intellectual_disability: {
+                    valueNotEquals: '?',
+                },
+                visual_disability: {
+                    valueNotEquals: '?',
+                },
+                psychosocial_disability: {
+                    valueNotEquals: '?',
+                },
+                hearing_disability: {
+                    valueNotEquals: '?',
+                },
+                conadis_id: {
+                    required: true
+                },
+                grade_of_disability: {
+                    valueNotEquals: '? undefined:undefined ?'
+                },
+                has_diagnostic: {
+                    valueNotEquals: '? object:null ?'
+                },
+                diagnostic_id: {
+                    valueNotEquals: '?'
+                },
+                entity_send_diagnostic: {
+                    required: true
+                },
+                assist_other_therapeutic_center: {
+                    valueNotEquals: '?'
+                },
+                therapeutic_center_name : {
+                    required : function(){
+                        return $scope.assist_other_therapeutic_center != '';
+                    }
+                }
+            },
+            messages: {
+                num_identification: {
+                    required: "Identificación requerida",
+                    min: "Identificación inválida",
+                    max: "Identificación inválida",
+                },
+                name: {
+                    required: "Nombre Requerido"
+                },
+                last_name: {
+                    required: "Apellido Requerido"
+                },
+                date_birth: {
+                    required: "Fecha Nacimiento Requerida",
+                    date: "La Fecha es Inválida",
+                },
+                age: {
+                    required: "La Edad es Requerida",
+                    number: true,
+                    max: "Edad Incorrecta"
+                },
+                genre: {
+                    valueNotEquals: 'Género requerido',
+                },
+                address: {
+                    required: "Domicilio Requerida",
+                    min: "Ingrese al menos 10 carácteres",
+                },
+                province: {
+                    valueNotEquals: 'Provincia Requerida',
+                },
+                city: {
+                    valueNotEquals: 'Ciudad Requerida',
+                },
+                parish: {
+                    valueNotEquals: 'Parroquia Requerida',
+                },
+                physical_disability: {
+                    valueNotEquals: 'D. Requerida',
+                },
+                intellectual_disability: {
+                    valueNotEquals: 'D. Requerida',
+                },
+                visual_disability: {
+                    valueNotEquals: 'D. Requerida',
+                },
+                hearing_disability: {
+                    valueNotEquals: 'D. Requerida',
+                },
+                psychosocial_disability: {
+                    valueNotEquals: 'D. Requerida',
+                },
+                conadis_id: {
+                    required: "Conadis Requerida"
+                },
+                grade_of_disability: {
+                    valueNotEquals: 'Es Requerido'
+                }
+            }
+        }
+
 
         $scope.calculateAge = function(dateBirth) {
             $scope.model.age = pUserInscriptionService.calculateAge(dateBirth);
         };
 
-        $scope.save = function() {
-
-            $scope.saving = true;
+        $scope.save = function(saveForm, returnIndex) {
             var successCallback = function() {
                 $scope.saving = false;
                 $scope.hasMessage = true;
@@ -143,7 +280,10 @@ define(['app'], function(app) {
                 $scope.saving = false
                 return false;
             }
-            pUserInscriptionService.save($scope.model).then(successCallback, failCallback);
+            if (saveForm.validate()) {
+                $scope.saving = true;
+                pUserInscriptionService.save($scope.model).then(successCallback, failCallback);
+            }
         };
 
         $scope.delete = function(id) {

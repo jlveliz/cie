@@ -1,18 +1,18 @@
 /**
- ** Province controller
+ ** Pathology controller
  **/
 define(['app'], function(app) {
 
-    app.register.service('ProvinceService', function() {
+    app.register.service('PathologyService', function() {
 
         var _this = this;
 
         _this.messageFlag = {};
     })
 
-    app.register.controller('ProvinceIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ProvinceService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, ProvinceService, $rootScope) {
+    app.register.controller('PathologyIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PathologyService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PathologyService, $rootScope) {
 
-        $scope.provinces = [];
+        $scope.pathologies = [];
         $scope.loading = true;
         $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
         $scope.messages = {};
@@ -31,36 +31,36 @@ define(['app'], function(app) {
             responsive: true
         });
 
-        apiResource.resource('provinces').query().then(function(results) {
+        apiResource.resource('pathologies').query().then(function(results) {
             $scope.loading = false;
-            $scope.provinces = results;
-            $scope.messages = ProvinceService.messageFlag;
+            $scope.pathologies = results;
+            $scope.messages = PathologyService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
-                ProvinceService.messageFlag = {};
+                PathologyService.messageFlag = {};
             }
         });
 
         $scope.delete = function(id) {
-            apiResource.resource('provinces').getCopy(id).then(function(object) {
+            apiResource.resource('pathologies').getCopy(id).then(function(object) {
                 var params = {
                     title: 'Atención',
-                    text: 'Desea eliminar la Provincia ' + object.name + '.?'
+                    text: 'Desea eliminar la Patología ' + object.name + '.?'
                 }
                 $rootScope.openDelteModal(params).then(function() {
-                    var idx = _.findIndex($scope.provinces, function(el) {
+                    var idx = _.findIndex($scope.pathologies, function(el) {
                         return el.id == object.id;
                     });
                     if (idx > -1) {
-                        $scope.provinces[idx].$deleting = true;
+                        $scope.pathologies[idx].$deleting = true;
                         object.$delete(function() {
-                            ProvinceService.messageFlag.title = "Provincia eliminado correctamente";
-                            ProvinceService.messageFlag.type = "info";
-                            $scope.messages = ProvinceService.messageFlag;
+                            PathologyService.messageFlag.title = "Patología eliminada correctamente";
+                            PathologyService.messageFlag.type = "info";
+                            $scope.messages = PathologyService.messageFlag;
                             $scope.hasMessage = true;
-                            $scope.provinces[idx].$deleting = false;
-                            $scope.provinces.splice(idx, 1);
-                            apiResource.resource('provinces').removeFromCache(id);
+                            $scope.pathologies[idx].$deleting = false;
+                            $scope.pathologies.splice(idx, 1);
+                            apiResource.resource('pathologies').removeFromCache(id);
                         })
                     }
                 })
@@ -69,46 +69,48 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('ProvinceCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'ProvinceService', function($scope, apiResource, $stateParams, $state, ProvinceService) {
+    app.register.controller('PathologyCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PathologyService', '$q', function($scope, apiResource, $stateParams, $state, PathologyService, $q) {
 
         $scope.saving = false;
         $scope.model = {};
         $scope.listPermissions = [];
         $scope.messages = [];
+        $scope.cities = [];
 
 
-        $scope.model = apiResource.resource('provinces').create();
+        $scope.model = apiResource.resource('pathologies').create();
+
+
 
         $scope.validateOptions = {
             rules: {
                 name: {
                     required: true,
-                    unique: 'province,name'
+                    unique: 'pathology,name'
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
-                    unique: 'La Provincia ya fue tomada'
+                    unique: 'La Patología ya fue tomada'
                 }
             }
 
         };
-
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
-                    apiResource.resource('provinces').setOnCache(data);
-                    ProvinceService.messageFlag.title = "Provincia creada correctamente";
-                    ProvinceService.messageFlag.type = "info";
+                    apiResource.resource('pathologies').setOnCache(data);
+                    PathologyService.messageFlag.title = "Patología creada correctamente";
+                    PathologyService.messageFlag.type = "info";
                     if (returnIndex) {
-                        $state.go('root.province');
+                        $state.go('root.pathology');
                     } else {
-                        $state.go('root.province.edit', {
-                            provinceId: data.id
+                        $state.go('root.pathology.edit', {
+                            pathologyId: data.id
                         })
                     }
 
@@ -135,38 +137,39 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('ProvinceEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'ProvinceService', function($scope, apiResource, $stateParams, $state, ProvinceService) {
+    app.register.controller('PathologyEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'PathologyService', '$q', function($scope, apiResource, $stateParams, $state, PathologyService, $q) {
 
-        var provinceId = $stateParams.provinceId;
+        var pathologyId = $stateParams.pathologyId;
         $scope.isEdit = true;
-
-
         $scope.loading = true;
         $scope.model = {};
         $scope.messages = {};
         $scope.existError = false;
 
-        apiResource.resource('provinces').getCopy(provinceId).then(function(model) {
+
+        apiResource.resource('pathologies').getCopy(pathologyId).then(function(model) {
             $scope.model = model;
-            $scope.messages = ProvinceService.messageFlag;
+            $scope.messages = PathologyService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
-                ProvinceService.messageFlag = {};
+                PathologyService.messageFlag = {};
             }
             $scope.loading = false;
         });
+
+
 
         $scope.validateOptions = {
             rules: {
                 name: {
                     required: true,
-                    unique: 'province,name,' + provinceId
+                    unique: 'pathology,name,' + pathologyId
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
-                    unique: 'El Provincia ya fue tomado'
+                    unique: "La Patología es requerida",
                 }
             }
 
@@ -176,16 +179,16 @@ define(['app'], function(app) {
             $scope.messages = {};
             if (form.validate()) {
                 $scope.saving = true;
-                $scope.model.key = provinceId;
-                $scope.model.$update(provinceId, function(data) {
+                $scope.model.key = pathologyId;
+                $scope.model.$update(pathologyId, function(data) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
-                    apiResource.resource('provinces').setOnCache(data);
-                    ProvinceService.messageFlag.title = "Provincia " + $scope.model.name + " Actualizada correctamente";
-                    ProvinceService.messageFlag.type = "info";
-                    $scope.messages = ProvinceService.messageFlag;
+                    apiResource.resource('pathologies').setOnCache(data);
+                    PathologyService.messageFlag.title = "Patología " + $scope.model.name + " Actualizada correctamente";
+                    PathologyService.messageFlag.type = "info";
+                    $scope.messages = PathologyService.messageFlag;
                     if (returnIndex) {
-                        $state.go('root.province');
+                        $state.go('root.pathology');
                     }
                 }, function(reason) {
                     $scope.saving = false;

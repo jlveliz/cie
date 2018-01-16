@@ -10,9 +10,16 @@ class Parish extends Model
 
     protected $primaryKey = "id";
 
+    protected $with = 'city';
+
     protected $fillable = [
     	'name',
         'slug',
         'city_id'
     ];
+
+    public function city()
+    {
+    	return $this->belongsTo('Cie\Models\City','city_id');
+    }
 }

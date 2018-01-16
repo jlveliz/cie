@@ -1370,14 +1370,14 @@ define([
             },
             data: {
                 permissions: {
-                    // only: ['admin'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
                 css: ['frontend/assets/css/checkbox-bootstrap.css'],
                 pageTitle: "Provincias"
             }
-        })); 
+        }));
 
         $stateProvider.state('root.province.edit', angularAMD.route({
             url: '/{provinceId:int}/edit',
@@ -1391,7 +1391,7 @@ define([
             },
             data: {
                 permissions: {
-                    // only: ['admin'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1399,6 +1399,202 @@ define([
                 pageTitle: "Provincias"
             }
         }));
+
+        /**
+            CITY
+        **/
+        $stateProvider.state('root.city', angularAMD.route({
+            url: 'cities',
+            controllerUrl: 'frontend/components/city/city',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/city/index.html',
+                    controller: 'CityIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Ciudades"
+            }
+        }));
+
+        $stateProvider.state('root.city.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/city/city',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/city/create-edit.html',
+                    controller: 'CityCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Ciudades"
+            }
+        }));
+
+
+        $stateProvider.state('root.city.edit', angularAMD.route({
+            url: '/{cityId:int}/edit',
+            controllerUrl: 'frontend/components/city/city',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/city/create-edit.html',
+                    controller: 'CityEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Ciudades"
+            }
+        }));
+
+        /**
+            PARISH
+        **/
+        $stateProvider.state('root.parish', angularAMD.route({
+            url: 'parishies',
+            controllerUrl: 'frontend/components/parish/parish',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/parish/index.html',
+                    controller: 'ParishIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Parroquias"
+            }
+        }));
+
+        $stateProvider.state('root.parish.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/parish/parish',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/parish/create-edit.html',
+                    controller: 'ParishCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Parroquias"
+            }
+        }));
+
+
+        $stateProvider.state('root.parish.edit', angularAMD.route({
+            url: '/{parishId:int}/edit',
+            controllerUrl: 'frontend/components/parish/parish',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/parish/create-edit.html',
+                    controller: 'ParishEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Parroquias"
+            }
+        }));
+
+        /**
+            PATHOLOGY
+        **/
+        $stateProvider.state('root.pathology', angularAMD.route({
+            url: 'pathologies',
+            controllerUrl: 'frontend/components/pathology/pathology',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pathology/index.html',
+                    controller: 'PathologyIdxCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Patologías"
+            }
+        }));
+
+        $stateProvider.state('root.pathology.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/pathology/pathology',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pathology/create-edit.html',
+                    controller: 'PathologyCreateCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Patologías"
+            }
+        }));
+
+         $stateProvider.state('root.pathology.edit', angularAMD.route({
+            url: '/{pathologyId:int}/edit',
+            controllerUrl: 'frontend/components/pathology/pathology',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pathology/create-edit.html',
+                    controller: 'PathologyEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Patologías"
+            }
+        }));
+
+
 
 
         /**

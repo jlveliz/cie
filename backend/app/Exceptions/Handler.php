@@ -80,7 +80,7 @@ class Handler extends ExceptionHandler
 
     private function handle($request, Exception $exception)
     {
-        dd($exception);
+        // dd($exception);
         $this->report($exception);
         $data = $exception->getMessage();
         $status = $exception->getCode();
