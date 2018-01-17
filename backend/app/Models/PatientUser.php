@@ -31,6 +31,7 @@ class PatientUser extends Model
         'receives_medical_attention',
         'name_medical_attention',
         'schooling',
+        'schooling_type',
         'schooling_name',
         'user_live_with',
         'parent_status_civil',

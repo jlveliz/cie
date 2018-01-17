@@ -27,37 +27,45 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 	}
 
 	public function rules($method = null) {
-		$rules = [
-			'name' => 'required',
-			'last_name'=>'required',
-			'username'=>'required|unique:user,username',
-			'password'=>'required',
-			'repeat_password'=>'required|same:password',
-			'email'=>'required|email|unique:person,email'
+		return [
+			'num_identification' => 'required|min:10|max:10|is_valid_id',
+			'name'=>'required',
+			'last_name' => 'required',
+			'date_birth' => 'required|date_format:Y-m-d',
+			'age'=>'required|digits_between:0,15',
+			'genre'=>'required|boolean',
+			'address' =>'required|min:10',
+			'province_id' => 'required|exists:province,id',
+			'city_id' =>'required|exists:city,id',
+			'physical_disability' => 'required|int',
+			'intellectual_disability' => 'required|int',
+			'visual_disability' => 'required|int',
+			'psychosocial_disability' => 'required|int',
+			'conadis_id' => 'required',
+			'grade_of_disability' => 'required',
+			'has_diagnostic' => 'required|boolean',
+			'diagnostic_id' => 'required|exists:pathology,id',
+			'entity_send_diagnostic' => 'required',
+			'assist_other_therapeutic_center' => 'required|boolean',
+			'therapeutic_center_name'=>'required_with:assist_other_therapeutic_center',
+			'has_insurance'=>'required|boolean',
+			'receives_medical_attention' => 'required',
+			'name_medical_attention' => 'required_with:receives_medical_attention',
+			'schooling'=>'required',
+			'schooling_type'=>'required',
+			'schooling_name'=>'required',
+			
 		];
 
-		if ($method == 'PUT') {
-			$rules['email'] = 'required|email|unique:person,email,'.$this->request->get('person_id');
-			$rules['username'] = 'required|unique:user,username,'.$this->request->get('key');
-			$rules['password'] = 'required_with:password';
-			$rules['repeat_password'] = 'required_with:password|same:password';
-		}
-
+		
 		return $rules;
 	}
 
 	public function messages($method = null) {
 		return [
-			'name.required' => 'El nombre es requerido',
-			'last_name.required' => 'EL apellido es requerido',
-			'username.required'=>'El usuario es requerido',
-			'username.unique'=>'El usuario ya fue tomado',
-			'password.required'=>'La contraseña es requerida',
-			'repeat_password.required'=>'La confirmación de contraseña es requerida',
-			'repeat_password.same'=>'La confirmación de contraseña no coincide con la contraseña',
-			'email.required' => 'El email es requerido',
-			'email.email' => 'El email tiene un formato inválido',
-			'email.unique' => 'El email ya fue tomado',
+			'num_identification.required' => 'Identificación requerida',
+			'num_identification.min' => 'Identificación es inválida',
+			'num_identification.is_valid_id' => 'Cédula Inválida'
 		];
 	}
 }
