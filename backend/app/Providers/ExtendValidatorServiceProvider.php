@@ -14,6 +14,7 @@ class ExtendValidatorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        ///if a ci valid
         Validator::extend('is_valid_id',function($attribute, $value, $parameters, $validator){
             //Preguntamos si la $value consta de 10 digitos
             if (strlen($value) == 10) {
@@ -75,6 +76,17 @@ class ExtendValidatorServiceProvider extends ServiceProvider
                 //imprimimos en consola si la $value tiene mas o menos de 10 digitos
                 return false;
             }  
+        });
+
+
+        Validator::extend('number_between',function($attribute, $value, $parameters, $validator){
+            
+            if ($value >= $parameters[0] && $value <= $parameters[1]) {
+                return true;
+            }
+
+            return false;
+
         });
     }
 

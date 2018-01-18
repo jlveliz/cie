@@ -3,6 +3,7 @@
 namespace Cie\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class PatientUser extends Model
 {
@@ -10,7 +11,7 @@ class PatientUser extends Model
 
     protected $primaryKey = "id";
 
-    protected $with = ['person','parent','father','mother','representant','user'];
+    protected $with = ['person','father','mother','representant','user'];
 
     protected $fillable = [
     	'person_id',
@@ -36,6 +37,9 @@ class PatientUser extends Model
         'user_live_with',
         'parent_status_civil',
         'observation',
+        'father_id',
+        'mother_id',
+        'representant_id',
         'other_diagnostic'
     ];
 
@@ -51,7 +55,7 @@ class PatientUser extends Model
 
     public function mother()
     {
-        return $this->belongsTo('Cie\Models\Person','father_id');
+        return $this->belongsTo('Cie\Models\Person','mother_id');
     }
 
     public function representant()
@@ -62,5 +66,19 @@ class PatientUser extends Model
     public function user()
     {
         return $this->belongsTo('Cie\Models\User','created_user_id');
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function($pUser){
+            $pUser->created_user_id = Auth::user()->id;
+        });
+
+        static::deleted(function($pUser){
+            $pUser->person()->delete();
+        });
+
     }
 }
