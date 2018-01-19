@@ -862,14 +862,14 @@ define([
             errorElement: 'span',
             errorClass: 'help-block',
             highlight: function(element) {
-                $(element).closest('.form-group').addClass('has-error');
+                $(element).parents('.form-group').addClass('has-error');
             },
             unhighlight: function(element) {
-                $(element).closest('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').removeClass('has-error');
             },
             errorPlacement: function(error, element) {
-                error.insertAfter(element);
-
+                var element = element.parents('.form-group');
+                element.append(error);
             }
         });
 
@@ -914,6 +914,68 @@ define([
             });
             return success;
         }, "Already exist.");
+
+        $validatorProvider.addMethod("isValidId", function(value, element, arg) {
+            //Preguntamos si la value consta de 10 digitos
+            if (value.length == 10) {
+                //Obtenemos el digito de la region que sonlos dos primeros digitos
+                var regionId = value.substring(0, 2);
+                //Pregunto si la region existe ecuador se divide en 24 regiones
+                if (regionId >= 1 && regionId <= 24) {
+                    // Extraigo el ultimo digito
+                    var lastDigit = value.substring(9, 10);
+                    //Agrupo todos los pair y los sumo
+                    var pair = parseInt(value.substring(1, 2)) + parseInt(value.substring(3, 4)) + parseInt(value.substring(5, 6)) + parseInt(value.substring(7, 8));
+                    //Agrupo los odd, los multiplico por un factor de 2, si la resultante es > que 9 le restamos el 9 a la resultante
+                    var numOne = value.substring(0, 1);
+                    var numOne = (numOne * 2);
+                    if (numOne > 9) { var numOne = (numOne - 9); }
+                    var numThree = value.substring(2, 3);
+                    var numThree = (numThree * 2);
+                    if (numThree > 9) { var numThree = (numThree - 9); }
+                    var numFive = value.substring(4, 5);
+                    var numFive = (numFive * 2);
+                    if (numFive > 9) { var numFive = (numFive - 9); }
+                    var numSeven = value.substring(6, 7);
+                    var numSeven = (numSeven * 2);
+                    if (numSeven > 9) { var numSeven = (numSeven - 9); }
+                    var numNine = value.substring(8, 9);
+                    var numNine = (numNine * 2);
+                    if (numNine > 9) { var numNine = (numNine - 9); }
+                    var odd = numOne + numThree + numFive + numSeven + numNine;
+                    //Suma total
+                    var sumTotal = (pair + odd);
+                    //extraemos el primero digito
+                    var firstDigitSum = String(sumTotal).substring(0, 1);
+                    //Obtenemos la ten inmediata
+                    var ten = (parseInt(firstDigitSum) + 1) * 10;
+                    //Obtenemos la resta de la ten inmediata - la sumTotal esto nos da el digito validador
+                    var validatorDigit = ten - sumTotal;
+                    //Si el digito validador es = a 10 toma el valor de 0
+                    if (validatorDigit == 10)
+                        var validatorDigit = 0;
+                    //Validamos que el digito validador sea igual al de la value
+                    if (validatorDigit == lastDigit) {
+                        return true
+                    } else {
+                        return false
+                    }
+
+                } else {
+                    // imprimimos en consola si la region no pertenece
+                    return false;
+                }
+            } else {
+                //imprimimos en consola si la value tiene mas o menos de 10 digitos
+                return false;
+            }
+        }, "Invalid ID.");
+
+
+        $validatorProvider.addMethod('notEqualtTo', function(value, element, arg) {
+            if ($(arg).val() == value) return false;
+            return true;
+        }, 'exist equal');
 
 
         $urlRouterProvider.otherwise('/errors/404');
@@ -1574,7 +1636,7 @@ define([
             }
         }));
 
-         $stateProvider.state('root.pathology.edit', angularAMD.route({
+        $stateProvider.state('root.pathology.edit', angularAMD.route({
             url: '/{pathologyId:int}/edit',
             controllerUrl: 'frontend/components/pathology/pathology',
             views: {
@@ -1655,7 +1717,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                pageTitle: "Creación de Fichas de Inscripción"
+                pageTitle: "Edición de Fichas de Inscripción"
             }
 
         }));

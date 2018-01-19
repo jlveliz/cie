@@ -36,11 +36,11 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="inscription in inscriptions">
-                                        <td>{{inscriptions.person.name  | capitalize:'oneLetter'}} {{inscriptions.person.last_name  | capitalize:'oneLetter'}}</td>
-                                        <td>{{inscriptions.representant.name | capitalize:'oneLetter' }}</td> <td>{{inscriptions.representant.last_name | capitalize:'oneLetter'}}</td>
-                                        <td>{{inscriptions.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
+                                        <td>{{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}</td>
+                                        <td>{{inscription.representant.name | capitalize:'oneLetter' }} {{inscription.representant.last_name | capitalize:'oneLetter'}}</td>
+                                        <td>{{inscription.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="inscription.$deleting" ui-sref="root.pUserInscriptions.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
+                                            <a ng-hide="inscription.$deleting" ui-sref="root.inscription.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
                                             <a ng-hide="inscription.$deleting" ng-click="delete(inscription.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
                                             <p ng-show="inscription.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>

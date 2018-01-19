@@ -14,7 +14,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	
 	public function enum($params = null)
 	{
-		$paUsers = PatientUser::all();
+		$paUsers = PatientUser::join('person','person.id','=','person_id')->get();
 
 		if (!$paUsers) {
 			throw new PatientUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -28,17 +28,17 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	{
 		if (is_array($field)) {
 			if (array_key_exists('num_identification', $field)) { 
-				$paUser = PatientUser::where('num_identification',$field['num_identification'])->first();	
+				$paUser = PatientUser::join('person','person.id','=','person_id')->where('num_identification',$field['num_identification'])->first();	
 			} elseif (array_key_exists('conadis_id', $field)) {
-				$paUser = PatientUser::where('conadis_id',$field['conadis_id'])->first();	
+				$paUser = PatientUser::join('person','person.id','=','person_id')->where('conadis_id',$field['conadis_id'])->first();	
 			} elseif (array_key_exists('person_id', $field)) {
-				$paUser = PatientUser::where('person_id',$field['person_id'])->first();	
+				$paUser = PatientUser::join('person','person.id','=','person_id')->where('person_id',$field['person_id'])->first();	
 			} else {
 				throw new PatientUserException(['title'=>'No se puede buscar el Usuario','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			$paUser = PatientUser::find($field);
+			$paUser = PatientUser::join('person','person.id','=','person_id')->where('patient_user.id',$field)->first();
 		} else {
 			throw new PatientUserException(['title'=>'Se ha producido un error al buscar el Usuario','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
@@ -56,22 +56,31 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		//father
 		$dataFather = $data['father'];
 		$father = new Person();
+		$dataFather['genre'] = $father->getMale();
 		$father->fill($dataFather);
 		if ($father->save()) {
 			$fatherKey = $father->getKey();
 			//mother
 			$dataMother = $data['mother'];
 			$mother = new Person();
+			$dataMother['genre'] = $mother->getFemale();
 			$mother->fill($dataMother);
 			if ($mother->save()) {
 				$motherKey = $mother->getKey();
 
 				if (array_key_exists('is_representant', $data['father']) && $data['father']['is_representant'] == 1) {
 					$reresentantId = $fatherKey;
-				}
-
-				if (array_key_exists('is_representant', $data['mother'])  && $data['mother']['is_representant'] == 1) {
+				} elseif (array_key_exists('is_representant', $data['mother'])  && $data['mother']['is_representant'] == 1) {
 					$reresentantId = $motherKey;
+				} else {
+					//representant
+					$dataRepresentant = $data['representant'];
+					$representant = new Person();
+					$representant->fill($dataRepresentant);
+					if($representant->save()){
+						$reresentantId = $representant->getKey();
+					}
+
 				}
 
 				//user patient
@@ -83,7 +92,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 					$data['person_id'] = $personKey;
 					$data['father_id'] = $fatherKey;
 					$data['mother_id'] = $motherKey;
-					$data['representant_id'] = $fatherKey;
+					$data['representant_id'] = $reresentantId;
 					$pUPatient->fill($data);
 					if($pUPatient->save()){
 						$key = $pUPatient->getKey();

@@ -10,8 +10,13 @@ class Person extends Model
 
     protected $primaryKey = "id";
 
+    private $male = "M";
+
+    private $female = "F";
+
     protected $fillable = [
     	'person_type_id',
+        'num_identification',
     	'name',
     	'last_name',
     	'email',
@@ -43,5 +48,15 @@ class Person extends Model
     public function parish()
     {
     	return $this->belongsTo('Cie\Models\Parish','city_id');
+    }
+
+    public function getMale()
+    {
+        return $this->male;
+    }
+
+    public function getFemale()
+    {
+        return $this->female;
     }
 }

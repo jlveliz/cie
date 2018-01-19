@@ -11,11 +11,10 @@ class PatientUser extends Model
 
     protected $primaryKey = "id";
 
-    protected $with = ['person','father','mother','representant','user'];
+    protected $with = ['father','mother','representant','user'];
 
     protected $fillable = [
     	'person_id',
-    	'num_identification',
     	'conadis_id',
     	'physical_disability',
     	'visual_disability',
@@ -43,6 +42,13 @@ class PatientUser extends Model
         'other_diagnostic'
     ];
 
+    public function __construct()
+    {
+        parent::__construct();
+        return $this->join('person','person.id','=','patient_user.person_id');
+    }
+
+
     public function person()
     {
         return $this->belongsTo('Cie\Models\Person','person_id');
@@ -67,6 +73,8 @@ class PatientUser extends Model
     {
         return $this->belongsTo('Cie\Models\User','created_user_id');
     }
+
+   
 
 
     public static function boot()
