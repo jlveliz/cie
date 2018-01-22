@@ -3,6 +3,7 @@
 namespace Cie\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Cie\Scope\PatientUserScope;
 use Auth;
 
 class PatientUser extends Model
@@ -42,12 +43,6 @@ class PatientUser extends Model
         'other_diagnostic'
     ];
 
-    public function __construct()
-    {
-        parent::__construct();
-        return $this->join('person','person.id','=','patient_user.person_id');
-    }
-
 
     public function person()
     {
@@ -74,6 +69,8 @@ class PatientUser extends Model
         return $this->belongsTo('Cie\Models\User','created_user_id');
     }
 
+
+
    
 
 
@@ -87,6 +84,8 @@ class PatientUser extends Model
         static::deleted(function($pUser){
             $pUser->person()->delete();
         });
+
+        static::addGlobalScope(new PatientUserScope());
 
     }
 }

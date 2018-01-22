@@ -973,8 +973,26 @@ define([
 
 
         $validatorProvider.addMethod('notEqualtTo', function(value, element, arg) {
-            if ($(arg).val() == value) return false;
-            return true;
+            function validateElem(elem) {
+                if ($(elem).val() == value) return false;
+                return true;
+            }
+
+            if (angular.isArray(arg)) {
+                var results = [];
+                angular.forEach(arg, function(el) {
+                    if (validateElem(el)) {
+                        results.push(true)
+                    } else {
+                        results.push(false);
+                    }
+                })
+
+                if (_.contains(results, false)) return false;
+                return true;
+            } else {
+                return validateElem(arg);
+            }
         }, 'exist equal');
 
 

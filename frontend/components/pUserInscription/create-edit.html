@@ -305,7 +305,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="representant_num_identification" title="Cedula del Representante del Usuario" class="control-label">Representante</label>
-                                                        <select ng-disabled="saving" name="representant" id="representant" ng-change="changeRepresentant()" ng-model="representant.family" class="form-control" ng-options="rep.id as rep.value for rep in representants" >
+                                                        <select ng-disabled="saving" name="representant" id="representant" ng-change="changeRepresentant()" ng-model="representant.family" class="form-control" ng-options="rep.id as rep.value for rep in representants">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading" ng-show="representant.family == '3' ">
@@ -316,11 +316,11 @@
                                                         <label class="control-label" for="representant_name" title="Nombres del Representante del Usuario">Nombres <span class="text-danger">*</span></label>
                                                         <input ng-disabled="saving" id="representant_name" type="text" class="form-control" name="representant_name" ng-model="model.representant.name">
                                                     </div>
-                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading" ng-show="representant.family == '3'" >
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading" ng-show="representant.family == '3'">
                                                         <label class="control-label" for="representant_lastname" title="Apellidos del Representante del Usuario">Apellidos <span class="text-danger">*</span></label>
                                                         <input ng-disabled="saving" id="representant_lastname" type="text" class="form-control" name="representant_lastname" ng-model="model.representant.last_name">
                                                     </div>
-                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group ng-scope" ng-if="!loading" ng-show="representant.family == '3'" >
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group ng-scope" ng-if="!loading" ng-show="representant.family == '3'">
                                                         <label class="control-label" for="date_birth" title="Fecha de Nacimiento del Representante del Usuario">Fecha de Nacimiento <span class="text-danger">*</span></label>
                                                         <input ng-disabled="saving" id="representant_date_birth" type="date" class="form-control" name="representant_date_birth" ng-change="calculateAgeRepresentant(model.representant.date_birth)" ng-model="model.representant.date_birth">
                                                     </div>
@@ -328,7 +328,14 @@
                                                 <div class="row" ng-show="representant.family == '3' ">
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Representante del Usuario" for="representant_age">Edad <span class="text-danger">*</span></label>
-                                                        <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="representant_age" type="text" class="form-control ng-pristine ng-valid ng-empty ng-valid-minlength ng-valid-maxlength ng-touched" name="representant_age" ng-model="model.representant.age" aria-invalid="false" style="">
+                                                        <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="representant_age" type="text" class="form-control" name="representant_age" ng-model="model.representant.age" aria-invalid="false" style="">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                        <label class="control-label" title="Edad del Representante del Usuario" for="representant_age">Género <span class="text-danger">*</span></label>
+                                                        <select ng-disabled="saving" class="form-control" name="representant_genre" id="genre" ng-model="model.representant.genre">
+                                                            <option value="M">Masculino</option>
+                                                            <option value="F">Femenino</option>
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="representant_phone" title="Teléfono del Representante del Usuario">Teléfono </label>
@@ -338,7 +345,7 @@
                                                         <label class="control-label" for="representant_mobile" title="Celular del Representante del Usuario">Celular <span class="text-danger">*</span></label>
                                                         <input ng-disabled="saving" id="representant_mobile" type="text" class="form-control" name="representant_mobile" ng-model="model.representant.mobile" numbers-only maxlength="10" minlength="10">
                                                     </div>
-                                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group" ng-if="!loading">
+                                                    <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="representant_activity" title="Actividad a la que se dedica Padre del Usuario">Actividad en la que labora <span class="text-danger">*</span></label>
                                                         <input ng-disabled="saving" id="representant_activity" type="text" class="form-control" name="representant_activity" ng-model="model.representant.activity">
                                                     </div>
@@ -359,7 +366,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <hr>
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="observation" title="Observación final de la solicitud">Observación </label>

@@ -14,7 +14,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	
 	public function enum($params = null)
 	{
-		$paUsers = PatientUser::join('person','person.id','=','person_id')->get();
+		$paUsers = PatientUser::all();
 
 		if (!$paUsers) {
 			throw new PatientUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -28,17 +28,17 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	{
 		if (is_array($field)) {
 			if (array_key_exists('num_identification', $field)) { 
-				$paUser = PatientUser::join('person','person.id','=','person_id')->where('num_identification',$field['num_identification'])->first();	
+				$paUser = PatientUser::where('patient_user.num_identification',$field['num_identification'])->first();
 			} elseif (array_key_exists('conadis_id', $field)) {
-				$paUser = PatientUser::join('person','person.id','=','person_id')->where('conadis_id',$field['conadis_id'])->first();	
+				$paUser = PatientUser::where('patient_user.conadis_id',$field['conadis_id'])->first();	
 			} elseif (array_key_exists('person_id', $field)) {
-				$paUser = PatientUser::join('person','person.id','=','person_id')->where('person_id',$field['person_id'])->first();	
+				$paUser = PatientUser::where('patient_user.person_id',$field['person_id'])->first();	
 			} else {
 				throw new PatientUserException(['title'=>'No se puede buscar el Usuario','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			$paUser = PatientUser::join('person','person.id','=','person_id')->where('patient_user.id',$field)->first();
+			$paUser = PatientUser::where('patient_user.id',$field)->first();
 		} else {
 			throw new PatientUserException(['title'=>'Se ha producido un error al buscar el Usuario','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
@@ -111,27 +111,51 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
 	public function edit($id,$data)
 	{
-		// $paUser = $this->find($id);
-		// if ($paUser) {
-		// 	$paUser->fill($data);
-		// 	if($paUser->update()){
-		// 		$paUser->permissions()->sync($data['permissions']);
-		// 		$key = $paUser->getKey();
-		// 		return $this->find($key);
-		// 	}
-		// } else {
-		// 	throw new PatientUserException(['title'=>'Ha ocurrido un error al actualizar el rol '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
-		// }
+		$paUser = $this->find($id);
+		if ($paUser) {
+			//father
+
+			$paUser->father->update($data['father']);
+			$fatherKey = $paUser->father->id;
+			//mother
+			$paUser->mother->update($data['mother']);
+			$motherKey = $paUser->father->id;
+			
+			//representant
+			if (array_key_exists('is_representant', $data['father']) && $data['father']['is_representant'] == 1) {
+				$reresentantId = $paUser->father->id;
+			} elseif (array_key_exists('is_representant', $data['mother'])  && $data['mother']['is_representant'] == 1) {
+				$reresentantId = $paUser->mother->id;
+			} else {
+				//representant
+				//TODOO
+				$paUser->representant->update($data['representant']);
+				$reresentantId = $paUser->representant->id;
+			}
+			$data['father_id'] = $fatherKey;
+			$data['mother_id'] = $motherKey;
+			$data['representant_id'] = $reresentantId;
+			$paUser->person->update($data);
+			$paUser->fill($data);
+			if($paUser->update()){
+				$key = $paUser->getKey();
+				return $this->find($key);
+			}
+		} else {
+			throw new PatientUserException(['title'=>'Ha ocurrido un error al actualizar la solicitud '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		}
 
 
 	}
 
 	public function remove($id)
 	{
-		if ($paUser = $this->find($id)) {
+		
+		$paUser = $this->find($id);
+		if ($paUser) {
 			$paUser->delete();
 			return true;
 		}
-		throw new PatientUserException(['title'=>'Ha ocurrido un error al eliminar el rol ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		throw new PatientUserException(['title'=>'Ha ocurrido un error al eliminar el Paciente ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 	}
 }

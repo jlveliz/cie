@@ -2,6 +2,7 @@
  ** Inscriptions controller
  **/
 define(['app'], function(app) {
+
     app.register.service('PUserInscriptionService', ['$q', function($q) {
 
         var _this = this;
@@ -151,6 +152,37 @@ define(['app'], function(app) {
             { id: 3, value: 'Otro' },
         ];
 
+        _this.changeRepresentant = function(model, representant) {
+            var familyType = representant.family;
+            var representant = model.representant;
+            switch (familyType) {
+                case 1: //is mother
+                    model.mother.is_representant = 1;
+                    model.mother.has_facebook = representant.has_facebook;
+                    model.mother.has_twitter = representant.has_twitter;
+                    model.mother.has_instagram = representant.representant;
+                    model.father.is_representant = 0;
+                    model.father.has_facebook = null
+                    model.father.has_twitter = null
+                    model.father.has_instagram = null
+                    break;
+                case 2: //is father
+                    model.mother.is_representant = 0;
+                    model.mother.has_facebook = null
+                    model.mother.has_twitter = null
+                    model.mother.has_instagram = null
+
+                    model.father.is_representant = 1;
+                    model.father.has_facebook = representant.has_facebook;
+                    model.father.has_twitter = representant.has_twitter;
+                    model.father.has_instagram = representant.representant;
+                    break;
+                default:
+                    model.representant = representant;
+            }
+
+            return model;
+        }
 
     }]);
 
@@ -191,7 +223,7 @@ define(['app'], function(app) {
             apiResource.resource('puserinscriptions').getCopy(id).then(function(object) {
                 var params = {
                     title: 'Atención',
-                    text: 'Desea eliminar la Solicitud de ' + object.name + ' '+ object.last_name + '.?'
+                    text: 'Desea eliminar la Solicitud de ' + object.name + ' ' + object.last_name + '.?'
                 }
                 $rootScope.openDelteModal(params).then(function() {
                     var idx = _.findIndex($scope.inscriptions, function(el) {
@@ -268,7 +300,10 @@ define(['app'], function(app) {
                 parish_id: null,
                 assist_other_therapeutic_center: null,
                 receives_medical_attention: null,
-                schooling: null
+                schooling: null,
+                representant: {},
+                mother: {},
+                father: {}
             });
             $scope.loading = false;
         });
@@ -380,7 +415,7 @@ define(['app'], function(app) {
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
-                    notEqualtTo: "#num_identification",
+                    notEqualtTo: ["#num_identification", '#mother_num_identification', '#representant_num_identification'],
 
                 },
                 father_name: {
@@ -414,7 +449,7 @@ define(['app'], function(app) {
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
-                    notEqualtTo: "num_identification",
+                    notEqualtTo: ["#num_identification", "#father_num_identification", "#representant_num_identification"],
                 },
                 mother_name: {
                     required: true
@@ -453,7 +488,7 @@ define(['app'], function(app) {
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
-                    notEqualtTo: "#num_identification",
+                    notEqualtTo: ["#num_identification", "#father_num_identification", "#mother_num_identification"],
                 },
                 representant_name: {
                     required: true
@@ -582,7 +617,7 @@ define(['app'], function(app) {
                     minlength: 'Es Inválido',
                     maxlength: 'Es Inválido',
                     isValidId: 'Es Inválido',
-                    notEqualtTo: "La cédula no puede ser igual a la Identificación",
+                    notEqualtTo: "Por favor, ingrese una cédula que no se repita",
                 },
                 father_name: {
                     required: 'Es Requerida',
@@ -615,7 +650,7 @@ define(['app'], function(app) {
                     minlength: 'Es Inválida',
                     maxlength: 'Es Inválida',
                     isValidId: 'Es Inválida',
-                    notEqualtTo: "La cédula no puede ser igual a la Identificación",
+                    notEqualtTo: "Por favor, ingrese una cédula que no se repita",
                 },
                 mother_name: {
                     required: "Es Requerida",
@@ -654,7 +689,7 @@ define(['app'], function(app) {
                     minlength: 'Es Inválida',
                     maxlength: 'Es Inválida',
                     isValidId: 'Es Inválida',
-                    notEqualtTo: "La cédula no puede ser igual a la Identificación",
+                    notEqualtTo: "Por favor, ingrese una cédula que no se repita",
                 },
                 representant_name: {
                     required: "Es Requerida",
@@ -717,27 +752,7 @@ define(['app'], function(app) {
 
 
         $scope.changeRepresentant = function() {
-            var hasFb = $scope.model.representant.has_facebook;
-            var hasTw = $scope.model.representant.has_twitter;
-            var hasIns = $scope.model.representant.has_instagram;
-
-            if ($scope.representant.family == 1) {
-                $scope.model.mother.is_representant = 1;
-                $scope.model.representant = $scope.model.mother;
-            }
-
-            if ($scope.representant.family == 2) {
-                $scope.model.father.is_representant = 1;
-                $scope.model.representant = $scope.model.father;
-            }
-
-            if ($scope.representant.family == 3) {
-                $scope.model.representant = {};
-            }
-
-            $scope.model.representant.has_facebook = hasFb;
-            $scope.model.representant.has_twitter = hasTw;
-            $scope.model.representant.has_instagram = hasIns;
+            $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
         }
 
         $scope.save = function(saveForm, returnIndex) {
@@ -745,7 +760,7 @@ define(['app'], function(app) {
                 $scope.saving = false;
                 $scope.hasMessage = true;
                 apiResource.resource('puserinscriptions').setOnCache(data);
-                PUserInscriptionService.messageFlag.title = "Solicitud de  " + $scope.model.name + $scope.model.last_name + " Ingresada correctamente";
+                PUserInscriptionService.messageFlag.title = "Solicitud de  " + $scope.model.name + ' ' + $scope.model.last_name + " Ingresada correctamente";
                 PUserInscriptionService.messageFlag.type = "info";
                 $scope.messages = PUserInscriptionService.messageFlag;
                 if (returnIndex) {
@@ -771,7 +786,6 @@ define(['app'], function(app) {
             }
 
             if (saveForm.validate()) {
-                debugger;
                 $scope.saving = true;
                 $scope.changeRepresentant();
                 PUserInscriptionService.save($scope.model).then(successCallback, failCallback);
@@ -781,7 +795,6 @@ define(['app'], function(app) {
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
         }
-
     }]);
 
     app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q) {
@@ -831,16 +844,14 @@ define(['app'], function(app) {
         deps.then(function() {
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(model) {
                 $scope.model = model;
-                debugger;
                 $scope.model.date_birth = new Date($scope.model.date_birth);
                 $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
                 $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
                 $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
 
-                if ($scope.model.representant_id == $scope.model.mother.id)
+                if ($scope.model.representant_id == $scope.model.mother.id) {
                     $scope.representant.family = 1;
-
-                if ($scope.model.representant_id == $scope.model.father.id) {
+                } else if ($scope.model.representant_id == $scope.model.father.id) {
                     $scope.representant.family = 2;
                 } else {
                     $scope.representant.family = 3;
@@ -879,26 +890,7 @@ define(['app'], function(app) {
         }
 
         $scope.changeRepresentant = function() {
-            var hasFb = $scope.model.representant.has_facebook;
-            var hasTw = $scope.model.representant.has_twitter;
-            var hasIns = $scope.model.representant.has_instagram;
-
-
-            if ($scope.representant.family == 1) {
-                $scope.model.representant = $scope.model.mother;
-            }
-
-            if ($scope.representant.family == 2) {
-                $scope.model.representant = $scope.model.father;
-            }
-
-            if ($scope.representant.family == 3) {
-                $scope.model.representant = {};
-            }
-
-            $scope.model.representant.has_facebook = hasFb;
-            $scope.model.representant.has_twitter = hasTw;
-            $scope.model.representant.has_instagram = hasIns;
+            $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
         }
 
 
@@ -1314,7 +1306,51 @@ define(['app'], function(app) {
                     required: "Es Requerida",
                 }
             }
-        }
+        };
+
+        $scope.save = function(saveForm, returnIndex) {
+            var successCallback = function(data) {
+                debugger;
+                $scope.saving = false;
+                $scope.hasMessage = true;
+                apiResource.resource('puserinscriptions').setOnCache(data);
+                $scope.model.date_birth = new Date($scope.model.date_birth);
+                $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
+                $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
+                $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
+                $scope.changeRepresentant();
+                PUserInscriptionService.messageFlag.title = "Solicitud de  " + $scope.model.name + ' ' + $scope.model.last_name + " Actualizada Correctamente";
+                PUserInscriptionService.messageFlag.type = "info";
+                $scope.messages = PUserInscriptionService.messageFlag;
+                if (returnIndex) {
+                    $state.go('root.inscription');
+                }
+            }
+
+            var failCallback = function(reason) {
+                $scope.saving = false
+                $scope.existError = true;
+                $scope.messages.title = reason.data.title;
+                $scope.messages.details = [];
+                var json = JSON.parse(reason.data.detail);
+                angular.forEach(json, function(elem, idx) {
+                    angular.forEach(elem, function(el, idex) {
+                        $scope.messages.details.push(el)
+                    })
+                })
+            }
+
+            if (saveForm.validate()) {
+                debugger;
+                $scope.saving = true;
+                $scope.changeRepresentant();
+                PUserInscriptionService.save($scope.model).then(successCallback, failCallback);
+            }
+        };
+
+        $scope.saveAndClose = function(form) {
+            $scope.save(form, true);
+        };
 
     }]);
 });
