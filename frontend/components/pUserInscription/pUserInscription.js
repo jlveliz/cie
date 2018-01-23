@@ -160,14 +160,14 @@ define(['app'], function(app) {
                     model.mother.is_representant = 1;
                     model.mother.has_facebook = representant.has_facebook;
                     model.mother.has_twitter = representant.has_twitter;
-                    model.mother.has_instagram = representant.representant;
-                    model.father.is_representant = 0;
+                    model.mother.has_instagram = representant.has_instagram;
+                    model.father.is_representant = null;
                     model.father.has_facebook = null
                     model.father.has_twitter = null
                     model.father.has_instagram = null
                     break;
                 case 2: //is father
-                    model.mother.is_representant = 0;
+                    model.mother.is_representant = null;
                     model.mother.has_facebook = null
                     model.mother.has_twitter = null
                     model.mother.has_instagram = null
@@ -175,11 +175,23 @@ define(['app'], function(app) {
                     model.father.is_representant = 1;
                     model.father.has_facebook = representant.has_facebook;
                     model.father.has_twitter = representant.has_twitter;
-                    model.father.has_instagram = representant.representant;
+                    model.father.has_instagram = representant.has_instagram;
                     break;
                 default:
-                    model.representant = representant;
+                    //reset mother
+                    model.mother.is_representant = null;
+                    model.mother.has_facebook = null;
+                    model.mother.has_twitter = null;
+                    model.mother.has_instagram = null;
+                    //reset father
+                    model.father.is_representant = null;
+                    model.father.has_facebook = null
+                    model.father.has_twitter = null
+                    model.father.has_instagram = null
+
             }
+
+            model.representant = {};
 
             return model;
         }
@@ -219,7 +231,6 @@ define(['app'], function(app) {
         });
 
         $scope.delete = function(id) {
-            debugger
             apiResource.resource('puserinscriptions').getCopy(id).then(function(object) {
                 var params = {
                     title: 'Atención',
@@ -302,7 +313,9 @@ define(['app'], function(app) {
                 receives_medical_attention: null,
                 schooling: null,
                 representant: {},
-                mother: {},
+                mother: {
+                    is_representant: 1
+                },
                 father: {}
             });
             $scope.loading = false;
@@ -787,7 +800,7 @@ define(['app'], function(app) {
 
             if (saveForm.validate()) {
                 $scope.saving = true;
-                $scope.changeRepresentant();
+                // $scope.changeRepresentant();
                 PUserInscriptionService.save($scope.model).then(successCallback, failCallback);
             }
         };
@@ -797,7 +810,7 @@ define(['app'], function(app) {
         }
     }]);
 
-    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q) {
+    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state) {
 
         $scope.isEdit = true
         var inscriptionId = $stateParams.pInsId;
@@ -850,9 +863,13 @@ define(['app'], function(app) {
                 $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
 
                 if ($scope.model.representant_id == $scope.model.mother.id) {
+                    $scope.model.mother.is_representant = 1;
                     $scope.representant.family = 1;
+                    $scope.model.representant = {};
                 } else if ($scope.model.representant_id == $scope.model.father.id) {
+                    $scope.model.father.is_representant = 1;
                     $scope.representant.family = 2;
+                    $scope.model.representant = {};
                 } else {
                     $scope.representant.family = 3;
                 }
@@ -1001,7 +1018,7 @@ define(['app'], function(app) {
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
-                    notEqualtTo: "#num_identification",
+                    notEqualtTo: ["#num_identification", '#mother_num_identification', '#representant_num_identification'],
 
                 },
                 father_name: {
@@ -1035,7 +1052,7 @@ define(['app'], function(app) {
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
-                    notEqualtTo: "num_identification",
+                    notEqualtTo: ["#num_identification", '#father_num_identification', '#representant_num_identification'],
                 },
                 mother_name: {
                     required: true
@@ -1074,7 +1091,7 @@ define(['app'], function(app) {
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
-                    notEqualtTo: "#num_identification",
+                    notEqualtTo: ["#num_identification", '#mother_num_identification', '#father_num_identification'],
                 },
                 representant_name: {
                     required: true
@@ -1310,7 +1327,6 @@ define(['app'], function(app) {
 
         $scope.save = function(saveForm, returnIndex) {
             var successCallback = function(data) {
-                debugger;
                 $scope.saving = false;
                 $scope.hasMessage = true;
                 apiResource.resource('puserinscriptions').setOnCache(data);
@@ -1318,7 +1334,19 @@ define(['app'], function(app) {
                 $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
                 $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
                 $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
-                $scope.changeRepresentant();
+
+                if ($scope.model.representant_id == $scope.model.mother.id) {
+                    $scope.model.mother.is_representant = 1;
+                    $scope.representant.family = 1;
+                    $scope.model.representant = {};
+                } else if ($scope.model.representant_id == $scope.model.father.id) {
+                    $scope.model.father.is_representant = 1;
+                    $scope.representant.family = 2;
+                    $scope.model.representant = {};
+                } else {
+                    $scope.representant.family = 3;
+                }
+
                 PUserInscriptionService.messageFlag.title = "Solicitud de  " + $scope.model.name + ' ' + $scope.model.last_name + " Actualizada Correctamente";
                 PUserInscriptionService.messageFlag.type = "info";
                 $scope.messages = PUserInscriptionService.messageFlag;
@@ -1341,9 +1369,7 @@ define(['app'], function(app) {
             }
 
             if (saveForm.validate()) {
-                debugger;
                 $scope.saving = true;
-                $scope.changeRepresentant();
                 PUserInscriptionService.save($scope.model).then(successCallback, failCallback);
             }
         };

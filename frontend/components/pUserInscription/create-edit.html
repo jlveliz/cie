@@ -173,7 +173,7 @@
                                                 </div>
                                                 <p class="section-inner">Asistencia Médica</p>
                                                 <div class="row">
-                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="has_insurance" title="Asiste a otros centros Terapeuticos">Tiene Algún Seguro <span class="text-danger">*</span></label>
                                                         <select ng-disabled="saving" class="form-control" name="has_insurance" id="has_insurance" ng-model="model.has_insurance" ng-options="ins.id as ins.value for ins in insurances">
                                                         </select>
@@ -353,15 +353,37 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Red Social del Representante del Usuario">Redes Sociales que Maneja <span class="text-danger">*</span></label>
-                                                        <div class="checkbox">
+                                                        <div class="checkbox" ng-if="model.representant.length">
                                                             <label class="checkbox-inline" for="has_facebook">
-                                                                <input type="checkbox" name="social-network[]" id="has_facebook" ng-model="model.representant.has_facebook" ng-checked="model.representant.has_facebook == 1">Facebook
+                                                                <input type="checkbox" name="social-network[]" id="has_facebook" ng-model="model.representant.has_facebook" ng-checked="model.representant.has_facebook == 1" ng-true-value="1" ng-false-value="0">Facebook
                                                             </label> |
                                                             <label class="checkbox-inline" for="has_twitter">
-                                                                <input type="checkbox" name="social-network[]" id="has_twitter" ng-model="model.representant.has_twitter" ng-checked="model.representant.has_twitter == 1">Twitter
+                                                                <input type="checkbox" name="social-network[]" id="has_twitter" ng-model="model.representant.has_twitter" ng-checked="model.representant.has_twitter == 1" ng-true-value="1" ng-false-value="0">Twitter
                                                             </label> |
                                                             <label class="checkbox-inline" for="has_instagram">
-                                                                <input type="checkbox" name="social-network[]" id="has_instagram" ng-model="model.representant.has_instagram" ng-checked="model.representant.has_instagram == 1">Instagram
+                                                                <input type="checkbox" name="social-network[]" id="has_instagram" ng-model="model.representant.has_instagram" ng-checked="model.representant.has_instagram == 1" ng-true-value="1" ng-false-value="0">Instagram
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox" ng-if="model.mother.is_representant">
+                                                            <label class="checkbox-inline" for="has_facebook">
+                                                                <input type="checkbox" name="social-network[]" id="has_facebook" ng-model="model.mother.has_facebook" ng-checked="model.mother.has_facebook == 1" ng-true-value="1" ng-false-value="0">Facebook
+                                                            </label> |
+                                                            <label class="checkbox-inline" for="has_twitter">
+                                                                <input type="checkbox" name="social-network[]" id="has_twitter" ng-model="model.mother.has_twitter" ng-checked="model.mother.has_twitter == 1" ng-true-value="1" ng-false-value="0">Twitter
+                                                            </label> |
+                                                            <label class="checkbox-inline" for="has_instagram">
+                                                                <input type="checkbox" name="social-network[]" id="has_instagram" ng-model="model.mother.has_instagram" ng-checked="model.mother.has_instagram == 1" ng-true-value="1" ng-false-value="0">Instagram
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox" ng-if="model.father.is_representant">
+                                                            <label class="checkbox-inline" for="has_facebook">
+                                                                <input type="checkbox" name="social-network[]" id="has_facebook" ng-model="model.father.has_facebook" ng-checked="model.father.has_facebook == 1" ng-true-value="1" ng-false-value="0">Facebook
+                                                            </label> |
+                                                            <label class="checkbox-inline" for="has_twitter">
+                                                                <input type="checkbox" name="social-network[]" id="has_twitter" ng-model="model.father.has_twitter" ng-checked="model.father.has_twitter == 1" ng-true-value="1" ng-false-value="0">Twitter
+                                                            </label> |
+                                                            <label class="checkbox-inline" for="has_instagram">
+                                                                <input type="checkbox" name="social-network[]" id="has_instagram" ng-model="model.father.has_instagram" ng-checked="model.father.has_instagram == 1" ng-true-value="1" ng-false-value="0">Instagram
                                                             </label>
                                                         </div>
                                                     </div>

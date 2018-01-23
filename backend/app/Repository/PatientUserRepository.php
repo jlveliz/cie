@@ -69,16 +69,16 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 				$motherKey = $mother->getKey();
 
 				if (array_key_exists('is_representant', $data['father']) && $data['father']['is_representant'] == 1) {
-					$reresentantId = $fatherKey;
+					$representantId = $fatherKey;
 				} elseif (array_key_exists('is_representant', $data['mother'])  && $data['mother']['is_representant'] == 1) {
-					$reresentantId = $motherKey;
+					$representantId = $motherKey;
 				} else {
 					//representant
 					$dataRepresentant = $data['representant'];
 					$representant = new Person();
 					$representant->fill($dataRepresentant);
 					if($representant->save()){
-						$reresentantId = $representant->getKey();
+						$representantId = $representant->getKey();
 					}
 
 				}
@@ -92,7 +92,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 					$data['person_id'] = $personKey;
 					$data['father_id'] = $fatherKey;
 					$data['mother_id'] = $motherKey;
-					$data['representant_id'] = $reresentantId;
+					$data['representant_id'] = $representantId;
 					$pUPatient->fill($data);
 					if($pUPatient->save()){
 						$key = $pUPatient->getKey();
@@ -119,22 +119,33 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			$fatherKey = $paUser->father->id;
 			//mother
 			$paUser->mother->update($data['mother']);
-			$motherKey = $paUser->father->id;
+			$motherKey = $paUser->mother->id;
 			
 			//representant
 			if (array_key_exists('is_representant', $data['father']) && $data['father']['is_representant'] == 1) {
-				$reresentantId = $paUser->father->id;
+				$representantId = $paUser->father->id;
 			} elseif (array_key_exists('is_representant', $data['mother'])  && $data['mother']['is_representant'] == 1) {
-				$reresentantId = $paUser->mother->id;
+				$representantId = $paUser->mother->id;
 			} else {
 				//representant
 				//TODOO
-				$paUser->representant->update($data['representant']);
-				$reresentantId = $paUser->representant->id;
+				$existRepresentant = Person::where('num_identification',$data['representant']['num_identification'])->first();
+				if ($existRepresentant) {
+					//update person
+					$existRepresentant->fill($data['representant'])->update();
+					$representantId = $existRepresentant->id;
+				} else {
+					//create person
+					$representant = new Person();
+					$representant->fill($data['representant']);
+					$representant->save();
+					$representantId = $representant->getKey();
+				}
+				
 			}
 			$data['father_id'] = $fatherKey;
 			$data['mother_id'] = $motherKey;
-			$data['representant_id'] = $reresentantId;
+			$data['representant_id'] = $representantId;
 			$paUser->person->update($data);
 			$paUser->fill($data);
 			if($paUser->update()){
