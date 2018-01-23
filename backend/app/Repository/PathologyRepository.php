@@ -17,7 +17,7 @@ class PathologyRepository implements PathologyRepositoryInterface
 		
 
 		if (!$pathologies) {
-			throw new PathologyException(['title'=>'No se han encontrado el listado de  Patologías','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+			throw new PathologyException(['title'=>'No se han encontrado el listado de  Patologías','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],404);
 		}
 		return $pathologies;
 	}
@@ -32,7 +32,7 @@ class PathologyRepository implements PathologyRepositoryInterface
 				$pathology = Pathology::where('name',$field['name'])->first();	
 			} else {
 
-				throw new PathologyException(['title'=>'No se puede buscar la Patología','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+				throw new PathologyException(['title'=>'No se puede buscar la Patología','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],404);	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {

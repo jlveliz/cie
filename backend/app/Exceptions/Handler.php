@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+// use Cie\Exceptions\AppException;
 
 class Handler extends ExceptionHandler
 {
@@ -21,15 +22,15 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
-        AppException::class,
+        // AppException::class,
     ];
 
-    public $request;
+    // public $request;
 
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+    // public function __construct(Request $request)
+    // {
+    //     $this->request = $request;
+    // }
 
     /**
      * Report or log an exception.
@@ -41,7 +42,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        $this->render($this->request, $exception);
+        parent::report($exception);
     }
 
     /**
@@ -53,7 +54,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // dd(,config('app.debug'));
         if (config('app.debug')) {
             return parent::render($request, $exception);
         }
@@ -78,12 +78,32 @@ class Handler extends ExceptionHandler
 
 
 
-    private function handle($request, Exception $exception)
+    private function handle($request, Exception $e)
     {
-        // dd($exception);
-        $this->report($exception);
-        $data = $exception->getMessage();
-        $status = $exception->getCode();
-        return response()->json($data, $status);        
+        if ($e instanceOf AppException) {
+           
+            $data   = $e->toArray();
+            $status = $e->getStatus();
+            $dataLog = [
+                'status' =>$data['status'],
+                'title' => $data['title'],
+                'detail' => $data['detail'],
+            ];
+            $this->report($e);
+            return response()->json($data, $status);        
+
+        } else {
+            
+            $data = [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'code' => $e->getCode()
+            ];
+            
+            return response()->json($data,500);
+        }
+        
+
     }
 }
