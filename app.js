@@ -659,7 +659,7 @@ define([
     /** 
     ===========PERMISSIONS & ROLES ====================
     **/
-    cie.run(['$rootScope', 'PermissionStore', 'authFactory', 'RoleStore', 'apiResource', function($rootScope, PermissionStore, authFactory, RoleStore, apiResource) {
+    cie.run(['$rootScope', 'PermissionStore', 'authFactory', 'RoleStore', 'apiResource', '$urlRouter', function($rootScope, PermissionStore, authFactory, RoleStore, apiResource, $urlRouter) {
 
 
         PermissionStore.definePermission('isloggedin', function(permissionName, transitionProperties) {
@@ -694,20 +694,26 @@ define([
                     return authFactory.hasPermission(permissionName).then(succesCallback, failCallbacks);
                 })
             });
+        });
 
-            //roles
-            apiResource.resource('roles').query().then(function(roles) {
-                angular.forEach(roles, function(role) {
-                    var permRoles = [];
-                    angular.forEach(role.permissions, function(permRole) {
-                        permRoles.push(permRole.code);
-                    })
-                    RoleStore.defineRole(role.code, permRoles, function(roleName) {
-                        return authFactory.hasRole(role.code)
-                    })
+        //roles
+        apiResource.resource('roles').query().then(function(roles) {
+            angular.forEach(roles, function(role) {
+                var permRoles = [];
+                angular.forEach(role.permissions, function(permRole) {
+                    permRoles.push(permRole.code);
+                })
+                RoleStore.defineRole(role.code, permRoles, function(roleName) {
+                    return authFactory.hasRole(role.code)
                 })
             })
-        });
+        }).then(function() {
+            // Once permissions are set-up 
+            // kick-off router and start the application rendering
+            $urlRouter.sync();
+            // Also enable router to listen to url changes
+            $urlRouter.listen();
+        })
 
         /**
             ===========PERMISSIONS & ROLES ====================
@@ -995,8 +1001,10 @@ define([
             }
         }, 'exist equal');
 
-
+        //if not found
         $urlRouterProvider.otherwise('/errors/404');
+        // Prevent router from automatic state resolving
+        $urlRouterProvider.deferIntercept();
 
         $stateProvider.state('index', angularAMD.route({
             url: '/',
