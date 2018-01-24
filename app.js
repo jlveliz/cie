@@ -363,7 +363,6 @@ define([
             logout: function() {
                 var deferred = $q.defer();
                 $auth.logout().then(function() {
-                    // RoleStore.clearStore(); //remove roles from user
                     localStorage.removeItem('user');
                     $rootScope.currentUser = null;
                     deferred.resolve();
@@ -400,6 +399,7 @@ define([
                 return deferred.promise;
             },
             hasPermission: function(key) {
+                
                 var deferred = $q.defer();
                 if (this.authenticated()) {
                     var roles = $rootScope.currentUser.roles;
@@ -421,7 +421,10 @@ define([
                         if (el == key) return true;
                     });
 
-                    found > -1 ? deferred.resolve() : deferred.reject();
+                    if (found > -1)
+                        deferred.resolve()
+                    else
+                        deferred.reject();
 
                     return deferred.promise;
                 }
@@ -659,7 +662,7 @@ define([
     /** 
     ===========PERMISSIONS & ROLES ====================
     **/
-    cie.run(['$rootScope', 'PermissionStore', 'authFactory', 'RoleStore', 'apiResource', '$urlRouter', function($rootScope, PermissionStore, authFactory, RoleStore, apiResource, $urlRouter) {
+    cie.run(['$rootScope', 'PermissionStore', 'authFactory', 'RoleStore', 'apiResource', '$urlRouter', '$q', function($rootScope, PermissionStore, authFactory, RoleStore, apiResource, $urlRouter, $q) {
 
 
         PermissionStore.definePermission('isloggedin', function(permissionName, transitionProperties) {
@@ -679,41 +682,31 @@ define([
 
 
         apiResource.resource('permissions').query().then(function(permissions) {
-            var succesCallback = function() {
-                return true;
-            }
-
-            var failCallbacks = function() {
-                return false;
-            }
-
-
 
             angular.forEach(permissions, function(permi) {
                 PermissionStore.definePermission(permi.code, function(permissionName) {
-                    return authFactory.hasPermission(permissionName).then(succesCallback, failCallbacks);
+                    return authFactory.hasPermission(permissionName)
                 })
             });
+
+            //roles
+            apiResource.resource('roles').query().then(function(roles) {
+                angular.forEach(roles, function(role) {
+                    var permRoles = [];
+                    angular.forEach(role.permissions, function(permRole) {
+                        permRoles.push(permRole.code);
+                    })
+                    RoleStore.defineRole(role.code, permRoles);
+                })
+            }).then(function() {
+                // Once permissions are set-up 
+                // kick-off router and start the application rendering
+                $urlRouter.sync();
+                // Also enable router to listen to url changes
+                $urlRouter.listen();
+            })
         });
 
-        //roles
-        apiResource.resource('roles').query().then(function(roles) {
-            angular.forEach(roles, function(role) {
-                var permRoles = [];
-                angular.forEach(role.permissions, function(permRole) {
-                    permRoles.push(permRole.code);
-                })
-                RoleStore.defineRole(role.code, permRoles, function(roleName) {
-                    return authFactory.hasRole(role.code)
-                })
-            })
-        }).then(function() {
-            // Once permissions are set-up 
-            // kick-off router and start the application rendering
-            $urlRouter.sync();
-            // Also enable router to listen to url changes
-            $urlRouter.listen();
-        })
 
         /**
             ===========PERMISSIONS & ROLES ====================
@@ -721,7 +714,7 @@ define([
 
     }]);
 
-    cie.run(['appName', '$rootScope', '$uibModal', '$q', 'DTDefaultOptions', 'authFactory', 'apiResource', '$state', function(appName, $rootScope, $uibModal, $q, DTDefaultOptions, authFactory, apiResource, $state) {
+    cie.run(['appName', '$rootScope', '$uibModal', '$q', 'DTDefaultOptions', 'authFactory', 'apiResource', '$state', 'RoleStore', 'PermissionStore', function(appName, $rootScope, $uibModal, $q, DTDefaultOptions, authFactory, apiResource, $state, RoleStore, PermissionStore) {
 
         $rootScope.isMenuCollapsed = false; //menu collapsed
 
@@ -739,7 +732,6 @@ define([
 
         $rootScope.logout = function() {
             authFactory.logout().then(function() {
-                apiResource.clearAllCache(); // clear all cache
                 $state.go('adminAuth');
             });
         }
@@ -1437,7 +1429,7 @@ define([
             },
             data: {
                 permissions: {
-                    // only: ['admin'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1699,7 +1691,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'UsNormal'],
+                    only: ['UsNormal'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
