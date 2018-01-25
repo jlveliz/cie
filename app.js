@@ -399,7 +399,7 @@ define([
                 return deferred.promise;
             },
             hasPermission: function(key) {
-                
+
                 var deferred = $q.defer();
                 if (this.authenticated()) {
                     var roles = $rootScope.currentUser.roles;
@@ -552,6 +552,33 @@ define([
             });
         }
     });
+
+    cie.directive('maxDateToday', [function() {
+        return {
+            restrict: 'C',
+            require: 'ngModel',
+            scope: {
+                ngModel: '='
+            },
+            link: function(scope, iElement, iAttrs, ngModelCtrl) {
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1; //January is 0!
+                var yyyy = today.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd
+                }
+
+                if (mm < 10) {
+                    mm = '0' + mm
+                }
+
+                today = yyyy + '-' + mm + '-' + dd;
+                iElement.attr('max', today);
+                scope.ngModel = new Date();
+            }
+        };
+    }])
 
 
     cie.filter('capitalize', function() {
@@ -895,6 +922,7 @@ define([
 
             });
             return success;
+
         }, "Not Unique.");
 
         $validatorProvider.addMethod("exists", function(value, element, arg) {
@@ -992,6 +1020,21 @@ define([
                 return validateElem(arg);
             }
         }, 'exist equal');
+
+        $validatorProvider.addMethod('uniquePatient', function(value, element, arg) {
+            var success = false;
+            $.ajax({
+                url: envServiceProvider.read('api') + 'validator/uniquePatient?columnname=' + arg + '&value=' + value,
+                type: 'GET',
+                async: false,
+                success: function(result) {
+                    success = result === "ok" ? true : false;
+                }
+
+            });
+            return success;
+
+        }, 'patien exist')
 
         //if not found
         $urlRouterProvider.otherwise('/errors/404');
@@ -1104,7 +1147,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'personalizado'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },

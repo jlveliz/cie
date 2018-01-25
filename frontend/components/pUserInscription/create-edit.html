@@ -39,6 +39,12 @@
                                                 <h5 title="Datos del Usuario"><b><i class="fa fa-user"></i> Datos del Usuario</b></h5>
                                             </uib-tab-heading>
                                             <div class="tab-index">
+                                                <div class="row">
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group col-md-offset-5">
+                                                        <label for="num_identification" title="Cedula del Usuario" class="control-label">Fecha de Ingreso <span class="text-danger">*</span></label>
+                                                        <input ng-disabled="saving" id="date_birth" type="date" class="form-control max-date-today" name="date_admission" ng-model="model.date_admission" style="padding-left: 2px; padding-right: 0px">
+                                                    </div>
+                                                </div>
                                                 <p class="section-inner">Datos Personales</p>
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">

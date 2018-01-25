@@ -127,7 +127,7 @@ define(['app'], function(app) {
         }
     }]);
 
-    app.register.controller('UserCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', '$q', function($scope, apiResource, $stateParams, $state, UserService, $q) {
+    app.register.controller('UserCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'UserService', '$q', 'envService', function($scope, apiResource, $stateParams, $state, UserService, $q, envService) {
 
         $scope.saving = false;
         $scope.model = {};
