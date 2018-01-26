@@ -919,7 +919,8 @@ define(['app'], function(app) {
                     required: true,
                     minlength: 10,
                     maxlength: 10,
-                    isValidId: true
+                    isValidId: true,
+                    uniquePatient: 'num_identification,' + inscriptionId
                 },
                 name: {
                     required: true
@@ -1131,6 +1132,7 @@ define(['app'], function(app) {
                     minlength: "Identificación inválida",
                     maxlength: "Identificación inválida",
                     isValidId: "Identificación inválida",
+                    uniquePatient: 'Ya existe un usuario registrado'
                 },
                 name: {
                     required: "Nombre Requerido"

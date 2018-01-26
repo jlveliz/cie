@@ -340,7 +340,8 @@ define(['app'], function(app) {
                     required: "Campo requerido",
                 },
                 username: {
-                    required: "Campo requerido"
+                    required: "Campo requerido",
+                    unique: ''
                 },
                 last_name: {
                     required: "Campo requerido"

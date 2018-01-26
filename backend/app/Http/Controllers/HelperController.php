@@ -37,7 +37,7 @@ class HelperController extends Controller
 				if ($exists) return response()->json('ok',200);
 				return response()->json('no-exist',200);
 			case 'uniquePatient': 
-				$unique = $this->verifyPatient($request->get('columnname'),$request->get('value'));
+				$unique = $this->verifyUniquePatient($request->get('columnname'),$request->get('value'),$request->get('id'));
 				if ($unique) {
 					return response()->json('exist',200);
 				}
@@ -50,11 +50,8 @@ class HelperController extends Controller
 
 
 	private function verifyUnique($table,$columnKey,$columnValue, $key = null) {
-		if (!$key) {
-			$exist = DB::table($table)->where($columnKey,$columnValue)->first();
-		} else {
-			$exist = DB::table($table)->where($columnKey,$columnValue)->where('id','<>',$key)->first();
-		}
+		
+		$exist = DB::table($table)->where($columnKey,$columnValue)->where('id','<>',$key)->first();
 		if($exist) return true;
 		return false;
 	}
@@ -67,9 +64,10 @@ class HelperController extends Controller
 
 	
 
-	public function verifyPatient($columnName,$value)
+	public function verifyUniquePatient($columnName,$value, $key = null)
 	{
-		$exist = DB::table('patient_user')->join('person','person.id','=','patient_user.person_id')->whereRaw("person.".$columnName.'='.$value)->first();
+		$exist = DB::table('patient_user')->join('person','person.id','=','patient_user.person_id')->whereRaw("person.".$columnName.'='.$value)
+		->where('patient_user.id','<>',$key)->first();
 		if($exist) return true;
 		return false;
 	}

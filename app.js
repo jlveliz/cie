@@ -1023,8 +1023,15 @@ define([
 
         $validatorProvider.addMethod('uniquePatient', function(value, element, arg) {
             var success = false;
+            var params = arg.split(',');
+            var id = null;
+           
+           if (typeof params[1] != 'undefined') {
+                id = params[1];
+            }
+            
             $.ajax({
-                url: envServiceProvider.read('api') + 'validator/uniquePatient?columnname=' + arg + '&value=' + value,
+                url: envServiceProvider.read('api') + 'validator/uniquePatient?columnname=' + params[0] + '&value=' + value+'&id=' + id,
                 type: 'GET',
                 async: false,
                 success: function(result) {
