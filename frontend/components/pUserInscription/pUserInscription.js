@@ -311,6 +311,7 @@ define(['app'], function(app) {
                 parish_id: null,
                 assist_other_therapeutic_center: null,
                 receives_medical_attention: null,
+                date_admission : new Date(),
                 schooling: null,
                 representant: {},
                 mother: {
@@ -816,6 +817,8 @@ define(['app'], function(app) {
 
         $scope.isEdit = true
         var inscriptionId = $stateParams.pInsId;
+        $scope.hasMessage = false;
+        $scope.messages = {};
         $scope.loading = true;
         $scope.model = {};
         $scope.provinces = [];
@@ -860,6 +863,7 @@ define(['app'], function(app) {
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(model) {
                 $scope.model = model;
                 $scope.model.date_birth = new Date($scope.model.date_birth);
+                $scope.model.date_admission = new Date($scope.model.date_admission);
                 $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
                 $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
                 $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
@@ -876,7 +880,11 @@ define(['app'], function(app) {
                     $scope.representant.family = 3;
                 }
 
-
+                $scope.messages = PUserInscriptionService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    PUserInscriptionService.messageFlag = {};
+                }
                 $scope.loading = false;
             });
         });

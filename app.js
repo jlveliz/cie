@@ -575,7 +575,6 @@ define([
 
                 today = yyyy + '-' + mm + '-' + dd;
                 iElement.attr('max', today);
-                scope.ngModel = new Date();
             }
         };
     }])
