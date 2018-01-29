@@ -3,7 +3,7 @@
  **/
 define(['app'], function(app) {
 
-    app.register.service('PUserInscriptionService', ['$q', function($q) {
+    app.register.service('PUserInscriptionService', ['$q', 'layoutReportFactory', function($q, layoutReportFactory) {
 
         var _this = this;
         _this.messageFlag = {};
@@ -196,6 +196,20 @@ define(['app'], function(app) {
             return model;
         }
 
+
+        _this.loadLetterEngagement = function(model) {
+            return {
+                text: model.name
+            }
+        }
+
+        _this.loadPrintsDocs = function(model) {
+            debugger;
+            var letter = layoutReportFactory.getHeader();
+            letter.content = _this.loadLetterEngagement(model);
+            return letter;
+        }
+
     }]);
 
     app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope) {
@@ -229,6 +243,14 @@ define(['app'], function(app) {
                 PUserInscriptionService.messageFlag = {};
             }
         });
+
+        $scope.print = function(inscripId) {
+            apiResource.resource('puserinscriptions').getCopy(inscripId).then(function(result) {
+                debugger;
+                var docDefinition = PUserInscriptionService.loadPrintsDocs(result);
+                pdfMake.createPdf(docDefinition).open();
+            })
+        }
 
         $scope.delete = function(id) {
             apiResource.resource('puserinscriptions').getCopy(id).then(function(object) {
@@ -311,7 +333,7 @@ define(['app'], function(app) {
                 parish_id: null,
                 assist_other_therapeutic_center: null,
                 receives_medical_attention: null,
-                date_admission : new Date(),
+                date_admission: new Date(),
                 schooling: null,
                 representant: {},
                 mother: {

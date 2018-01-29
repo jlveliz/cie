@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('test','ReportController@index');
+
 
 Route::group(['prefix'=>'api'],function() {
 

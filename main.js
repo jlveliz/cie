@@ -24,6 +24,8 @@ require.config({
         'angular-material': 'frontend/bower_components/angular-material/angular-material',
         'moment': 'frontend/bower_components/moment/min/moment-with-locales',
         'underscore': 'frontend/bower_components/underscore/underscore-min',
+        'pdfmake':'frontend/bower_components/pdfmake/build/pdfmake.min',
+        'vfs_fonts':'frontend/bower_components/pdfmake/build/vfs_fonts'
     },
     shim: {
         'jquery': {
@@ -98,6 +100,14 @@ require.config({
         'angular-material': {
             exports: 'angular-material',
             deps: ['angular-animate', 'angular-aria', 'angular-messages'],
+        },
+        'pdfmake': {
+            exports: 'pdfmake',
+            deps: ['jquery'],
+        },
+        'vfs_fonts': {
+            exports: 'vfs_fonts',
+            deps: ['pdfmake'],
         }
     },
     deps: ['app']
