@@ -460,7 +460,7 @@ define([
                         canvas.width = img.width;
                         canvas.height = img.height;
                         var ctx = canvas.getContext("2d");
-                        ctx.drawImage(img, 0, 0 , img.width * 0.3, img.height * 0.3);
+                        ctx.drawImage(img, 0, 0 , img.width, img.height);
                         var dataURL = canvas.toDataURL("image/png");
                         resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
                     }
