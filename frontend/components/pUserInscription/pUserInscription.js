@@ -204,10 +204,13 @@ define(['app'], function(app) {
         }
 
         _this.loadPrintsDocs = function(model) {
-            debugger;
-            var letter = layoutReportFactory.getHeader();
-            letter.content = _this.loadLetterEngagement(model);
-            return letter;
+            var deferred = $q.defer();
+            layoutReportFactory.getHeader().then(function(header) {
+                var letter = header;
+                letter.content = _this.loadLetterEngagement(model);
+                deferred.resolve(letter)
+            });
+            return deferred.promise;
         }
 
     }]);
@@ -246,9 +249,9 @@ define(['app'], function(app) {
 
         $scope.print = function(inscripId) {
             apiResource.resource('puserinscriptions').getCopy(inscripId).then(function(result) {
-                debugger;
-                var docDefinition = PUserInscriptionService.loadPrintsDocs(result);
-                pdfMake.createPdf(docDefinition).open();
+                PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
+                    pdfMake.createPdf(docDefinition).open();
+                });
             })
         }
 
