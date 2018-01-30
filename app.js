@@ -460,7 +460,7 @@ define([
                         canvas.width = img.width;
                         canvas.height = img.height;
                         var ctx = canvas.getContext("2d");
-                        ctx.drawImage(img, 0, 0 , img.width, img.height);
+                        ctx.drawImage(img, 0, 0);
                         var dataURL = canvas.toDataURL("image/png");
                         resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
                     }
@@ -476,11 +476,37 @@ define([
                 var deferred = $q.defer();
                 var imgUrl = envService.read('assets') + '/images/header_report.png'
                 getBase64Image(imgUrl).then(function(base64) {
-                    base64 = 'data:image/png;base64,'+ base64
+                    base64 = 'data:image/png;base64,' + base64
                     deferred.resolve({
-                        header: {
-                            image: base64
-                        }
+                        image: base64,
+                        width: 600,
+                        height: 85
+                    })
+                })
+                return deferred.promise;
+            },
+            getFooter: function() {
+                var deferred = $q.defer();
+                var imgUrl = envService.read('assets') + '/images/footer_report.png';
+                getBase64Image(imgUrl).then(function(base64) {
+                    base64 = 'data:image/png;base64,' + base64
+                    deferred.resolve({
+                        image: base64,
+                        width: 595,
+                        height: 105
+                    })
+                })
+                return deferred.promise;
+            },
+            getLayout: function() {
+                var deferred = $q.defer();
+                var _this = this;
+                this.getHeader().then(function(header) {
+                    var layout = {};
+                    layout.header= header;
+                    _this.getFooter().then(function(footer) {
+                        layout.footer = footer;
+                        deferred.resolve(layout);
                     })
                 })
                 return deferred.promise;

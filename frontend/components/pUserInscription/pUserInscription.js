@@ -205,8 +205,9 @@ define(['app'], function(app) {
 
         _this.loadPrintsDocs = function(model) {
             var deferred = $q.defer();
-            layoutReportFactory.getHeader().then(function(header) {
-                var letter = header;
+            debugger;
+            layoutReportFactory.getLayout().then(function(layout) {
+                var letter = layout;
                 letter.content = _this.loadLetterEngagement(model);
                 deferred.resolve(letter)
             });
