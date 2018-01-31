@@ -493,17 +493,35 @@ define([
                     deferred.resolve({
                         image: base64,
                         width: 595,
-                        height: 105
+                        height: 65,
+                        margin: [0, -25, 0, 10]
+
                     })
                 })
                 return deferred.promise;
             },
-            getLayout: function() {
+            getLayout: function(params) {
                 var deferred = $q.defer();
                 var _this = this;
                 this.getHeader().then(function(header) {
                     var layout = {};
-                    layout.header= header;
+                    layout.styles = {
+                        header: {
+                            fontSize: 22,
+                            bold: true,
+                            alignment: 'center',
+                            margin: [0, 0, 0, 20]
+                        },
+                        content: {
+                            fontSize: 12,
+                            alignment: 'justify',
+                            margin: [0, 7]
+                        }
+                    };
+                    layout.pageSize = params.size ? params.size : 'A4';
+                    layout.pageOrientation = params.orientation === 'landscape' ? 'landscape' : 'portrait';
+                    layout.pageMargins = params.margins ? [params.margins.left ? params.margins.left : 0, params.margins.top ? params.margins.top : 0, params.margins.right ? params.margins.right : 0, params.margins.bottom ? params.margins.bottom : 0] : [0, 0, 0, 0];
+                    layout.header = header;
                     _this.getFooter().then(function(footer) {
                         layout.footer = footer;
                         deferred.resolve(layout);

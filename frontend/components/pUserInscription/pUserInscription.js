@@ -198,14 +198,55 @@ define(['app'], function(app) {
 
 
         _this.loadLetterEngagement = function(model) {
-            return {
-                text: model.name
-            }
+            return [
+                { text: 'CARTA DE COMPROMISO', style: 'header' },
+                {
+                    style: 'content',
+                    text: [
+                        'Yo, ',
+                        { text: model.representant.last_name, bold: true },
+                        ' ',
+                        { text: model.representant.name, bold: true },
+                        ' con CI ',
+                        { text: model.representant.num_identification, bold: true },
+                        ' Certifico que mi representado/a ',
+                        { text: model.last_name, bold: true },
+                        ' ',
+                        { text: model.last_name, bold: true },
+                        ' Con CI ',
+                        { text: model.num_identification, bold: true },
+                        ', se encuentra bajo mi total responsabilidad en el Centro Integral de Equinoterapia cuando asiste a sus respectivas terapias de rehabilitación y está siempre bajo mi supervisión y cuidado.'
+                    ]
+                },
+                { text: 'Además dejo constancia que he sido informado de lo siguiente:', style: 'content' },
+                { text: '-El usuario no podrá tener 3 faltas consecutivas injustificadas, porque será retirado/a  del servicio de Terapias.', style: 'content' },
+                { text: '-Solo podrá tener 2 re-ingresos dentro de un mismo año, siempre y cuando haya justificado formalmente las inasistencias, y estará sujeto a disponibilidad de cupo.', style: 'content' },
+                { text: '-Se mantendrá permisos de asistencia solo por 1 mes, previamente justificación formal con certificado. Después del mes de permiso deberá realizar el re-ingreso correspondiente.', style: 'content' },
+                { text: '-Debe cumplir con los requisitos de inscripción, de lo contrario el usuario será suspendido del servicio de terapias.', style: 'content' },
+                { text: 'Teniendo conocimiento de esta información desligo de toda responsabilidad al Centro Integral de Equinoterapia del Gobierno Provincial del Guayas.', style: 'content' },
+                {
+                    alignment: 'center',
+                    fontSize: 11,
+                    margin: [0, 80],
+                    columns: [{
+                        text: '___________________________________\nFirma del Representante \n\n Fecha: _____________________ \n Celular: _____________________'
+                    }]
+
+                }
+
+            ]
         }
 
         _this.loadPrintsDocs = function(model) {
             var deferred = $q.defer();
-            layoutReportFactory.getLayout().then(function(layout) {
+            layoutReportFactory.getLayout({
+                margins: {
+                    left: 30,
+                    top: 120,
+                    right: 30,
+                    bottom: 45
+                }
+            }).then(function(layout) {
                 var letter = layout;
                 letter.content = _this.loadLetterEngagement(model);
                 deferred.resolve(letter)
