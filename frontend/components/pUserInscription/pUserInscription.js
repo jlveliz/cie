@@ -202,6 +202,7 @@ define(['app'], function(app) {
                 { text: 'CARTA DE COMPROMISO', style: 'header' },
                 {
                     style: 'content',
+                    margin: [0, 20],
                     text: [
                         'Yo, ',
                         { text: model.representant.last_name, bold: true },
@@ -226,16 +227,52 @@ define(['app'], function(app) {
                 { text: 'Teniendo conocimiento de esta información desligo de toda responsabilidad al Centro Integral de Equinoterapia del Gobierno Provincial del Guayas.', style: 'content' },
                 {
                     alignment: 'center',
-                    fontSize: 11,
-                    margin: [0, 80],
+                    fontSize: 12,
+                    margin: [0, 90],
                     columns: [{
                         text: '___________________________________\nFirma del Representante \n\n Fecha: _____________________ \n Celular: _____________________'
-                    }]
+                    }],
+                    pageBreak: 'after'
+
+                },
+                //CARTA DE AUTORIZACION
+                { text: 'CARTA DE AUTORIZACIÓN \n DE USO DE IMAGEN', style: 'header', margin: [0, 0, 0, 60] },
+                {
+                    style: 'content',
+                    lineHeight: 2.0,
+                    margin: [0, 20],
+                    text: [
+                        'Yo, ',
+                        { text: model.representant.last_name, bold: true },
+                        ' ',
+                        { text: model.representant.name, bold: true },
+                        ' Ecuatoriano/a, Mayor de edad, domiciliado en ',
+                        { text: model.address, bold: true },
+                        ' Identificado/a con número de CI. ',
+                        { text: model.representant.num_identification, bold: true },
+                        ' de ',
+                        { text: model.representant.age, bold: true },
+                        ' años de edad, autorizo la realización de tomas fotográficas y de video a mi hijo/a ',
+                        { text: model.last_name, bold: true },
+                        ' ',
+                        { text: model.last_name, bold: true },
+                        ', para USO EN MEDIOS DE COMUNICACIÓN Y REDES SOCIALES DE LA PREFECTURA DEL GUAYAS, a difundirse a nivel nacional.',
+                    ]
+                },
+                { text: 'Declaro conocer las condiciones que involucran el uso de las imágenes para los fines señalados.', style: 'content' },
+                {
+                    alignment: 'center',
+                    fontSize: 12,
+                    margin: [0, 90],
+                    columns: [{
+                        text: '___________________________________\nFirma del Representante \n\n Fecha: _____________________ \n Celular: _____________________'
+                    }],
+                    pageBreak: 'after'
 
                 }
 
             ]
-        }
+        };
 
         _this.loadPrintsDocs = function(model) {
             var deferred = $q.defer();
@@ -291,7 +328,14 @@ define(['app'], function(app) {
         $scope.print = function(inscripId) {
             apiResource.resource('puserinscriptions').getCopy(inscripId).then(function(result) {
                 PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
-                    pdfMake.createPdf(docDefinition).open();
+                    var params = {
+                        type: 'pdf',
+                        content: docDefinition,
+                        title: result.last_name + ' ' + result.name
+                    };
+                    $rootScope.openPreviewModal(params);
+
+
                 });
             })
         }

@@ -493,8 +493,8 @@ define([
                     deferred.resolve({
                         image: base64,
                         width: 595,
-                        height: 65,
-                        margin: [0, -25, 0, 10]
+                        height: 80,
+                        margin: [0, -35, 0, 10]
 
                     })
                 })
@@ -505,7 +505,7 @@ define([
                 var _this = this;
                 this.getHeader().then(function(header) {
                     var layout = {};
-                    layout.defaultStyle =  {
+                    layout.defaultStyle = {
                         font: 'timeNewRoman'
                     }
                     layout.styles = {
@@ -518,7 +518,7 @@ define([
                         content: {
                             fontSize: 12,
                             alignment: 'justify',
-                            margin: [0, 7]
+                            margin: [0, 15]
                         }
                     };
                     layout.pageSize = params.size ? params.size : 'A4';
@@ -951,12 +951,34 @@ define([
                 size: 'lg',
                 templateUrl: 'frontend/partials/modal-preview.html',
                 resolve: {
-                    modalContent: function() {
+                    params: function() {
                         return params
                     }
                 },
-                controller: function($scope, modalContent, $uibModalInstance) {
-                    $scope.modalContent = modalContent;
+                controller: function($scope, params, $uibModalInstance, $sce) {
+                    $scope.title = params.title;
+                    var content = params.content ? params.content : null;
+                    $scope.type = params.type ? params.type : 'pdf';
+                    $scope.loading = true;
+                    $scope.content = null;
+
+                    switch ($scope.type) {
+                        default: pdfMake.createPdf(content).getBase64(function(result) {
+                            $scope.content = $sce.trustAsResourceUrl('data:application/pdf;base64,' + result);
+                            $scope.loading = false;
+                        });
+                        break;
+                    }
+
+
+                    $scope.print = function() {
+                        pdfMake.createPdf(content).print()
+                    }
+
+                    $scope.download = function() {
+                        pdfMake.createPdf(content).download($scope.title+'_'+moment().format('l'))
+                    }
+
                     $scope.ok = function() {
                         $uibModalInstance.close();
                         deferred.resolve();
