@@ -25,7 +25,7 @@ require.config({
         'moment': 'frontend/bower_components/moment/min/moment-with-locales',
         'underscore': 'frontend/bower_components/underscore/underscore-min',
         'pdfmake':'frontend/bower_components/pdfmake/build/pdfmake.min',
-        'vfs_fonts':'frontend/bower_components/pdfmake/build/vfs_fonts'
+        'vfs_fonts':'frontend/assets/js/pdfmake/vfs_fonts'
     },
     shim: {
         'jquery': {

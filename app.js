@@ -505,6 +505,9 @@ define([
                 var _this = this;
                 this.getHeader().then(function(header) {
                     var layout = {};
+                    layout.defaultStyle =  {
+                        font: 'timeNewRoman'
+                    }
                     layout.styles = {
                         header: {
                             fontSize: 22,
@@ -967,6 +970,17 @@ define([
     cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
 
         $locationProvider.html5Mode(true);
+
+        //PDF CONFIG FONTS
+        pdfMake.fonts = {
+            timeNewRoman: {
+                normal: 'times.ttf',
+                bold: 'timesbd.ttf',
+                italics: 'timesi.ttf',
+                bolditalics: 'timesbi.ttf'
+            }
+        }
+        //PDF CONFIG FONTS
 
 
         envServiceProvider.config({
