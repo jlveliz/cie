@@ -12,7 +12,7 @@ class PatientUser extends Model
 
     protected $primaryKey = "id";
 
-    protected $with = ['father','mother','representant','user'];
+    protected $with = ['father','mother','representant','user','province','city','parish','pathology'];
 
     protected $fillable = [
     	'person_id',
@@ -65,9 +65,29 @@ class PatientUser extends Model
     	return $this->belongsTo('Cie\Models\Person','representant_id');
     }
 
+    public function province()
+    {
+        return $this->belongsTo('Cie\Models\Province','province_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo('Cie\Models\City','city_id');
+    }
+
+    public function parish()
+    {
+        return $this->belongsTo('Cie\Models\Parish','parish_id');
+    }
+
     public function user()
     {
         return $this->belongsTo('Cie\Models\User','created_user_id');
+    }
+
+    public function pathology()
+    {
+        return $this->belongsTo('Cie\Models\Pathology','diagnostic_id');
     }
 
 
