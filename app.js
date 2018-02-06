@@ -533,7 +533,6 @@ define([
                 return deferred.promise;
             }
         };
-
     }])
 
     cie.directive('title', ['$rootScope', '$timeout',

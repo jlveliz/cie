@@ -359,7 +359,7 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Red Social del Representante del Usuario">Redes Sociales que Maneja <span class="text-danger">*</span></label>
-                                                        <div class="checkbox" ng-if="model.representant.length">
+                                                        <div class="checkbox" ng-if="!model.mother.is_representant && !model.father.is_representant">
                                                             <label class="checkbox-inline" for="has_facebook">
                                                                 <input type="checkbox" name="social-network[]" id="has_facebook" ng-model="model.representant.has_facebook" ng-checked="model.representant.has_facebook == 1" ng-true-value="1" ng-false-value="0">Facebook
                                                             </label> |
@@ -399,6 +399,23 @@
                                                         <label class="control-label" for="observation" title="Observación final de la solicitud">Observación </label>
                                                         <textarea ng-disabled="saving" name="observation" id="observation" rows="5" class="form-control" id="observation" name="observation" ng-model="model.observation"></textarea>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </uib-tab>
+                                        <uib-tab index="2" ng-if="isEdit">
+                                            <uib-tab-heading ng-click="loadDocs()">
+                                                <h5 title="Documentación"><b><i class="fa fa-file-pdf-o"></i> Documentación</b></h5>
+                                            </uib-tab-heading>
+                                            <div class="tab-index">
+                                                <div class="row  modal-body-preview">
+                                                    <h4 class="text-center" ng-if="loadingDocs">
+                                                        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                                                        <span class="sr-only">Cargando...</span>
+                                                    </h4>
+                                                    <iframe width="100%" height="100%" ng-src="{{docContent}}" ng-if="!loadingDocs" src="" frameborder="0"></iframe>
+                                                    <button class="btn btn-success" type="button" ng-click="loadDocs('print')"  ng-if="!loadingDocs">Imprimir</button>
+                                                    <button class="btn btn-warning" type="button" ng-click="loadDocs('download')"  ng-if="!loadingDocs">Descargar</button>
+                                                    <div style="clear:both"></div>
                                                 </div>
                                             </div>
                                         </uib-tab>

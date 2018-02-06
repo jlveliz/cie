@@ -1,7 +1,7 @@
 /**
  ** Inscriptions controller
  **/
-define(['app'], function(app) {
+define(['app', 'moment'], function(app, moment) {
 
     app.register.service('PUserInscriptionService', ['$q', 'layoutReportFactory', function($q, layoutReportFactory) {
 
@@ -54,83 +54,44 @@ define(['app'], function(app) {
 
         }
 
-        _this.gradeDisability = [{
-            id: 'l',
-            value: 'Leve'
-        }, {
-            id: 'm',
-            value: 'Moderado'
-        }, {
-            id: 'g',
-            value: 'Grave'
-        }];
-
-        _this.yesOrNot = [{
-            id: 1,
-            value: 'Si'
-        }, {
-            id: 0,
-            value: 'No'
-        }];
-
-        _this.insurances = [{
-                id: 1,
-                value: 'IESS'
-            },
-            {
-                id: 2,
-                value: 'Seguro Particular'
-            },
-            {
-                id: 3,
-                value: 'Otros'
-            },
+        _this.gradeDisability = [
+            { id: 'l', value: 'Leve' },
+            { id: 'm', value: 'Moderado' },
+            { id: 'g', value: 'Grave' }
         ];
 
-        _this.medicalAttentions = [{
-            id: 1,
-            value: 'Seguro Particular'
-        }, {
-            id: 2,
-            value: 'IESS'
-        }, {
-            id: 3,
-            value: 'MSP'
-        }, {
-            id: 4,
-            value: 'Fundaciones'
-        }, {
-            id: 5,
-            value: 'Dispensarios Médicos'
-        }, {
-            id: 5,
-            value: 'Junta de Beneficiencia'
-        }, {
-            id: 6,
-            value: 'Otros'
-        }];
+        _this.yesOrNot = [
+            { id: 1, value: 'Si' },
+            { id: 0, value: 'No' }
+        ];
 
-        _this.scooling = [{
-            id: 1,
-            value: 'Regular'
-        }, {
-            id: 2,
-            value: 'Especial'
-        }];
+        _this.insurances = [
+            { id: 1, value: 'IESS' },
+            { id: 2, value: 'Seguro Particular' },
+            { id: 3, value: 'Otros' },
+        ];
 
-        _this.scoolingType = [{
-            id: 1,
-            value: 'Particular'
-        }, {
-            id: 2,
-            value: 'Fiscal'
-        }, {
-            id: 3,
-            value: 'Fiscomisional'
-        }, {
-            id: 4,
-            value: 'Otros'
-        }];
+        _this.medicalAttentions = [
+            { id: 1, value: 'Seguro Particular' },
+            { id: 2, value: 'IESS' },
+            { id: 3, value: 'MSP' },
+            { id: 4, value: 'Fundaciones' },
+            { id: 5, value: 'Dispensarios Médicos' },
+            { id: 5, value: 'Junta de Beneficiencia' },
+            { id: 6, value: 'Otros' }
+        ];
+
+        _this.scooling = [
+            { id: 1, value: 'Regular' },
+            { id: 2, value: 'Especial' }
+        ];
+
+        _this.scoolingType = [
+            { id: 1, value: 'Particular' },
+            { id: 2, value: 'Fiscal' },
+            { id: 3, value: 'Fiscomisional' },
+            { id: 4, value: 'Otros' }
+        ];
 
         _this.statusCivil = [
             { id: 1, value: 'Casados' },
@@ -196,9 +157,464 @@ define(['app'], function(app) {
             return model;
         }
 
+        _this.getGradeDisability = function(gradeDisability) {
+            var grade = null;
+            angular.forEach(_this.gradeDisability, function(item) {
+                if (item.id == gradeDisability) grade = item.value;
+            });
+            return grade;
+        };
+
+        _this.getHasTypeInsurance = function(typeInsurance) {
+            var type = null;
+            angular.forEach(_this.insurances, function(item) {
+                if (item.id == typeInsurance) type = item.value;
+            })
+            return type;
+        };
+
+        _this.getNameMedicalAttention = function(medicalAt) {
+            var medicalAte = null;
+            angular.forEach(_this.medicalAttentions, function(item) {
+                if (item.id == medicalAt) medicalAte = item.value;
+            })
+            return medicalAte;
+        };
+
+        _this.getHasSchooling = function(schoolingVal) {
+            var schooling = null;
+            angular.forEach(_this.scooling, function(item) {
+                if (item.id == schoolingVal) schooling = item.value;
+            })
+            return schooling;
+        };
+
+        _this.getHasSchoolingType = function(schoolingTypeVal) {
+            var schoolingType = null;
+            angular.forEach(_this.scoolingType, function(item) {
+                if (item.id == schoolingTypeVal) schoolingType = item.value;
+            })
+            return schoolingType;
+        }
+
+
 
         _this.loadLetterEngagement = function(model) {
             return [
+                //FICHA DE INSCRIPCION
+                { text: 'FICHA DE INSCRIPCIÓN', style: 'header', margin: [0, 0, 0, 30] },
+                { text: 'DATOS DEL USUARIO', bold: true, fontSize: 12, decoration: 'underline' },
+                {
+                    style: 'tableHeader',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: 'Datos Personales', bold: true }]
+                        ]
+                    },
+                    layout: { fillColor: '#CCCCCC', border: 0 }
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: [{ text: 'Nombres y Apellidos: ', bold: true }, model.last_name + ' ' + model.name] }],
+                        ]
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Cedula de Identidad: ', bold: true }, model.num_identification] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.date_birth).format('DD/MM/YYYY')] }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*', '*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Edad: ', bold: true }, model.age] },
+                                { text: [{ text: 'Sexo: ', bold: true }, model.genre == 'M' ? 'Masculino' : 'Femenino'] },
+                                { text: [{ text: 'Carnet No: ', bold: true }, model.conadis_id] }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: [{ text: 'Domicilio: ', bold: true }, model.address] }]
+                        ],
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*', '*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Provincia: ', bold: true }, model.province.name] },
+                                { text: [{ text: 'Ciudad: ', bold: true }, model.city.name] },
+                                { text: [{ text: 'Parroquia: ', bold: true }, model.parish.name] },
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'tableHeader',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: 'Discapacidad', bold: true }]
+                        ]
+                    },
+                    layout: { fillColor: '#CCCCCC', border: 0 }
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*', '*', '*', '*', '*'],
+                        body: [
+                            [{ colSpan: 5, text: 'Tipo de Discapacidad', bold: true }, {}, {}, {}, {}],
+                            [
+                                { text: [{ text: 'Física: ', bold: true }, model.physical_disability + '%'] },
+                                { text: [{ text: 'Intelectual: ', bold: true }, model.intellectual_disability + '%'] },
+                                { text: [{ text: 'Visual: ', bold: true }, model.visual_disability + '%'] },
+                                { text: [{ text: 'Auditiva: ', bold: true }, model.hearing_disability + '%'] },
+                                { text: [{ text: 'Psicosocial: ', bold: true }, model.psychosocial_disability + '%'] },
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*', '*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Grado de Discapacidad: ', bold: true }, _this.getGradeDisability(model.grade_of_disability)] },
+                                { text: [{ text: 'Tiene Diagnóstico?: ', bold: true }, model.has_diagnostic == 1 ? 'Si' : 'No'] },
+                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology.name] },
+                            ],
+                            [
+                                { colSpan: 3, text: [{ text: 'Otros Diagnósticos: ', bold: true }, model.other_diagnostic] },
+                                {},
+                                {}
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: [{ text: 'Entidad que emite el Diagnóstico: ', bold: true }, model.entity_send_diagnostic] }]
+                        ]
+                    },
+                    layout: 'noBorders'
+
+                }, {
+                    style: 'table',
+                    table: {
+                        widths: ['*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Asiste a otros centros terapéuticos: ', bold: true }, model.assist_other_therapeutic_center == '1' ? 'Si' : 'No'] },
+                                { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.therapeutic_center_name] },
+
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+
+                }, {
+                    style: 'tableHeader',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: 'Asistencia Médica', bold: true }]
+                        ]
+                    },
+                    layout: {
+                        fillColor: '#CCCCCC',
+                        border: 0
+                    }
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Tiene algún tipo de seguro: ', bold: true }, _this.getHasTypeInsurance(model.has_insurance)] },
+                                { text: [{ text: 'Recibe atención Medica en: ', bold: true }, _this.getNameMedicalAttention(model.receives_medical_attention)] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.name_medical_attention] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'tableHeader',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: 'Educación Formal', bold: true }]
+                        ]
+                    },
+                    layout: {
+                        fillColor: '#CCCCCC',
+                        border: 0
+                    }
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Escolarización: ', bold: true }, _this.getHasSchooling(model.schooling)] },
+                                { text: [{ text: 'Tipo Escolarización: ', bold: true }, _this.getHasSchoolingType(model.schooling_type)] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*'],
+                        body: [
+                            [
+                                { pageBreak: 'after', text: [{ text: 'Nombre de la Institución: ', bold: true }, model.schooling_name] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    text: 'DATOS DE FAMILIARES',
+                    bold: true,
+                    fontSize: 12,
+                    decoration: 'underline'
+                }, {
+                    style: 'tableHeader',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: 'Datos del Padre', bold: true }]
+                        ]
+                    },
+                    layout: {
+                        fillColor: '#CCCCCC',
+                        border: 0
+                    }
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Nombre del Padre: ', bold: true }, model.father.last_name + ' ' + model.father.name] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*', '*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.father.num_identification] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.father.date_birth).format('DD/MM/YYYY')] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.father.age] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.father.phone] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Móvil: ', bold: true }, model.father.mobile] },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.father.activity] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'tableHeader',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: 'Datos de la Madre', bold: true }]
+                        ]
+                    },
+                    layout: {
+                        fillColor: '#CCCCCC',
+                        border: 0
+                    }
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Nombre de la Madre: ', bold: true }, model.mother.last_name + ' ' + model.mother.name] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*', '*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.mother.num_identification] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.mother.date_birth).format('DD/MM/YYYY')] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.mother.age] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.mother.phone] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Móvil: ', bold: true }, model.mother.mobile] },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.mother.activity] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'tableHeader',
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [{ text: 'Datos del Representante', bold: true }]
+                        ]
+                    },
+                    layout: {
+                        fillColor: '#CCCCCC',
+                        border: 0
+                    }
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Nombre del Representante: ', bold: true }, model.representant.last_name + ' ' + model.representant.name] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*', '*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant.num_identification] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.representant.date_birth).format('DD/MM/YYYY')] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.representant.age] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.representant.phone] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*', '*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Género: ', bold: true }, model.representant.genre == 'M' ? 'Masculino' : 'Femenino'] },
+                                { text: [{ text: 'Móvil: ', bold: true }, model.representant.mobile] },
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    style: 'table',
+                    table: {
+                        widhts: ['*'],
+                        body: [
+                            [
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.representant.activity] },
+                            ],
+                            [
+                                { text: [{ text: 'Redes Sociales que Maneja: ', bold: true }, model.representant.has_facebook ? ' Faceook ' : '', model.representant.has_twitter ? ' Twitter ' : '', model.representant.has_instagram ? ' Instagram ' : '', !model.representant.has_instagram && !model.representant.has_facebook && !model.representant.has_twitter ? ' Ninguna ' : ''] }
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                }, {
+                    margin: [0, 20],
+                    table: {
+                        widhts: ['*'],
+                        body: [
+                            [
+                                { text: 'Observación: ', bold: true },
+                            ],
+                            [
+                                model.observation,
+                            ],
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                },
+
+                {
+                    margin: [0, 30, 0, 0],
+                    text: '_________________________________________\n Firma del Representante',
+                    bold: true,
+                },
+                {
+                    pageBreak: 'after',
+                    margin: [0, 10, 0, 0],
+                    text: [{ text: 'Fecha: ', bold: true }, moment(model.date_admission).format('DD/MM/YYYY')],
+                    bold: true,
+                },
+                //CARTA DE COMPROMISO
                 { text: 'CARTA DE COMPROMISO', style: 'header' },
                 {
                     style: 'content',
@@ -266,212 +682,10 @@ define(['app'], function(app) {
                     margin: [0, 90],
                     columns: [{
                         text: '___________________________________\nFirma del Representante \n\n Fecha: _____________________ \n Celular: _____________________'
-                    }],
-                    pageBreak: 'after'
+                    }]
 
                 },
-                //FICHA DE INSCRIPCION
-                { text: 'FICHA DE INSCRIPCIÓN', style: 'header', margin: [0, 0, 0, 30] },
-                { text: 'DATOS DEL USUARIO', bold: true, fontSize: 12, decoration: 'underline' },
-                {
-                    style: 'tableHeader',
-                    table: {
-                        widths: ['*'],
-                        body: [
-                            [{ text: 'Datos Personales', bold: true }]
-                        ]
-                    },
-                    layout: {
-                        fillColor: '#CCCCCC',
-                        border: 0
-                    }
-                },
-                {
-                    style: 'table',
-                    table: {
-                        widths: ['auto', 'auto', 'auto', 'auto'],
-                        body: [
-                            [{
-                                    colsPan: 4,
-                                    text: [
-                                        { text: 'Nombres y Apellidos: ', bold: true },
-                                        model.name + ' ' + model.last_name
-                                    ]
-                                },
-                                {},
-                                {},
-                                {},
-                            ],
-                            [{
-                                    colsPan: 2,
-                                    text: [
-                                        { text: 'Cedula de Identidad: ', bold: true },
-                                        model.num_identification
-                                    ]
-                                },
-                                {
-                                    colsPan: 2,
-                                    text: [
-                                        { text: 'Fecha de Nacimiento: ', bold: true },
-                                        model.date_birth
-                                    ]
-                                },
-                                {},
-                                {}
-                            ],
 
-                        ]
-                    },
-                    layout: 'noBorders'
-                },
-                {
-                    table: {
-                        widths: ['*', '*', '*'],
-                        body: [
-                            [{
-                                text: [
-                                    { text: 'Edad: ', bold: true },
-                                    model.age
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Sexo: ', bold: true },
-                                    model.genre
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Carnet No. : ', bold: true },
-                                    model.conadis_id
-                                ]
-                            }]
-                        ],
-                    },
-                    layout: 'noBorders'
-                },
-                {
-                    table: {
-                        widths: ['auto'],
-                        body: [
-                            [{
-                                text: [{
-                                    text: 'Domicilio: ',
-                                    bold: true
-                                }, model.address]
-                            }]
-                        ]
-                    },
-                    layout: 'noBorders',
-                },
-                {
-                    table: {
-                        widths: ['*', '*', '*', '*', ],
-                        body: [
-                            [{
-                                text: [
-                                    { text: 'Provincia: ', bold: true },
-                                    model.province.name
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Cantón: ', bold: true },
-                                    model.city.name
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Ciudad: ', bold: true },
-                                    model.city.name
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Parroquia: ', bold: true },
-                                    model.parish.name
-                                ]
-                            }]
-                        ]
-                    },
-                    layout: 'noBorders',
-                },
-                {
-                    style: 'tableHeader',
-                    table: {
-                        widths: ['*'],
-                        body: [
-                            [{ text: 'Discapacidad', bold: true }]
-                        ]
-                    },
-                    layout: {
-                        fillColor: '#CCCCCC',
-                        border: 0
-                    }
-                },
-                {
-                    style: 'tableHeader',
-                    table: {
-                        widths: ['*'],
-                        body: [
-                            [{ text: 'Tipos de discapacidad', bold: true }]
-                        ]
-                    },
-                    layout: 'noBorders'
-                },
-                {
-                    style: 'table',
-                    table: {
-                        widths: ['*', '*', '*', '*', '*', '*'],
-                        body: [
-                            [{
-                                text: [
-                                    { text: 'Física: ', bold: true },
-                                    model.physical_disability + '%'
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Intelectual: ', bold: true },
-                                    model.intellectual_disability + '%'
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Visual: ', bold: true },
-                                    model.visual_disability + '%'
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Auditiva: ', bold: true },
-                                    model.hearing_disability + '%'
-                                ]
-                            }, {
-                                text: [
-                                    { text: 'Psicosocial: ', bold: true },
-                                    model.psychosocial_disability + '%'
-                                ]
-                            }, {}],
-                            [{
-                                    colSpan: 2,
-                                    text: [
-                                        { text: 'Carnet No. ', bold: true },
-                                        model.conadis_id
-                                    ]
-                                },
-                                { colSpan: 2, text: [{ text: 'Grado de Discapacidad: ', bold: true }, model.grade_of_disability] },
-                                { colSpan: 2, text: [{ text: 'Posee Diagnóstico', bold: true }, model.has_diagnostic] }, {}, {}, {}
-                            ],
-                            [
-                                { colSpan: 1, text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology.name] },
-                                { colSpan: 4, text: [{ text: 'Entidad que emite el Diagnóstico: ', bold: true }, model.entity_send_diagnostic] },
-                                {}, {}, {}, {}
-                            ],
-                            [
-                                { colSpan: 2, text: [{ text: 'Otros Diagnósticos: ', bold: true }, model.other_diagnostic] },
-                                {}, {}, {}, {}, {}
-                            ],
-                            [
-                                { colSpan: 3, text: [{ text: 'Asiste a otros centros terapéuticos: ', bold: true }, model.assist_other_therapeutic_center] },
-                                { colSpan: 2, text: [{ text: 'Nombre de la institución', bold: true }, model.assist_other_therapeutic_center] }, {}, {}, {}, {}
-                            ]
-                        ]
-                    },
-                    layout: 'noBorders'
-                }
 
 
             ]
@@ -490,14 +704,13 @@ define(['app'], function(app) {
                 var letter = layout;
                 var styleDoc = {
                     table: {
-                        fontSize: 11,
+                        fontSize: 12,
                         alignment: 'left',
-                        margin: [0, 20, 0, 10],
                     },
                     tableHeader: {
-                        fontSize: 11,
+                        fontSize: 12,
                         alignment: 'left',
-                        margin: [0, 20, 0, -20],
+                        margin: [0, 20, 0, -0],
                     }
                 };
                 angular.extend(letter.styles, styleDoc)
@@ -609,10 +822,6 @@ define(['app'], function(app) {
         $scope.statusCivil = PUserInscriptionService.statusCivil;
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
-
-
-
-
 
 
         var deps = $q.all([
@@ -1139,9 +1348,10 @@ define(['app'], function(app) {
         }
     }]);
 
-    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state) {
+    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce) {
 
         $scope.isEdit = true
+        $scope.docContent = null;
         var inscriptionId = $stateParams.pInsId;
         $scope.hasMessage = false;
         $scope.messages = {};
@@ -1245,6 +1455,26 @@ define(['app'], function(app) {
         $scope.changeRepresentant = function() {
             $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
         }
+
+        $scope.loadDocs = function(option) {
+            debugger;
+            if(!option) $scope.loadingDocs = true;
+            apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(result) {
+                PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
+                    if (option == 'print') {
+                        pdfMake.createPdf(docDefinition).print();
+                    } else if(option == 'download') {
+                        pdfMake.createPdf(docDefinition).download($scope.model.last_name + ' ' + $scope.model.name + '_' + moment().format('l'))
+                    } else {
+                        pdfMake.createPdf(docDefinition).getBase64(function(doc) {
+                            $scope.docContent = $sce.trustAsResourceUrl('data:application/pdf;base64,' + doc);
+                            $scope.loadingDocs = false;
+                            $scope.$apply();
+                        })
+                    }
+                });
+            })
+        };
 
 
         $scope.validateOptions = {

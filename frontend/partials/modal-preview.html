@@ -11,8 +11,7 @@
     <div style="clear:both"></div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="delete()">Aceptar</button>
+    <button class="btn btn-primary" type="button" ng-click="$dismiss()">Aceptar</button>
     <button ng-if="type == 'pdf'" class="btn btn-success" type="button" ng-click="print()">Imprimir</button>
     <button ng-if="type == 'pdf'" class="btn btn-warning" type="button" ng-click="download()">Descargar</button>
-    <button class="btn btn-default" type="button" ng-click="$dismiss()">Cancelar</button>
 </div>
