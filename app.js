@@ -975,7 +975,7 @@ define([
                     }
 
                     $scope.download = function() {
-                        pdfMake.createPdf(content).download($scope.title+'_'+moment().format('l'))
+                        pdfMake.createPdf(content).download($scope.title + '_' + moment().format('l'))
                     }
 
                     $scope.ok = function() {
@@ -1007,7 +1007,8 @@ define([
         envServiceProvider.config({
             domains: {
                 development: ['cie2.local'],
-                home: ['cie.local']
+                home: ['cie.local'],
+                server_develop_public: ['10.101.0.51']
             },
             vars: {
                 development: {
@@ -1018,6 +1019,12 @@ define([
                     assets: 'http://cie.local/frontend/assets',
                     authorization: 'http://cie.local/backend/api/authenticate/login',
                     api: 'http://cie.local/backend/api/',
+                },
+                server_develop_public: {
+                    assets: 'http://10.101.0.51/frontend/assets',
+                    authorization: "http://10.101.0.51/backend/api/authenticate/login",
+                    api: 'http://10.101.0.51/backend/api/',
+                    public: 'http://10.101.0.51'
                 }
             }
         });

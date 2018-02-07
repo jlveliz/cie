@@ -69,6 +69,7 @@ define(['app', 'moment'], function(app, moment) {
             { id: 1, value: 'IESS' },
             { id: 2, value: 'Seguro Particular' },
             { id: 3, value: 'Otros' },
+            { id: 4, value: 'No tiene Seguro' },
         ];
 
         _this.medicalAttentions = [
@@ -302,10 +303,10 @@ define(['app', 'moment'], function(app, moment) {
                             [
                                 { text: [{ text: 'Grado de Discapacidad: ', bold: true }, _this.getGradeDisability(model.grade_of_disability)] },
                                 { text: [{ text: 'Tiene Diagnóstico?: ', bold: true }, model.has_diagnostic == 1 ? 'Si' : 'No'] },
-                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology.name] },
+                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology.name == null || model.pathology.name == '' ? '' : model.pathology.name] },
                             ],
                             [
-                                { colSpan: 3, text: [{ text: 'Otros Diagnósticos: ', bold: true }, model.other_diagnostic] },
+                                { colSpan: 3, text: [{ text: 'Otros Diagnósticos: ', bold: true }, model.other_diagnostic == null || model.other_diagnostic == '' ? '' : model.other_diagnostic] },
                                 {},
                                 {}
                             ]
@@ -317,7 +318,7 @@ define(['app', 'moment'], function(app, moment) {
                     table: {
                         widths: ['*'],
                         body: [
-                            [{ text: [{ text: 'Entidad que emite el Diagnóstico: ', bold: true }, model.entity_send_diagnostic] }]
+                            [{ text: [{ text: 'Entidad que emite el Diagnóstico: ', bold: true }, model.entity_send_diagnostic == null || model.entity_send_diagnostic == '' ? '' : model.entity_send_diagnostic] }]
                         ]
                     },
                     layout: 'noBorders'
@@ -329,7 +330,7 @@ define(['app', 'moment'], function(app, moment) {
                         body: [
                             [
                                 { text: [{ text: 'Asiste a otros centros terapéuticos: ', bold: true }, model.assist_other_therapeutic_center == '1' ? 'Si' : 'No'] },
-                                { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.therapeutic_center_name] },
+                                { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.therapeutic_center_name == null || model.therapeutic_center_name == '' ? '' : model.therapeutic_center_name] },
 
                             ]
                         ]
@@ -367,7 +368,7 @@ define(['app', 'moment'], function(app, moment) {
                         widhts: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.name_medical_attention] },
+                                { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.name_medical_attention == '' || model.name_medical_attention == null ? '' : model.name_medical_attention] },
                             ]
                         ]
 
@@ -404,7 +405,7 @@ define(['app', 'moment'], function(app, moment) {
                         widhts: ['*'],
                         body: [
                             [
-                                { pageBreak: 'after', text: [{ text: 'Nombre de la Institución: ', bold: true }, model.schooling_name] },
+                                { pageBreak: 'after', text: [{ text: 'Nombre de la Institución: ', bold: true }, model.schooling_name == null || model.schooling_name == '' ? '' : model.schooling_name] },
                             ]
                         ]
 
@@ -447,8 +448,8 @@ define(['app', 'moment'], function(app, moment) {
                             [
                                 { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.father.num_identification] },
                                 { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.father.date_birth).format('DD/MM/YYYY')] },
-                                { text: [{ text: 'Edad: ', bold: true }, model.father.age] },
-                                { text: [{ text: 'Teléfono: ', bold: true }, model.father.phone] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.father.age == '' || model.father.age == null ? '' : model.father.age] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.father.phone == '' || model.father.phone == null ? '' : model.father.phone] },
                             ]
                         ]
 
@@ -459,9 +460,10 @@ define(['app', 'moment'], function(app, moment) {
                     table: {
                         widhts: ['*', '*'],
                         body: [
-                            [
-                                { text: [{ text: 'Móvil: ', bold: true }, model.father.mobile] },
-                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.father.activity] },
+                            [{
+                                    text: [{ text: 'Móvil: ', bold: true }, model.father.mobile == '' || model.father.mobile == null ? '' : model.father.mobile]
+                                },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.father.activity == '' || model.father.activity == null] ? '' : model.father.activity },
                             ]
                         ]
 
@@ -499,8 +501,8 @@ define(['app', 'moment'], function(app, moment) {
                             [
                                 { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.mother.num_identification] },
                                 { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.mother.date_birth).format('DD/MM/YYYY')] },
-                                { text: [{ text: 'Edad: ', bold: true }, model.mother.age] },
-                                { text: [{ text: 'Teléfono: ', bold: true }, model.mother.phone] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.mother.age == '' || model.mother.age == null ? '' : model.mother.age] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.mother.phone == '' || model.mother.phone == null ? '' : model.mother.phone] },
                             ]
                         ]
 
@@ -511,9 +513,10 @@ define(['app', 'moment'], function(app, moment) {
                     table: {
                         widhts: ['*', '*'],
                         body: [
-                            [
-                                { text: [{ text: 'Móvil: ', bold: true }, model.mother.mobile] },
-                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.mother.activity] },
+                            [{
+                                    text: [{ text: 'Móvil: ', bold: true }, model.mother.mobile == '' || model.mother.mobile == null ? '' : model.mother.mobile]
+                                },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.mother.activity == '' || model.mother.activity == null ? '' : model.mother.activity] },
                             ]
                         ]
 
@@ -549,10 +552,10 @@ define(['app', 'moment'], function(app, moment) {
                         widhts: ['*', '*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant.num_identification] },
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant.num_identification == '' || model.representant.num_identification == null ? '' : model.representant.num_identification] },
                                 { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.representant.date_birth).format('DD/MM/YYYY')] },
-                                { text: [{ text: 'Edad: ', bold: true }, model.representant.age] },
-                                { text: [{ text: 'Teléfono: ', bold: true }, model.representant.phone] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.representant.age == '' || model.representant.age == null ? '' : model.representant.age] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.representant.phone == null || model.representant.phone == '' ? '' : model.representant.phone] },
                             ]
                         ]
 
@@ -565,7 +568,7 @@ define(['app', 'moment'], function(app, moment) {
                         body: [
                             [
                                 { text: [{ text: 'Género: ', bold: true }, model.representant.genre == 'M' ? 'Masculino' : 'Femenino'] },
-                                { text: [{ text: 'Móvil: ', bold: true }, model.representant.mobile] },
+                                { text: [{ text: 'Móvil: ', bold: true }, model.representant.mobile == '' || model.representant.mobile == null ? '' : model.representant.mobile] },
                             ]
                         ]
 
@@ -577,10 +580,10 @@ define(['app', 'moment'], function(app, moment) {
                         widhts: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.representant.activity] },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.representant.activity == '' || model.representant.activity == null ? '' : model.representant.activity] },
                             ],
                             [
-                                { text: [{ text: 'Redes Sociales que Maneja: ', bold: true }, model.representant.has_facebook ? ' Faceook ' : '', model.representant.has_twitter ? ' Twitter ' : '', model.representant.has_instagram ? ' Instagram ' : '', !model.representant.has_instagram && !model.representant.has_facebook && !model.representant.has_twitter ? ' Ninguna ' : ''] }
+                                { text: [{ text: 'Redes Sociales que Maneja: ', bold: true }, model.representant.has_facebook ? ' Facebook ' : '', model.representant.has_twitter ? ' Twitter ' : '', model.representant.has_instagram ? ' Instagram ' : '', !model.representant.has_instagram && !model.representant.has_facebook && !model.representant.has_twitter ? ' Ninguna ' : ''] }
                             ]
                         ]
 
@@ -595,7 +598,7 @@ define(['app', 'moment'], function(app, moment) {
                                 { text: 'Observación: ', bold: true },
                             ],
                             [
-                                model.observation,
+                                model.observation == null || model.observation == '' ? '' : model.observation,
                             ],
                         ]
 
@@ -801,8 +804,10 @@ define(['app', 'moment'], function(app, moment) {
         $scope.isEdit = false
         $scope.loading = true;
         $scope.saving = false;
+        $scope.existError = false;
         $scope.model = {};
         $scope.provinces = [];
+        $scope.messages = {};
         $scope.cities = [];
         $scope.parishies = [];
         $scope.pathologies = [];
@@ -992,7 +997,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 father_activity: {
                     required: true,
-                    minlength: 10,
                 },
                 mother_num_identification: {
                     required: true,
@@ -1064,13 +1068,13 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 representant_activity: {
                     required: true
-                },
-                "social-network[]": {
-                    required: true
                 }
 
             },
             messages: {
+                date_admission: {
+                    max: 'Ingrese un valor menor o igual a {0}'
+                },
                 num_identification: {
                     required: "Identificación requerida",
                     minlength: "Identificación inválida",
@@ -1194,7 +1198,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 father_activity: {
                     required: 'Es Requerida',
-                    minlength: 'Ingrese al menos 10 carácteres',
                 },
                 mother_num_identification: {
                     required: "Es Requerida",
@@ -1266,9 +1269,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 representant_activity: {
                     required: "Es Requerida",
-                },
-                "social-network[]": {
-                    required: "Es Requerida",
                 }
             }
         }
@@ -1327,6 +1327,7 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.saving = false
                 $scope.existError = true;
                 $scope.messages.title = reason.data.title;
+                $scope.messages.type = 'error';
                 $scope.messages.details = [];
                 var json = JSON.parse(reason.data.detail);
                 angular.forEach(json, function(elem, idx) {
@@ -1350,9 +1351,9 @@ define(['app', 'moment'], function(app, moment) {
 
     app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce) {
 
+        var inscriptionId = $stateParams.pInsId;
         $scope.isEdit = true
         $scope.docContent = null;
-        var inscriptionId = $stateParams.pInsId;
         $scope.hasMessage = false;
         $scope.messages = {};
         $scope.loading = true;
@@ -1457,13 +1458,12 @@ define(['app', 'moment'], function(app, moment) {
         }
 
         $scope.loadDocs = function(option) {
-            debugger;
-            if(!option) $scope.loadingDocs = true;
+            if (!option) $scope.loadingDocs = true;
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(result) {
                 PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
                     if (option == 'print') {
                         pdfMake.createPdf(docDefinition).print();
-                    } else if(option == 'download') {
+                    } else if (option == 'download') {
                         pdfMake.createPdf(docDefinition).download($scope.model.last_name + ' ' + $scope.model.name + '_' + moment().format('l'))
                     } else {
                         pdfMake.createPdf(docDefinition).getBase64(function(doc) {
@@ -1612,7 +1612,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 father_activity: {
                     required: true,
-                    minlength: 10,
                 },
                 mother_num_identification: {
                     required: true,
@@ -1684,13 +1683,13 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 representant_activity: {
                     required: true
-                },
-                "social-network[]": {
-                    required: true
                 }
 
             },
             messages: {
+                date_admission: {
+                    max: 'Ingrese un valor menor o igual a {0}'
+                },
                 num_identification: {
                     required: "Identificación requerida",
                     minlength: "Identificación inválida",
@@ -1814,7 +1813,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 father_activity: {
                     required: 'Es Requerida',
-                    minlength: 'Ingrese al menos 10 carácteres',
                 },
                 mother_num_identification: {
                     required: "Es Requerida",
@@ -1847,7 +1845,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 mother_activity: {
                     required: "Es Requerida",
-                    minlength: 'Ingrese al menos 10 carácteres',
                 },
                 parent_status_civil: {
                     valueNotEquals: "Es Requerida"
@@ -1886,9 +1883,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 representant_activity: {
                     required: "Es Requerida",
-                },
-                "social-network[]": {
-                    required: "Es Requerida",
                 }
             }
         };
@@ -1906,11 +1900,11 @@ define(['app', 'moment'], function(app, moment) {
                 if ($scope.model.representant_id == $scope.model.mother.id) {
                     $scope.model.mother.is_representant = 1;
                     $scope.representant.family = 1;
-                    $scope.model.representant = {};
+                    // $scope.model.representant = {};
                 } else if ($scope.model.representant_id == $scope.model.father.id) {
                     $scope.model.father.is_representant = 1;
                     $scope.representant.family = 2;
-                    $scope.model.representant = {};
+                    // $scope.model.representant = {};
                 } else {
                     $scope.representant.family = 3;
                 }

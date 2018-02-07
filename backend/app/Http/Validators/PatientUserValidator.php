@@ -64,7 +64,7 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 			'father.date_birth' => 'required',
 			'father.age'=>'required|number_between:18,99',
 			'father.mobile'=>'required|min:10|max:10',
-			'father.activity' => 'required|min:10',
+			'father.activity' => 'required',
 			'mother' => 'required|array',
 			'mother.num_identification' => 'required|min:10|max:10|is_valid_id',
 			'mother.name' => 'required',
@@ -72,7 +72,7 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 			'mother.date_birth' => 'required',
 			'mother.age'=>'required|number_between:18,99',
 			'mother.mobile'=>'min:10|max:10',
-			'mother.activity' => 'required|min:10',
+			'mother.activity' => 'required',
 		];
 
 		
