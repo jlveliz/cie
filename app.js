@@ -1008,7 +1008,8 @@ define([
             domains: {
                 development: ['cie2.local'],
                 home: ['cie.local'],
-                server_develop_public: ['10.101.0.51']
+                server_develop_public: ['10.101.0.51'],
+                server_prod_public: ['cie.guayas.gob.ec']
             },
             vars: {
                 development: {
@@ -1025,6 +1026,12 @@ define([
                     authorization: "http://10.101.0.51/backend/api/authenticate/login",
                     api: 'http://10.101.0.51/backend/api/',
                     public: 'http://10.101.0.51'
+                },
+                server_prod_public: {
+                    assets: 'http://cie.guayas.gob.ec/frontend/assets',
+                    authorization: "http://cie.guayas.gob.ec/backend/api/authenticate/login",
+                    api: 'http://cie.guayas.gob.ec/backend/api/',
+                    public: 'http://cie.guayas.gob.ec'
                 }
             }
         });
