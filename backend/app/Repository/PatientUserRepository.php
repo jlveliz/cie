@@ -55,19 +55,24 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		
 		//father
 		$dataFather = $data['father'];
-		$father = new Person();
-		$dataFather['genre'] = $father->getMale();
+		$father = Person::where('num_identification',$dataFather['num_identification'])->first();
+		if(!$father) {
+			$father = new Person();
+			$dataFather['genre'] = $father->getMale();
+		} 
 		$father->fill($dataFather);
 		if ($father->save()) {
 			$fatherKey = $father->getKey();
 			//mother
 			$dataMother = $data['mother'];
-			$mother = new Person();
-			$dataMother['genre'] = $mother->getFemale();
+			$mother = Person::where('num_identification',$dataMother['num_identification'])->first();
+			if (!$mother) {
+				$mother = new Person();
+				$dataMother['genre'] = $mother->getFemale();
+			}
 			$mother->fill($dataMother);
 			if ($mother->save()) {
 				$motherKey = $mother->getKey();
-
 				if (array_key_exists('is_representant', $data['father']) && $data['father']['is_representant'] == 1) {
 					$representantId = $fatherKey;
 				} elseif (array_key_exists('is_representant', $data['mother'])  && $data['mother']['is_representant'] == 1) {
@@ -75,7 +80,10 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 				} else {
 					//representant
 					$dataRepresentant = $data['representant'];
-					$representant = new Person();
+					$representant = Person::where('num_identification',$dataRepresentant['num_identification'])->first();
+					if(!$representant) {
+						$representant = new Person();
+					}
 					$representant->fill($dataRepresentant);
 					if($representant->save()){
 						$representantId = $representant->getKey();

@@ -1314,7 +1314,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'personalizado'],
+                    only: ['admin'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1835,7 +1835,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin','dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1856,7 +1856,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin','dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1876,7 +1876,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin','dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1901,7 +1901,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['UsNormal'],
+                    only: ['UsNormal','dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1921,7 +1921,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'UsNormal'],
+                    only: ['admin', 'UsNormal','dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1941,7 +1941,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'UsNormal'],
+                    only: ['admin', 'UsNormal','dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
