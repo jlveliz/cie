@@ -2,9 +2,9 @@
 
 namespace Cie\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
-class UserPermission extends Model
+class UserPermission extends BaseModel
 {
     protected $table = "user_permission";
 

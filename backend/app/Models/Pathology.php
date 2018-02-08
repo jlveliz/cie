@@ -2,9 +2,9 @@
 
 namespace Cie\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
-class Pathology extends Model
+class Pathology extends BaseModel
 {
     protected $table = "pathology";
 

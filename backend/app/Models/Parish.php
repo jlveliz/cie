@@ -2,9 +2,9 @@
 
 namespace Cie\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
-class Parish extends Model
+class Parish extends BaseModel
 {
     protected $table = "parish";
 

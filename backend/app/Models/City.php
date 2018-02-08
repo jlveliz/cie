@@ -2,9 +2,9 @@
 
 namespace Cie\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class City extends BaseModel
 {
     protected $table = "city";
 
@@ -25,5 +25,14 @@ class City extends Model
     public function province()
     {
     	return $this->belongsTo('Cie\Models\Province','province_id');
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function($city){
+            $city->slug = str_slug($city->name,'-');
+        });
     }
 }

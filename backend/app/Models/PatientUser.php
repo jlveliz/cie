@@ -2,11 +2,11 @@
 
 namespace Cie\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 use Cie\Scope\PatientUserScope;
 use Auth;
 
-class PatientUser extends Model
+class PatientUser extends BaseModel
 {
     protected $table = "patient_user";
 
