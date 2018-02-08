@@ -831,7 +831,7 @@ define([
 
     }]);
 
-    cie.run(['appName', '$rootScope', '$uibModal', '$q', 'DTDefaultOptions', 'authFactory', 'apiResource', '$state', 'RoleStore', 'PermissionStore', function(appName, $rootScope, $uibModal, $q, DTDefaultOptions, authFactory, apiResource, $state, RoleStore, PermissionStore) {
+    cie.run(['appName', '$rootScope', '$uibModal', '$q', 'DTDefaultOptions', 'authFactory', 'apiResource', '$state', 'RoleStore', 'PermissionStore', '$interval', function(appName, $rootScope, $uibModal, $q, DTDefaultOptions, authFactory, apiResource, $state, RoleStore, PermissionStore, $interval) {
 
         $rootScope.isMenuCollapsed = false; //menu collapsed
 
@@ -985,6 +985,17 @@ define([
                 }
             })
         }
+
+        // REFRESH TOKEN EVERY 1 HOUR
+        $interval(function() {
+            if (!authFactory.authenticated()) {
+                return;
+            } else {
+                authFactory.refreshToken().then(null, function(error) {
+                    authFactory.logout();
+                })
+            }
+        }, 3600000);
 
     }])
 
