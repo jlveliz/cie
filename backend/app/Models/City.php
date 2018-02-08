@@ -12,6 +12,10 @@ class City extends Model
 
     protected $with = "province";
 
+    protected $casts = [
+        'province_id' => 'int',
+    ];
+
     protected $fillable = [
     	'name',
         'slug',

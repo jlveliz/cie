@@ -64,6 +64,7 @@ return [
             'prefix' => '',
             'strict' => false,
             'engine' => null,
+            'options' => [ PDO::ATTR_STRINGIFY_FETCHES => false],
         ],
 
         'pgsql' => [

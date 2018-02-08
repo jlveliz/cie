@@ -14,6 +14,34 @@ class PatientUser extends Model
 
     protected $with = ['father','mother','representant','user','province','city','parish','pathology'];
 
+    protected $casts = [
+        'date_birth' => 'date',
+        'date_admission' => 'date',
+        'person_id' => 'int',
+        'physical_disability' => 'int',
+        'visual_disability' => 'int',
+        'intellectual_disability' => 'int',
+        'hearing_disability' => 'int',
+        'psychosocial_disability' => 'int',
+        'has_diagnostic' => 'int',
+        'diagnostic_id' => 'int',
+        'has_insurance' => 'int',
+        'receives_medical_attention' => 'int',
+        'schooling' => 'int',
+        'schooling_type' => 'int',
+        'user_live_with' => 'int',
+        'father_id' => 'int',
+        'mother_id' => 'int',
+        'representant_id' => 'int',
+        'created_user_id' => 'int',
+        'parent_status_civil' => 'int',
+        'province_id' => 'int',
+        'city_id' => 'int',
+        'parish_id' => 'int',
+        'age' => 'int',
+        'assist_other_therapeutic_center' => 'int',
+    ];
+
     protected $fillable = [
     	'person_id',
         'date_admission',
@@ -90,7 +118,7 @@ class PatientUser extends Model
         return $this->belongsTo('Cie\Models\Pathology','diagnostic_id');
     }
 
-
+   
 
    
 
@@ -108,5 +136,10 @@ class PatientUser extends Model
 
         static::addGlobalScope(new PatientUserScope());
 
+    }
+
+    public function setDateAdmissionAttribute($value)
+    {
+        $this->attributes['date_admission'] = date('Y-m-d',strtotime($value));
     }
 }

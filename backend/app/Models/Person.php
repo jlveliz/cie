@@ -35,6 +35,18 @@ class Person extends Model
         'has_instagram',
     ];
 
+    protected $casts = [
+        'date_birth' => 'date',
+        'province_id' => 'int',
+        'city_id' => 'int',
+        'parish_id' => 'int',
+        'age' => 'int',
+        'has_facebook' => 'int',
+        'has_twitter' => 'int',
+        'has_instagram' => 'int',
+
+    ];
+
     public function province()
     {
         return $this->belongsTo('Cie\Models\Province','province_id');
@@ -59,4 +71,13 @@ class Person extends Model
     {
         return $this->female;
     }
+
+    public function setDateBirthAttribute($value)
+    {
+        $this->attributes['date_birth'] = date('Y-m-d',strtotime($value));
+    }
+
+   
+
+
 }

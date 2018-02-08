@@ -12,6 +12,10 @@ class Parish extends Model
 
     protected $with = 'city';
 
+     protected $casts = [
+        'city_id' => 'int',
+    ];
+
     protected $fillable = [
     	'name',
         'slug',

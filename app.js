@@ -84,7 +84,7 @@ define([
                                         method: "POST",
                                     },
                                     get: {
-                                        method: "GET",
+                                        method: "GET"
                                     },
                                     delete: {
                                         method: "DELETE",
@@ -1835,7 +1835,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin','dirTerapia'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1856,7 +1856,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin','dirTerapia'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1876,7 +1876,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin','dirTerapia'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1901,7 +1901,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['UsNormal','dirTerapia'],
+                    only: ['UsNormal', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1921,7 +1921,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'UsNormal','dirTerapia'],
+                    only: ['admin', 'UsNormal', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -1941,7 +1941,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'UsNormal','dirTerapia'],
+                    only: ['admin', 'UsNormal', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },

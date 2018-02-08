@@ -12,6 +12,12 @@ class Permission extends Model
 
     protected $primaryKey = "id";
 
+    protected $casts = [
+        'module_id' => 'int',
+        'parent_id' => 'int',
+        'type_id' => 'int',
+    ];
+
     protected $fillable = [
     	'name',
     	'module_id',
