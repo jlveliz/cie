@@ -6,6 +6,7 @@ use Cie\RepositoryInterface\ProvinceRepositoryInterface;
 use Cie\Http\Validators\ProvinceValidator;
 use Cie\Exceptions\ProvinceException;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Token;
 
 class ProvinceController extends Controller
 {
@@ -13,8 +14,9 @@ class ProvinceController extends Controller
     protected $provinceRepo;
 
 
-    public function __construct(ProvinceRepositoryInterface $provinceRepo)
+    public function __construct(ProvinceRepositoryInterface $provinceRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth');
         $this->provinceRepo = $provinceRepo;
     }
@@ -25,7 +27,8 @@ class ProvinceController extends Controller
      */
     public function index()
     {
-        $provinces = $this->provinceRepo->enum();
+        $provinces = $this->provinceRepo->enum()->toJson();
+        $provinces = $this->encodeReponse($provinces);
         return response()->json(['data'=>$provinces],200);
     }
 
@@ -40,6 +43,7 @@ class ProvinceController extends Controller
         try {
             $data = $request->all();
             $province = $this->provinceRepo->save($data);
+            $province = $this->encodeReponse($province->toJson());
             return response()->json($province,200);
         } catch (ProvinceException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -56,7 +60,8 @@ class ProvinceController extends Controller
     {
         
         try {
-            $province = $this->provinceRepo->find($id);
+            $province = $this->provinceRepo->find($id)->toJson();
+            $province = $this->encodeReponse($province);
             return response()->json($province,200);
         } catch (ProvinceException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -74,7 +79,8 @@ class ProvinceController extends Controller
     public function update(ProvinceValidator $validator, Request $request, $id)
     {
         try {
-            $province = $this->provinceRepo->edit($id, $request->all());
+            $province = $this->provinceRepo->edit($id, $request->all())->toJson();
+            $province = $this->encodeReponse($province);
             return response()->json($province,200);
         } catch (ProvinceException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -92,7 +98,8 @@ class ProvinceController extends Controller
         try {
             $removed = $this->provinceRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $province = $this->encodeReponse(json_encode(['exitoso'=>true]));
+                return response()->json($province,200);
             }
         } catch (ProvinceException $e) {
             return response()->json($e->getMessage(),$e->getCode());

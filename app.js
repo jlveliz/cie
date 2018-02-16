@@ -31,13 +31,17 @@ define([
     cie.provider('apiResource', function() {
         return {
             $get: ['$resource', "$q", '$cacheFactory', '$http', function($resource, $q, $cacheFactory, $http) {
+
                 var names = {};
+
                 var caching = $cacheFactory('cieCache');
+
                 var getFromCache = function(idCache) {
                     var existCache = caching.get(idCache);
                     if (existCache) return existCache;
                     return null;
                 }
+
                 var formDataObject = function(data) {
                     var formData = new FormData();
                     for (i in data) {
@@ -49,6 +53,34 @@ define([
                         }
                     }
                     return formData;
+                }
+
+                var transformResponse = function(value, headers) {
+                    var val = JSON.parse(value);
+                    val = val.data ? val.data : val;
+                    if (angular.isString(val)) {
+                        var decoded = atob(val);
+                        decoded = JSON.parse(decoded);
+                        var response = {};
+                        if (_.has(decoded, 0)) {
+                            response.data = [];
+                            angular.forEach(decoded, function(object, idex) {
+                                response.data.push(object);
+                            });
+                        } else {
+                            response = decoded;
+                        }
+
+                        return response;
+
+                    }
+                    return JSON.parse(value)
+                };
+
+                var transformRequest = function(value) {
+                    value = JSON.stringify(value);
+                    var decode = btoa(value);
+                    return angular.toJson({ data: decode });
                 }
 
 
@@ -78,19 +110,29 @@ define([
                                 var defaultActions = {
                                     query: {
                                         method: "GET",
+                                        transformResponse: transformResponse,
+                                        transformRequest: transformRequest
                                     },
                                     update: {
                                         method: "PUT",
+                                        transformRequest: transformRequest,
+                                        transformResponse: transformResponse
                                     },
                                     save: {
                                         method: "POST",
-                                        
+                                        transformRequest: transformRequest,
+                                        transformResponse: transformResponse
+
                                     },
                                     get: {
-                                        method: "GET"
+                                        method: "GET",
+                                        transformResponse: transformResponse,
+                                        transformRequest: transformRequest
                                     },
                                     delete: {
                                         method: "DELETE",
+                                        transformRequest: transformRequest,
+                                        transformResponse: transformResponse,
                                     }
                                 };
 
