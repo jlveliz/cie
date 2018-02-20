@@ -114,6 +114,11 @@ define(['app', 'moment'], function(app, moment) {
             { id: 3, value: 'Otro' },
         ];
 
+        _this.statesForm = [
+            { id: 1, value: 'Inactivo' },
+            { id: 2, value: 'Activo' },
+        ];
+
         _this.changeRepresentant = function(model, representant) {
             var familyType = representant.family;
             var representant = model.representant;
@@ -814,6 +819,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.representant = {
             family: 1
         };
+        $scope.states = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
         $scope.gradeDisability = PUserInscriptionService.gradeDisability;
@@ -827,6 +833,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.statusCivil = PUserInscriptionService.statusCivil;
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
+        $scope.states = PUserInscriptionService.statesForm;
 
 
         var deps = $q.all([
@@ -851,6 +858,7 @@ define(['app', 'moment'], function(app, moment) {
                 parish_id: null,
                 assist_other_therapeutic_center: null,
                 receives_medical_attention: null,
+                state: 2,
                 date_admission: new Date(),
                 schooling: null,
                 representant: {},
@@ -938,6 +946,9 @@ define(['app', 'moment'], function(app, moment) {
                     required: true
                 },
                 assist_other_therapeutic_center: {
+                    valueNotEquals: '?'
+                },
+                state: {
                     valueNotEquals: '?'
                 },
                 therapeutic_center_name: {
@@ -1269,6 +1280,9 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 representant_activity: {
                     required: "Es Requerida",
+                },
+                state: {
+                    valueNotEquals: 'Es Requerido'
                 }
             }
         }
@@ -1365,6 +1379,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.representant = {
             family: 1
         };
+        $scope.states = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
         $scope.gradeDisability = PUserInscriptionService.gradeDisability;
@@ -1378,6 +1393,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.statusCivil = PUserInscriptionService.statusCivil;
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
+        $scope.states = PUserInscriptionService.statesForm;
 
 
 
@@ -1523,6 +1539,9 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?',
                 },
                 physical_disability: {
+                    valueNotEquals: '?',
+                },
+                state: {
                     valueNotEquals: '?',
                 },
                 intellectual_disability: {
@@ -1883,6 +1902,9 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 representant_activity: {
                     required: "Es Requerida",
+                },
+                state: {
+                    valueNotEquals: 'Es Requerido'
                 }
             }
         };

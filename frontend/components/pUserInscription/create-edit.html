@@ -23,7 +23,6 @@
                         </h4>
                         <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
                             <div class="tab-index">
-                                
                                 <div class="row" ng-if="existError || hasMessage">
                                     <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -33,7 +32,6 @@
                                         </ul>
                                     </div>
                                 </div>
-                                
                                 <div class="row">
                                     <uib-tabset active="0">
                                         <uib-tab index="0">
@@ -42,9 +40,14 @@
                                             </uib-tab-heading>
                                             <div class="tab-index">
                                                 <div class="row">
-                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group col-md-offset-5">
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group">
                                                         <label for="date_admission" title="Fecha de ingreso de la solicitud" class="control-label">Fecha de Ingreso <span class="text-danger">*</span></label>
                                                         <input ng-disabled="saving" id="date_admission" type="date" class="form-control max-date-today" name="date_admission" ng-model="model.date_admission" style="padding-left: 2px; padding-right: 0px">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                                                        <label for="date_admission" title="Fecha de ingreso de la solicitud" class="control-label">Estado <span class="text-danger">*</span></label>
+                                                        <select ng-disabled="saving" class="form-control" name="state" id="state" ng-model="model.state" ng-options="st.id as st.value for st in states">
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <p class="section-inner">Datos Personales</p>
@@ -423,7 +426,6 @@
                                         </uib-tab>
                                     </uib-tabset>
                                 </div>
-                                
                                 <div class="row" ng-if="existError || hasMessage">
                                     <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

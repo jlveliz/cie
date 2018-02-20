@@ -38,8 +38,8 @@
                                         <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label" title="La provincia a la que le pertenece la ciudad">Ciudad  <span class="text-danger">*</span></label>
-                                        <select required ng-disabled="saving" class="form-control" name="city_id" ng-model="model.city_id" id="city_id" ng-options="city.id as city.name for city in cities"></select>
+                                        <label class="control-label" title="La Ciudad a la que le pertenece la parroquia">Ciudad  <span class="text-danger">*</span></label>
+                                        <select required ng-disabled="saving" class="form-control" name="city_id" ng-model="model.city_id" id="city_id" ng-options="city.id as city.name for city in cities | orderBy:'name' "></select>
                                     </div>
                                 </div>
                             </div>
