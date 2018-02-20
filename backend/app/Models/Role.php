@@ -10,6 +10,10 @@ class Role extends BaseModel
 
     protected $primaryKey = "id";
 
+    protected $no_uppercase = [
+        'code'
+    ];
+
     protected $fillable = [
     	'name',
         'code',

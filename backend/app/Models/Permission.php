@@ -12,6 +12,12 @@ class Permission extends BaseModel
 
     protected $primaryKey = "id";
 
+    protected $no_uppercase = [
+        'code',
+        'resource',
+        'fav_icon'
+    ];
+
     protected $casts = [
         'module_id' => 'int',
         'parent_id' => 'int',

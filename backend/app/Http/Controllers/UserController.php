@@ -13,8 +13,9 @@ class UserController extends Controller
     protected $userRepo;
 
 
-    public function __construct(UserRepositoryInterface $userRepo)
+    public function __construct(UserRepositoryInterface $userRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth');
         $this->userRepo = $userRepo;
     }
@@ -25,8 +26,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userRepo->enum();
-        return response()->json(['data'=>$users],200);
+        $users = $this->userRepo->enum()->toJson();
+        $users = $this->encodeResponse($users);
+        return response()->json($users,200);
     }
 
     /**
@@ -39,7 +41,8 @@ class UserController extends Controller
     {
         try {
             $data = $request->all();
-            $user = $this->userRepo->save($data);
+            $user = $this->userRepo->save($data)->toJson();
+            $user = $this->encodeResponse($user);
             return response()->json($user,200);
         } catch (UserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -56,7 +59,8 @@ class UserController extends Controller
     {
         
         try {
-            $user = $this->userRepo->find($id);
+            $user = $this->userRepo->find($id)->toJson();
+            $user = $this->encodeResponse($user);
             return response()->json($user,200);
         } catch (UserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -74,7 +78,8 @@ class UserController extends Controller
     public function update(UserValidator $validator, Request $request, $id)
     {
         try {
-            $user = $this->userRepo->edit($id, $request->all());
+            $user = $this->userRepo->edit($id, $request->all())->toJson();
+            $user = $this->encodeResponse($user);
             return response()->json($user,200);
         } catch (UserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -92,7 +97,8 @@ class UserController extends Controller
         try {
             $removed = $this->userRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $user = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($user,200);
             }
         } catch (UserException $e) {
             return response()->json($e->getMessage(),$e->getCode());

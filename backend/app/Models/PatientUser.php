@@ -14,6 +14,10 @@ class PatientUser extends BaseModel
 
     protected $with = ['father','mother','representant','user','province','city','parish','pathology'];
 
+    protected $no_uppercase = [
+        'grade_of_disability',
+    ];
+
     protected $casts = [
         'date_birth' => 'date',
         'date_admission' => 'date',

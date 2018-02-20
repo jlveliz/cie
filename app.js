@@ -4,6 +4,7 @@ define([
     'angularAMD',
     'moment',
     'jquery',
+    'base64',
     'pdfmake',
     'vfs_fonts',
     'underscore',
@@ -22,7 +23,7 @@ define([
     'angular-bootstrap',
     'angular-datatables-bootstrap',
     'angular-moment',
-], function(angularAMD, moment, $) {
+], function(angularAMD, moment, $, base64) {
 
     var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial']);
 
@@ -56,30 +57,24 @@ define([
                 }
 
                 var transformResponse = function(value, headers) {
+                    value = base64.decode(value);
                     var val = JSON.parse(value);
-                    val = val.data ? val.data : val;
-                    if (angular.isString(val)) {
-                        var decoded = atob(val);
-                        decoded = JSON.parse(decoded);
-                        var response = {};
-                        if (_.has(decoded, 0)) {
-                            response.data = [];
-                            angular.forEach(decoded, function(object, idex) {
-                                response.data.push(object);
-                            });
-                        } else {
-                            response = decoded;
-                        }
-
-                        return response;
-
+                    var response = {};
+                    if (angular.isArray(val)) {
+                        response.data = [];
+                        angular.forEach(val, function(object, idex) {
+                            response.data.push(object);
+                        });
+                    } else {
+                        response = val;
                     }
-                    return JSON.parse(value)
+
+                    return response;
                 };
 
                 var transformRequest = function(value) {
                     value = JSON.stringify(value);
-                    var decode = btoa(value);
+                    var decode = base64.encode(value);
                     return angular.toJson({ data: decode });
                 }
 

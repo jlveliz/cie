@@ -28,8 +28,8 @@ class ProvinceController extends Controller
     public function index()
     {
         $provinces = $this->provinceRepo->enum()->toJson();
-        $provinces = $this->encodeReponse($provinces);
-        return response()->json(['data'=>$provinces],200);
+        $provinces = $this->encodeResponse($provinces);
+        return response()->json($provinces,200);
     }
 
     /**
@@ -43,7 +43,7 @@ class ProvinceController extends Controller
         try {
             $data = $request->all();
             $province = $this->provinceRepo->save($data);
-            $province = $this->encodeReponse($province->toJson());
+            $province = $this->encodeResponse($province->toJson());
             return response()->json($province,200);
         } catch (ProvinceException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -61,7 +61,7 @@ class ProvinceController extends Controller
         
         try {
             $province = $this->provinceRepo->find($id)->toJson();
-            $province = $this->encodeReponse($province);
+            $province = $this->encodeResponse($province);
             return response()->json($province,200);
         } catch (ProvinceException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -80,7 +80,7 @@ class ProvinceController extends Controller
     {
         try {
             $province = $this->provinceRepo->edit($id, $request->all())->toJson();
-            $province = $this->encodeReponse($province);
+            $province = $this->encodeResponse($province);
             return response()->json($province,200);
         } catch (ProvinceException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -98,7 +98,7 @@ class ProvinceController extends Controller
         try {
             $removed = $this->provinceRepo->remove($id);
             if ($removed) {
-                $province = $this->encodeReponse(json_encode(['exitoso'=>true]));
+                $province = $this->encodeResponse(json_encode(['exitoso'=>true]));
                 return response()->json($province,200);
             }
         } catch (ProvinceException $e) {

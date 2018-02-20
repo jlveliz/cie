@@ -13,8 +13,9 @@ class CityController extends Controller
     protected $cityRepo;
 
 
-    public function __construct(CityRepositoryInterface $cityRepo)
+    public function __construct(CityRepositoryInterface $cityRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth');
         $this->cityRepo = $cityRepo;
     }
@@ -25,8 +26,9 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = $this->cityRepo->enum();
-        return response()->json(['data'=>$cities],200);
+        $cities = $this->cityRepo->enum()->toJson();
+        $cities = $this->encodeResponse($cities);
+        return response()->json($cities,200);
     }
 
     /**
@@ -40,6 +42,7 @@ class CityController extends Controller
         try {
             $data = $request->all();
             $city = $this->cityRepo->save($data);
+            $city = $this->encodeResponse($city->toJson());
             return response()->json($city,200);
         } catch (CityException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -56,7 +59,8 @@ class CityController extends Controller
     {
         
         try {
-            $city = $this->cityRepo->find($id);
+            $city = $this->cityRepo->find($id)->toJson();
+            $city = $this->encodeResponse($city);
             return response()->json($city,200);
         } catch (CityException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -74,7 +78,8 @@ class CityController extends Controller
     public function update(CityValidator $validator, Request $request, $id)
     {
         try {
-            $city = $this->cityRepo->edit($id, $request->all());
+            $city = $this->cityRepo->edit($id, $request->all())->toJson();
+            $city = $this->encodeResponse($city);
             return response()->json($city,200);
         } catch (CityException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -92,7 +97,8 @@ class CityController extends Controller
         try {
             $removed = $this->cityRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $removed = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($removed,200);
             }
         } catch (CityException $e) {
             return response()->json($e->getMessage(),$e->getCode());

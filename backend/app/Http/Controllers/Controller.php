@@ -27,14 +27,14 @@ class Controller extends BaseController
     		
     	if(array_search($request->method(), $this->httpMethods) > -1) {
     		if($request->has('data')) {
-    			$data = $this->decodeRequest($request->get('data'));
+                $data = $this->decodeRequest($request->get('data'));
     			$request->replace($data);
     		}
     	}
     }
 
 
-    public function encodeReponse($data)
+    public function encodeResponse($data)
     {
     	return base64_encode($data);
   
@@ -43,7 +43,7 @@ class Controller extends BaseController
     public function decodeRequest($data)
     {
     	$dataConv =  base64_decode($data);
-    	$dataConv = json_decode($dataConv,true);
-    	return (array) $dataConv;
+        $newDataConv = json_decode($dataConv,true);
+    	return $newDataConv;
     }
 }

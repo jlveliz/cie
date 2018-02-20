@@ -13,8 +13,9 @@ class PermissionController extends Controller
     protected $permissionRepo;
 
 
-    public function __construct(PermissionRepositoryInterface $permissionRepo)
+    public function __construct(PermissionRepositoryInterface $permissionRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth',['except'=>['index']]);
         $this->permissionRepo = $permissionRepo;
     }
@@ -25,8 +26,9 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        $modules = $this->permissionRepo->enum($request->all());
-        return response()->json(['data'=>$modules],200);
+        $permissions = $this->permissionRepo->enum($request->all())->toJson();
+        $permissions = $this->encodeResponse($permissions);
+        return response()->json($permissions,200);
     }
 
     /**
@@ -39,8 +41,9 @@ class PermissionController extends Controller
     {
         try {
             $data = $request->all();
-            $module = $this->permissionRepo->save($data);
-            return response()->json($module,200);
+            $permission = $this->permissionRepo->save($data)->toJson();
+            $permission = $this->encodeResponse($permission);
+            return response()->json($permission,200);
         } catch (PermissionException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -56,8 +59,9 @@ class PermissionController extends Controller
     {
         
         try {
-            $module = $this->permissionRepo->find($id);
-            return response()->json($module,200);
+            $permission = $this->permissionRepo->find($id)->toJson();
+            $permission = $this->encodeResponse($permission);
+            return response()->json($permission,200);
         } catch (PermissionException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -74,8 +78,9 @@ class PermissionController extends Controller
     public function update(PermissionValidator $validator, Request $request, $id)
     {
         try {
-            $module = $this->permissionRepo->edit($id, $request->all());
-            return response()->json($module,200);
+            $permission = $this->permissionRepo->edit($id, $request->all())->toJson();
+            $permission = $this->encodeResponse($permission);
+            return response()->json($permission,200);
         } catch (PermissionException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -92,7 +97,8 @@ class PermissionController extends Controller
         try {
             $removed = $this->permissionRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $removed = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($removed,200);
             }
         } catch (PermissionException $e) {
             return response()->json($e->getMessage(),$e->getCode());

@@ -27,7 +27,7 @@ define(['app'], function(app) {
             orderable: false,
             columnDefs: [{
                 orderable: false,
-                targets: 4
+                targets: 5
             }],
             order: [
                 [0, 'asc'],

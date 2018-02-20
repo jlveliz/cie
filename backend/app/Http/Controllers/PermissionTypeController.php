@@ -13,8 +13,9 @@ class PermissionTypeController extends Controller
     protected $permissionTypeRepo;
 
 
-    public function __construct(PermissionTypeRepositoryInterface $permissionTypeRepo)
+    public function __construct(PermissionTypeRepositoryInterface $permissionTypeRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth');
         $this->permissionTypeRepo = $permissionTypeRepo;
     }
@@ -25,8 +26,9 @@ class PermissionTypeController extends Controller
      */
     public function index()
     {
-        $modules = $this->permissionTypeRepo->enum();
-        return response()->json(['data'=>$modules],200);
+        $permissions = $this->permissionTypeRepo->enum()->toJson();
+        $permissions = $this->encodeResponse($permissions);
+        return response()->json($permissions,200);
     }
 
     /**
@@ -39,8 +41,9 @@ class PermissionTypeController extends Controller
     {
         try {
             $data = $request->all();
-            $module = $this->permissionTypeRepo->save($data);
-            return response()->json($module,200);
+            $permission = $this->permissionTypeRepo->save($data)->toJson();
+            $permission = $this->encodeResponse($permission);
+            return response()->json($permission,200);
         } catch (PermissionTypeException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -56,8 +59,9 @@ class PermissionTypeController extends Controller
     {
         
         try {
-            $module = $this->permissionTypeRepo->find($id);
-            return response()->json($module,200);
+            $permission = $this->permissionTypeRepo->find($id)->toJson();
+            $permission = $this->encodeResponse($permission);
+            return response()->json($permission,200);
         } catch (PermissionTypeException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -74,8 +78,9 @@ class PermissionTypeController extends Controller
     public function update(PermissionTypeValidator $validator, Request $request, $id)
     {
         try {
-            $module = $this->permissionTypeRepo->edit($id, $request->all());
-            return response()->json($module,200);
+            $permission = $this->permissionTypeRepo->edit($id, $request->all())->toJson();
+            $permission = $this->encodeResponse($permission);
+            return response()->json($permission,200);
         } catch (PermissionTypeException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }

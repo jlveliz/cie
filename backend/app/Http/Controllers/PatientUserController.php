@@ -13,8 +13,9 @@ class PatientUserController extends Controller
     protected $pUserRepo;
 
 
-    public function __construct(PatientUserRepositoryInterface $pUserRepo)
+    public function __construct(PatientUserRepositoryInterface $pUserRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth');
         $this->pUserRepo = $pUserRepo;
     }
@@ -25,8 +26,9 @@ class PatientUserController extends Controller
      */
     public function index()
     {
-        $users = $this->pUserRepo->enum();
-        return response()->json(['data'=>$users],200);
+        $users = $this->pUserRepo->enum()->toJson();
+        $users = $this->encodeResponse($users);
+        return response()->json($users,200);
     }
 
     /**
@@ -39,7 +41,8 @@ class PatientUserController extends Controller
     {
         try {
             $data = $request->all();
-            $user = $this->pUserRepo->save($data);
+            $user = $this->pUserRepo->save($data)->toJson();
+            $user = $this->encodeResponse($user);
             return response()->json($user,200);
         } catch (PatientUserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -56,7 +59,8 @@ class PatientUserController extends Controller
     {
         
         try {
-            $user = $this->pUserRepo->find($id);
+            $user = $this->pUserRepo->find($id)->toJson();
+            $user = $this->encodeResponse($user);
             return response()->json($user,200);
         } catch (PatientUserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -74,7 +78,8 @@ class PatientUserController extends Controller
     public function update(PatientUserValidator $validator, Request $request, $id)
     {
         try {
-            $user = $this->pUserRepo->edit($id, $request->all());
+            $user = $this->pUserRepo->edit($id, $request->all())->toJson();
+            $user = $this->encodeResponse($user);
             return response()->json($user,200);
         } catch (PatientUserException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -92,7 +97,8 @@ class PatientUserController extends Controller
         try {
             $removed = $this->pUserRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $user = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($user,200);
             }
         } catch (PatientUserException $e) {
             return response()->json($e->getMessage(),$e->getCode());

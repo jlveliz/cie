@@ -13,8 +13,9 @@ class RoleController extends Controller
     protected $roleRepo;
 
 
-    public function __construct(RoleRepositoryInterface $roleRepo)
+    public function __construct(RoleRepositoryInterface $roleRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth',['except'=>['index']]);
         $this->roleRepo = $roleRepo;
     }
@@ -25,8 +26,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = $this->roleRepo->enum();
-        return response()->json(['data'=>$roles],200);
+        $roles = $this->roleRepo->enum()->toJson();
+        $roles = $this->encodeResponse($roles);
+        return response()->json($roles,200);
     }
 
     /**
@@ -39,7 +41,8 @@ class RoleController extends Controller
     {
         try {
             $data = $request->all();
-            $role = $this->roleRepo->save($data);
+            $role = $this->roleRepo->save($data)->toJson();
+            $role = $this->encodeResponse($role);
             return response()->json($role,200);
         } catch (RoleException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -56,7 +59,8 @@ class RoleController extends Controller
     {
         
         try {
-            $role = $this->roleRepo->find($id);
+            $role = $this->roleRepo->find($id)->toJson();
+            $role = $this->encodeResponse($role);
             return response()->json($role,200);
         } catch (RoleException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -74,7 +78,8 @@ class RoleController extends Controller
     public function update(RoleValidator $validator, Request $request, $id)
     {
         try {
-            $role = $this->roleRepo->edit($id, $request->all());
+            $role = $this->roleRepo->edit($id, $request->all())->toJson();
+            $role = $this->encodeResponse($role);
             return response()->json($role,200);
         } catch (RoleException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -92,7 +97,8 @@ class RoleController extends Controller
         try {
             $removed = $this->roleRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $removed = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($removed,200);
             }
         } catch (RoleException $e) {
             return response()->json($e->getMessage(),$e->getCode());

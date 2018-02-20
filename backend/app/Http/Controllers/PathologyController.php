@@ -13,8 +13,9 @@ class PathologyController extends Controller
     protected $pathologyRepo;
 
 
-    public function __construct(PathologyRepositoryInterface $pathologyRepo)
+    public function __construct(PathologyRepositoryInterface $pathologyRepo, Request $request)
     {
+        parent::__construct($request);
         $this->middleware('jwt.auth');
         $this->PathologyRepo = $pathologyRepo;
     }
@@ -25,8 +26,9 @@ class PathologyController extends Controller
      */
     public function index()
     {
-        $pathologies = $this->PathologyRepo->enum();
-        return response()->json(['data'=>$pathologies],200);
+        $pathologies = $this->PathologyRepo->enum()->toJson();
+        $pathologies = $this->encodeResponse($pathologies);
+        return response()->json($pathologies,200);
     }
 
     /**
@@ -40,6 +42,7 @@ class PathologyController extends Controller
         try {
             $data = $request->all();
             $pathology = $this->PathologyRepo->save($data);
+            $pathology = $this->encodeResponse($pathology->toJson());
             return response()->json($pathology,200);
         } catch (PathologyException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -56,7 +59,8 @@ class PathologyController extends Controller
     {
         
         try {
-            $pathology = $this->PathologyRepo->find($id);
+            $pathology = $this->PathologyRepo->find($id)->toJson();
+            $pathology = $this->encodeResponse($pathology);
             return response()->json($pathology,200);
         } catch (PathologyException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -74,7 +78,8 @@ class PathologyController extends Controller
     public function update(PathologyValidator $validator, Request $request, $id)
     {
         try {
-            $pathology = $this->PathologyRepo->edit($id, $request->all());
+            $pathology = $this->PathologyRepo->edit($id, $request->all())->toJson();
+            $pathology = $this->encodeResponse($pathology);
             return response()->json($pathology,200);
         } catch (PathologyException $e) {
             return response()->json($e->getMessage(),$e->getCode());
@@ -92,7 +97,8 @@ class PathologyController extends Controller
         try {
             $removed = $this->PathologyRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $pathology = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($pathology,200);
             }
         } catch (PathologyException $e) {
             return response()->json($e->getMessage(),$e->getCode());

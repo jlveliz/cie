@@ -25,7 +25,7 @@
     "angular-bootstrap": "^2.5.0",
     "angular-moment": "^1.0.1",
     "angular-material": "^1.1.4",
-    "pdfmake": "^0.1.35"
+    "pdfmake": "^0.1.35",
   },
   "resolutions": {
     "requirejs": "~2.2.0",
