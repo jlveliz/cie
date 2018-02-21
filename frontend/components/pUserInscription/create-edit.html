@@ -152,7 +152,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="has_diagnostic" title="Posee Diagnóstico el Usuario">Posee Diagnóstico <span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving" class="form-control" name="has_diagnostic" id="has_diagnostic" ng-model="model.has_diagnostic" ng-options="diag.id as diag.value for diag in hasDiagnostic">
+                                                        <select ng-disabled="saving" class="form-control" name="has_diagnostic" id="has_diagnostic" ng-model="model.has_diagnostic" ng-options="diag.id as diag.value for diag in hasDiagnostic" ng-change="changeDiagnostic()">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
@@ -174,7 +174,7 @@
                                                 <div class="row">
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="assist_other_therapeutic_center" title="Asiste a otros centros Terapeuticos">Asiste a otros centros Terapéuticos <span class="text-danger">*</span></label>
-                                                        <select style="width: 50%" ng-disabled="saving" class="form-control" name="assist_other_therapeutic_center" id="assist_other_therapeutic_center" ng-model="model.assist_other_therapeutic_center" ng-options="asis.id as asis.value for asis in assistOtherTherapeuticCenter">
+                                                        <select style="width: 50%" ng-disabled="saving" class="form-control" name="assist_other_therapeutic_center" id="assist_other_therapeutic_center" ng-model="model.assist_other_therapeutic_center" ng-options="asis.id as asis.value for asis in assistOtherTherapeuticCenter" ng-change="changeAssistOtherTherapeuticCenter()">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
@@ -191,7 +191,7 @@
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="receives_medical_attention" title="Lugar Donde Recibe Atención Médica el Usuario">Recibe Atención Médica en <span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving" class="form-control" name="receives_medical_attention" id="receives_medical_attention" ng-model="model.receives_medical_attention" ng-options="med.id as med.value for med in medicalCenters">
+                                                        <select ng-disabled="saving" class="form-control" name="receives_medical_attention" id="receives_medical_attention" ng-model="model.receives_medical_attention" ng-options="med.id as med.value for med in medicalCenters" ng-change="changeReceivesMedicalAttention()">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
@@ -203,7 +203,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="schooling" title="Escolarización del Usuario">Escolarización <span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving" class="form-control" name="schooling" id="schooling" ng-model="model.schooling" ng-options="esc.id as esc.value for esc in scooling">
+                                                        <select ng-disabled="saving" class="form-control" name="schooling" id="schooling" ng-model="model.schooling" ng-options="esc.id as esc.value for esc in scooling" ng-change="changeSchooling()">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">

@@ -727,6 +727,31 @@ define(['app', 'moment'], function(app, moment) {
                 deferred.resolve(letter)
             });
             return deferred.promise;
+        };
+
+        _this.setNullDiagnostic = function(model) {
+            if (model.has_diagnostic == 0) {
+                model.diagnostic_id = null;
+                model.entity_send_diagnostic = null;
+                model.other_diagnostic = null;
+            }
+        };
+
+        _this.setNullNameCenterTherapeutic = function(model) {
+            if (model.assist_other_therapeutic_center == 0)
+                model.therapeutic_center_name = null;
+        };
+
+        _this.setNullNameMedicalAttention = function(model) {
+            if (model.receives_medical_attention == 2 || model.receives_medical_attention == 3)
+                model.name_medical_attention = null;
+        };
+
+        _this.setNullSchooling = function(model) {
+            if (model.schooling == 3) {
+                model.schooling_type = null;
+                model.schooling_name = '';
+            }
         }
 
     }]);
@@ -954,7 +979,7 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 therapeutic_center_name: {
                     required: function(element) {
-                        return $("#assist_other_therapeutic_center").val() == 1;
+                        return $scope.model.assist_other_therapeutic_center == 1;
                     }
                 },
                 has_insurance: {
@@ -965,7 +990,7 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 name_medical_attention: {
                     required: function(element) {
-                        return $("#receives_medical_attention").val() == 1 || $("#receives_medical_attention").val() > 3;
+                        return $scope.model.receives_medical_attention == 1 || $scope.model.receives_medical_attention > 3;
                     }
                 },
                 schooling: {
@@ -1316,10 +1341,28 @@ define(['app', 'moment'], function(app, moment) {
             return false;
         }
 
+        $scope.changeDiagnostic = function() {
+            return PUserInscriptionService.setNullDiagnostic($scope.model);
+        };
+
+        $scope.changeAssistOtherTherapeuticCenter = function() {
+            return PUserInscriptionService.setNullNameCenterTherapeutic($scope.model);
+        };
+
+        $scope.changeReceivesMedicalAttention = function() {
+            return PUserInscriptionService.setNullNameMedicalAttention($scope.model);
+        }
+
+        $scope.changeSchooling = function() {
+            return PUserInscriptionService.setNullSchooling($scope.model)
+        };
 
         $scope.changeRepresentant = function() {
             $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
-        }
+        };
+
+
+
 
         $scope.save = function(saveForm, returnIndex) {
             var successCallback = function(data) {
@@ -1474,6 +1517,22 @@ define(['app', 'moment'], function(app, moment) {
             $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
         }
 
+        $scope.changeDiagnostic = function() {
+            return PUserInscriptionService.setNullDiagnostic($scope.model);
+        };
+
+        $scope.changeAssistOtherTherapeuticCenter = function() {
+            return PUserInscriptionService.setNullNameCenterTherapeutic($scope.model);
+        };
+
+        $scope.changeReceivesMedicalAttention = function() {
+            return PUserInscriptionService.setNullNameMedicalAttention($scope.model);
+        };
+
+        $scope.changeSchooling = function() {
+            return PUserInscriptionService.setNullSchooling($scope.model)
+        };
+
         $scope.loadDocs = function(option) {
             if (!option) $scope.loadingDocs = true;
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(result) {
@@ -1577,7 +1636,7 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 therapeutic_center_name: {
                     required: function(element) {
-                        return $("#assist_other_therapeutic_center").val() == 1;
+                        return $scope.model.assist_other_therapeutic_center == 1;
                     }
                 },
                 has_insurance: {
@@ -1588,7 +1647,7 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 name_medical_attention: {
                     required: function(element) {
-                        return $("#receives_medical_attention").val() == 1 || $("#receives_medical_attention").val() > 3;
+                        return $scope.model.receives_medical_attention == 1 || $scope.model.receives_medical_attention > 3;
                     }
                 },
                 schooling: {
