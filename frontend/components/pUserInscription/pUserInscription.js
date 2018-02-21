@@ -84,7 +84,8 @@ define(['app', 'moment'], function(app, moment) {
 
         _this.scooling = [
             { id: 1, value: 'Regular' },
-            { id: 2, value: 'Especial' }
+            { id: 2, value: 'Especial' },
+            { id: 3, value: 'No Posee' },
         ];
 
         _this.scoolingType = [
@@ -971,7 +972,7 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?'
                 },
                 schooling_type: {
-                    valueNotEquals: '?'
+                    valueNotEquals: '?',
                 },
                 schooling_name: {
                     required: true
