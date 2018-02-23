@@ -223,8 +223,14 @@
                                                 <h5 title="Datos de Familiares"><b><i class="fa fa-users"></i> Datos de Familiares</b></h5>
                                             </uib-tab-heading>
                                             <div class="tab-index">
-                                                <p class="section-inner">Datos del Padre </p>
+                                                <p class="section-inner">Datos del Padre</p>
                                                 <div class="row">
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group col-md-offset-5" ng-if="!loading">
+                                                        <label for="has_father" title="El Usuario tiene Padre?" class="control-label">Tiene Padre? <span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="has_father" id="has_father" ng-options="fa.id as fa.value for fa in hasFather" ng-model="model.has_father" ng-change="verifyHasFatherRrepesentant();filterRepresentant('father')"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="row" ng-if="model.has_father">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Cedula del Padre del Usuario" class="control-label">Cédula <span class="text-danger">*</span></label>
                                                         <input maxlength="10" minlength="10" ng-disabled="saving" id="father_num_identification" type="text" class="form-control" name="father_num_identification" ng-model="model.father.num_identification" numbers-only>
@@ -246,7 +252,7 @@
                                                         <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row" ng-if="model.has_father">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="father_phone" title="Teléfono del Padre del Usuario">Teléfono </label>
                                                         <input ng-disabled="saving" id="father_phone" type="text" class="form-control" name="father_phone" ng-model="model.father.phone" numbers-only maxlength="10">
@@ -263,6 +269,12 @@
                                                 <!-- madre -->
                                                 <p class="section-inner">Datos de la Madre</p>
                                                 <div class="row">
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group col-md-offset-5" ng-if="!loading">
+                                                        <label for="has_father" title="El Usuario tiene Padre?" class="control-label">Tiene Madre? <span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="has_father" id="has_father" ng-options="fa.id as fa.value for fa in hasMother" ng-model="model.has_mother" ng-change="verifyHasMotherRrepesentant();filterRepresentant('mother')"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="row" ng-if="model.has_mother">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="mother_num_identification" title="Cedula de la Madre del Usuario" class="control-label">Cédula <span class="text-danger">*</span></label>
                                                         <input maxlength="10" minlength="10" ng-disabled="saving" id="mother_num_identification" type="text" class="form-control" name="mother_num_identification" ng-model="model.mother.num_identification" numbers-only ng-disabled="saving">
@@ -284,7 +296,7 @@
                                                         <input readonly="" ng-disabled="saving" maxlength="2" minlength="1" id="mother_age" type="text" class="form-control" name="mother_age" ng-model="model.mother.age" aria-invalid="false" style="">
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row" ng-if="model.has_mother">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="mother_phone" title="Teléfono de la Madre del Usuario">Teléfono</label>
                                                         <input ng-disabled="saving" id="mother_phone" type="text" class="form-control" name="mother_phone" ng-model="model.mother.phone" numbers-only maxlength="10">
@@ -316,7 +328,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="representant_num_identification" title="Cedula del Representante del Usuario" class="control-label">Representante</label>
-                                                        <select ng-disabled="saving" name="representant" id="representant" ng-change="changeRepresentant()" ng-model="representant.family" class="form-control" ng-options="rep.id as rep.value for rep in representants">
+                                                        <select ng-disabled="saving" name="representant" id="representant" ng-change="changeRepresentant()" ng-model="representant.family" class="form-control" ng-options="rep.id as rep.value for rep in representants|filter:{$visible:true} ">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading" ng-show="representant.family == '3' ">

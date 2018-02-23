@@ -110,9 +110,9 @@ define(['app', 'moment'], function(app, moment) {
         ];
 
         _this.representants = [
-            { id: 1, value: 'Madre' },
-            { id: 2, value: 'Padre' },
-            { id: 3, value: 'Otro' },
+            { id: 1, value: 'Madre', $visible: true },
+            { id: 2, value: 'Padre', $visible: true },
+            { id: 3, value: 'Otro', $visible: true },
         ];
 
         _this.statesForm = [
@@ -197,7 +197,7 @@ define(['app', 'moment'], function(app, moment) {
         };
 
         _this.getHasSchoolingType = function(schoolingTypeVal) {
-            var schoolingType = null;
+            var schoolingType = '';
             angular.forEach(_this.scoolingType, function(item) {
                 if (item.id == schoolingTypeVal) schoolingType = item.value;
             })
@@ -335,7 +335,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Asiste a otros centros terapéuticos: ', bold: true }, model.assist_other_therapeutic_center == '1' ? 'Si' : 'No'] },
+                                { text: [{ text: 'Asiste a otros centros terapéuticos: ', bold: true }, model.assist_other_therapeutic_center == 1 ? 'Si' : 'No'] },
                                 { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.therapeutic_center_name == null || model.therapeutic_center_name == '' ? '' : model.therapeutic_center_name] },
 
                             ]
@@ -358,7 +358,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*'],
+                        widths: ['*', '*'],
                         body: [
                             [
                                 { text: [{ text: 'Tiene algún tipo de seguro: ', bold: true }, _this.getHasTypeInsurance(model.has_insurance)] },
@@ -371,7 +371,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*'],
+                        widths: ['*'],
                         body: [
                             [
                                 { text: [{ text: 'Nombre de la Institución: ', bold: true }, model.name_medical_attention == '' || model.name_medical_attention == null ? '' : model.name_medical_attention] },
@@ -395,7 +395,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*', '*'],
+                        widths: ['*', '*', '*'],
                         body: [
                             [
                                 { text: [{ text: 'Escolarización: ', bold: true }, _this.getHasSchooling(model.schooling)] },
@@ -408,7 +408,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*'],
+                        widths: ['*'],
                         body: [
                             [
                                 { pageBreak: 'after', text: [{ text: 'Nombre de la Institución: ', bold: true }, model.schooling_name == null || model.schooling_name == '' ? '' : model.schooling_name] },
@@ -437,10 +437,13 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*'],
+                        widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Nombre del Padre: ', bold: true }, model.father.last_name + ' ' + model.father.name] },
+                                { text: [{ text: 'Tiene Padre', bold: true }, model.has_father == 1  ? 'Si' : 'No'] }
+                            ],
+                            [
+                                { text: [{ text: 'Nombre del Padre: ', bold: true }, model.has_father == 1 ? model.father.last_name + ' ' + model.father.name : 'N/A'] },
                             ]
                         ]
 
@@ -449,13 +452,13 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*', '*', '*'],
+                        widths: ['*', '*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.father.num_identification] },
-                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.father.date_birth).format('DD/MM/YYYY')] },
-                                { text: [{ text: 'Edad: ', bold: true }, model.father.age == '' || model.father.age == null ? '' : model.father.age] },
-                                { text: [{ text: 'Teléfono: ', bold: true }, model.father.phone == '' || model.father.phone == null ? '' : model.father.phone] },
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.has_father == 1 ? model.father.num_identification : 'N/A'] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, model.has_father == 1 ? moment(model.father.date_birth).format('DD/MM/YYYY') : 'N/A'] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.has_father == 1 ? model.father.age == '' || model.father.age == null ? '' : model.father.age : 'N/A'] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.has_father == 1 ? model.father.phone == '' || model.father.phone == null ? '' : model.father.phone : 'N/A'] },
                             ]
                         ]
 
@@ -464,12 +467,12 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*'],
+                        widths: ['*', '*'],
                         body: [
                             [{
-                                    text: [{ text: 'Móvil: ', bold: true }, model.father.mobile == '' || model.father.mobile == null ? '' : model.father.mobile]
+                                    text: [{ text: 'Móvil: ', bold: true }, model.has_father == 1 ? model.father.mobile == '' || model.father.mobile == null ? '' : model.father.mobile : 'N/A']
                                 },
-                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.father.activity == '' || model.father.activity == null] ? '' : model.father.activity },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.has_father == 1 ? model.father.activity == '' || model.father.activity == null ? '' : model.father.activity : 'N/A'] },
                             ]
                         ]
 
@@ -481,6 +484,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*'],
                         body: [
                             [{ text: 'Datos de la Madre', bold: true }]
+
                         ]
                     },
                     layout: {
@@ -490,10 +494,13 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*'],
+                        widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Nombre de la Madre: ', bold: true }, model.mother.last_name + ' ' + model.mother.name] },
+                                { text: [{ text: 'Tiene Madre', bold: true }, model.has_mother == 1 ? 'Si' : 'No'] }
+                            ],
+                            [
+                                { text: [{ text: 'Nombre de la Madre: ', bold: true }, model.has_mother == 1 ? model.mother.last_name + ' ' + model.mother.name : 'N/A'] },
                             ]
                         ]
 
@@ -502,13 +509,13 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*', '*', '*'],
+                        widths: ['*', '*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.mother.num_identification] },
-                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.mother.date_birth).format('DD/MM/YYYY')] },
-                                { text: [{ text: 'Edad: ', bold: true }, model.mother.age == '' || model.mother.age == null ? '' : model.mother.age] },
-                                { text: [{ text: 'Teléfono: ', bold: true }, model.mother.phone == '' || model.mother.phone == null ? '' : model.mother.phone] },
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.has_mother == 1 ? model.mother.num_identification : 'N/A'] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, model.has_mother == 1 ? moment(model.mother.date_birth).format('DD/MM/YYYY') : 'N/A'] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.has_mother == 1 ? model.mother.age == '' || model.mother.age == null ? '' : model.mother.age : 'N/A'] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.has_mother == 1 ? model.mother.phone == '' || model.mother.phone == null ? '' : model.mother.phone : 'N/A'] },
                             ]
                         ]
 
@@ -517,12 +524,12 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*'],
+                        widths: ['*', '*'],
                         body: [
                             [{
-                                    text: [{ text: 'Móvil: ', bold: true }, model.mother.mobile == '' || model.mother.mobile == null ? '' : model.mother.mobile]
+                                    text: [{ text: 'Móvil: ', bold: true }, model.has_mother == 1 ? model.mother.mobile == '' || model.mother.mobile == null ? '' : model.mother.mobile : 'N/A']
                                 },
-                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.mother.activity == '' || model.mother.activity == null ? '' : model.mother.activity] },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.has_mother == 1 ? model.mother.activity == '' || model.mother.activity == null ? '' : model.mother.activity : 'N/A'] },
                             ]
                         ]
 
@@ -543,7 +550,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*'],
+                        widths: ['*'],
                         body: [
                             [
                                 { text: [{ text: 'Nombre del Representante: ', bold: true }, model.representant.last_name + ' ' + model.representant.name] },
@@ -555,7 +562,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*', '*', '*'],
+                        widths: ['*', '*', '*', '*'],
                         body: [
                             [
                                 { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant.num_identification == '' || model.representant.num_identification == null ? '' : model.representant.num_identification] },
@@ -570,7 +577,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*', '*'],
+                        widths: ['*', '*'],
                         body: [
                             [
                                 { text: [{ text: 'Género: ', bold: true }, model.representant.genre == 'M' ? 'Masculino' : 'Femenino'] },
@@ -583,7 +590,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     style: 'table',
                     table: {
-                        widhts: ['*'],
+                        widths: ['*'],
                         body: [
                             [
                                 { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.representant.activity == '' || model.representant.activity == null ? '' : model.representant.activity] },
@@ -598,7 +605,7 @@ define(['app', 'moment'], function(app, moment) {
                 }, {
                     margin: [0, 20],
                     table: {
-                        widhts: ['*'],
+                        widths: ['*'],
                         body: [
                             [
                                 { text: 'Observación: ', bold: true },
@@ -752,6 +759,47 @@ define(['app', 'moment'], function(app, moment) {
                 model.schooling_type = null;
                 model.schooling_name = '';
             }
+        };
+
+
+        _this.verifyRrepesentant = function(model, parent) {
+            if (parent == 'father') {
+                if (!model.has_father) {
+                    model.father = {}
+                }
+            } else if (parent == 'mother') {
+                if (!model.has_mother) {
+                    model.mother = {}
+                }
+            }
+        }
+
+        _this.filterRepresentant = function(model, parent) {
+            if (parent == 'father' && !model.has_father) {
+                angular.forEach(_this.representants, function(item) {
+                    if (item.value == 'Padre')
+                        item.$visible = false;
+                })
+            } else {
+                angular.forEach(_this.representants, function(item) {
+                    if (item.value == 'Padre' && model.has_father)
+                        item.$visible = true;
+                })
+            }
+
+            if (parent == 'mother' && !model.has_mother) {
+                angular.forEach(_this.representants, function(item) {
+                    if (item.value == 'Madre')
+                        item.$visible = false;
+                })
+            } else {
+                angular.forEach(_this.representants, function(item) {
+                    if (item.value == 'Madre' && model.has_mother)
+                        item.$visible = true;
+                })
+            }
+
+            return _this.representants;
         }
 
     }]);
@@ -845,6 +893,8 @@ define(['app', 'moment'], function(app, moment) {
         $scope.representant = {
             family: 1
         };
+        $scope.hasFather = [];
+        $scope.hasMother = [];
         $scope.states = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
@@ -860,6 +910,8 @@ define(['app', 'moment'], function(app, moment) {
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
         $scope.states = PUserInscriptionService.statesForm;
+        $scope.hasFather = PUserInscriptionService.yesOrNot;
+        $scope.hasMother = PUserInscriptionService.yesOrNot;
 
 
         var deps = $q.all([
@@ -888,9 +940,11 @@ define(['app', 'moment'], function(app, moment) {
                 date_admission: new Date(),
                 schooling: null,
                 representant: {},
+                has_mother: 1,
                 mother: {
                     is_representant: 1
                 },
+                has_father: 1,
                 father: {}
             });
             $scope.loading = false;
@@ -1361,7 +1415,17 @@ define(['app', 'moment'], function(app, moment) {
             $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
         };
 
+        $scope.verifyHasFatherRrepesentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "father");
+        };
 
+        $scope.verifyHasMotherRrepesentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "mother");
+        };
+
+        $scope.filterRepresentant = function(parent) {
+            $scope.representants = PUserInscriptionService.filterRepresentant($scope.model, parent);
+        };
 
 
         $scope.save = function(saveForm, returnIndex) {
@@ -1424,6 +1488,8 @@ define(['app', 'moment'], function(app, moment) {
             family: 1
         };
         $scope.states = [];
+        $scope.hasFather = [];
+        $scope.hasMother = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
         $scope.gradeDisability = PUserInscriptionService.gradeDisability;
@@ -1438,6 +1504,8 @@ define(['app', 'moment'], function(app, moment) {
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
         $scope.states = PUserInscriptionService.statesForm;
+        $scope.hasFather = PUserInscriptionService.yesOrNot;
+        $scope.hasMother = PUserInscriptionService.yesOrNot;
 
 
 
@@ -1461,15 +1529,19 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model = model;
                 $scope.model.date_birth = new Date($scope.model.date_birth);
                 $scope.model.date_admission = new Date($scope.model.date_admission);
-                $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
-                $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
+                if ($scope.model.mother)
+                    $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
+
+                if ($scope.model.father)
+                    $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
+
                 $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
 
-                if ($scope.model.representant_id == $scope.model.mother.id) {
+                if ($scope.model.mother && ($scope.model.representant_id == $scope.model.mother.id)) {
                     $scope.model.mother.is_representant = 1;
                     $scope.representant.family = 1;
                     $scope.model.representant = {};
-                } else if ($scope.model.representant_id == $scope.model.father.id) {
+                } else if ($scope.model.father && ($scope.model.representant_id == $scope.model.father.id)) {
                     $scope.model.father.is_representant = 1;
                     $scope.representant.family = 2;
                     $scope.model.representant = {};
@@ -1491,11 +1563,13 @@ define(['app', 'moment'], function(app, moment) {
         };
 
         $scope.calculateAgeFather = function(dateBirth) {
-            $scope.model.father.age = PUserInscriptionService.calculateAge(dateBirth);
+            if ($scope.model.father)
+                $scope.model.father.age = PUserInscriptionService.calculateAge(dateBirth);
         };
 
         $scope.calculateAgeMother = function(dateBirth) {
-            $scope.model.mother.age = PUserInscriptionService.calculateAge(dateBirth);
+            if ($scope.model.mother)
+                $scope.model.mother.age = PUserInscriptionService.calculateAge(dateBirth);
         };
 
         $scope.calculateAgeRepresentant = function(dateBirth) {
@@ -1531,6 +1605,10 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.changeSchooling = function() {
             return PUserInscriptionService.setNullSchooling($scope.model)
+        };
+
+        $scope.filterRepresentant = function(parent) {
+            $scope.representants = PUserInscriptionService.filterRepresentant($scope.model, parent);
         };
 
         $scope.loadDocs = function(option) {
@@ -1975,15 +2053,20 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.hasMessage = true;
                 apiResource.resource('puserinscriptions').setOnCache(data);
                 $scope.model.date_birth = new Date($scope.model.date_birth);
-                $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
-                $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
+
+                if ($scope.model.mother)
+                    $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
+
+                if ($scope.mode.father)
+                    $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
+
                 $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
 
-                if ($scope.model.representant_id == $scope.model.mother.id) {
+                if ($scope.model.mother && ($scope.model.representant_id == $scope.model.mother.id)) {
                     $scope.model.mother.is_representant = 1;
                     $scope.representant.family = 1;
                     // $scope.model.representant = {};
-                } else if ($scope.model.representant_id == $scope.model.father.id) {
+                } else if ($scope.model.father && ($scope.model.representant_id == $scope.model.father.id)) {
                     $scope.model.father.is_representant = 1;
                     $scope.representant.family = 2;
                     // $scope.model.representant = {};

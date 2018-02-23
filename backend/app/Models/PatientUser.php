@@ -45,6 +45,8 @@ class PatientUser extends BaseModel
         'age' => 'int',
         'assist_other_therapeutic_center' => 'int',
         'state' => 'int',
+        'has_father' => 'int',
+        'has_mother' => 'int',
     ];
 
     protected $fillable = [
@@ -75,7 +77,9 @@ class PatientUser extends BaseModel
         'mother_id',
         'representant_id',
         'other_diagnostic',
-        'state'
+        'state',
+        'has_father',
+        'has_mother',
     ];
 
 

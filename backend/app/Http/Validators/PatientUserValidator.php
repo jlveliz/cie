@@ -28,7 +28,8 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 	}
 
 	public function rules($method = null) {
-		return [
+
+		$rules = [
 			'num_identification' => 'required|min:10|max:10|is_valid_id',
 			'name'=>'required',
 			'last_name' => 'required',
@@ -58,23 +59,31 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 			'schooling_type'=>'required_if:schooling,< 3',
 			'schooling_name'=>'required_if:schooling,< 3',
 			'state'=>'required|int',
-			'father' => 'required|array',
-			'father.num_identification' => 'required|min:10|max:10|is_valid_id',
-			'father.name' => 'required',
-			'father.last_name' => 'required',
-			'father.date_birth' => 'required',
-			'father.age'=>'required|number_between:18,99',
-			'father.mobile'=>'required|min:10|max:10',
-			'father.activity' => 'required',
-			'mother' => 'required|array',
-			'mother.num_identification' => 'required|min:10|max:10|is_valid_id',
-			'mother.name' => 'required',
-			'mother.last_name' => 'required',
-			'mother.date_birth' => 'required',
-			'mother.age'=>'required|number_between:18,99',
-			'mother.mobile'=>'min:10|max:10',
-			'mother.activity' => 'required',
+			'has_father' => 'required',
+			'has_mother' => 'required',
 		];
+
+		if($this->request->get('has_father') == 1) {
+			$rules['father'] = 'required|array';
+			$rules['father.num_identification'] = 'required|min:10|max:10|is_valid_id';
+			$rules['father.name'] = 'required';
+			$rules['father.last_name'] = 'required';
+			$rules['father.date_birth'] = 'required';
+			$rules['father.age'] = 'required|number_between:18,99';
+			$rules['father.mobile']='required|min:10|max:10';
+			$rules['father.activity'] = 'required';
+		}
+
+		if($this->request->get('has_mother') == 1) {
+			$rules['mother'] = 'required|array';
+			$rules['mother.num_identification'] = 'required|min:10|max:10|is_valid_id';
+			$rules['mother.name'] = 'required';
+			$rules['mother.last_name'] = 'required';
+			$rules['mother.date_birth'] = 'required';
+			$rules['mother.age']='required|number_between:18,99';
+			$rules['mother.mobile'] = 'min:10|max:10';
+			$rules['mother.activity'] = 'required';
+		}
 
 		
 		return $rules;
