@@ -814,6 +814,11 @@ define([
             id: '@id'
         }).register();
 
+        //personTypes
+        apiResource.resource("pertypes", envService.read('api') + 'pertypes/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     /** 
@@ -2000,6 +2005,78 @@ define([
             }
 
         }));
+
+        /**
+            INSCRIPCTIONS
+        **/
+
+
+        /**
+            PERSON  TYPES
+        **/
+        $stateProvider.state('root.pertypes', angularAMD.route({
+            url: 'per-types',
+            controllerUrl: 'frontend/components/pertype/pertype',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pertype/index.html',
+                    controller: 'PerTypeIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Tipos de Personas"
+            }
+        }));
+
+        $stateProvider.state('root.pertypes.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/pertype/pertype',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pertype/create-edit.html',
+                    controller: 'PerTypeCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Creación de Tipo de Persona"
+            }
+
+        }));
+
+        $stateProvider.state('root.pertypes.edit', angularAMD.route({
+            url: '/{perTypeId:int}/edit',
+            controllerUrl: 'frontend/components/pertype/pertype',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pertype/create-edit.html',
+                    controller: 'PerTypeEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Edición de Tipo de Persona"
+            }
+        }));
+
+        /**
+            PERSON  TYPES
+        **/
 
     }]);
 
