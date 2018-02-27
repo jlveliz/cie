@@ -5,6 +5,7 @@ use Cie\RepositoryInterface\PatientUserRepositoryInterface;
 use Cie\Exceptions\PatientUserException;
 use Cie\Models\PatientUser;
 use Cie\Models\Person;
+use Cie\Models\PersonType;
 
 /**
 * 
@@ -60,6 +61,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		$motherKey = null;
 		if (array_key_exists('has_father', $data) && $data['has_father'] == 1) {
 			$dataFather = $data['father'];
+			$dataFather['person_type_id'] = $this->getPersonType();
 			//if exists father
 			$father = Person::where('num_identification',$dataFather['num_identification'])->first();
 			if(!$father) {
@@ -83,6 +85,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		
 		if (array_key_exists('has_mother', $data) && $data['has_mother'] == 1) {
 			$dataMother = $data['mother'];
+			$dataMother['person_type_id'] = $this->getPersonType();
 			$mother = Person::where('num_identification',$dataMother['num_identification'])->first();
 			if (!$mother) {
 				$mother = new Person();
@@ -106,6 +109,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		//person representant
 		if (array_key_exists('representant', $data) && $data['representant']) {
 			$dataRepresentant = $data['representant'];
+			$dataRepresentant['person_type_id'] = $this->getPersonType();
 			$representant = Person::where('num_identification',$dataRepresentant['num_identification'])->first();
 			if(!$representant) {
 				$representant = new Person();
@@ -123,6 +127,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
 		//user patient
 		$pUPerson = new Person();
+		$pUPerson['person_type_id'] = $this->getPersonType();
 		$pUPerson->fill($data);
 		if ($pUPerson->save()) {
 			$personKey = $pUPerson->getKey();
@@ -155,6 +160,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			//if exists father
 			if (array_key_exists('has_father', $data) && $data['has_father'] == 1) {
 				$dataFather = $data['father'];
+				$dataFather['person_type_id'] = $this->getPersonType();
 				$father = Person::where('num_identification',$dataFather['num_identification'])->first();
 				if($father) {
 					$paUser->father->update($dataFather);
@@ -177,6 +183,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			//if exists mother
 			if (array_key_exists('has_mother', $data) && $data['has_mother'] == 1) {
 				$dataMother = $data['mother'];
+				$dataMother['person_type_id'] = $this->getPersonType();
 				$mother = Person::where('num_identification',$dataMother['num_identification'])->first();
 				if ($mother) {
 					$paUser->mother->update($dataMother);
@@ -199,6 +206,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			//representant
 			if(array_key_exists('representant', $data) && !$representantId) {
 				$dataRepresentant = $data['representant'];
+				$dataRepresentant['person_type_id'] = $this->getPersonType();
 				$representant = Person::where('num_identification',$dataRepresentant['num_identification'])->first();
 				if($representant) {
 					//update person
@@ -216,6 +224,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			$data['father_id'] = $fatherKey;
 			$data['mother_id'] = $motherKey;
 			$data['representant_id'] = $representantId;
+			$data['person_type_id'] = $this->getPersonType();
 			$paUser->person->update($data);
 			$paUser->fill($data);
 			if($paUser->update()){
@@ -241,5 +250,10 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			return true;
 		}
 		throw new PatientUserException(['title'=>'Ha ocurrido un error al eliminar el Paciente ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+	}
+
+
+	public function getPersonType() {
+		return PersonType::select('id')->where('code','persona-natural')->first()->id;
 	}
 }

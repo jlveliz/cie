@@ -5,5 +5,7 @@ namespace Cie\RepositoryInterface;
 
 
 interface UserRepositoryInterface extends CoreRepositoryInterface {
+
+	public function getPersonType();
 	
 }

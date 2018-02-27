@@ -5,6 +5,7 @@ use Cie\RepositoryInterface\UserRepositoryInterface;
 use Cie\Exceptions\UserException;
 use Cie\Models\User;
 use Cie\Models\Person;
+use Cie\Models\PersonType;
 /**
 * 
 */
@@ -51,6 +52,7 @@ class UserRepository implements UserRepositoryInterface
 	public function save($data)
 	{
 		$person = new Person();
+		$data['person_type_id'] = $this->getPersonType();
 		$person->fill($data);
 		if ($person->save()) {
 			$personId = $person->getKey();
@@ -74,8 +76,8 @@ class UserRepository implements UserRepositoryInterface
 
 	public function edit($id,$data)
 	{
+		$data['person_type_id'] = $this->getPersonType();
 		$user = $this->find($id);
-
 		if ($user) {
 			if(!empty($data['password'])) {
 				$data['password'] = \Hash::make($data['password']); 
@@ -104,5 +106,10 @@ class UserRepository implements UserRepositoryInterface
 			return true;
 		}
 		throw new UserException(['title'=>'Ha ocurrido un error al eliminar el usuario ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+	}
+
+
+	public function getPersonType() {
+		return PersonType::select('id')->where('code','usuario')->first()->id;
 	}
 }

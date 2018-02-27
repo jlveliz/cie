@@ -440,7 +440,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Tiene Padre', bold: true }, model.has_father == 1  ? 'Si' : 'No'] }
+                                { text: [{ text: 'Tiene Padre: ', bold: true }, model.has_father == 1  ? 'Si' : 'No'] }
                             ],
                             [
                                 { text: [{ text: 'Nombre del Padre: ', bold: true }, model.has_father == 1 ? model.father.last_name + ' ' + model.father.name : 'N/A'] },
@@ -497,7 +497,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Tiene Madre', bold: true }, model.has_mother == 1 ? 'Si' : 'No'] }
+                                { text: [{ text: 'Tiene Madre: ', bold: true }, model.has_mother == 1 ? 'Si' : 'No'] }
                             ],
                             [
                                 { text: [{ text: 'Nombre de la Madre: ', bold: true }, model.has_mother == 1 ? model.mother.last_name + ' ' + model.mother.name : 'N/A'] },
