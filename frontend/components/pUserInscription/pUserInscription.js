@@ -103,10 +103,10 @@ define(['app', 'moment'], function(app, moment) {
         ];
 
         _this.usrLiveWith = [
-            { id: 1, value: 'Madre' },
-            { id: 2, value: 'Padre' },
-            { id: 3, value: 'Familiar' },
-            { id: 4, value: 'Otro' },
+            { id: 1, value: 'Madre', $visible: true },
+            { id: 2, value: 'Padre', $visible: true },
+            { id: 3, value: 'Familiar', $visible: true },
+            { id: 4, value: 'Otro', $visible: true },
         ];
 
         _this.representants = [
@@ -440,7 +440,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Tiene Padre: ', bold: true }, model.has_father == 1  ? 'Si' : 'No'] }
+                                { text: [{ text: 'Tiene Padre: ', bold: true }, model.has_father == 1 ? 'Si' : 'No'] }
                             ],
                             [
                                 { text: [{ text: 'Nombre del Padre: ', bold: true }, model.has_father == 1 ? model.father.last_name + ' ' + model.father.name : 'N/A'] },
@@ -802,6 +802,34 @@ define(['app', 'moment'], function(app, moment) {
             return _this.representants;
         }
 
+        _this.filterUserLiveWithRepresentant = function(model, parent) {
+            if (parent == 'father' && !model.has_father) {
+                angular.forEach(_this.usrLiveWith, function(item) {
+                    if (item.value == 'Padre')
+                        item.$visible = false;
+                })
+            } else {
+                angular.forEach(_this.usrLiveWith, function(item) {
+                    if (item.value == 'Padre' && model.has_father)
+                        item.$visible = true;
+                })
+            }
+
+            if (parent == 'mother' && !model.has_mother) {
+                angular.forEach(_this.usrLiveWith, function(item) {
+                    if (item.value == 'Madre')
+                        item.$visible = false;
+                })
+            } else {
+                angular.forEach(_this.usrLiveWith, function(item) {
+                    if (item.value == 'Madre' && model.has_mother)
+                        item.$visible = true;
+                })
+            }
+
+            return _this.usrLiveWith;
+        }
+
     }]);
 
     app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope) {
@@ -940,14 +968,21 @@ define(['app', 'moment'], function(app, moment) {
                 date_admission: new Date(),
                 schooling: null,
                 representant: {},
-                has_mother: 1,
+                has_mother: 0,
                 mother: {
                     is_representant: 1
                 },
-                has_father: 1,
+                has_father: 0,
                 father: {}
             });
             $scope.loading = false;
+            //verify if parent is representant
+            $scope.verifyHasFatherRepresentant();
+            $scope.verifyHasMotherRrepesentant();
+            $scope.filterRepresentant('father');
+            $scope.filterRepresentant('mother');
+            $scope.filterUserLiveWith('father');
+            $scope.filterUserLiveWith('mother');
         });
 
         $scope.validateOptions = {
@@ -1415,17 +1450,21 @@ define(['app', 'moment'], function(app, moment) {
             $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
         };
 
-        $scope.verifyHasFatherRrepesentant = function() {
+        $scope.verifyHasFatherRepresentant = function() {
             return PUserInscriptionService.verifyRrepesentant($scope.model, "father");
         };
 
-        $scope.verifyHasMotherRrepesentant = function() {
+        $scope.verifyHasMotherRepresentant = function() {
             return PUserInscriptionService.verifyRrepesentant($scope.model, "mother");
         };
 
         $scope.filterRepresentant = function(parent) {
             $scope.representants = PUserInscriptionService.filterRepresentant($scope.model, parent);
         };
+
+        $scope.filterUserLiveWith = function(parent) {
+            $scope.usrLiveWith = PUserInscriptionService.filterUserLiveWithRepresentant($scope.model, parent);
+        }
 
 
         $scope.save = function(saveForm, returnIndex) {
@@ -1554,6 +1593,15 @@ define(['app', 'moment'], function(app, moment) {
                     $scope.hasMessage = true;
                     PUserInscriptionService.messageFlag = {};
                 }
+
+
+                //verify if parent is representant
+                $scope.verifyHasFatherRepresentant();
+                $scope.verifyHasMotherRepresentant();
+                $scope.filterRepresentant('father');
+                $scope.filterRepresentant('mother');
+                $scope.filterUserLiveWith('father');
+                $scope.filterUserLiveWith('mother');
                 $scope.loading = false;
             });
         });
@@ -1607,9 +1655,21 @@ define(['app', 'moment'], function(app, moment) {
             return PUserInscriptionService.setNullSchooling($scope.model)
         };
 
+        $scope.verifyHasFatherRepresentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "father");
+        };
+
+        $scope.verifyHasMotherRepresentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "mother");
+        };
+
         $scope.filterRepresentant = function(parent) {
             $scope.representants = PUserInscriptionService.filterRepresentant($scope.model, parent);
         };
+
+        $scope.filterUserLiveWith = function(parent) {
+            $scope.usrLiveWith = PUserInscriptionService.filterUserLiveWithRepresentant($scope.model, parent);
+        }
 
         $scope.loadDocs = function(option) {
             if (!option) $scope.loadingDocs = true;
@@ -2057,7 +2117,7 @@ define(['app', 'moment'], function(app, moment) {
                 if ($scope.model.mother)
                     $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
 
-                if ($scope.mode.father)
+                if ($scope.model.father)
                     $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
 
                 $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);

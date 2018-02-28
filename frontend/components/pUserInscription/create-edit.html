@@ -223,13 +223,12 @@
                                                 <h5 title="Datos de Familiares"><b><i class="fa fa-users"></i> Datos de Familiares</b></h5>
                                             </uib-tab-heading>
                                             <div class="tab-index">
-                                                <p class="section-inner">Datos del Padre</p>
-                                                <div class="row">
-                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group col-md-offset-5" ng-if="!loading">
-                                                        <label for="has_father" title="El Usuario tiene Padre?" class="control-label">Tiene Padre? <span class="text-danger">*</span></label>
-                                                        <select class="form-control" name="has_father" id="has_father" ng-options="fa.id as fa.value for fa in hasFather" ng-model="model.has_father" ng-change="verifyHasFatherRrepesentant();filterRepresentant('father')"></select>
-                                                    </div>
-                                                </div>
+                                                <p class="section-inner">
+                                                    <label for="has_father">
+                                                        Datos del Padre
+                                                        <input type="checkbox" title="El Usuario tiene Padre?" alt="El Usuario tiene Padre?" class="control-label" name="has_father" id="has_father" ng-change="verifyHasFatherRepresentant();filterRepresentant('father');filterUserLiveWith('father')" ng-model="model.has_father" ng-true-value="1" ng-false-value="0" />
+                                                    </label>
+                                                </p>
                                                 <div class="row" ng-if="model.has_father">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Cedula del Padre del Usuario" class="control-label">Cédula <span class="text-danger">*</span></label>
@@ -267,13 +266,12 @@
                                                     </div>
                                                 </div>
                                                 <!-- madre -->
-                                                <p class="section-inner">Datos de la Madre</p>
-                                                <div class="row">
-                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group col-md-offset-5" ng-if="!loading">
-                                                        <label for="has_father" title="El Usuario tiene Padre?" class="control-label">Tiene Madre? <span class="text-danger">*</span></label>
-                                                        <select class="form-control" name="has_father" id="has_father" ng-options="fa.id as fa.value for fa in hasMother" ng-model="model.has_mother" ng-change="verifyHasMotherRrepesentant();filterRepresentant('mother')"></select>
-                                                    </div>
-                                                </div>
+                                                <p class="section-inner">
+                                                    <label for="has_mother">
+                                                        Datos de la Madre
+                                                        <input type="checkbox" title="El Usuario tiene Madre?" alt="El Usuario tiene Madre?" class="control-label" name="has_mother" id="has_mother" ng-model="model.has_mother" ng-change="verifyHasMotherRepresentant();filterRepresentant('mother');filterUserLiveWith('mother')" ng-true-value="1" ng-false-value="0">
+                                                    </label>
+                                                </p>
                                                 <div class="row" ng-if="model.has_mother">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="mother_num_identification" title="Cedula de la Madre del Usuario" class="control-label">Cédula <span class="text-danger">*</span></label>
@@ -319,7 +317,7 @@
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="user_live_with" title="Con quién vive el usuario">El Usuario Vive con el <span class="text-danger">*</span></label>
-                                                        <select ng-disabled="saving" class="form-control" name="user_live_with" id="user_live_with" ng-model="model.user_live_with" ng-options="liv.id as liv.value for liv in usrLiveWith">
+                                                        <select ng-disabled="saving" class="form-control" name="user_live_with" id="user_live_with" ng-model="model.user_live_with" ng-options="liv.id as liv.value for liv in usrLiveWith |filter:{$visible:true}">
                                                         </select>
                                                     </div>
                                                 </div>
