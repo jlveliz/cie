@@ -100,6 +100,7 @@ define(['app', 'moment'], function(app, moment) {
             { id: 2, value: 'Divorciados' },
             { id: 3, value: 'Separados' },
             { id: 4, value: 'Unión Libre' },
+            { id: 5, value: 'Solteros' },
         ];
 
         _this.usrLiveWith = [
