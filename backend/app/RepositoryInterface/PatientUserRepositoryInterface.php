@@ -8,4 +8,9 @@ interface PatientUserRepositoryInterface extends CoreRepositoryInterface {
 
 	public function getParents($parentType);
 
+
+	/// permite tener un conteo de todas las solicitudes 
+	//ingresadas en el día corriente
+	public function getTotalUserToday();
+
 }

@@ -1,0 +1,15 @@
+<h4 class="text-center" ng-if="loading">
+    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    <span class="sr-only">Cargando...</span>
+</h4>
+
+<div class="row title_count" ng-if="!loading">
+    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-users"></i></div>
+            <div class="count">{{totalUsersToday || '0'}}</div>
+            <h3>Usuario(s)</h3>
+            <p>Que se han ingresado Ficha de Inscripción hoy.</p>
+        </div>
+    </div>
+</div>

@@ -20,6 +20,8 @@ Route::get('test','ReportController@index');
 
 Route::group(['prefix'=>'api'],function() {
 
+	Route::get('dashboard','DashboardController@index');
+
 	Route::group(['prefix'=>'authenticate'],function(){
 		Route::post('login','Auth\LoginController@login');
 		// Route::post('logout','Auth\AuthenticateController@logout');

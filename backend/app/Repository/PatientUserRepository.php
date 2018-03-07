@@ -274,4 +274,11 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			
 		}
 	}
+
+	/// permite tener un conteo de todas las solicitudes 
+	//ingresadas en el día corriente
+	public function getTotalUserToday()
+	{
+		return PatientUser::withoutGlobalScopes()->whereRaw('DATE_FORMAT(created_at,"%Y-%m-%d") = DATE_FORMAT(now(),"%Y-%m-%d")')->count();
+	}
 }
