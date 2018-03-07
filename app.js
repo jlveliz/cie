@@ -912,9 +912,9 @@ define([
                 },
                 controller: function($scope, modalContent, $uibModalInstance) {
                     $scope.modalContent = modalContent;
-                    $scope.ok = function() {
+                    $scope.ok = function(person) {
                         $uibModalInstance.close();
-                        deferred.resolve();
+                        deferred.resolve(person);
                     }
                 }
 

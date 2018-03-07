@@ -3,7 +3,7 @@
  **/
 define(['app', 'moment'], function(app, moment) {
 
-    app.register.service('PUserInscriptionService', ['$q', 'layoutReportFactory', function($q, layoutReportFactory) {
+    app.register.service('PUserInscriptionService', ['$q', 'layoutReportFactory', '$uibModal', function($q, layoutReportFactory, $uibModal) {
 
         var _this = this;
         _this.messageFlag = {};
@@ -829,6 +829,43 @@ define(['app', 'moment'], function(app, moment) {
             }
 
             return _this.usrLiveWith;
+        };
+
+        _this.openModalSearchParent = function(parent) {
+            var deferred = $q.defer();
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: false,
+                size: 'lg',
+                templateUrl: 'frontend/components/pUserInscription/search-parent.html',
+                resolve: {
+                    modalContent: function() {
+                        return parent;
+                    }
+                },
+                controller: function($scope, modalContent, $uibModalInstance, $http, envService, DTOptionsBuilder) {
+                    var parent = modalContent;
+                    $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
+                    $scope.modalContent = {};
+                    $http.get(envService.read('api') + "pUsers/getParent?parent=" + parent).then(function(result) {
+                        $scope.modalContent = result.data
+                    });
+
+                    $scope.ok = function(parent) {
+                        $uibModalInstance.close();
+                        deferred.resolve(parent);
+                    }
+                }
+
+            });
+
+            modalInstance.result.then(function() {
+                deferred.resolve();
+            }).catch(function() {
+                deferred.reject();
+            })
+
+            return deferred.promise;
         }
 
     }]);
@@ -979,7 +1016,7 @@ define(['app', 'moment'], function(app, moment) {
             $scope.loading = false;
             //verify if parent is representant
             $scope.verifyHasFatherRepresentant();
-            $scope.verifyHasMotherRrepesentant();
+            $scope.verifyHasMotherRepresentant();
             $scope.filterRepresentant('father');
             $scope.filterRepresentant('mother');
             $scope.filterUserLiveWith('father');
@@ -1465,7 +1502,25 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.filterUserLiveWith = function(parent) {
             $scope.usrLiveWith = PUserInscriptionService.filterUserLiveWithRepresentant($scope.model, parent);
-        }
+        };
+
+
+        $scope.searchFather = function() {
+            PUserInscriptionService.openModalSearchParent('father').then(function(father) {
+                $scope.model.father = {};
+                father.date_birth = new Date(father.date_birth);
+                $scope.model.father = father;
+            });
+        };
+
+
+        $scope.searchMother = function() {
+            PUserInscriptionService.openModalSearchParent('mother').then(function(mother) {
+                $scope.model.mother = {};
+                mother.date_birth = new Date(mother.date_birth);
+                $scope.model.mother = mother;
+            });
+        };
 
 
         $scope.save = function(saveForm, returnIndex) {
@@ -1670,7 +1725,24 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.filterUserLiveWith = function(parent) {
             $scope.usrLiveWith = PUserInscriptionService.filterUserLiveWithRepresentant($scope.model, parent);
-        }
+        };
+
+        $scope.searchFather = function() {
+            PUserInscriptionService.openModalSearchParent('father').then(function(father) {
+                $scope.model.father = {};
+                father.date_birth = new Date(father.date_birth);
+                $scope.model.father = father;
+            });
+        };
+
+
+        $scope.searchMother = function() {
+            PUserInscriptionService.openModalSearchParent('mother').then(function(mother) {
+                $scope.model.mother = {};
+                mother.date_birth = new Date(mother.date_birth);
+                $scope.model.mother = mother;
+            });
+        };
 
         $scope.loadDocs = function(option) {
             if (!option) $scope.loadingDocs = true;

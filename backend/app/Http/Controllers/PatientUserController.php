@@ -104,4 +104,24 @@ class PatientUserController extends Controller
             return response()->json($e->getMessage(),$e->getCode());
         }
     }
+
+
+    /**
+        get parents Mother or Father 
+    **/
+    public function getParent(Request $request)
+    {
+        try {
+            if ($request->has('parent')) {
+                $parentType = $request->get('parent');
+                $parents = $this->pUserRepo->getParents($parentType);
+                return response()->json($parents,200);
+            } else {
+                throw new \Exception("Parámetro inválido", 500);
+                
+            }
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(),$e->getCode());
+        }
+    }
 }

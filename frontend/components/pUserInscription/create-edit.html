@@ -231,7 +231,9 @@
                                                 </p>
                                                 <div class="row" ng-if="model.has_father">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                                        <label for="father_num_identification" title="Cedula del Padre del Usuario" class="control-label">Cédula <span class="text-danger">*</span></label>
+                                                        <label for="father_num_identification" title="Cedula del Padre del Usuario" class="control-label">Cédula <span class="text-danger">*</span>
+                                                        </label>
+                                                        <button class="btn btn-xs btn-default pull-right" ng-click="searchFather();" title="Buscar Padre" alt="Buscar Padre"><i class="fa fa-search"></i></button>
                                                         <input maxlength="10" minlength="10" ng-disabled="saving" id="father_num_identification" type="text" class="form-control" name="father_num_identification" ng-model="model.father.num_identification" numbers-only>
                                                     </div>
                                                     <div class="col-md-3 col-sm-2 col-xs-12 form-group" ng-if="!loading">
@@ -275,6 +277,7 @@
                                                 <div class="row" ng-if="model.has_mother">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="mother_num_identification" title="Cedula de la Madre del Usuario" class="control-label">Cédula <span class="text-danger">*</span></label>
+                                                        <button class="btn btn-xs btn-default pull-right" ng-click="searchMother();" title="Buscar Madre" alt="Buscar Madre"><i class="fa fa-search"></i></button>
                                                         <input maxlength="10" minlength="10" ng-disabled="saving" id="mother_num_identification" type="text" class="form-control" name="mother_num_identification" ng-model="model.mother.num_identification" numbers-only ng-disabled="saving">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">

@@ -6,6 +6,7 @@ use Cie\Exceptions\PatientUserException;
 use Cie\Models\PatientUser;
 use Cie\Models\Person;
 use Cie\Models\PersonType;
+use DB;
 
 /**
 * 
@@ -255,5 +256,22 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
 	public function getPersonType() {
 		return PersonType::select('id')->where('code','persona-natural')->first()->id;
+	}
+
+
+	/**	
+		find available parents
+	**/
+	public function getParents($parentType)
+	{
+		if ($parentType == 'father' || $parentType == 'mother') {
+			$genre = $parentType == 'father' ? 'M' : 'F';
+			$personType = $this->getPersonType();
+			$parents = Person::whereRaw('id not in ( select person_id from patient_user) and person_type_id = '.$personType)->where('genre',$genre)->get();
+			return $parents;
+		} else {
+			throw new PatientUserException("Ingreso un mal parametro", "500");
+			
+		}
 	}
 }
