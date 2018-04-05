@@ -328,7 +328,7 @@
                                                 <p class="section-inner">Datos del Representante</p>
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                                        <label for="representant_num_identification" title="Cedula del Representante del Usuario" class="control-label">Representante</label>
+                                                        <label for="representant_num_identification" title="Cedula del Representante del Usuario" class="control-label">Representante <span class="text-danger">*</span></label>
                                                         <select ng-disabled="saving" name="representant" id="representant" ng-change="changeRepresentant()" ng-model="representant.family" class="form-control" ng-options="rep.id as rep.value for rep in representants|filter:{$visible:true} ">
                                                         </select>
                                                     </div>

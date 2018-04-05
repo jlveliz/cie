@@ -47,7 +47,7 @@ define(['app'], function(app) {
                     title: 'Atención',
                     text: 'Desea eliminar la Patología ' + object.name + '.?'
                 }
-                $rootScope.openDelteModal(params).then(function() {
+                $rootScope.openDeleteModal(params).then(function() {
                     var idx = _.findIndex($scope.pathologies, function(el) {
                         return el.id == object.id;
                     });

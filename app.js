@@ -819,6 +819,11 @@ define([
             id: '@id'
         }).register();
 
+        //personTypes
+        apiResource.resource("identitypes", envService.read('api') + 'identitypes/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     /** 
@@ -958,7 +963,7 @@ define([
             return deferred.promise;
         }
 
-        $rootScope.openDelteModal = function(params) {
+        $rootScope.openDeleteModal = function(params) {
             var deferred = $q.defer();
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -2076,6 +2081,75 @@ define([
 
         /**
             PERSON  TYPES
+        **/ 
+
+
+
+        /**
+            IDENTIFICATION  TYPES
+        **/
+        $stateProvider.state('root.identitypes', angularAMD.route({
+            url: 'identi-types',
+            controllerUrl: 'frontend/components/identitype/identitype',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/identitype/index.html',
+                    controller: 'IdenTypeIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Tipos de Identificación"
+            }
+        }));
+
+        $stateProvider.state('root.identitypes.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/identitype/identitype',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/identitype/create-edit.html',
+                    controller: 'IdenTypeCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Creación de Tipo de Identificación"
+            }
+
+        }));
+
+        $stateProvider.state('root.identitypes.edit', angularAMD.route({
+            url: '/{idenTypeId:int}/edit',
+            controllerUrl: 'frontend/components/identitype/identitype',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/identitype/create-edit.html',
+                    controller: 'IdenTypeEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Edición de Tipo de Identificación"
+            }
+        }));
+
+        /**
+            IDENTIFICATION  TYPES
         **/
 
     }]);

@@ -923,7 +923,7 @@ define(['app', 'moment'], function(app, moment) {
                     title: 'Atención',
                     text: 'Desea eliminar la Solicitud de ' + object.name + ' ' + object.last_name + '.?'
                 }
-                $rootScope.openDelteModal(params).then(function() {
+                $rootScope.openDeleteModal(params).then(function() {
                     var idx = _.findIndex($scope.inscriptions, function(el) {
                         return el.id == object.id;
                     });
@@ -957,7 +957,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.parishies = [];
         $scope.pathologies = [];
         $scope.representant = {
-            family: 1
+            family: null
         };
         $scope.hasFather = [];
         $scope.hasMother = [];
@@ -1201,6 +1201,9 @@ define(['app', 'moment'], function(app, moment) {
                 user_live_with: {
                     valueNotEquals: '?'
                 },
+                representant: {
+                    valueNotEquals: '?'
+                },
                 representant_num_identification: {
                     required: true,
                     minlength: 10,
@@ -1400,6 +1403,9 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: "Es Requerida"
                 },
                 user_live_with: {
+                    valueNotEquals: "Es Requerida"
+                },
+                representant: {
                     valueNotEquals: "Es Requerida"
                 },
                 representant_num_identification: {

@@ -55,7 +55,7 @@ define(['app'], function(app) {
                     title: 'Atención',
                     text: 'Desea eliminar el permiso ' + object.name + '.?'
                 }
-                $rootScope.openDelteModal(params).then(function() {
+                $rootScope.openDeleteModal(params).then(function() {
                     var idx = _.findIndex($scope.permissions, function(el) {
                         return el.id == object.id;
                     });

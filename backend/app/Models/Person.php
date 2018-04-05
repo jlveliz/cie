@@ -3,9 +3,13 @@
 namespace Cie\Models;
 
 // use Illuminate\Database\Eloquent\Model;
+use  Illuminate\Database\Eloquent\SoftDeletes;
 
 class Person extends BaseModel
 {
+    
+    use SoftDeletes;
+
     protected $table = "person";
 
     protected $primaryKey = "id";
@@ -16,6 +20,7 @@ class Person extends BaseModel
 
     protected $fillable = [
     	'person_type_id',
+        'identification_type_id',
         'num_identification',
     	'name',
     	'last_name',
@@ -47,6 +52,15 @@ class Person extends BaseModel
 
     ];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    
+
     public function province()
     {
         return $this->belongsTo('Cie\Models\Province','province_id');
@@ -60,6 +74,11 @@ class Person extends BaseModel
     public function parish()
     {
     	return $this->belongsTo('Cie\Models\Parish','city_id');
+    }
+
+    public function identificationType()
+    {
+        return $this->belongsTo('Cie\Models\IdentificationType','identification_type_id');
     }
 
     public function getMale()
@@ -76,6 +95,8 @@ class Person extends BaseModel
     {
         $this->attributes['date_birth'] = date('Y-m-d',strtotime($value));
     }
+
+
 
    
 

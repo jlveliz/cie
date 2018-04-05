@@ -97,7 +97,8 @@ class PersonTypeController extends Controller
         try {
             $removed = $this->personTypeRepo->remove($id);
             if ($removed) {
-                return response()->json(['exitoso'=>true],200);
+                $personType = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($personType,200);
             }
         } catch (PersonTypeException $e) {
             return response()->json($e->getMessage(),$e->getCode());

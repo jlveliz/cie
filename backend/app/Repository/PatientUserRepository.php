@@ -6,6 +6,7 @@ use Cie\Exceptions\PatientUserException;
 use Cie\Models\PatientUser;
 use Cie\Models\Person;
 use Cie\Models\PersonType;
+use Cie\Models\IdentificationType;
 use DB;
 
 /**
@@ -63,6 +64,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		if (array_key_exists('has_father', $data) && $data['has_father'] == 1) {
 			$dataFather = $data['father'];
 			$dataFather['person_type_id'] = $this->getPersonType();
+			$dataFather['identification_type_id'] = $this->getIdentification('cedula');
 			//if exists father
 			$father = Person::where('num_identification',$dataFather['num_identification'])->first();
 			if(!$father) {
@@ -87,6 +89,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		if (array_key_exists('has_mother', $data) && $data['has_mother'] == 1) {
 			$dataMother = $data['mother'];
 			$dataMother['person_type_id'] = $this->getPersonType();
+			$dataMother['identification_type_id'] = $this->getIdentification('cedula');
 			$mother = Person::where('num_identification',$dataMother['num_identification'])->first();
 			if (!$mother) {
 				$mother = new Person();
@@ -108,13 +111,15 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		
 		
 		//person representant
-		if (array_key_exists('representant', $data) && $data['representant']) {
+		if ( (array_key_exists('representant', $data) && $data['representant']) && (!$data['mother']['is_representant']  && !$data['father']['is_representant']) )  {
 			$dataRepresentant = $data['representant'];
 			$dataRepresentant['person_type_id'] = $this->getPersonType();
+			$dataRepresentant['identification_type_id'] = $this->getIdentification('cedula');
 			$representant = Person::where('num_identification',$dataRepresentant['num_identification'])->first();
 			if(!$representant) {
 				$representant = new Person();
 			}
+
 
 			$representant->fill($dataRepresentant);
 			if($representant->save()){
@@ -129,6 +134,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		//user patient
 		$pUPerson = new Person();
 		$pUPerson['person_type_id'] = $this->getPersonType();
+		$pUPerson['identification_type_id'] = $this->getIdentification('cedula');
 		$pUPerson->fill($data);
 		if ($pUPerson->save()) {
 			$personKey = $pUPerson->getKey();
@@ -162,6 +168,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			if (array_key_exists('has_father', $data) && $data['has_father'] == 1) {
 				$dataFather = $data['father'];
 				$dataFather['person_type_id'] = $this->getPersonType();
+				$dataFather['identification_type_id'] = $this->getIdentification('cedula');
 				$father = Person::where('num_identification',$dataFather['num_identification'])->first();
 				if($father) {
 					$paUser->father->update($dataFather);
@@ -185,6 +192,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			if (array_key_exists('has_mother', $data) && $data['has_mother'] == 1) {
 				$dataMother = $data['mother'];
 				$dataMother['person_type_id'] = $this->getPersonType();
+				$dataMother['identification_type_id'] = $this->getIdentification('cedula');
 				$mother = Person::where('num_identification',$dataMother['num_identification'])->first();
 				if ($mother) {
 					$paUser->mother->update($dataMother);
@@ -208,6 +216,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			if(array_key_exists('representant', $data) && !$representantId) {
 				$dataRepresentant = $data['representant'];
 				$dataRepresentant['person_type_id'] = $this->getPersonType();
+				$dataRepresentant['identification_type_id'] = $this->getIdentification('cedula');
 				$representant = Person::where('num_identification',$dataRepresentant['num_identification'])->first();
 				if($representant) {
 					//update person
@@ -226,6 +235,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			$data['mother_id'] = $motherKey;
 			$data['representant_id'] = $representantId;
 			$data['person_type_id'] = $this->getPersonType();
+			$data['identification_type_id'] = $this->getIdentification('cedula');
 			$paUser->person->update($data);
 			$paUser->fill($data);
 			if($paUser->update()){
@@ -257,6 +267,13 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	public function getPersonType() {
 		return PersonType::select('id')->where('code','persona-natural')->first()->id;
 	}
+
+
+	public function getIdentification($type)
+    {
+        return  IdentificationType::where('code',$type)->first()->id;
+    }
+
 
 
 	/**	

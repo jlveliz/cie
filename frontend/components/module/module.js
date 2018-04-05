@@ -47,7 +47,7 @@ define(['app'], function(app) {
                     title: 'Atención',
                     text: 'Desea eliminar el módulo ' + object.name + '.?'
                 }
-                $rootScope.openDelteModal(params).then(function() {
+                $rootScope.openDeleteModal(params).then(function() {
                     var idx = _.findIndex($scope.modules, function(el) {
                         return el.id == object.id;
                     });

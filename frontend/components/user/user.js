@@ -110,7 +110,7 @@ define(['app'], function(app) {
                     title: 'Atención',
                     text: 'Desea eliminar el usuario ' + object.username + '.?'
                 }
-                $rootScope.openDelteModal(params).then(function() {
+                $rootScope.openDeleteModal(params).then(function() {
                     var idx = _.findIndex($scope.users, function(el) {
                         return el.id == object.id;
                     });

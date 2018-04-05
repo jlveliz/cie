@@ -7,7 +7,7 @@ use Validator;
 /**
 * 
 */
-class PersonTypeValidator extends Validator implements ValidatorInterface
+class IdentificationTypeValidator extends Validator implements ValidatorInterface
 {
 	private $request;
 
@@ -20,7 +20,7 @@ class PersonTypeValidator extends Validator implements ValidatorInterface
 	public function make(Request $request){
 		$validator =  parent::make($request->all(),$this->rules($request->method()),$this->messages($request->method()));
         if ($validator->fails()){
-        	throw new IdentificationTypeException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
+        	throw new ModuleException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
         } else {
         	return true;
         } 
@@ -28,11 +28,11 @@ class PersonTypeValidator extends Validator implements ValidatorInterface
 
 	public function rules($method = null) {
 		$rules = [
-			'name' => 'required|unique:person_type,name',
+			'name' => 'required|unique:identification_type,name',
 		];
 
 		if ($method == 'PUT') {
-			$rules['name'] = 'required|unique:person_type,name,'.$this->request->get('key');
+			$rules['name'] = 'required|unique:identification_type,name,'.$this->request->get('key');
 		}
 
 		return $rules;
@@ -41,7 +41,7 @@ class PersonTypeValidator extends Validator implements ValidatorInterface
 	public function messages($method = null) {
 		return [
 			'name.required' => 'El nombre es requerido',
-			'name.unique'=>'El nombre de Tipo de Persona ya fue tomado',
+			'name.unique'=>'El nombre de Tipo de Identificación ya fué tomado',
 			
 		];
 	}
