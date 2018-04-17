@@ -1,14 +1,15 @@
 <?php
 
-namespace Cie\Models;
+namespace Cie\Models\Historical;
 
 // use Illuminate\Database\Eloquent\Model;
 use Cie\Scope\PatientUserScope;
+use Cie\Models\BaseModel;
 use Auth;
 
-class PatientUser extends BaseModel
+class HistoricalPatientUser extends BaseModel
 {
-    protected $table = "patient_user";
+    protected $table = "historical_patient_user";
 
     protected $primaryKey = "id";
 
@@ -19,6 +20,7 @@ class PatientUser extends BaseModel
     ];
 
     protected $casts = [
+        'patient_user_id' => 'int',
         'date_birth' => 'date',
         'date_admission' => 'date',
         'person_id' => 'int',
@@ -50,6 +52,7 @@ class PatientUser extends BaseModel
     ];
 
     protected $fillable = [
+        'patient_user_id',
     	'person_id',
         'date_admission',
     	'conadis_id',
@@ -83,10 +86,10 @@ class PatientUser extends BaseModel
     ];
 
 
-    public function historical()
-    {
-        return $this->hasmany('Cie\Models\Historical\HistoricalPatientUser','patient_user_id');
-    }
+    // public function current()
+    // {
+    //     return $this->belongsTo('Cie\Models\PatientUser','id');
+    // }
 
     public function person()
     {

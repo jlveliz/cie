@@ -1,4 +1,9 @@
 @charset "UTF-8";
+input[type=text] {
+    text-transform: uppercase;
+}
+
+
 .left_col {
     background: #1C3B6A;
 }
@@ -304,6 +309,7 @@ body .container.body .right_col {
 .left_col .mCSB_dragger {
     max-height: 400px !important;
 }
+
 
 
 
@@ -1006,6 +1012,7 @@ article.media {
 
 
 
+
 /* *********  custom accordion  **************************** */
 
 *,
@@ -1184,6 +1191,7 @@ legend {
 
 
 
+
 /** Contacts **/
 
 .profile_details:nth-child(3n) {
@@ -1259,6 +1267,7 @@ legend {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
 }
+
 
 
 
@@ -1398,6 +1407,7 @@ h3.degrees {
 .weather .row {
     margin-bottom: 0;
 }
+
 
 
 
@@ -1650,6 +1660,7 @@ div.box {
     border: 1px solid #8080FF;
     background-color: #E5E5FF;
 }
+
 
 
 
@@ -1921,6 +1932,7 @@ span.right {
 
 
 
+
 /** top tiles  */
 
 .tile_count {
@@ -1997,6 +2009,7 @@ span.right {
 .tile_count .tile_stats_count .count_bottom i {
     width: 12px;
 }
+
 
 
 
@@ -2094,6 +2107,7 @@ h4.graph_title {
 
 
 
+
 /* *********  /widgets  *************************************** */
 
 
@@ -2137,6 +2151,7 @@ h4.graph_title {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
 
 
 
@@ -2283,6 +2298,7 @@ table.tile_info span.right {
     background: rgba(194, 194, 194, 0.3);
     text-align: left;
 }
+
 
 
 
@@ -2499,6 +2515,7 @@ button,
 
 
 
+
 /** /inbox **/
 
 
@@ -2653,6 +2670,7 @@ select.parsley-error {
 
 
 
+
 /* alerts (when validation fails) */
 
 .item .alert {
@@ -2721,6 +2739,7 @@ select.parsley-error {
 
 
 
+
 /* ***** autocomplete ***** */
 
 .autocomplete-suggestions {
@@ -2746,6 +2765,7 @@ select.parsley-error {
     color: #3399ff;
     font-weight: bolder;
 }
+
 
 
 
@@ -2847,6 +2867,7 @@ a.btn-danger {
 
 
 
+
 /* ***** /buttons *******/
 
 
@@ -2889,6 +2910,7 @@ textarea:focus {
     border-radius: 4px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
+
 
 
 
@@ -2949,6 +2971,7 @@ textarea:focus {
         font-size: 12px;
     }
 }
+
 
 
 
@@ -3027,6 +3050,7 @@ span.tag a {
 
 
 
+
 /* *********  /form tags input  **************************** */
 
 
@@ -3086,6 +3110,7 @@ ul.bar_tabs.right li {
 a:focus {
     outline: none;
 }
+
 
 
 
@@ -3202,6 +3227,7 @@ ul.social li {
 
 
 
+
 /* *********  /timeline  **************************** */
 
 
@@ -3262,6 +3288,7 @@ ul.social li {
 .chat .media-body {
     padding-top: 5px;
 }
+
 
 
 
@@ -3501,6 +3528,7 @@ ul.count2 li span {
 
 
 
+
 /* *********  /widgets  **************************** */
 
 .divider {
@@ -3651,6 +3679,7 @@ ul.project_files li a i {
 
 
 
+
 /* *********  pricing  **************************** */
 
 .pricing {
@@ -3766,6 +3795,7 @@ ul.project_files li a i {
     border-left: 2px solid transparent;
     border-right: 2px solid transparent;
 }
+
 
 
 
@@ -3906,6 +3936,7 @@ ul.project_files li a i {
 
 
 
+
 /* *********  /media gallery  **************************** */
 
 
@@ -4027,6 +4058,7 @@ ul.project_files li a i {
 
 
 
+
 /* *********  /verticle tabs  **************************** */
 
 
@@ -4056,6 +4088,7 @@ ul.project_files li a i {
     white-space: nowrap;
     margin: 0.1em 0;
 }
+
 
 
 
@@ -4144,6 +4177,7 @@ ul.project_files li a i {
 
 
 
+
 /* *********  /ecommerce  **************************** */
 
 
@@ -4215,6 +4249,7 @@ a.hiddenanchor {
     animation-timing-function: ease;
     animation-fill-mode: both;
 }
+
 
 
 
@@ -4420,6 +4455,7 @@ header {
 
 
 
+
 /** signup **/
 
 
@@ -4437,6 +4473,7 @@ header {
     border-top-color: #F7942A;
     border-left-color: #F7942A;
 }
+
 
 
 
@@ -4493,6 +4530,7 @@ div[data-role="editor-toolbar"] {
 
 
 
+
 /** /bootstrap-wysiwyg **/
 
 
@@ -4536,6 +4574,7 @@ div[data-role="editor-toolbar"] {
 
 
 
+
 /** /Select2 **/
 
 
@@ -4556,6 +4595,7 @@ div[data-role="editor-toolbar"] {
 
 
 
+
 /** /Switchery **/
 
 
@@ -4566,6 +4606,7 @@ fieldset {
     margin: 0;
     padding: 0;
 }
+
 
 
 
@@ -4738,6 +4779,7 @@ fieldset {
 .cropper .docs-cropped canvas {
     max-width: 100%;
 }
+
 
 
 
@@ -4958,6 +5000,7 @@ fieldset {
 
 
 
+
 /** jQuery Smart Wizard  **/
 
 
@@ -5040,6 +5083,7 @@ ul.verticle_bars li {
 .progress.vertical.progress_wide {
     width: 35px;
 }
+
 
 
 
@@ -5147,6 +5191,7 @@ ul.notifications {
     float: right;
     opacity: 1;
 }
+
 
 
 
@@ -5479,6 +5524,7 @@ ul.notifications {
 
 
 
+
 /** bootstrap-daterangepicker **/
 
 
@@ -5504,6 +5550,7 @@ ul.notifications {
 
 
 
+
 /** /FullCalendar **/
 
 
@@ -5519,6 +5566,7 @@ ul.notifications {
 
 
 
+
 /** /Dropzone.js **/
 
 
@@ -5527,6 +5575,7 @@ ul.notifications {
 .ace_editor {
     height: 400px;
 }
+
 
 
 
@@ -5578,6 +5627,7 @@ md-switch {
 }
 
 
+
 /** 
     Preview modal
 **/
@@ -5587,6 +5637,7 @@ md-switch {
     min-height: 200px!important;
     max-height: 800px!important
 }
+
 
 
 /** 

@@ -13,7 +13,6 @@ class ProvinceValidator extends Validator implements ValidatorInterface
 
 	public function __construct(Request $request)
 	{
-		dd($request->all());
 		$this->make($this->request = $request);
 	}
 

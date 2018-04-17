@@ -7,6 +7,7 @@ use Cie\Models\PatientUser;
 use Cie\Models\Person;
 use Cie\Models\PersonType;
 use Cie\Models\IdentificationType;
+use Cie\Models\Historical\HistoricalPatientUser;
 use DB;
 
 /**
@@ -155,6 +156,11 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		
 	}
 
+
+	/**
+		SAVE THE CURRENT RECORD ON THE TABLE ´historical_patient_user´ 
+		AND UPDATE THE DATA WITH THE REQUEST
+	**/
 	public function edit($id,$data)
 	{
 		
@@ -163,7 +169,13 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		$motherKey = null;
 		$representantId = null;
 		$paUser = $this->find($id);
+		
 		if ($paUser) {
+
+			//save de last data on the historical
+			$historical = new HistoricalPatientUser($paUser->toArray());
+			$paUser->historical()->save($historical);
+
 			//if exists father
 			if (array_key_exists('has_father', $data) && $data['has_father'] == 1) {
 				$dataFather = $data['father'];
@@ -239,6 +251,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			$paUser->person->update($data);
 			$paUser->fill($data);
 			if($paUser->update()){
+				
 				$key = $paUser->getKey();
 				return $this->find($key);
 			}
