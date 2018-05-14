@@ -37,8 +37,8 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="inscription in inscriptions">
-                                        <td>{{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}</td>
-                                        <td>{{inscription.representant.name | capitalize:'oneLetter' }} {{inscription.representant.last_name | capitalize:'oneLetter'}}</td>
+                                        <td>{{inscription.last_name  | capitalize:'oneLetter'}} {{inscription.name  | capitalize:'oneLetter'}} </td>
+                                        <td> {{inscription.representant ? inscription.representant.last_name +' ' +  inscription.representant.name : "-" | capitalize:'oneLetter'}}</td>
                                         <td>{{inscription.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
                                         <td>
                                             <a title="Editar Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" alt="Editar Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" ng-hide="inscription.$deleting" ui-sref="root.inscription.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>

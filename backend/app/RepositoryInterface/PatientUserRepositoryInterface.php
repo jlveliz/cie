@@ -13,4 +13,6 @@ interface PatientUserRepositoryInterface extends CoreRepositoryInterface {
 	//ingresadas en el día corriente
 	public function getTotalUserToday();
 
+	public function importData();
+
 }

@@ -7,6 +7,8 @@ use Cie\Http\Validators\PatientUserValidator;
 use Cie\Exceptions\PatientUserException;
 use Illuminate\Http\Request;
 
+
+
 class PatientUserController extends Controller
 {
     
@@ -15,8 +17,8 @@ class PatientUserController extends Controller
 
     public function __construct(PatientUserRepositoryInterface $pUserRepo, Request $request)
     {
+        $this->middleware('jwt.auth',['except'=>['import']]);
         parent::__construct($request);
-        $this->middleware('jwt.auth');
         $this->pUserRepo = $pUserRepo;
     }
     /**
@@ -123,5 +125,10 @@ class PatientUserController extends Controller
         } catch (\Exception $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
+    }
+
+    public function import()
+    {
+        $this->pUserRepo->importData();
     }
 }

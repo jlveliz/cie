@@ -7,7 +7,11 @@ use Cie\Models\PatientUser;
 use Cie\Models\Person;
 use Cie\Models\PersonType;
 use Cie\Models\IdentificationType;
+use Cie\Models\Province;
+use Cie\Models\City;
+use Cie\Models\Parish;
 use Cie\Models\Historical\HistoricalPatientUser;
+use Excel;
 use DB;
 
 /**
@@ -171,10 +175,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		$paUser = $this->find($id);
 		
 		if ($paUser) {
-
-			//save de last data on the historical
-			$historical = new HistoricalPatientUser($paUser->toArray());
-			$paUser->historical()->save($historical);
+			$paUserReplicate = $paUser->replicate();
 
 			//if exists father
 			if (array_key_exists('has_father', $data) && $data['has_father'] == 1) {
@@ -225,7 +226,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
 
 			//representant
-			if(array_key_exists('representant', $data) && !$representantId) {
+			if(array_key_exists('representant', $data) && !$representantId && $data['representant'] != null) {
 				$dataRepresentant = $data['representant'];
 				$dataRepresentant['person_type_id'] = $this->getPersonType();
 				$dataRepresentant['identification_type_id'] = $this->getIdentification('cedula');
@@ -251,6 +252,9 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			$paUser->person->update($data);
 			$paUser->fill($data);
 			if($paUser->update()){
+				//save de last data on the historical
+				$historical = new HistoricalPatientUser($paUserReplicate->toArray());
+				$paUser->historical()->save($historical);
 				
 				$key = $paUser->getKey();
 				return $this->find($key);
@@ -310,5 +314,159 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	public function getTotalUserToday()
 	{
 		return PatientUser::withoutGlobalScopes()->whereRaw('DATE_FORMAT(created_at,"%Y-%m-%d") = DATE_FORMAT(now(),"%Y-%m-%d")')->count();
+	}
+
+
+	/**
+	 * IMPORT DATA
+	 */
+
+	public function importData()
+	{
+		
+		function extractLastName($string) {
+			$lastName =  explode(" ", $string);
+			return $lastName[1] .' '. array_key_exists(2, $lastName) ? $lastName[2] : '';
+		}
+
+
+		function getSchooling($value)
+		{
+			switch ($value) {
+				case 'Regular':
+					$value = 1;
+					break;
+				case 'Especial':
+					$value = 2;
+					break;
+				default:
+					$value = 3;
+					break;
+			}
+
+			return $value;
+		}
+
+		function getSchoolingType($value)
+		{
+			$valInt;
+
+			switch ($value) {
+				case 'Fiscal':
+					$valInt = 1;
+					break;
+				case 'Particular':
+					$valInt = 2;
+					break;
+				case 'Fiscomisional':
+					$valInt = 3;
+					break;
+				default:
+					$valInt = 4;
+					break;
+			}
+
+			return $valInt;
+		}
+
+		function getDisabilityGrade($value)
+		{
+			switch ($value) {
+				case 'Leve':
+					$value = 'l';
+					break;
+				case 'Moderado':
+					$value = 'm';
+					break;
+				case 'Severo':
+					$value = 's';
+					break;
+				default:
+					$value = 'g';
+					break;
+			}
+
+			return $value;
+		}
+
+		function getInsurance($value) {
+
+			switch ($value) {
+				case 'IESS':
+					$value = 1;
+					break;
+				case 'SI':
+					$value = 2;
+					break;
+				default:
+					$value = 4;
+					break;
+			}
+
+			return $value;
+		}
+
+		function getMedicalAttention($value) {
+			switch ($value) {
+				case 'IESS':
+					$value = 2;
+					break;
+				case 'ISFA':
+					$value = 3;
+					break;
+				case 'MSP':
+					$value = 4;
+					break;
+				default:
+					$value = 1;
+					break;
+			}
+
+			return $value;
+		}
+
+		Excel::load(public_path()."/tester.xlsx",function($payload){
+			$results = $payload->get();
+            foreach ($results as $person) {
+            	$dataToSave = [
+            		'last_name' => $person->apellidos,
+            		'name' => $person->nombres,
+            		'date_birth' => $person->fecha_nacimiento,
+        			'age' => $person->edad,
+                    'genre' => $person->sexo,
+            		'num_identification'=> $person->identificacion,
+            		'schooling'=> getSchooling($person->tiene_escolarizacion),
+            		'schooling_type' => getSchoolingType($person->tipo_escolarizacion),
+            		'schooling_name' => $person->institucion_escolarizacion,
+        			'province_id' => Province::select('id')->where('name',$person->provincia)->first() ? Province::select('id')->where('name',$person->provincia)->first()->id : null,
+        			'city_id'=> City::select('id')->where('name',$person->canton)->first() ? City::select('id')->where('name',$person->canton)->first()->id : null, 
+        			'parish_id'=> Parish::select('id')->where('name',$person->parroquia)->first()? Parish::select('id')->where('name',$person->parroquia)->first()->id : null,
+        			'address' => $person->direccion_domiciliaria,
+        			'date_admission' => $person->fecha_ingreo,
+        			'state' => $person->estado == 'Activo' ? 1 : 0,
+        			'physical_disability' => $person->tipo_discapacidad == 'Física' ? ltrim($person->porcentaje,"0.") : 0,
+        			'intellectual_disability' => $person->tipo_discapacidad == 'Intelectual' ? ltrim($person->porcentaje ,"0."): 0,
+        			'hearing_disability' => $person->tipo_discapacidad == 'Auditiva' ? ltrim($person->porcentaje ,"0.") : 0,
+        			'visual_disability' => $person->tipo_discapacidad == 'Visual' ? ltrim($person->porcentaje ,"0.") : 0,
+        			'psychosocial_disability' => $person->tipo_discapacidad == 'Psicosocial' ? ltrim($person->porcentaje ,"0.") : 0,
+        			'language_disability' => $person->tipo_discapacidad == 'Lenguaje' ? ltrim($person->porcentaje ,"0.") : 0,
+        			'grade_of_disability' => getDisabilityGrade($person->grado_discapacidad),
+        			'conadis_id' => $person->conadis_carnet,
+        			'other_diagnostic' => $person->diagnostico_secundario .' '. $person->otro_diagnostico,
+        			'entity_send_diagnostic' => $person->entidad_emitio_diagnostico,
+        			'assist_other_therapeutic_center' => $person->asiste_otro_centro_terapeutico == 'SI' ? 1 : 0,
+        			'has_insurance' => getInsurance($person->posee_seguro),
+        			'receives_medical_attention' => getMedicalAttention($person->donde_recibe_atencion_medica)
+            		// 'representant' => [
+            		// 	'name' => explode(" ", $person->representant_name)[0],
+            		// 	'last_name'=>extractLastName($person->representant_name),
+            		// ]
+            	];
+            	// dd($dataToSave);
+            	$this->save($dataToSave);
+            }
+            return "Terminado";
+        });
+
 	}
 }

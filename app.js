@@ -5,7 +5,9 @@ define([
     'moment',
     'jquery',
     'base64',
+    'dropzone',
     'pdfmake',
+    'ng-dropzone',
     'vfs_fonts',
     'underscore',
     'angular',
@@ -22,12 +24,53 @@ define([
     'angular-datatables',
     'angular-bootstrap',
     'angular-datatables-bootstrap',
-    'angular-moment',
-], function(angularAMD, moment, $, base64) {
+    'angular-moment'
+], function(angularAMD, moment, $, base64, Dropzone) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial']);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial', 'thatisuday.dropzone']);
 
     cie.constant('appName', 'CIE');
+
+    cie.directive('appFilereader', ['$q', function($q) {
+        var slice = Array.prototype.slice;
+
+        return {
+            restrict: 'A',
+            require: '?ngModel',
+            link: function(scope, element, attrs, ngModel) {
+                if (!ngModel) return;
+
+                ngModel.$render = function() {};
+
+                element.bind('change', function(e) {
+                    var element = e.target;
+
+                    $q.all(slice.call(element.files, 0).map(readFile))
+                        .then(function(values) {
+                            if (element.multiple) ngModel.$setViewValue(values);
+                            else ngModel.$setViewValue(values.length ? values[0] : null);
+                        });
+
+                    function readFile(file) {
+                        var deferred = $q.defer();
+
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            deferred.resolve(e.target.result);
+                        };
+                        reader.onerror = function(e) {
+                            deferred.reject(e);
+                        };
+                        reader.readAsDataURL(file);
+
+                        return deferred.promise;
+                    }
+
+                }); //change
+
+            } //link
+        }; //return
+    }]);
 
     cie.provider('apiResource', function() {
         return {
@@ -43,16 +86,21 @@ define([
                     return null;
                 }
 
-                var formDataObject = function(data) {
-                    var formData = new FormData();
-                    for (i in data) {
-                        if (i.indexOf('$') == -1) {
-                            formData.append(i, data[i]);
-                            // if (angular.isArray(data[i])) {
-                            //     formDataObject(data[i])
-                            // }
+                var formDataObject = function(formData, data) {
+                    var formData = formData;
+                    for (var i in data) {
+                        if (angular.isObject(data[i])) {
+                            var array = new Array();
+                            for(var x in data[i]) {
+                                formData.append(i[x], data[i][x]);
+                                
+                            }
+                        } else {
+                            formData.append(i, data[i])
                         }
                     }
+
+
                     return formData;
                 }
 
@@ -82,7 +130,10 @@ define([
 
                 return {
 
-                    formDataObject: formDataObject,
+                    formDataObject: function(data) {
+                        var formData = new FormData();
+                        return formDataObject(formData, data);
+                    },
 
                     clearAllCache: function() {
                         return caching.removeAll();
@@ -792,6 +843,15 @@ define([
         //inscriptions
         apiResource.resource("puserinscriptions", envService.read('api') + 'pUsers/:id', {
             id: '@id'
+        }, {
+            save: {
+                method: "POST",
+                transformRequest: apiResource.formDataObject,
+                headers: {
+                    'Content-Type': undefined,
+                    'enctype': 'multipart/form-data'
+                }
+            }
         }).register();
 
         //provinces
@@ -1049,7 +1109,7 @@ define([
 
     }])
 
-    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider) {
+    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', 'dropzoneOpsProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider, dropzoneOpsProvider) {
 
         $locationProvider.html5Mode(true);
 
@@ -1063,6 +1123,22 @@ define([
             }
         }
         //PDF CONFIG FONTS
+
+        //DROPZONE
+        var previewTemplate = '<div class="file-row"><img data-dz-thumbnail /></div>';
+        dropzoneOpsProvider.setOptions({
+            paramName: 'file',
+            url: '/process.php',
+            maxFiles: 1,
+            maxFilesize: 5, // MB
+            uploadMultiple: false,
+            autoProcessQueue: false,
+            previewTemplate: previewTemplate,
+            autoQueue: false,
+            thumbnailWidth: 230,
+            thumbnailHeight: 330,
+            clickable: '.dropzone'
+        });
 
 
         envServiceProvider.config({
@@ -1986,6 +2062,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
+                css: ['frontend/assets/css/input-file.css'],
                 pageTitle: "Creación de Fichas de Inscripción"
             }
 
@@ -2006,6 +2083,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
+                css: ['frontend/assets/css/input-file.css'],
                 pageTitle: "Edición de Fichas de Inscripción"
             }
 
@@ -2081,7 +2159,7 @@ define([
 
         /**
             PERSON  TYPES
-        **/ 
+        **/
 
 
 

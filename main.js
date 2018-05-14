@@ -24,9 +24,11 @@ require.config({
         'angular-material': 'frontend/bower_components/angular-material/angular-material',
         'moment': 'frontend/bower_components/moment/min/moment-with-locales',
         'underscore': 'frontend/bower_components/underscore/underscore-min',
-        'pdfmake':'frontend/bower_components/pdfmake/build/pdfmake.min',
-        'vfs_fonts':'frontend/assets/js/pdfmake/vfs_fonts',
-        'base64':'frontend/assets/js/base64/base64_utf8'
+        'pdfmake': 'frontend/bower_components/pdfmake/build/pdfmake.min',
+        'vfs_fonts': 'frontend/assets/js/pdfmake/vfs_fonts',
+        'base64': 'frontend/assets/js/base64/base64_utf8',
+        'dropzone': 'frontend/assets/js/dropzone/dropzone-amd-module',
+        'ng-dropzone': 'frontend/bower_components/ng-dropzone/dist/ng-dropzone',
     },
     shim: {
         'jquery': {
@@ -112,9 +114,17 @@ require.config({
         },
         'base64': {
             exports: 'base64',
-            deps:['jquery']
-           
-        }
+            deps: ['jquery']
+
+        },
+        'dropzone': {
+            exports: 'dropzone',
+            deps: ['jquery'],
+        },
+        'ng-dropzone': {
+            exports: 'ng-dropzone',
+            deps: ['dropzone'],
+        },
     },
     deps: ['app']
 });

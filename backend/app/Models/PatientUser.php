@@ -12,7 +12,17 @@ class PatientUser extends BaseModel
 
     protected $primaryKey = "id";
 
-    protected $with = ['father','mother','representant','user','province','city','parish','pathology'];
+    protected $with = [
+        'father',
+        'mother',
+        'representant',
+        'user',
+        'province',
+        'city',
+        'parish',
+        'pathology',
+        'attached'
+    ];
 
     protected $no_uppercase = [
         'grade_of_disability',
@@ -27,6 +37,7 @@ class PatientUser extends BaseModel
         'intellectual_disability' => 'int',
         'hearing_disability' => 'int',
         'psychosocial_disability' => 'int',
+        'language_disability' => 'int',
         'has_diagnostic' => 'int',
         'diagnostic_id' => 'int',
         'has_insurance' => 'int',
@@ -58,6 +69,7 @@ class PatientUser extends BaseModel
     	'intellectual_disability',
         'hearing_disability',
         'psychosocial_disability',
+        'language_disability',
         'grade_of_disability',
         'has_diagnostic',
         'diagnostic_id',
@@ -133,7 +145,22 @@ class PatientUser extends BaseModel
         return $this->belongsTo('Cie\Models\Pathology','diagnostic_id');
     }
 
-   
+    public function attached()
+    {
+        return $this->hasmany('Cie\Models\PatienUserAttached','patient_user_id');
+    }
+
+
+    //FUNCIONES
+    public function hasAllDocumentAttached()
+    {
+        $attached = $this->attached;
+        if ($attached->representant_identification_card && $attached->user_identification_card && $attached->conadis_identification_card && $attached->specialist_certificate) {
+            return true;
+        }
+
+        return false;
+    }
 
    
 
@@ -142,7 +169,7 @@ class PatientUser extends BaseModel
     {
         parent::boot();
         static::saving(function($pUser){
-            $pUser->created_user_id = Auth::user()->id;
+            $pUser->created_user_id = Auth::user() ? Auth::user()->id : 1;
         });
 
         static::deleted(function($pUser){
@@ -157,4 +184,8 @@ class PatientUser extends BaseModel
     {
         $this->attributes['date_admission'] = date('Y-m-d',strtotime($value));
     }
+
+
+
+
 }

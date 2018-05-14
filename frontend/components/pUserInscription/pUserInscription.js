@@ -57,6 +57,7 @@ define(['app', 'moment'], function(app, moment) {
         _this.gradeDisability = [
             { id: 'l', value: 'Leve' },
             { id: 'm', value: 'Moderado' },
+            { id: 's', value: 'Severo' },
             { id: 'g', value: 'Grave' }
         ];
 
@@ -75,11 +76,12 @@ define(['app', 'moment'], function(app, moment) {
         _this.medicalAttentions = [
             { id: 1, value: 'Seguro Particular' },
             { id: 2, value: 'IESS' },
-            { id: 3, value: 'MSP' },
-            { id: 4, value: 'Fundaciones' },
-            { id: 5, value: 'Dispensarios Médicos' },
-            { id: 5, value: 'Junta de Beneficiencia' },
-            { id: 6, value: 'Otros' }
+            { id: 3, value: 'ISFA' },
+            { id: 4, value: 'MSP' },
+            { id: 5, value: 'Fundaciones' },
+            { id: 6, value: 'Dispensarios Médicos' },
+            { id: 7, value: 'Junta de Beneficiencia' },
+            { id: 8, value: 'Otros' }
         ];
 
         _this.scooling = [
@@ -89,8 +91,8 @@ define(['app', 'moment'], function(app, moment) {
         ];
 
         _this.scoolingType = [
-            { id: 1, value: 'Particular' },
-            { id: 2, value: 'Fiscal' },
+            { id: 1, value: 'Fiscal' },
+            { id: 2, value: 'Particular' },
             { id: 3, value: 'Fiscomisional' },
             { id: 4, value: 'Otros' }
         ];
@@ -310,7 +312,7 @@ define(['app', 'moment'], function(app, moment) {
                             [
                                 { text: [{ text: 'Grado de Discapacidad: ', bold: true }, _this.getGradeDisability(model.grade_of_disability)] },
                                 { text: [{ text: 'Tiene Diagnóstico?: ', bold: true }, model.has_diagnostic == 1 ? 'Si' : 'No'] },
-                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology.name == null || model.pathology.name == '' ? '' : model.pathology.name] },
+                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology ? model.pathology.name  : ''  ] },
                             ],
                             [
                                 { colSpan: 3, text: [{ text: 'Otros Diagnósticos: ', bold: true }, model.other_diagnostic == null || model.other_diagnostic == '' ? '' : model.other_diagnostic] },
@@ -554,7 +556,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Nombre del Representante: ', bold: true }, model.representant.last_name + ' ' + model.representant.name] },
+                                { text: [{ text: 'Nombre del Representante: ', bold: true },  model.representant ?  model.representant.last_name + ' ' + model.representant.name : 'N/A'] },
                             ]
                         ]
 
@@ -566,10 +568,10 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant.num_identification == '' || model.representant.num_identification == null ? '' : model.representant.num_identification] },
-                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.representant.date_birth).format('DD/MM/YYYY')] },
-                                { text: [{ text: 'Edad: ', bold: true }, model.representant.age == '' || model.representant.age == null ? '' : model.representant.age] },
-                                { text: [{ text: 'Teléfono: ', bold: true }, model.representant.phone == null || model.representant.phone == '' ? '' : model.representant.phone] },
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant ?  model.representant.num_identification : 'N/A'] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true },  model.representant ? moment(model.representant.date_birth).format('DD/MM/YYYY') : ''] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.representant ? model.representant.age : ''] },
+                                { text: [{ text: 'Teléfono: ', bold: true },  model.representant ? model.representant.phone == null || model.representant.phone == '' ? '' : model.representant.phone : 'N/A'] },
                             ]
                         ]
 
@@ -581,8 +583,8 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Género: ', bold: true }, model.representant.genre == 'M' ? 'Masculino' : 'Femenino'] },
-                                { text: [{ text: 'Móvil: ', bold: true }, model.representant.mobile == '' || model.representant.mobile == null ? '' : model.representant.mobile] },
+                                { text: [{ text: 'Género: ', bold: true }, model.representant && model.representant.genre == 'M' ? 'Masculino' : 'Femenino'] },
+                                { text: [{ text: 'Móvil: ', bold: true }, !model.representant || model.representant.mobile == '' || model.representant.mobile == null ? '' : model.representant.mobile] },
                             ]
                         ]
 
@@ -594,10 +596,10 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, model.representant.activity == '' || model.representant.activity == null ? '' : model.representant.activity] },
+                                { text: [{ text: 'Actividad en la que labora: ', bold: true }, !model.representant || model.representant.activity == '' || model.representant.activity == null ? '' : model.representant.activity] },
                             ],
                             [
-                                { text: [{ text: 'Redes Sociales que Maneja: ', bold: true }, model.representant.has_facebook ? ' Facebook ' : '', model.representant.has_twitter ? ' Twitter ' : '', model.representant.has_instagram ? ' Instagram ' : '', !model.representant.has_instagram && !model.representant.has_facebook && !model.representant.has_twitter ? ' Ninguna ' : ''] }
+                                { text: [{ text: 'Redes Sociales que Maneja: ', bold: true }, model.representant && model.representant.has_facebook ? ' Facebook ' : '', model.representant && model.representant.has_twitter ? ' Twitter ' : '', model.representant && model.representant.has_instagram ? ' Instagram ' : '', model.representant && (!model.representant.has_instagram && !model.representant.has_facebook && !model.representant.has_twitter) ? ' Ninguna ' : ''] }
                             ]
                         ]
 
@@ -638,11 +640,11 @@ define(['app', 'moment'], function(app, moment) {
                     margin: [0, 20],
                     text: [
                         'Yo, ',
-                        { text: model.representant.last_name, bold: true },
+                        { text: model.representant ? model.representant.last_name : 'N/A', bold: true },
                         ' ',
-                        { text: model.representant.name, bold: true },
+                        { text: model.representant ? model.representant.name : 'N/A', bold: true },
                         ' con CI ',
-                        { text: model.representant.num_identification, bold: true },
+                        { text: model.representant ? model.representant.num_identification : 'N/A', bold: true },
                         ' Certifico que mi representado/a ',
                         { text: model.last_name, bold: true },
                         ' ',
@@ -676,15 +678,15 @@ define(['app', 'moment'], function(app, moment) {
                     margin: [0, 20],
                     text: [
                         'Yo, ',
-                        { text: model.representant.last_name, bold: true },
+                        { text: model.representant ? model.representant.last_name : 'N/A', bold: true },
                         ' ',
-                        { text: model.representant.name, bold: true },
+                        { text: model.representant ? model.representant.name : 'N/A', bold: true },
                         ' Ecuatoriano/a, Mayor de edad, domiciliado en ',
                         { text: model.address, bold: true },
                         ' Identificado/a con número de CI. ',
-                        { text: model.representant.num_identification, bold: true },
+                        { text: model.representant ? model.representant.num_identification : 'N/A', bold: true },
                         ' de ',
-                        { text: model.representant.age, bold: true },
+                        { text: model.representant ? model.representant.age : 'N/A', bold: true },
                         ' años de edad, autorizo la realización de tomas fotográficas y de video a mi hijo/a ',
                         { text: model.last_name, bold: true },
                         ' ',
@@ -969,7 +971,6 @@ define(['app', 'moment'], function(app, moment) {
         $scope.assistOtherTherapeuticCenter = PUserInscriptionService.yesOrNot;
         $scope.insurances = PUserInscriptionService.insurances;
         $scope.medicalCenters = PUserInscriptionService.medicalAttentions;
-        $scope.medicalCenters = PUserInscriptionService.medicalAttentions;
         $scope.scooling = PUserInscriptionService.scooling;
         $scope.scoolingType = PUserInscriptionService.scoolingType;
         $scope.statusCivil = PUserInscriptionService.statusCivil;
@@ -1011,7 +1012,13 @@ define(['app', 'moment'], function(app, moment) {
                     is_representant: 1
                 },
                 has_father: 0,
-                father: {}
+                father: {},
+                patient_user_attached: {
+                    representant_identification_card: null,
+                    user_identification_card: null,
+                    conadis_identification_card: null,
+                    specialist_certificate: null
+                }
             });
             $scope.loading = false;
             //verify if parent is representant
@@ -1026,31 +1033,31 @@ define(['app', 'moment'], function(app, moment) {
         $scope.validateOptions = {
             rules: {
                 num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
                     uniquePatient: 'num_identification'
                 },
                 name: {
-                    required: true
+                    // required: true
                 },
                 last_name: {
-                    required: true
+                    // required: true
                 },
                 date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 age: {
-                    required: true,
+                    // required: true,
                     number: true,
                 },
                 genre: {
                     valueNotEquals: '? undefined:undefined ?',
                 },
                 address: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                 },
                 province_id: {
@@ -1084,7 +1091,7 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?',
                 },
                 conadis_id: {
-                    required: true
+                    // required: true
                 },
                 grade_of_disability: {
                     valueNotEquals: '?'
@@ -1096,7 +1103,7 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?'
                 },
                 entity_send_diagnostic: {
-                    required: true
+                    // required: true
                 },
                 assist_other_therapeutic_center: {
                     valueNotEquals: '?'
@@ -1127,10 +1134,10 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?',
                 },
                 schooling_name: {
-                    required: true
+                    // required: true
                 },
                 father_num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
@@ -1138,103 +1145,103 @@ define(['app', 'moment'], function(app, moment) {
 
                 },
                 father_name: {
-                    required: true
+                    // required: true
                 },
                 father_lastname: {
-                    required: true
+                    // required: true
                 },
                 father_date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 father_age: {
-                    required: true,
+                    // required: true,
                     number: true,
                     min: 18,
                     max: 99
                 },
                 father_mobile: {
-                    required: true,
+                    // required: true,
                     number: true,
                     maxlength: 10,
                     minlength: 10,
                 },
                 father_activity: {
-                    required: true,
+                    // required: true,
                 },
                 mother_num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
                     notEqualtTo: ["#num_identification", "#father_num_identification", "#representant_num_identification"],
                 },
                 mother_name: {
-                    required: true
+                    // required: true
                 },
                 mother_lastname: {
-                    required: true
+                    // required: true
                 },
                 mother_date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 mother_age: {
-                    required: true,
+                    // required: true,
                     number: true,
                     min: 18,
                     max: 99
                 },
                 mother_mobile: {
-                    required: true,
+                    // required: true,
                     number: true,
                     maxlength: 10,
                     minlength: 10,
                 },
                 mother_activity: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                 },
                 parent_status_civil: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 user_live_with: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 representant: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 representant_num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
-                    isValidId: true,
+                    // isValidId: true,
                     notEqualtTo: ["#num_identification", "#father_num_identification", "#mother_num_identification"],
                 },
                 representant_name: {
-                    required: true
+                    // required: true
                 },
                 representant_lastname: {
-                    required: true
+                    // required: true
                 },
                 representant_date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 representant_age: {
-                    required: true,
+                    // required: true,
                     number: true,
                     min: 18,
                     max: 99
                 },
                 representant_mobile: {
-                    required: true,
+                    // required: true,
                     number: true,
                     maxlength: 10,
                     minlength: 10,
                 },
                 representant_activity: {
-                    required: true
+                    // required: true
                 }
 
             },
@@ -1529,6 +1536,38 @@ define(['app', 'moment'], function(app, moment) {
         };
 
 
+        ///DROPZONE/////
+        $scope.drOptionsId = {
+            url: '/alt_upload_url',
+            paramName: 'representant_identification_card',
+            maxFilesize: '1',
+            acceptedFiles: 'image/*',
+            autoProcessQueue: false,
+            maxFiles: 1
+        };
+
+        $scope.dropzoneCallbackRepresentantId = {
+
+            maxfilesexceeded: function(file) {
+                var files = $scope.dropzoneMethodsRepresentantId.getAllFiles();
+                angular.forEach(files, function(f) {
+                    if (f != file) {
+                        $scope.dropzoneMethodsRepresentantId.removeFile(f);
+                    }
+                })
+            },
+            addedfile: function(file) {
+                $scope.myDpZoneRepresentantId = $scope.dropzoneMethodsRepresentantId.getDropzone();
+                console.log($scope.myDpZoneRepresentantId);
+                if ($scope.myDpZoneRepresentantId.files.length > 1) {
+                    $scope.myDpZoneRepresentantId.emit('maxfilesexceeded', file);
+                }
+                $scope.model.patient_user_attached.representant_identification_card = file
+            }
+        };
+
+
+      
         $scope.save = function(saveForm, returnIndex) {
             var successCallback = function(data) {
                 $scope.saving = false;
@@ -1636,7 +1675,8 @@ define(['app', 'moment'], function(app, moment) {
                 if ($scope.model.father)
                     $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
 
-                $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
+                if ($scope.model.representant)
+                    $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
 
                 if ($scope.model.mother && ($scope.model.representant_id == $scope.model.mother.id)) {
                     $scope.model.mother.is_representant = 1;
@@ -1773,31 +1813,31 @@ define(['app', 'moment'], function(app, moment) {
         $scope.validateOptions = {
             rules: {
                 num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
                     uniquePatient: 'num_identification,' + inscriptionId
                 },
                 name: {
-                    required: true
+                    // required: true
                 },
                 last_name: {
-                    required: true
+                    // required: true
                 },
                 date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 age: {
-                    required: true,
+                    // required: true,
                     number: true,
                 },
                 genre: {
                     valueNotEquals: '? undefined:undefined ?',
                 },
                 address: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                 },
                 province_id: {
@@ -1834,7 +1874,7 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?',
                 },
                 conadis_id: {
-                    required: true
+                    // required: true
                 },
                 grade_of_disability: {
                     valueNotEquals: '?'
@@ -1846,15 +1886,15 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?'
                 },
                 entity_send_diagnostic: {
-                    required: true
+                    // required: true
                 },
                 assist_other_therapeutic_center: {
                     valueNotEquals: '?'
                 },
                 therapeutic_center_name: {
-                    required: function(element) {
-                        return $scope.model.assist_other_therapeutic_center == 1;
-                    }
+                    // required: function(element) {
+                        // return $scope.model.assist_other_therapeutic_center == 1;
+                    // }
                 },
                 has_insurance: {
                     valueNotEquals: '?'
@@ -1863,9 +1903,9 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?'
                 },
                 name_medical_attention: {
-                    required: function(element) {
-                        return $scope.model.receives_medical_attention == 1 || $scope.model.receives_medical_attention > 3;
-                    }
+                    // required: function(element) {
+                    //     return $scope.model.receives_medical_attention == 1 || $scope.model.receives_medical_attention > 3;
+                    // }
                 },
                 schooling: {
                     valueNotEquals: '?'
@@ -1874,10 +1914,10 @@ define(['app', 'moment'], function(app, moment) {
                     valueNotEquals: '?'
                 },
                 schooling_name: {
-                    required: true
+                    // required: true
                 },
                 father_num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
@@ -1885,100 +1925,100 @@ define(['app', 'moment'], function(app, moment) {
 
                 },
                 father_name: {
-                    required: true
+                    // required: true
                 },
                 father_lastname: {
-                    required: true
+                    // required: true
                 },
                 father_date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 father_age: {
-                    required: true,
+                    // required: true,
                     number: true,
                     min: 18,
                     max: 99
                 },
                 father_mobile: {
-                    required: true,
+                    // required: true,
                     number: true,
                     maxlength: 10,
                     minlength: 10,
                 },
                 father_activity: {
-                    required: true,
+                    // required: true,
                 },
                 mother_num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
                     notEqualtTo: ["#num_identification", '#father_num_identification', '#representant_num_identification'],
                 },
                 mother_name: {
-                    required: true
+                    // required: true
                 },
                 mother_lastname: {
-                    required: true
+                    // required: true
                 },
                 mother_date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 mother_age: {
-                    required: true,
+                    // required: true,
                     number: true,
                     min: 18,
                     max: 99
                 },
                 mother_mobile: {
-                    required: true,
+                    // required: true,
                     number: true,
                     maxlength: 10,
                     minlength: 10,
                 },
                 mother_activity: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                 },
                 parent_status_civil: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 user_live_with: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 representant_num_identification: {
-                    required: true,
+                    // required: true,
                     minlength: 10,
                     maxlength: 10,
-                    isValidId: true,
+                    // isValidId: true,
                     notEqualtTo: ["#num_identification", '#mother_num_identification', '#father_num_identification'],
                 },
                 representant_name: {
-                    required: true
+                    // required: true
                 },
                 representant_lastname: {
-                    required: true
+                    // required: true
                 },
                 representant_date_birth: {
-                    required: true,
+                    // required: true,
                     date: true
                 },
                 representant_age: {
-                    required: true,
+                    // required: true,
                     number: true,
                     min: 18,
                     max: 99
                 },
                 representant_mobile: {
-                    required: true,
+                    // required: true,
                     number: true,
                     maxlength: 10,
                     minlength: 10,
                 },
                 representant_activity: {
-                    required: true
+                    // required: true
                 }
 
             },
@@ -2198,8 +2238,9 @@ define(['app', 'moment'], function(app, moment) {
 
                 if ($scope.model.father)
                     $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
-
-                $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
+                
+                if ($scope.model.representant)
+                    $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
 
                 if ($scope.model.mother && ($scope.model.representant_id == $scope.model.mother.id)) {
                     $scope.model.mother.is_representant = 1;

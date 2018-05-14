@@ -15,8 +15,8 @@ class UserController extends Controller
 
     public function __construct(UserRepositoryInterface $userRepo, Request $request)
     {
-        parent::__construct($request);
         $this->middleware('jwt.auth');
+        parent::__construct($request);
         $this->userRepo = $userRepo;
     }
     /**
@@ -104,4 +104,5 @@ class UserController extends Controller
             return response()->json($e->getMessage(),$e->getCode());
         }
     }
+
 }

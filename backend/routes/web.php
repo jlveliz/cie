@@ -30,6 +30,7 @@ Route::group(['prefix'=>'api'],function() {
 	});
 
 
+	Route::get('users/import','PatientUserController@import');
 	Route::resource('users','UserController',['except'=>['create']]);
 	Route::resource('modules','ModuleController',['except'=>['create']]);
 	Route::resource('permissions','PermissionController',['except'=>['create']]);

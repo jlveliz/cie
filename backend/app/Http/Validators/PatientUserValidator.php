@@ -29,60 +29,100 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 
 	public function rules($method = null) {
 
+		// $rules = [
+		// 	'num_identification' => 'required|min:10|max:10|is_valid_id',
+		// 	'name'=>'required',
+		// 	'last_name' => 'required',
+		// 	'date_birth' => 'required|date',
+		// 	'age'=>'required',
+		// 	'genre'=>'required',
+		// 	'address' =>'required|min:10',
+		// 	'province_id' => 'required|exists:province,id',
+		// 	'city_id' =>'required|exists:city,id',
+		// 	'parish_id' =>'required|exists:parish,id',
+		// 	'physical_disability' => 'required|int',
+		// 	'intellectual_disability' => 'required|int',
+		// 	'visual_disability' => 'required|int',
+		// 	'hearing_disability' => 'required|int',
+		// 	'psychosocial_disability' => 'required|int',
+		// 	'conadis_id' => 'required',
+		// 	'grade_of_disability' => 'required',
+		// 	'has_diagnostic' => 'required|boolean',
+		// 	'diagnostic_id' => 'required|exists:pathology,id',
+		// 	'entity_send_diagnostic' => 'required',
+		// 	'assist_other_therapeutic_center' => 'required|boolean',
+		// 	'therapeutic_center_name'=>'required_if:assist_other_therapeutic_center,1',
+		// 	'has_insurance'=>'required',
+		// 	'receives_medical_attention' => 'required',
+		// 	'name_medical_attention' => 'required_if:receives_medical_attention,6',
+		// 	'schooling'=>'required',
+		// 	'schooling_type'=>'required_if:schooling,< 3',
+		// 	'schooling_name'=>'required_if:schooling,< 3',
+		// 	'state'=>'required|int',
+		// 	'has_father' => 'required',
+		// 	'has_mother' => 'required',
+		// 	'representant_identification_card'=>'file',
+		// 	'user_identification_card'=>'file',
+		// 	'conadis_identification_card'=>'file',
+		// 	'specialist_certificate'=>'file'
+		// ];
+
 		$rules = [
-			'num_identification' => 'required|min:10|max:10|is_valid_id',
-			'name'=>'required',
-			'last_name' => 'required',
-			'date_birth' => 'required|date',
-			'age'=>'required',
-			'genre'=>'required',
-			'address' =>'required|min:10',
-			'province_id' => 'required|exists:province,id',
-			'city_id' =>'required|exists:city,id',
-			'parish_id' =>'required|exists:parish,id',
-			'physical_disability' => 'required|int',
-			'intellectual_disability' => 'required|int',
-			'visual_disability' => 'required|int',
-			'hearing_disability' => 'required|int',
-			'psychosocial_disability' => 'required|int',
-			'conadis_id' => 'required',
-			'grade_of_disability' => 'required',
-			'has_diagnostic' => 'required|boolean',
-			'diagnostic_id' => 'required|exists:pathology,id',
-			'entity_send_diagnostic' => 'required',
-			'assist_other_therapeutic_center' => 'required|boolean',
-			'therapeutic_center_name'=>'required_if:assist_other_therapeutic_center,1',
-			'has_insurance'=>'required',
-			'receives_medical_attention' => 'required',
-			'name_medical_attention' => 'required_if:receives_medical_attention,6',
-			'schooling'=>'required',
-			'schooling_type'=>'required_if:schooling,< 3',
-			'schooling_name'=>'required_if:schooling,< 3',
-			'state'=>'required|int',
-			'has_father' => 'required',
-			'has_mother' => 'required',
+			'num_identification' => 'min:10|max:10|is_valid_id',
+			'date_birth' => 'date',
+			'address' =>'min:10',
+			'province_id' => 'exists:province,id',
+			'city_id' =>'exists:city,id',
+			'parish_id' =>'exists:parish,id',
+			'physical_disability' => 'int',
+			'intellectual_disability' => 'int',
+			'visual_disability' => 'int',
+			'hearing_disability' => 'int',
+			'psychosocial_disability' => 'int',
+			'has_diagnostic' => 'boolean',
+			'diagnostic_id' => 'nullable|exists:pathology,id',
+			'assist_other_therapeutic_center' => 'boolean',
+			'state'=>'int',
+			// 'representant_identification_card'=>'file',
+			// 'user_identification_card'=>'file',
+			// 'conadis_identification_card'=>'file',
+			// 'specialist_certificate'=>'file'
 		];
 
+		// if($this->request->get('has_father') == 1) {
+		// 	$rules['father'] = 'required|array';
+		// 	$rules['father.num_identification'] = 'required|min:10|max:10|is_valid_id';
+		// 	$rules['father.name'] = 'required';
+		// 	$rules['father.last_name'] = 'required';
+		// 	$rules['father.date_birth'] = 'required';
+		// 	$rules['father.age'] = 'required|number_between:18,99';
+		// 	$rules['father.mobile']='required|min:10|max:10';
+		// 	$rules['father.activity'] = 'required';
+		// }
+
 		if($this->request->get('has_father') == 1) {
-			$rules['father'] = 'required|array';
-			$rules['father.num_identification'] = 'required|min:10|max:10|is_valid_id';
-			$rules['father.name'] = 'required';
-			$rules['father.last_name'] = 'required';
-			$rules['father.date_birth'] = 'required';
-			$rules['father.age'] = 'required|number_between:18,99';
-			$rules['father.mobile']='required|min:10|max:10';
-			$rules['father.activity'] = 'required';
+			$rules['father'] = 'array';
+			$rules['father.num_identification'] = 'min:10|max:10|is_valid_id';
+			$rules['father.age'] = 'number_between:18,99';
+			$rules['father.mobile']='min:10|max:10';
 		}
 
+		// if($this->request->get('has_mother') == 1) {
+		// 	$rules['mother'] = 'required|array';
+		// 	$rules['mother.num_identification'] = 'required|min:10|max:10|is_valid_id';
+		// 	$rules['mother.name'] = 'required';
+		// 	$rules['mother.last_name'] = 'required';
+		// 	$rules['mother.date_birth'] = 'required';
+		// 	$rules['mother.age']='required|number_between:18,99';
+		// 	$rules['mother.mobile'] = 'min:10|max:10';
+		// 	$rules['mother.activity'] = 'required';
+		// }
+
 		if($this->request->get('has_mother') == 1) {
-			$rules['mother'] = 'required|array';
-			$rules['mother.num_identification'] = 'required|min:10|max:10|is_valid_id';
-			$rules['mother.name'] = 'required';
-			$rules['mother.last_name'] = 'required';
-			$rules['mother.date_birth'] = 'required';
-			$rules['mother.age']='required|number_between:18,99';
+			$rules['mother'] = 'array';
+			$rules['mother.num_identification'] = 'min:10|max:10|is_valid_id';
+			$rules['mother.age']='number_between:18,99';
 			$rules['mother.mobile'] = 'min:10|max:10';
-			$rules['mother.activity'] = 'required';
 		}
 
 		
@@ -169,6 +209,10 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 			'mother.mobile.max'=>'Por favor, ingrese un teléfono de la madre válido',
 			'mother.activity.required' => 'Por favor, ingrese una actividad de la madre',
 			'mother.activity.min' => 'Por favor, ingrese una actividad de la madre de al menos 10 carácteres',
+			'representant_identification_card.file'=>'La imagen es inválida',
+			'user_identification_card.file'=>'La imagen es inválida',
+			'conadis_identification_card.file'=>'La imagen es inválida',
+			'specialist_certificate.file'=>'La imagen es inválida'
 		];
 	}
 }
