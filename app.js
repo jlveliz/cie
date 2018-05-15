@@ -31,46 +31,84 @@ define([
 
     cie.constant('appName', 'CIE');
 
-    cie.directive('appFilereader', ['$q', function($q) {
-        var slice = Array.prototype.slice;
+    cie.factory('FileReader', function($q, $window) {
+
+        if (!$window.FileReader) {
+            throw new Error('Browser does not support FileReader');
+        }
+
+        function readAsDataUrl(file) {
+            var deferred = $q.defer(),
+                reader = new $window.FileReader();
+
+            reader.onload = function() {
+                deferred.resolve(reader.result);
+            };
+
+            reader.onerror = function() {
+                deferred.reject(reader.error);
+            };
+
+            reader.readAsDataURL(file);
+
+            return deferred.promise;
+        }
 
         return {
+            readAsDataUrl: readAsDataUrl
+        };
+    });
+
+
+    cie.directive('filePreview', function(FileReader) {
+        return {
             restrict: 'A',
-            require: '?ngModel',
-            link: function(scope, element, attrs, ngModel) {
-                if (!ngModel) return;
-
-                ngModel.$render = function() {};
-
-                element.bind('change', function(e) {
-                    var element = e.target;
-
-                    $q.all(slice.call(element.files, 0).map(readFile))
-                        .then(function(values) {
-                            if (element.multiple) ngModel.$setViewValue(values);
-                            else ngModel.$setViewValue(values.length ? values[0] : null);
+            scope: {
+                filePreview: '='
+            },
+            link: function(scope, element, attrs) {
+                scope.$watch('filePreview', function(filePreview) {
+                    if (filePreview && filePreview[0].name) {
+                        FileReader.readAsDataUrl(filePreview[0]).then(function(result) {
+                            element.attr('src', result);
                         });
-
-                    function readFile(file) {
-                        var deferred = $q.defer();
-
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            deferred.resolve(e.target.result);
-                        };
-                        reader.onerror = function(e) {
-                            deferred.reject(e);
-                        };
-                        reader.readAsDataURL(file);
-
-                        return deferred.promise;
                     }
+                });
+            }
+        };
+    });
 
-                }); //change
+    cie.directive('filesModel', function($parse, $compile, $timeout) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                var inputFile = "<input type='file' accept='image/*'/>";
+                var compiled = $compile(inputFile)(scope);
+                var preview = "<img file-preview='" + attrs.filesModel + "' ng-src='data:image/png;base64,{{attrs.filesModel}}' />";
+                var compilePreview = $compile(preview)(scope);
 
-            } //link
-        }; //return
-    }]);
+                element.append(compiled);
+                element.append(compilePreview);
+
+                element.bind('click', function(event) {
+                    $timeout(function() {
+                        compiled.click();
+                    })
+
+                });
+
+
+                var model = $parse(attrs.filesModel),
+                    modelSetter = model.assign
+                compiled.bind('change', function(e) {
+                    scope.$apply(function() {
+                        modelSetter(scope, compiled[0].files)
+                    })
+                })
+            }
+        }
+    });
+
 
     cie.provider('apiResource', function() {
         return {
@@ -86,22 +124,37 @@ define([
                     return null;
                 }
 
-                var formDataObject = function(formData, data) {
-                    var formData = formData;
-                    for (var i in data) {
-                        if (angular.isObject(data[i])) {
-                            var array = new Array();
-                            for(var x in data[i]) {
-                                formData.append(i[x], data[i][x]);
-                                
-                            }
-                        } else {
-                            formData.append(i, data[i])
-                        }
+                var formDataObject = function(data) {
+                    // var formData = new FormData();
+                    // for (var i in data) {
+                    //     if (i.indexOf('$') == -1) {
+                    //         formData.append(i, data[i]);
+                    //         // if (angular.isArray(data[i])) {
+                    //         //     formDataObject(data[i])
+                    //         // }
+                    //     }
+                    // }
+                    // return formData;
+
+                    if (data === undefined) {
+                        return data
                     }
 
+                    var fd = new FormData();
 
-                    return formData;
+                    angular.forEach(data, function(value, key) {
+                        if (value instanceof FileList) {
+                            angular.forEach(value, function(file, index) {
+                                fd.append(key, file);
+                            })
+                        } else if (value instanceof Array || value instanceof Object) {
+                            fd.append(key, JSON.stringify(value))
+                        } else {
+                            fd.append(key, value);
+                        }
+                    });
+
+                    return fd;
                 }
 
                 var transformResponse = function(value, headers) {
@@ -130,10 +183,9 @@ define([
 
                 return {
 
-                    formDataObject: function(data) {
-                        var formData = new FormData();
-                        return formDataObject(formData, data);
-                    },
+                    formDataObject: formDataObject,
+
+                    transformResponse: transformRequest,
 
                     clearAllCache: function() {
                         return caching.removeAll();
@@ -847,6 +899,21 @@ define([
             save: {
                 method: "POST",
                 transformRequest: apiResource.formDataObject,
+                transformResponse: function(value, headers) {
+                    value = base64.decode(value);
+                    var val = JSON.parse(value);
+                    var response = {};
+                    if (angular.isArray(val)) {
+                        response.data = [];
+                        angular.forEach(val, function(object, idex) {
+                            response.data.push(object);
+                        });
+                    } else {
+                        response = val;
+                    }
+
+                    return response;
+                },
                 headers: {
                     'Content-Type': undefined,
                     'enctype': 'multipart/form-data'

@@ -11,6 +11,7 @@ use Cie\Models\Province;
 use Cie\Models\City;
 use Cie\Models\Parish;
 use Cie\Models\Historical\HistoricalPatientUser;
+use Image;
 use Excel;
 use DB;
 
@@ -116,7 +117,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		
 		
 		//person representant
-		if ( (array_key_exists('representant', $data) && $data['representant']) && (!$data['mother']['is_representant']  && !$data['father']['is_representant']) )  {
+		if ( (array_key_exists('representant', $data) && $data['representant']) && (!isset($data['mother']['is_representant'])  && !isset($data['father']['is_representant'])) )  {
 			$dataRepresentant = $data['representant'];
 			$dataRepresentant['person_type_id'] = $this->getPersonType();
 			$dataRepresentant['identification_type_id'] = $this->getIdentification('cedula');
@@ -151,6 +152,23 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			$pUPatient->fill($data);
 			if($pUPatient->save()){
 				$key = $pUPatient->getKey();
+
+				//attachment 
+				$repreIdenficationCard = isset($data['representant_identification_card']) ? $data['representant_identification_card'] : null;
+				
+				$userIdenficationCard = isset($data['user_identification_card']) ? $data['user_identification_card'] : null;
+				
+				$conadisIdenficationCard = isset($data['conadis_identification_card']) ? $data['conadis_identification_card'] : null;
+
+				$specialistCertificate = isset($data['specialist_certificate']) ? $data['specialist_certificate'] : null;
+
+				//attached
+				$pUPatient->attached()->create([
+					'representant_identification_card' => $repreIdenficationCard ? $this->uploadAttachment($repreIdenficationCard) : '',
+					'user_identification_card' => $userIdenficationCard ? $this->uploadAttachment($userIdenficationCard) : '',
+					'conadis_identification_card' => $conadisIdenficationCard ? $this->uploadAttachment($conadisIdenficationCard) : '',
+					'specialist_certificate' => $specialistCertificate ? $this->uploadAttachment($specialistCertificate) : '',
+				]);
 				return $this->find($key);
 			} else {
 				throw new PatientUserException(['title'=>'Ha ocurrido un error al guardar los datos del usuario '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
@@ -314,6 +332,38 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	public function getTotalUserToday()
 	{
 		return PatientUser::withoutGlobalScopes()->whereRaw('DATE_FORMAT(created_at,"%Y-%m-%d") = DATE_FORMAT(now(),"%Y-%m-%d")')->count();
+	}
+
+
+	public function uploadAttachment($photo)
+	{
+		if ($photo->isValid()) {
+			
+			$realPath = $photo->getRealPath();
+			$image = Image::make($realPath);
+			$isLandScape = true;
+
+			if ($image->width() >= $image->height()) {
+				$isLandScape = false;
+			}
+			//is landscape
+			if ($isLandScape) {
+				$image->resize(309,482,function($constraint){
+					$constraint->aspectRatio();
+				});
+			} else {
+				//is portrait
+				$image->resize(722,482,function($constraint){
+					$constraint->aspectRatio();
+				});				
+			}
+
+
+			$imageName = '_'.str_random().'.'. $photo->getClientOriginalExtension();
+			if($image->save(public_path().'/uploads/user_doc/'.$imageName)){
+				return 'public/uploads/user_doc/'.$imageName;
+			}
+		}
 	}
 
 

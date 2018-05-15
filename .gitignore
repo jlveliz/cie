@@ -5,4 +5,5 @@ node/node_modules/
 frontend/bower_components/
 local/
 backend/.env
+backend/public/uploads
 nodejs/npm-debug.log

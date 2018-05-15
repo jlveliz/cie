@@ -17,6 +17,13 @@ class PatienUserAttached extends BaseModel
     	'specialist_certificate'
     ];
 
+     protected $no_uppercase = [
+        'user_identification_card',
+        'representant_identification_card',
+        'conadis_identification_card',
+        'specialist_certificate',
+    ];
+
 
 
     public function patient()

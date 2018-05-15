@@ -15,4 +15,6 @@ interface PatientUserRepositoryInterface extends CoreRepositoryInterface {
 
 	public function importData();
 
+	public function uploadAttachment($photo);
+
 }

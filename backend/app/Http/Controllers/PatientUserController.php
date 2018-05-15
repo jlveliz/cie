@@ -43,6 +43,19 @@ class PatientUserController extends Controller
     {
         try {
             $data = $request->all();
+            
+            if (array_key_exists('father', $data)) {
+                $data['father'] = json_decode($data['father'],true);
+            }
+
+            if (array_key_exists('mother', $data)) {
+                $data['mother'] = json_decode($data['mother'],true);
+            }
+
+            if (array_key_exists('representant', $data)) {
+                $data['representant'] = json_decode($data['representant'],true);
+            }
+
             $user = $this->pUserRepo->save($data)->toJson();
             $user = $this->encodeResponse($user);
             return response()->json($user,200);
@@ -80,6 +93,18 @@ class PatientUserController extends Controller
     public function update(PatientUserValidator $validator, Request $request, $id)
     {
         try {
+            $data = $request->all();
+            if (array_key_exists('father', $data)) {
+                $data['father'] = json_decode($data['father'],true);
+            }
+
+            if (array_key_exists('mother', $data)) {
+                $data['mother'] = json_decode($data['mother'],true);
+            }
+
+            if (array_key_exists('representant', $data)) {
+                $data['representant'] = json_decode($data['representant'],true);
+            }
             $user = $this->pUserRepo->edit($id, $request->all())->toJson();
             $user = $this->encodeResponse($user);
             return response()->json($user,200);

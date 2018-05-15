@@ -21,7 +21,7 @@ class PatientUser extends BaseModel
         'city',
         'parish',
         'pathology',
-        'attached'
+        'attached',
     ];
 
     protected $no_uppercase = [
@@ -147,7 +147,7 @@ class PatientUser extends BaseModel
 
     public function attached()
     {
-        return $this->hasmany('Cie\Models\PatienUserAttached','patient_user_id');
+        return $this->hasOne('Cie\Models\PatienUserAttached','patient_user_id');
     }
 
 

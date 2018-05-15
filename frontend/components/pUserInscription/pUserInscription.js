@@ -312,7 +312,7 @@ define(['app', 'moment'], function(app, moment) {
                             [
                                 { text: [{ text: 'Grado de Discapacidad: ', bold: true }, _this.getGradeDisability(model.grade_of_disability)] },
                                 { text: [{ text: 'Tiene Diagnóstico?: ', bold: true }, model.has_diagnostic == 1 ? 'Si' : 'No'] },
-                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology ? model.pathology.name  : ''  ] },
+                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology ? model.pathology.name : ''] },
                             ],
                             [
                                 { colSpan: 3, text: [{ text: 'Otros Diagnósticos: ', bold: true }, model.other_diagnostic == null || model.other_diagnostic == '' ? '' : model.other_diagnostic] },
@@ -556,7 +556,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*'],
                         body: [
                             [
-                                { text: [{ text: 'Nombre del Representante: ', bold: true },  model.representant ?  model.representant.last_name + ' ' + model.representant.name : 'N/A'] },
+                                { text: [{ text: 'Nombre del Representante: ', bold: true }, model.representant ? model.representant.last_name + ' ' + model.representant.name : 'N/A'] },
                             ]
                         ]
 
@@ -568,10 +568,10 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant ?  model.representant.num_identification : 'N/A'] },
-                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true },  model.representant ? moment(model.representant.date_birth).format('DD/MM/YYYY') : ''] },
+                                { text: [{ text: 'Cédula de Identidad: ', bold: true }, model.representant ? model.representant.num_identification : 'N/A'] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, model.representant ? moment(model.representant.date_birth).format('DD/MM/YYYY') : ''] },
                                 { text: [{ text: 'Edad: ', bold: true }, model.representant ? model.representant.age : ''] },
-                                { text: [{ text: 'Teléfono: ', bold: true },  model.representant ? model.representant.phone == null || model.representant.phone == '' ? '' : model.representant.phone : 'N/A'] },
+                                { text: [{ text: 'Teléfono: ', bold: true }, model.representant ? model.representant.phone == null || model.representant.phone == '' ? '' : model.representant.phone : 'N/A'] },
                             ]
                         ]
 
@@ -1013,12 +1013,6 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 has_father: 0,
                 father: {},
-                patient_user_attached: {
-                    representant_identification_card: null,
-                    user_identification_card: null,
-                    conadis_identification_card: null,
-                    specialist_certificate: null
-                }
             });
             $scope.loading = false;
             //verify if parent is representant
@@ -1054,84 +1048,84 @@ define(['app', 'moment'], function(app, moment) {
                     number: true,
                 },
                 genre: {
-                    valueNotEquals: '? undefined:undefined ?',
+                    // valueNotEquals: '? undefined:undefined ?',
                 },
                 address: {
                     // required: true,
                     minlength: 10,
                 },
                 province_id: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 city_id: {
-                    required: function() {
-                        return $("#province_id").val() == '?';
-                    },
-                    valueNotEquals: '?',
+                    // required: function() {
+                    //     return $("#province_id").val() == '?';
+                    // },
+                    // valueNotEquals: '?',
                 },
                 parish_id: {
-                    required: function() {
-                        return $("#city_id").val() == '?';
-                    },
-                    valueNotEquals: '?',
+                    // required: function() {
+                    //     return $("#city_id").val() == '?';
+                    // },
+                    // valueNotEquals: '?',
                 },
                 physical_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 intellectual_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 visual_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 psychosocial_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 hearing_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 conadis_id: {
                     // required: true
                 },
                 grade_of_disability: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 has_diagnostic: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 diagnostic_id: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 entity_send_diagnostic: {
                     // required: true
                 },
                 assist_other_therapeutic_center: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 state: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 therapeutic_center_name: {
-                    required: function(element) {
-                        return $scope.model.assist_other_therapeutic_center == 1;
-                    }
+                    // required: function(element) {
+                    //     return $scope.model.assist_other_therapeutic_center == 1;
+                    // }
                 },
                 has_insurance: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 receives_medical_attention: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 name_medical_attention: {
-                    required: function(element) {
-                        return $scope.model.receives_medical_attention == 1 || $scope.model.receives_medical_attention > 3;
-                    }
+                    // required: function(element) {
+                    //     return $scope.model.receives_medical_attention == 1 || $scope.model.receives_medical_attention > 3;
+                    // }
                 },
                 schooling: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 schooling_type: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 schooling_name: {
                     // required: true
@@ -1536,40 +1530,9 @@ define(['app', 'moment'], function(app, moment) {
         };
 
 
-        ///DROPZONE/////
-        $scope.drOptionsId = {
-            url: '/alt_upload_url',
-            paramName: 'representant_identification_card',
-            maxFilesize: '1',
-            acceptedFiles: 'image/*',
-            autoProcessQueue: false,
-            maxFiles: 1
-        };
-
-        $scope.dropzoneCallbackRepresentantId = {
-
-            maxfilesexceeded: function(file) {
-                var files = $scope.dropzoneMethodsRepresentantId.getAllFiles();
-                angular.forEach(files, function(f) {
-                    if (f != file) {
-                        $scope.dropzoneMethodsRepresentantId.removeFile(f);
-                    }
-                })
-            },
-            addedfile: function(file) {
-                $scope.myDpZoneRepresentantId = $scope.dropzoneMethodsRepresentantId.getDropzone();
-                console.log($scope.myDpZoneRepresentantId);
-                if ($scope.myDpZoneRepresentantId.files.length > 1) {
-                    $scope.myDpZoneRepresentantId.emit('maxfilesexceeded', file);
-                }
-                $scope.model.patient_user_attached.representant_identification_card = file
-            }
-        };
-
-
-      
         $scope.save = function(saveForm, returnIndex) {
             var successCallback = function(data) {
+                debugger;
                 $scope.saving = false;
                 $scope.hasMessage = true;
                 apiResource.resource('puserinscriptions').setOnCache(data);
@@ -1667,6 +1630,12 @@ define(['app', 'moment'], function(app, moment) {
         deps.then(function() {
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(model) {
                 $scope.model = model;
+                //attached
+                $scope.model.representant_identification_card = $scope.model.attached.representant_identification_card;
+                $scope.model.user_identification_card = $scope.model.attached.user_identification_card;
+                $scope.model.conadis_identification_card = $scope.model.attached.conadis_identification_card;
+                $scope.model.specialist_certificate = $scope.model.attached.specialist_certificate;
+
                 $scope.model.date_birth = new Date($scope.model.date_birth);
                 $scope.model.date_admission = new Date($scope.model.date_admission);
                 if ($scope.model.mother)
@@ -1834,56 +1803,56 @@ define(['app', 'moment'], function(app, moment) {
                     number: true,
                 },
                 genre: {
-                    valueNotEquals: '? undefined:undefined ?',
+                    // valueNotEquals: '? undefined:undefined ?',
                 },
                 address: {
                     // required: true,
                     minlength: 10,
                 },
                 province_id: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 city_id: {
-                    required: function() {
-                        return $("#province_id").val() == '?';
-                    },
-                    valueNotEquals: '?',
+                    // required: function() {
+                    //     return $("#province_id").val() == '?';
+                    // },
+                    // valueNotEquals: '?',
                 },
                 parish_id: {
-                    required: function() {
-                        return $("#city_id").val() == '?';
-                    },
-                    valueNotEquals: '?',
+                    // required: function() {
+                    // return $("#city_id").val() == '?';
+                    // },
+                    // valueNotEquals: '?',
                 },
                 physical_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 state: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 intellectual_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 visual_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 psychosocial_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 hearing_disability: {
-                    valueNotEquals: '?',
+                    // valueNotEquals: '?',
                 },
                 conadis_id: {
                     // required: true
                 },
                 grade_of_disability: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 has_diagnostic: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 diagnostic_id: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 entity_send_diagnostic: {
                     // required: true
@@ -1893,14 +1862,14 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 therapeutic_center_name: {
                     // required: function(element) {
-                        // return $scope.model.assist_other_therapeutic_center == 1;
+                    // return $scope.model.assist_other_therapeutic_center == 1;
                     // }
                 },
                 has_insurance: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 receives_medical_attention: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 name_medical_attention: {
                     // required: function(element) {
@@ -1908,10 +1877,10 @@ define(['app', 'moment'], function(app, moment) {
                     // }
                 },
                 schooling: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 schooling_type: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 schooling_name: {
                     // required: true
@@ -2238,7 +2207,7 @@ define(['app', 'moment'], function(app, moment) {
 
                 if ($scope.model.father)
                     $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
-                
+
                 if ($scope.model.representant)
                     $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
 

@@ -13,13 +13,28 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 
 	public function __construct(Request $request)
 	{
+		
 		$this->make($this->request = $request);
 	}
 
 
 	public function make(Request $request){
 		
-		$validator =  parent::make($request->all(),$this->rules($request->method()),$this->messages($request->method()));
+		$data = $request->all();
+
+		if (array_key_exists('father', $data)) {
+			$data['father'] = json_decode($data['father'],true);
+		}
+
+		if (array_key_exists('mother', $data)) {
+			$data['mother'] = json_decode($data['mother'],true);
+		}
+
+		if (array_key_exists('representant', $data)) {
+			$data['representant'] = json_decode($data['representant'],true);
+		}
+
+		$validator =  parent::make($data,$this->rules($request->method()),$this->messages($request->method()));
         if ($validator->fails()){
         	throw new PatientUserException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
         } else {
@@ -68,21 +83,21 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 		// ];
 
 		$rules = [
-			'num_identification' => 'min:10|max:10|is_valid_id',
-			'date_birth' => 'date',
-			'address' =>'min:10',
-			'province_id' => 'exists:province,id',
-			'city_id' =>'exists:city,id',
-			'parish_id' =>'exists:parish,id',
-			'physical_disability' => 'int',
-			'intellectual_disability' => 'int',
-			'visual_disability' => 'int',
-			'hearing_disability' => 'int',
-			'psychosocial_disability' => 'int',
-			'has_diagnostic' => 'boolean',
-			'diagnostic_id' => 'nullable|exists:pathology,id',
-			'assist_other_therapeutic_center' => 'boolean',
-			'state'=>'int',
+			// 'num_identification' => 'min:10|max:10|is_valid_id',
+			// 'date_birth' => 'date',
+			// 'address' =>'min:10',
+			// 'province_id' => 'exists:province,id',
+			// 'city_id' =>'exists:city,id',
+			// 'parish_id' =>'exists:parish,id',
+			// 'physical_disability' => 'int',
+			// 'intellectual_disability' => 'int',
+			// 'visual_disability' => 'int',
+			// 'hearing_disability' => 'int',
+			// 'psychosocial_disability' => 'int',
+			// 'has_diagnostic' => 'boolean',
+			// 'diagnostic_id' => 'nullable|exists:pathology,id',
+			// 'assist_other_therapeutic_center' => 'boolean',
+			// 'state'=>'int',
 			// 'representant_identification_card'=>'file',
 			// 'user_identification_card'=>'file',
 			// 'conadis_identification_card'=>'file',
