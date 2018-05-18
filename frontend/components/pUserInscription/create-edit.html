@@ -56,7 +56,7 @@
                                                         <label for="num_identification" title="Cedula del Usuario" class="control-label">Cédula
                                                             <!-- <span class="text-danger">*</span> -->
                                                         </label>
-                                                        <input maxlength="10" minlength="10" ng-disabled="saving" id="num_identification" type="text" class="form-control" name="num_identification" ng-model="model.num_identification" autofocus="" numbers-only>
+                                                        <input maxlength="10" minlength="10" ng-disabled="saving" id="num_identification" type="text" class="form-control" name="num_identification" ng-model="model.num_identification" autofocus numbers-only>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="name" title="Nombres del Usuario">Nombres
@@ -397,8 +397,13 @@
                                                     </div>
                                                 </div>
                                                 <!-- Representante -->
-                                                <p class="section-inner">Datos del Representante</p>
-                                                <div class="row">
+                                                <p class="section-inner">
+                                                     <label for="has_representant">
+                                                        Datos del Representante
+                                                        <input type="checkbox" title="El Usuario tiene Representante?" alt="El Usuario tiene Representante?" class="control-label" name="has_representant" id="has_representant" ng-model="model.has_representant" ng-change="verifyRepresentant()" ng-true-value="1" ng-false-value="0">
+                                                    </label>
+                                                </p>
+                                                <div class="row" ng-if="model.has_representant">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="representant_num_identification" title="Cedula del Representante del Usuario" class="control-label">Representante
                                                             <!-- <span class="text-danger">*</span> -->
@@ -431,7 +436,7 @@
                                                         <input ng-disabled="saving" id="representant_date_birth" type="date" class="form-control" name="representant_date_birth" ng-change="calculateAgeRepresentant(model.representant.date_birth)" ng-model="model.representant.date_birth">
                                                     </div>
                                                 </div>
-                                                <div class="row" ng-show="representant.family == '3' ">
+                                                <div class="row" ng-show="representant.family == '3' " ng-if="model.has_representant">
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Representante del Usuario" for="representant_age">Edad
                                                             <!-- <span class="text-danger">*</span> -->
@@ -464,7 +469,7 @@
                                                         <input ng-disabled="saving" id="representant_activity" type="text" class="form-control" name="representant_activity" ng-model="model.representant.activity">
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row" ng-if="model.has_representant">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Red Social del Representante del Usuario">Redes Sociales que Maneja</label>
                                                         <div class="checkbox" ng-if="!model.mother.is_representant && !model.father.is_representant">
@@ -502,8 +507,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <p class="section-inner">Convivencia del Usuario</p>
-                                                <div class="row">
+                                                <p class="section-inner" ng-if="model.has_representant">Convivencia del Usuario</p>
+                                                <div class="row" ng-if="model.has_representant">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="parent_status_civil" title="Estado Civil de los Padres">Estado Civil
                                                         </label>

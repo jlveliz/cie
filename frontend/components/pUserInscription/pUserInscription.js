@@ -1,7 +1,7 @@
 /**
  ** Inscriptions controller
  **/
-define(['app', 'moment'], function(app, moment) {
+define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
 
     app.register.service('PUserInscriptionService', ['$q', 'layoutReportFactory', '$uibModal', function($q, layoutReportFactory, $uibModal) {
 
@@ -238,31 +238,37 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Cedula de Identidad: ', bold: true }, model.num_identification] },
-                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, moment(model.date_birth).format('DD/MM/YYYY')] }
+                                { text: [{ text: 'Cedula de Identidad: ', bold: true }, model.num_identification ? model.num_identification : 'N/A'] },
+                                { text: [{ text: 'Fecha de Nacimiento: ', bold: true }, model.date_birth ? moment(model.date_birth).format('DD/MM/YYYY') : 'N/A'] }
                             ]
                         ]
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Edad: ', bold: true }, model.age] },
+                                { text: [{ text: 'Edad: ', bold: true }, model.age ? model.age : 'N/A'] },
                                 { text: [{ text: 'Sexo: ', bold: true }, model.genre == 'M' ? 'Masculino' : 'Femenino'] },
-                                { text: [{ text: 'Carnet No: ', bold: true }, model.conadis_id] }
+                                { text: [{ text: 'Carnet No: ', bold: true }, model.conadis_id ? model.conadis_id : 'N/A'] }
                             ]
                         ]
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*'],
                         body: [
-                            [{ text: [{ text: 'Domicilio: ', bold: true }, model.address] }]
+                            [{
+                                text: [{ text: 'Domicilio: ', bold: true }, model.address ? model.address :
+                                    'N/A'
+                                ]
+                            }]
                         ],
                     },
                     layout: 'noBorders'
@@ -272,14 +278,15 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Provincia: ', bold: true }, model.province.name] },
-                                { text: [{ text: 'Ciudad: ', bold: true }, model.city.name] },
-                                { text: [{ text: 'Parroquia: ', bold: true }, model.parish.name] },
+                                { text: [{ text: 'Provincia: ', bold: true }, model.province ? model.province.name : 'N/A'] },
+                                { text: [{ text: 'Ciudad: ', bold: true }, model.city ? model.city.name : 'N/A'] },
+                                { text: [{ text: 'Parroquia: ', bold: true }, model.parish ? model.parish.name : 'N/A'] },
                             ]
                         ]
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'tableHeader',
                     table: {
                         widths: ['*'],
@@ -288,7 +295,8 @@ define(['app', 'moment'], function(app, moment) {
                         ]
                     },
                     layout: { fillColor: '#CCCCCC', border: 0 }
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*', '*', '*', '*', '*'],
@@ -304,13 +312,14 @@ define(['app', 'moment'], function(app, moment) {
                         ]
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Grado de Discapacidad: ', bold: true }, _this.getGradeDisability(model.grade_of_disability)] },
+                                { text: [{ text: 'Grado de Discapacidad: ', bold: true }, model.grade_of_disability ? _this.getGradeDisability(model.grade_of_disability) : 'N/A'] },
                                 { text: [{ text: 'Tiene Diagnóstico?: ', bold: true }, model.has_diagnostic == 1 ? 'Si' : 'No'] },
                                 { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology ? model.pathology.name : ''] },
                             ],
@@ -322,7 +331,8 @@ define(['app', 'moment'], function(app, moment) {
                         ]
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*'],
@@ -332,7 +342,8 @@ define(['app', 'moment'], function(app, moment) {
                     },
                     layout: 'noBorders'
 
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*', '*'],
@@ -346,7 +357,8 @@ define(['app', 'moment'], function(app, moment) {
                     },
                     layout: 'noBorders'
 
-                }, {
+                },
+                {
                     style: 'tableHeader',
                     table: {
                         widths: ['*'],
@@ -364,14 +376,15 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Tiene algún tipo de seguro: ', bold: true }, _this.getHasTypeInsurance(model.has_insurance)] },
-                                { text: [{ text: 'Recibe atención Medica en: ', bold: true }, _this.getNameMedicalAttention(model.receives_medical_attention)] },
+                                { text: [{ text: 'Tiene algún tipo de seguro: ', bold: true }, model.has_insurance ? _this.getHasTypeInsurance(model.has_insurance) : 'N/A'] },
+                                { text: [{ text: 'Recibe atención Medica en: ', bold: true }, model.receives_medical_attention ? _this.getNameMedicalAttention(model.receives_medical_attention) : 'N/A'] },
                             ]
                         ]
 
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*'],
@@ -401,8 +414,8 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Escolarización: ', bold: true }, _this.getHasSchooling(model.schooling)] },
-                                { text: [{ text: 'Tipo Escolarización: ', bold: true }, _this.getHasSchoolingType(model.schooling_type)] },
+                                { text: [{ text: 'Escolarización: ', bold: true }, model.schooling ? _this.getHasSchooling(model.schooling) : 'N/A'] },
+                                { text: [{ text: 'Tipo Escolarización: ', bold: true }, model.schooling_type ? _this.getHasSchoolingType(model.schooling_type) : 'N/A'] },
                             ]
                         ]
 
@@ -467,7 +480,8 @@ define(['app', 'moment'], function(app, moment) {
 
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*', '*'],
@@ -524,7 +538,8 @@ define(['app', 'moment'], function(app, moment) {
 
                     },
                     layout: 'noBorders'
-                }, {
+                },
+                {
                     style: 'table',
                     table: {
                         widths: ['*', '*'],
@@ -633,7 +648,7 @@ define(['app', 'moment'], function(app, moment) {
                     text: [{ text: 'Fecha: ', bold: true }, moment(model.date_admission).format('DD/MM/YYYY')],
                     bold: true,
                 },
-                //CARTA DE COMPROMISO
+                // CARTA DE COMPROMISO 
                 { text: 'CARTA DE COMPROMISO', style: 'header' },
                 {
                     style: 'content',
@@ -670,7 +685,7 @@ define(['app', 'moment'], function(app, moment) {
                     pageBreak: 'after'
 
                 },
-                //CARTA DE AUTORIZACION
+                // CARTA DE AUTORIZACION 
                 { text: 'CARTA DE AUTORIZACIÓN \n DE USO DE IMAGEN', style: 'header', margin: [0, 0, 0, 60] },
                 {
                     style: 'content',
@@ -774,6 +789,10 @@ define(['app', 'moment'], function(app, moment) {
                 if (!model.has_mother) {
                     model.mother = {}
                 }
+            } else if (parent == 'representant') {
+                if (!model.has_representant) {
+                    model.representant = {};
+                }
             }
         }
 
@@ -872,7 +891,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope) {
+    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter) {
 
         $scope.inscriptions = [];
         $scope.loading = true;
@@ -891,10 +910,11 @@ define(['app', 'moment'], function(app, moment) {
                 [1, 'asc'],
                 [2, 'asc'],
             ],
-            responsive: true
+            responsive: true,
         });
 
-        apiResource.resource('puserinscriptions').queryCopy().then(function(results) {
+        apiResource.resource('puserinscriptions').query().then(function(results) {
+            // debugger;
             $scope.loading = false;
             $scope.inscriptions = results;
             $scope.messages = PUserInscriptionService.messageFlag;
@@ -1013,6 +1033,14 @@ define(['app', 'moment'], function(app, moment) {
                 },
                 has_father: 0,
                 father: {},
+                has_diagnostic: 0,
+                physical_disability: 0,
+                intellectual_disability: 0,
+                visual_disability: 0,
+                hearing_disability: 0,
+                psychosocial_disability: 0,
+                assist_other_therapeutic_center: 0,
+                schooling: 3
             });
             $scope.loading = false;
             //verify if parent is representant
@@ -1503,6 +1531,10 @@ define(['app', 'moment'], function(app, moment) {
             return PUserInscriptionService.verifyRrepesentant($scope.model, "mother");
         };
 
+        $scope.verifyRepresentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "representant");
+        }
+
         $scope.filterRepresentant = function(parent) {
             $scope.representants = PUserInscriptionService.filterRepresentant($scope.model, parent);
         };
@@ -1532,7 +1564,6 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.save = function(saveForm, returnIndex) {
             var successCallback = function(data) {
-                debugger;
                 $scope.saving = false;
                 $scope.hasMessage = true;
                 apiResource.resource('puserinscriptions').setOnCache(data);
@@ -1631,10 +1662,10 @@ define(['app', 'moment'], function(app, moment) {
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(model) {
                 $scope.model = model;
                 //attached
-                $scope.model.representant_identification_card = $scope.model.attached.representant_identification_card;
-                $scope.model.user_identification_card = $scope.model.attached.user_identification_card;
-                $scope.model.conadis_identification_card = $scope.model.attached.conadis_identification_card;
-                $scope.model.specialist_certificate = $scope.model.attached.specialist_certificate;
+                $scope.model.representant_identification_card = $scope.model.attached ? $scope.model.attached.representant_identification_card : null;
+                $scope.model.user_identification_card = $scope.model.attached ? $scope.model.attached.user_identification_card : null;
+                $scope.model.conadis_identification_card = $scope.model.attached ? $scope.model.attached.conadis_identification_card : null;
+                $scope.model.specialist_certificate = $scope.model.attached ? $scope.model.attached.specialist_certificate : null;
 
                 $scope.model.date_birth = new Date($scope.model.date_birth);
                 $scope.model.date_admission = new Date($scope.model.date_admission);
@@ -1733,6 +1764,10 @@ define(['app', 'moment'], function(app, moment) {
         $scope.verifyHasMotherRepresentant = function() {
             return PUserInscriptionService.verifyRrepesentant($scope.model, "mother");
         };
+
+        $scope.verifyRepresentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "representant");
+        }
 
         $scope.filterRepresentant = function(parent) {
             $scope.representants = PUserInscriptionService.filterRepresentant($scope.model, parent);

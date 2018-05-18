@@ -37,7 +37,9 @@ Route::group(['prefix'=>'api'],function() {
 	Route::resource('typepermissions','PermissionTypeController',['except'=>['create']]);
 	Route::resource('roles','RoleController',['except'=>['create']]);
 	Route::get('pUsers/getParent','PatientUserController@getParent');
-	Route::resource('pUsers','PatientUserController',['except'=>['create']]);
+	//custom route for patient user inscripton
+	Route::resource('pUsers','PatientUserController',['except'=>['create','update']]);
+	Route::post('pUsers/{pUserId}/update','PatientUserController@update');
 	Route::resource('provinces','ProvinceController',['except'=>['create']]);
 	Route::resource('cities','CityController',['except'=>['create']]);
 	Route::resource('parishies','ParishController',['except'=>['create']]);

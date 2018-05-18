@@ -25,7 +25,6 @@
                                     <p ng-if="hasMessage">{{messages.title}}</p>
                                 </div>
                             </div>
-
                             <table datatable="ng" dt-options="dtOptions" id="inscription-list" class="table table-striped">
                                 <thead>
                                     <tr>
@@ -36,16 +35,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="inscription in inscriptions">
-                                        <td>{{inscription.last_name  | capitalize:'oneLetter'}} {{inscription.name  | capitalize:'oneLetter'}} </td>
-                                        <td> {{inscription.representant ? inscription.representant.last_name +' ' +  inscription.representant.name : "-" | capitalize:'oneLetter'}}</td>
+                                    <tr ng-repeat="inscription in inscriptions track by $index">
+                                        <td>{{inscription.last_name}} {{inscription.name}} </td>
+                                        <td> {{inscription.representant ? inscription.representant.last_name +' ' +  inscription.representant.name : "-"}}</td>
                                         <td>{{inscription.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a title="Editar Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" alt="Editar Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" ng-hide="inscription.$deleting" ui-sref="root.inscription.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
+                                            <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting" ui-sref="root.inscription.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
 
-                                            <button title="Imprimir Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" alt="Imprimir Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" ng-hide="inscription.$deleting" class="btn btn-default btn-sm" type="button" ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</button>
+                                            <button title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting" class="btn btn-default btn-sm" type="button" ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</button>
                                             
-                                            <a title="Eliminar Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" alt="Eliminar Usuario {{inscription.name  | capitalize:'oneLetter'}} {{inscription.last_name  | capitalize:'oneLetter'}}" ng-hide="inscription.$deleting" ng-click="delete(inscription.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <a title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting" ng-click="delete(inscription.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
 
                                             <p ng-show="inscription.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>

@@ -3,14 +3,26 @@
 namespace Cie\Models;
 
 // use Illuminate\Database\Eloquent\Model;
+use  Illuminate\Database\Eloquent\SoftDeletes;
 use Cie\Scope\PatientUserScope;
 use Auth;
 
 class PatientUser extends BaseModel
 {
+    
+    use SoftDeletes;
+
     protected $table = "patient_user";
 
     protected $primaryKey = "id";
+
+      /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
 
     protected $with = [
         'father',
@@ -54,7 +66,6 @@ class PatientUser extends BaseModel
         'city_id' => 'int',
         'parish_id' => 'int',
         'age' => 'int',
-        'assist_other_therapeutic_center' => 'int',
         'state' => 'int',
         'has_father' => 'int',
         'has_mother' => 'int',

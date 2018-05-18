@@ -4,6 +4,9 @@ namespace Cie\RepositoryInterface;
 
 interface PatientUserRepositoryInterface extends CoreRepositoryInterface {
 	
+	
+	public function paginate();
+
 	public function getPersonType();
 
 	public function getParents($parentType);

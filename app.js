@@ -8,7 +8,6 @@ define([
     'dropzone',
     'pdfmake',
     'ng-dropzone',
-    'vfs_fonts',
     'underscore',
     'angular',
     'angular-material',
@@ -78,7 +77,7 @@ define([
         };
     });
 
-    cie.directive('filesModel', function($parse, $compile, $timeout) {
+    cie.directive('filesModel', function($parse, $compile, $timeout, $rootScope) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -90,19 +89,28 @@ define([
                 element.append(compiled);
                 element.append(compilePreview);
 
-                element.bind('click', function(event) {
-                    $timeout(function() {
-                        compiled.click();
-                    })
+                element.click(function(e) {
+                    compiled.trigger('click');
+
+                    // // debugger;
+                    // e.stopPropagation();
+                    // $timeout(function() {
+                    //     scope.$apply(function(){
+                    //         compiled.trigger('click');
+                    //         e.preventDefault();
+                    //     })
+                    //     // scope.$digest();
+                    // })
 
                 });
 
 
                 var model = $parse(attrs.filesModel),
                     modelSetter = model.assign
-                compiled.bind('change', function(e) {
+                compiled.on('change', function(e) {
                     scope.$apply(function() {
                         modelSetter(scope, compiled[0].files)
+                        scope.$digest();
                     })
                 })
             }
@@ -125,17 +133,6 @@ define([
                 }
 
                 var formDataObject = function(data) {
-                    // var formData = new FormData();
-                    // for (var i in data) {
-                    //     if (i.indexOf('$') == -1) {
-                    //         formData.append(i, data[i]);
-                    //         // if (angular.isArray(data[i])) {
-                    //         //     formDataObject(data[i])
-                    //         // }
-                    //     }
-                    // }
-                    // return formData;
-
                     if (data === undefined) {
                         return data
                     }
@@ -681,11 +678,13 @@ define([
     cie.directive('title', ['$rootScope', '$timeout',
         function($rootScope, $timeout) {
             return {
-                link: function() {
+                link: function(scope) {
                     $rootScope.title = "Ingreso";
                     var listener = function(event, toState) {
                         $timeout(function() {
-                            $rootScope.title = (toState.data && toState.data.pageTitle) ? toState.data.pageTitle : 'Default title';
+                            scope.$apply(function() {
+                                $rootScope.title = (toState.data && toState.data.pageTitle) ? toState.data.pageTitle : 'Default title';
+                            })
                         });
                     };
 
@@ -918,6 +917,31 @@ define([
                     'Content-Type': undefined,
                     'enctype': 'multipart/form-data'
                 }
+            },
+            update: {
+                url: envService.read('api') + 'pUsers/:pUserId/update',
+                params: { pUserId: '@id' },
+                method: "POST",
+                transformRequest: apiResource.formDataObject,
+                transformResponse: function(value, headers) {
+                    value = base64.decode(value);
+                    var val = JSON.parse(value);
+                    var response = {};
+                    if (angular.isArray(val)) {
+                        response.data = [];
+                        angular.forEach(val, function(object, idex) {
+                            response.data.push(object);
+                        });
+                    } else {
+                        response = val;
+                    }
+
+                    return response;
+                },
+                headers: {
+                    'Content-Type': undefined,
+                    'enctype': 'multipart/form-data'
+                }
             }
         }).register();
 
@@ -1015,7 +1039,7 @@ define([
         $rootScope.auth = {};
 
         DTDefaultOptions.setLanguageSource('frontend/assets/js/datatables/es.json');
-        DTDefaultOptions.setOption("processing", true);
+        DTDefaultOptions.setLoadingTemplate("<h2>Cargando</h2>");
 
         var userInStorage = localStorage.getItem('user');
         if (userInStorage != "undefined") {

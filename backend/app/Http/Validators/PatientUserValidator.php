@@ -13,7 +13,6 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 
 	public function __construct(Request $request)
 	{
-		
 		$this->make($this->request = $request);
 	}
 

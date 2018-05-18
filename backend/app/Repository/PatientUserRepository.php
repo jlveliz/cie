@@ -21,10 +21,17 @@ use DB;
 class PatientUserRepository implements PatientUserRepositoryInterface
 {
 	
+	
+	public function paginate()
+	{
+		return PatientUser::paginate();
+	}
+
 	public function enum($params = null)
 	{
-		$paUsers = PatientUser::all();
-
+		// $paUsers = PatientUser::toSql();
+		$paUsers = PatientUser::get();
+		// dd($paUsers);
 		if (!$paUsers) {
 			throw new PatientUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 		}
@@ -244,7 +251,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
 
 			//representant
-			if(array_key_exists('representant', $data) && !$representantId && $data['representant'] != null) {
+			if(array_key_exists('representant', $data) && !$representantId && count($data['representant'])) {
 				$dataRepresentant = $data['representant'];
 				$dataRepresentant['person_type_id'] = $this->getPersonType();
 				$dataRepresentant['identification_type_id'] = $this->getIdentification('cedula');

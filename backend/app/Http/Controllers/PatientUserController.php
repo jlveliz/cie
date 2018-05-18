@@ -29,6 +29,8 @@ class PatientUserController extends Controller
     public function index()
     {
         $users = $this->pUserRepo->enum()->toJson();
+        // $users = $this->pUserRepo->paginate()->toJson();
+        // dd($users);
         $users = $this->encodeResponse($users);
         return response()->json($users,200);
     }
@@ -105,7 +107,7 @@ class PatientUserController extends Controller
             if (array_key_exists('representant', $data)) {
                 $data['representant'] = json_decode($data['representant'],true);
             }
-            $user = $this->pUserRepo->edit($id, $request->all())->toJson();
+            $user = $this->pUserRepo->edit($id, $data)->toJson();
             $user = $this->encodeResponse($user);
             return response()->json($user,200);
         } catch (PatientUserException $e) {
