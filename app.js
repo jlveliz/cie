@@ -89,19 +89,8 @@ define([
                 element.append(compiled);
                 element.append(compilePreview);
 
-                element.click(function(e) {
-                    compiled.trigger('click');
-
-                    // // debugger;
-                    // e.stopPropagation();
-                    // $timeout(function() {
-                    //     scope.$apply(function(){
-                    //         compiled.trigger('click');
-                    //         e.preventDefault();
-                    //     })
-                    //     // scope.$digest();
-                    // })
-
+                element.bind('click',function(e) {
+                    angular.element(e.target).children("input[type='file']").trigger('click');
                 });
 
 
