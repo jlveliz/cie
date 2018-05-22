@@ -223,9 +223,8 @@
                                                         <label class="control-label" for="therapeutic_center_name" title="Nombre de la Institución">
                                                             Nombre de la Institución
                                                             <!-- <span class="text-danger" ng-show="model.assist_other_therapeutic_center == 1">*</span> -->
-
                                                         </label>
-                                                            <input type="text" ng-disabled="saving || !model.assist_other_therapeutic_center" class="form-control" name="therapeutic_center_name" id="therapeutic_center_name" ng-model="model.therapeutic_center_name">
+                                                        <input type="text" ng-disabled="saving || !model.assist_other_therapeutic_center" class="form-control" name="therapeutic_center_name" id="therapeutic_center_name" ng-model="model.therapeutic_center_name">
                                                     </div>
                                                 </div>
                                                 <p class="section-inner">Asistencia Médica</p>
@@ -398,7 +397,7 @@
                                                 </div>
                                                 <!-- Representante -->
                                                 <p class="section-inner">
-                                                     <label for="has_representant">
+                                                    <label for="has_representant">
                                                         Datos del Representante
                                                         <input type="checkbox" title="El Usuario tiene Representante?" alt="El Usuario tiene Representante?" class="control-label" name="has_representant" id="has_representant" ng-model="model.has_representant" ng-change="verifyRepresentant()" ng-true-value="1" ng-false-value="0">
                                                     </label>
@@ -539,21 +538,25 @@
                                                 <div class="col-md-3 col-sm-3 col-xs-12 ">
                                                     <label>Cédula del Representante</label>
                                                     <div class="file-input" files-model="model.representant_identification_card">
+                                                        <img ng-if="isEdit" ng-src="{{model.representant_identification_card}}" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-12 ">
                                                     <label>Cédula del Usuario</label>
                                                     <div class="file-input" files-model="model.user_identification_card">
+                                                        <img ng-if="isEdit" ng-src="{{model.user_identification_card}}" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-12 ">
                                                     <label>Carnet del CONADIS</label>
                                                     <div class="file-input" files-model="model.conadis_identification_card">
+                                                        <img ng-if="isEdit" ng-src="{{model.conadis_identification_card}}" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-12 ">
                                                     <label>Certificado del Diagnóstico</label>
                                                     <div class="file-input" files-model="model.specialist_certificate">
+                                                        <img files-model="model.specialist_certificate"  ng-if="isEdit" ng-src="{{model.specialist_certificate}}" alt="">
                                                     </div>
                                                 </div>
                                             </div>

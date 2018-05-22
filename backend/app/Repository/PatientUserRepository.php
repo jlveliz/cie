@@ -171,10 +171,10 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
 				//attached
 				$pUPatient->attached()->create([
-					'representant_identification_card' => $repreIdenficationCard ? $this->uploadAttachment($repreIdenficationCard) : '',
-					'user_identification_card' => $userIdenficationCard ? $this->uploadAttachment($userIdenficationCard) : '',
-					'conadis_identification_card' => $conadisIdenficationCard ? $this->uploadAttachment($conadisIdenficationCard) : '',
-					'specialist_certificate' => $specialistCertificate ? $this->uploadAttachment($specialistCertificate) : '',
+					'representant_identification_card' => $repreIdenficationCard ? $this->uploadAttachment($key,$repreIdenficationCard) : '',
+					'user_identification_card' => $userIdenficationCard ? $this->uploadAttachment($key,$userIdenficationCard) : '',
+					'conadis_identification_card' => $conadisIdenficationCard ? $this->uploadAttachment($key,$conadisIdenficationCard) : '',
+					'specialist_certificate' => $specialistCertificate ? $this->uploadAttachment($key,$specialistCertificate) : '',
 				]);
 				return $this->find($key);
 			} else {
@@ -342,7 +342,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	}
 
 
-	public function uploadAttachment($photo)
+	public function uploadAttachment($puserId,$photo)
 	{
 		if ($photo->isValid()) {
 			
@@ -366,7 +366,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			}
 
 
-			$imageName = '_'.str_random().'.'. $photo->getClientOriginalExtension();
+			$imageName = '_'.str_random().'_'.$puserId.'.'. $photo->getClientOriginalExtension();
 			if($image->save(public_path().'/uploads/user_doc/'.$imageName)){
 				return 'public/uploads/user_doc/'.$imageName;
 			}

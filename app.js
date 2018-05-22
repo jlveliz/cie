@@ -80,7 +80,12 @@ define([
     cie.directive('filesModel', function($parse, $compile, $timeout, $rootScope) {
         return {
             restrict: 'A',
+            scope: {
+                'file-preview': '='
+            },
             link: function(scope, element, attrs) {
+                var model = $parse(attrs.filesModel),
+                    modelSetter = model.assign
                 var inputFile = "<input type='file' accept='image/*'/>";
                 var compiled = $compile(inputFile)(scope);
                 var preview = "<img file-preview='" + attrs.filesModel + "' ng-src='data:image/png;base64,{{attrs.filesModel}}' />";
@@ -89,17 +94,15 @@ define([
                 element.append(compiled);
                 element.append(compilePreview);
 
-                element.bind('click',function(e) {
+                element.bind('click', function(e) {
                     angular.element(e.target).children("input[type='file']").trigger('click');
                 });
 
 
-                var model = $parse(attrs.filesModel),
-                    modelSetter = model.assign
                 compiled.on('change', function(e) {
                     scope.$apply(function() {
                         modelSetter(scope, compiled[0].files)
-                        scope.$digest();
+                        // scope.$digest();
                     })
                 })
             }
@@ -1232,23 +1235,25 @@ define([
                 development: {
                     authorization: 'http://cie2.local/backend/api/authenticate/login',
                     api: 'http://cie2.local/backend/api/',
+                    public: 'http://cie2.local/backend/',
                 },
                 home: {
                     assets: 'http://cie.local/frontend/assets',
                     authorization: 'http://cie.local/backend/api/authenticate/login',
                     api: 'http://cie.local/backend/api/',
+                    public: 'http://cie.local/backend/',
                 },
                 server_develop_public: {
                     assets: 'http://10.101.0.51/frontend/assets',
                     authorization: "http://10.101.0.51/backend/api/authenticate/login",
                     api: 'http://10.101.0.51/backend/api/',
-                    public: 'http://10.101.0.51'
+                    public: 'http://10.101.0.51',
                 },
                 server_prod_public: {
                     assets: 'http://cie.guayas.gob.ec/frontend/assets',
                     authorization: "http://cie.guayas.gob.ec/backend/api/authenticate/login",
                     api: 'http://cie.guayas.gob.ec/backend/api/',
-                    public: 'http://cie.guayas.gob.ec'
+                    public: 'http://cie.guayas.gob.ec/backend'
                 }
             }
         });

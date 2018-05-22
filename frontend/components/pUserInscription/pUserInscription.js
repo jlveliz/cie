@@ -1605,7 +1605,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
         }
     }]);
 
-    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce) {
+    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', 'envService', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce, envService) {
 
         var inscriptionId = $stateParams.pInsId;
         $scope.isEdit = true
@@ -1662,10 +1662,10 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(model) {
                 $scope.model = model;
                 //attached
-                $scope.model.representant_identification_card = $scope.model.attached ? $scope.model.attached.representant_identification_card : null;
-                $scope.model.user_identification_card = $scope.model.attached ? $scope.model.attached.user_identification_card : null;
-                $scope.model.conadis_identification_card = $scope.model.attached ? $scope.model.attached.conadis_identification_card : null;
-                $scope.model.specialist_certificate = $scope.model.attached ? $scope.model.attached.specialist_certificate : null;
+                $scope.model.representant_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.representant_identification_card : null;
+                $scope.model.user_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.user_identification_card : null;
+                $scope.model.conadis_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.conadis_identification_card : null;
+                $scope.model.specialist_certificate = $scope.model.attached ? envService.read('public') + $scope.model.attached.specialist_certificate : null;
 
                 $scope.model.date_birth = new Date($scope.model.date_birth);
                 $scope.model.date_admission = new Date($scope.model.date_admission);

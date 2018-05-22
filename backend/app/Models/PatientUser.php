@@ -185,6 +185,7 @@ class PatientUser extends BaseModel
 
         static::deleted(function($pUser){
             $pUser->person()->delete();
+            $puser->attached()->delete();
         });
 
         static::addGlobalScope(new PatientUserScope());
