@@ -967,6 +967,11 @@ define([
             id: '@id'
         }).register();
 
+        //states patients
+        apiResource.resource("stapatients", envService.read('api') + 'stapatients/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     /** 
@@ -2314,6 +2319,68 @@ define([
         /**
             IDENTIFICATION  TYPES
         **/
+
+
+        /**
+            STATE PATIENTS USER
+        **/
+        $stateProvider.state('root.stapatients', angularAMD.route({
+            url: 'state-patients',
+            controllerUrl: 'frontend/components/stapatients/stapatients',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/stapatients/index.html',
+                    controller: 'StatePatientUserIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Estados de Usuarios P"
+            }
+        }));
+
+        $stateProvider.state('root.stapatients.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/stapatients/stapatients',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/stapatients/create-edit.html',
+                    controller: 'StatePatientUserCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Creación Estados de Usuarios P"
+            }
+        }));
+
+        $stateProvider.state('root.stapatients.edit', angularAMD.route({
+            url: '/{statePaId:int}/edit',
+            controllerUrl: 'frontend/components/stapatients/stapatients',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/stapatients/create-edit.html',
+                    controller: 'StatePatientUserEditCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Edición Estados de Usuarios P"
+            }
+        }));
 
     }]);
 

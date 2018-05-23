@@ -46,6 +46,7 @@ Route::group(['prefix'=>'api'],function() {
 	Route::resource('pathologies','PathologyController',['except'=>['create']]);
 	Route::resource('pertypes','PersonTypeController',['except'=>['create']]);
 	Route::resource('identitypes','IdentificationTypeController',['except'=>['create']]);
+	Route::resource('stapatients','StatePatientUserController',['except'=>['create']]);
 
 	Route::get('validator/{method}','HelperController@validation');
 	Route::get('menu','HelperController@loadMenu');

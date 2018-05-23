@@ -46,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
         //Tipo de Persona
         $this->app->bind('Cie\RepositoryInterface\PersonTypeRepositoryInterface','Cie\Repository\PersonTypeRepository');
         //Tipo de Identificacion
-        $this->app->bind('Cie\RepositoryInterface\IdentificationTypeRepositoryInterface','Cie\Repository\IdentificationTypeRepository');
+        $this->app->bind('Cie\RepositoryInterface\IdentificationTypeRepositoryInterface','Cie\Repository\IdentificationTypeRepository'); 
+        //Tipo de estado de usuario
+        $this->app->bind('Cie\RepositoryInterface\StatePatientUserRepositoryInterface','Cie\Repository\StatePatientUserRepository');
     }
 }

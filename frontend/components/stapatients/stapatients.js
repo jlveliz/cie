@@ -1,18 +1,18 @@
 /**
- ** Province controller
+ ** State Patient User controller
  **/
 define(['app'], function(app) {
 
-    app.register.service('ProvinceService', function() {
+    app.register.service('StatePatientUserService', function(apiResource) {
 
         var _this = this;
-
         _this.messageFlag = {};
-    })
 
-    app.register.controller('ProvinceIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ProvinceService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, ProvinceService, $rootScope) {
+    });
 
-        $scope.provinces = [];
+    app.register.controller('StatePatientUserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'StatePatientUserService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, StatePatientUserService, $rootScope) {
+
+        $scope.states = [];
         $scope.loading = true;
         $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
         $scope.messages = {};
@@ -22,73 +22,73 @@ define(['app'], function(app) {
             orderable: false,
             columnDefs: [{
                 orderable: false,
-                targets: 2
+                targets: 3
             }],
             order: [
                 [0, 'asc'],
                 [1, 'asc'],
+                [2, 'asc'],
             ],
             responsive: true
         });
 
-        apiResource.resource('provinces').query().then(function(results) {
+        apiResource.resource('stapatients').query().then(function(results) {
             $scope.loading = false;
-            $scope.provinces = results;
-            $scope.messages = ProvinceService.messageFlag;
+            $scope.states = results;
+            $scope.messages = StatePatientUserService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
-                ProvinceService.messageFlag = {};
+                StatePatientUserService.messageFlag = {};
             }
         });
 
         $scope.delete = function(id) {
-            apiResource.resource('provinces').getCopy(id).then(function(object) {
+            apiResource.resource('stapatients').getCopy(id).then(function(object) {
                 var params = {
                     title: 'Atención',
-                    text: 'Desea eliminar la Provincia ' + object.name + '.?'
+                    text: 'Desea eliminar el estado de usuario  ' + object.name + '.?'
                 }
                 $rootScope.openDeleteModal(params).then(function() {
-                    var idx = _.findIndex($scope.provinces, function(el) {
+                    var idx = _.findIndex($scope.states, function(el) {
                         return el.id == object.id;
                     });
                     if (idx > -1) {
-                        $scope.provinces[idx].$deleting = true;
+                        $scope.states[idx].$deleting = true;
                         object.$delete(function() {
-                            ProvinceService.messageFlag.title = "Provincia eliminado correctamente";
-                            ProvinceService.messageFlag.type = "info";
-                            $scope.messages = ProvinceService.messageFlag;
+                            StatePatientUserService.messageFlag.title = "Estado de Usuario P se ha eliminado correctamente";
+                            StatePatientUserService.messageFlag.type = "info";
+                            $scope.messages = StatePatientUserService.messageFlag;
                             $scope.hasMessage = true;
-                            $scope.provinces[idx].$deleting = false;
-                            $scope.provinces.splice(idx, 1);
-                            apiResource.resource('provinces').removeFromCache(id);
+                            $scope.states[idx].$deleting = false;
+                            $scope.states.splice(idx, 1);
+                            apiResource.resource('stapatients').removeFromCache(id);
                         })
                     }
                 })
             });
         }
-
     }]);
 
-    app.register.controller('ProvinceCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'ProvinceService', function($scope, apiResource, $stateParams, $state, ProvinceService) {
+
+    app.register.controller('StatePatientUserCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'StatePatientUserService', function($scope, apiResource, $stateParams, $state, StatePatientUserService) {
 
         $scope.saving = false;
         $scope.model = {};
         $scope.messages = [];
 
-
-        $scope.model = apiResource.resource('provinces').create();
+        $scope.model = apiResource.resource('stapatients').create();
 
         $scope.validateOptions = {
             rules: {
                 name: {
                     required: true,
-                    unique: 'province,name'
+                    unique: 'state_patient_user,name'
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
-                    unique: 'La Provincia ya fue tomada'
+                    unique: 'El nombre ya fue tomado'
                 }
             }
 
@@ -100,14 +100,14 @@ define(['app'], function(app) {
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
-                    apiResource.resource('provinces').setOnCache(data);
-                    ProvinceService.messageFlag.title = "Provincia creada correctamente";
-                    ProvinceService.messageFlag.type = "info";
+                    apiResource.resource('stapatients').setOnCache(data);
+                    StatePatientUserService.messageFlag.title = "Estado de usuario P creada correctamente";
+                    StatePatientUserService.messageFlag.type = "info";
                     if (returnIndex) {
-                        $state.go('root.province');
+                        $state.go('root.stapatients');
                     } else {
-                        $state.go('root.province.edit', {
-                            provinceId: data.id
+                        $state.go('root.stapatients.edit', {
+                            statePaId: data.id
                         })
                     }
 
@@ -134,23 +134,23 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('ProvinceEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'ProvinceService', function($scope, apiResource, $stateParams, $state, ProvinceService) {
 
-        var provinceId = $stateParams.provinceId;
+    app.register.controller('StatePatientUserEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'StatePatientUserService', function($scope, apiResource, $stateParams, $state, StatePatientUserService) {
+
+        var stateUserP = $stateParams.statePaId;
         $scope.isEdit = true;
-
 
         $scope.loading = true;
         $scope.model = {};
         $scope.messages = {};
         $scope.existError = false;
 
-        apiResource.resource('provinces').getCopy(provinceId).then(function(model) {
+        apiResource.resource('stapatients').getCopy(stateUserP).then(function(model) {
             $scope.model = model;
-            $scope.messages = ProvinceService.messageFlag;
+            $scope.messages = StatePatientUserService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
-                ProvinceService.messageFlag = {};
+                StatePatientUserService.messageFlag = {};
             }
             $scope.loading = false;
         });
@@ -159,13 +159,13 @@ define(['app'], function(app) {
             rules: {
                 name: {
                     required: true,
-                    unique: 'province,name,' + provinceId
+                    unique: 'state_patient_user,name,' + stateUserP
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
-                    unique: 'El Provincia ya fue tomado'
+                    unique: 'El nombre del estado de paciente ya fue tomado'
                 }
             }
 
@@ -175,16 +175,16 @@ define(['app'], function(app) {
             $scope.messages = {};
             if (form.validate()) {
                 $scope.saving = true;
-                $scope.model.key = provinceId;
-                $scope.model.$update(provinceId, function(data) {
+                $scope.model.key = stateUserP;
+                $scope.model.$update(stateUserP, function(data) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
-                    apiResource.resource('provinces').setOnCache(data);
-                    ProvinceService.messageFlag.title = "Provincia " + $scope.model.name + " Actualizada correctamente";
-                    ProvinceService.messageFlag.type = "info";
-                    $scope.messages = ProvinceService.messageFlag;
+                    apiResource.resource('stapatients').setOnCache(data);
+                    StatePatientUserService.messageFlag.title = "Estado de Usuario P " + $scope.model.name + " Actualizada correctamente";
+                    StatePatientUserService.messageFlag.type = "info";
+                    $scope.messages = StatePatientUserService.messageFlag;
                     if (returnIndex) {
-                        $state.go('root.province');
+                        $state.go('root.stapatients');
                     }
                 }, function(reason) {
                     $scope.saving = false;
