@@ -12,6 +12,7 @@ class Module extends BaseModel
 
     protected $fillable = [
     	'name',
+    	'order'
     ];
 
     public function permissions()

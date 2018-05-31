@@ -110,6 +110,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 					->leftJoin('permission as child','child.parent_id','=','parent.id')
 					->whereRaw("module.id in (SELECT per.module_id FROM permission per left JOIN role_permission rPer ON rPer.permission_id = per.id left join user_role rolU on rolU.role_id = rPer.role_id left join user on `user`.id = rolU.user_id where user.id = ".$userId.") and parent.type_id = (select id from permission_type where code = 'menu')")
 					->groupBy('module.name')
+					->orderBy('module.order')
 					->orderBy('parent.order')
 					->get();
 		return $query;
@@ -131,6 +132,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 		}])
 		->leftJoin('permission as parent','parent.module_id','=','module.id')
 		->groupBy('module.name')
+		->orderBy('module.order')
 		->orderBy('parent.order')
 		->get();
 		return $query;

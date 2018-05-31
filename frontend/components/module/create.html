@@ -36,6 +36,10 @@
                                         <label class="control-label">Nombre  <span class="text-danger">*</span></label>
                                         <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
                                     </div>
+                                    <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Orden  <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="order" type="number" class="form-control" name="order" ng-model="model.order" min="0" max="10">
+                                    </div>
                                 </div>
                             </div>
                             <!-- Nav tabs -->

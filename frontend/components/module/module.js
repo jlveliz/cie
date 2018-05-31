@@ -84,12 +84,20 @@ define(['app'], function(app) {
                 name: {
                     required: true,
                     unique: 'module,name'
+                },
+                order: {
+                    required: true,
+
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
                     unique: 'El módulo ya fue tomado'
+                },
+                order: {
+                    required: "El orden es requerido",
+
                 }
             }
 
@@ -159,12 +167,20 @@ define(['app'], function(app) {
                 name: {
                     required: true,
                     unique: 'module,name,' + moduleId
+                },
+                order: {
+                    required: true,
+
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
                     unique: 'El módulo ya fue tomado'
+                },
+                order: {
+                    required: "El orden es requerido",
+
                 }
             }
 
