@@ -49,5 +49,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('Cie\RepositoryInterface\IdentificationTypeRepositoryInterface','Cie\Repository\IdentificationTypeRepository'); 
         //Tipo de estado de usuario
         $this->app->bind('Cie\RepositoryInterface\StatePatientUserRepositoryInterface','Cie\Repository\StatePatientUserRepository');
+
+        //Psycological Assessment
+        $this->app->bind('Cie\RepositoryInterface\PsychologicalAssessmentRepositoryInterface','Cie\Repository\PsychologicalAssessmentRepository');
     }
 }
