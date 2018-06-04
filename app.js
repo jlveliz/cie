@@ -972,6 +972,14 @@ define([
             id: '@id'
         }).register();
 
+
+        //Psychological Ass
+        apiResource.resource("psycho-assessments", envService.read('api') + 'psycho-assessments/:id', {
+            id: '@id'
+        }).register();
+
+
+
     }]);
 
     /** 
@@ -2381,6 +2389,70 @@ define([
                 pageTitle: "Edición Estados de Usuarios P"
             }
         }));
+
+
+
+        /**
+            STATE PATIENTS USER
+        **/
+        $stateProvider.state('root.psychoAssessment', angularAMD.route({
+            url: 'psycho-assessments',
+            controllerUrl: 'frontend/components/psychologicalAss/psychologicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/psychologicalAss/index.html',
+                    controller: 'PsychologicalAssIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Evaluación Psicológica"
+            }
+        }));
+
+        $stateProvider.state('root.psychoAssessment.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/psychologicalAss/psychologicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/psychologicalAss/create-edit.html',
+                    controller: 'PsychologicalAssCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Creación de Evaluación Psicológica"
+            }
+        }));
+
+        $stateProvider.state('root.psychoAssessment.edit', angularAMD.route({
+            url: '/{psychoAssId:int}/edit',
+            controllerUrl: 'frontend/components/psychologicalAss/psychologicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/psychologicalAss/create-edit.html',
+                    controller: 'PsychologicalAssEditCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Edición de Evaluación Psicológica"
+            }
+        }));
+
 
     }]);
 

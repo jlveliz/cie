@@ -8,6 +8,8 @@ class PsychologicalAssessment extends BaseModel
 {
     protected $table = "psychological_assessment";
 
+    protected $with = ['patientUser'];
+
     protected $primaryKey = "id";
 
     protected $casts = [
@@ -16,6 +18,7 @@ class PsychologicalAssessment extends BaseModel
 
     protected $fillable = [
     	'patient_user_id',
+        'call_user_in_home',
         'date_eval',
         'reason_consultation',
         'background',
@@ -67,4 +70,9 @@ class PsychologicalAssessment extends BaseModel
         'demand_establishment',
         'behaivor_child_interview'
     ];
+
+    public function patientUser()
+    {
+        return $this->belongsTo('Cie\Models\PatientUser','patient_user_id');
+    }
 }

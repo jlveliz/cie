@@ -1,0 +1,247 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Entrevista Psicológica</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <uib-tabset active="1">
+                    <uib-tab index="0">
+                        <uib-tab-heading>
+                            <a ui-sref="root.psychoAssessment" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
+                        </uib-tab-heading>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <h5 ng-if="!isEdit"><b><i class="fa fa-plus"></i> Crear</b></h5>
+                            <h5 ng-if="isEdit"><b><i class="fa fa-plus"></i> Editar</b></h5>
+                        </uib-tab-heading>
+                        <h4 class="text-center" ng-if="loading">
+                            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Cargando...</span>
+                        </h4>
+                        <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
+                            <div class="tab-index">
+                                <div class="row" ng-if="existError || hasMessage">
+                                    <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <p ng-if="hasMessage">{{messages.title}}</p>
+                                        <ul ng-if="messages.details.length">
+                                            <li ng-repeat="ms in messages.details">{{ms}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div ng-if="!isEdit" class="col-md-3 col-md-offset-4 col-xs-12">
+                                        <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Buscar Usuario</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <uib-tabset active="0">
+                                        <!-- DATOS GENERAL -->
+                                        <uib-tab index="0">
+                                            <uib-tab-heading>
+                                                <h5 title="Datos del Usuario"><b>D. Generales</b></h5>
+                                            </uib-tab-heading>
+                                            <div class="tab-index">
+                                                <p class="section-inner">Datos de Usuario</p>
+                                                <div class="row">
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                                                        <label for="date_eval" title="Fecha de evaluación" class="control-label">Fecha de evaluación<span class="text-danger">*</span></label>
+                                                        <input ng-disabled="saving" id="date_eval" type="date" class="form-control max-date-today" name="date_eval" ng-model="model.date_eval" style="padding-left: 2px; padding-right: 0px">
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="name" title="Nombres del Usuario">Nombres</label>
+                                                        <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="name" title="Nombres del Usuario">Como lo llaman en casa</label>
+                                                        <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name">
+                                                    </div>
+                                                    <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" title="Edad del Usuario" for="age">Edad</label>
+                                                        <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="age" type="text" class="form-control" name="age" ng-model="model.age">
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" title="Lugar de Nacimiento" for="place_both">Lugar de Nacimiento</label>
+                                                        <input readonly ng-disabled="saving" id="place_both" type="text" class="form-control" name="place_both" ng-model="model.age">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="genre" title="Género del Usuario">Género</label>
+                                                        <input readonly ng-disabled="saving" id="genre" type="text" class="form-control" name="genre" ng-model="model.genre">
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="schooling" title="Escolarización del Usuario">Escolarización</label>
+                                                        <input type="text" class="form-control" name="" readonly="">
+                                                    </div>
+                                                    <div class="col-md-7 col-sm-7 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="address" title="Dirección domiciliaria">Dirección domiciliaria</label>
+                                                        <input ng-disabled="saving" id="address" type="text" class="form-control" name="address" ng-model="model.address" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="address" title="Diagnóstico del Usuario">Diagnóstico <small>(si ha sido otorgado por alguna Institución o Profesional)</small> </label>
+                                                        <input type="text" name="address" id="address" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <!-- ANTECEDENTES FAMILIARES -->
+                                                <p class="section-inner">Ant. Familiares</p>
+                                                <div class="row">
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                        <label for="father_num_identification" title="Cedula del Padre o Madre del Usuario" class="control-label">Nombre del Padre</label>
+                                                        <input ng-disabled="saving" id="father_name" type="text" class="form-control" name="father_name" ng-model="model.father">
+                                                    </div>
+                                                    <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                        <label class="control-label" title="Edad del Padre o madre del Usuario" for="father_age">Edad</label>
+                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                        <label class="control-label" title="Estado Civil del Padre o madre" for="father_age">Estado Civil</label>
+                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                        <label class="control-label" title="Escolaridad del Padre o Madre del usuario" for="father_age">Escolaridad</label>
+                                                        <input ng-disabled="saving" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                        <label for="father_num_identification" title="Cedula de la Madre del Usuario" class="control-label">Nombre de la Madre</label>
+                                                        <input ng-disabled="saving" id="father_name" type="text" class="form-control" name="mother_name" ng-model="model.mother">
+                                                    </div>
+                                                    <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                        <label class="control-label" title="Edad del Padre o madre del Usuario" for="father_age">Edad</label>
+                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                        <label class="control-label" title="Estado Civil del Padre o madre" for="father_age">Estado Civil</label>
+                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                        <label class="control-label" title="Escolaridad del Padre o Madre del usuario" for="father_age">Escolaridad</label>
+                                                        <input ng-disabled="saving" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </uib-tab>
+                                        <uib-tab index="1">
+                                            <uib-tab-heading>
+                                                <h5 title="Datos del Usuario"><b>Motivos</b></h5>
+                                            </uib-tab-heading>
+                                            <div class="tab-index">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                                        <label class="control-label" title="Motivo de Consulta" for="father_age">Motivo de Consulta</label>
+                                                        <textarea name="reason_consultation" id="reason_consultation" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                                        <label class="control-label" title="Antecendentes de la consulta" for="background">Antecedentes</label>
+                                                        <textarea name="background" id="background" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                                        <label class="control-label" title="Situación Actual" for="current_situation">Situación Actual</label>
+                                                        <input type="text" name="current_situation" class="form-control" ng-model="model.current_situation">
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                                        <label class="control-label" title="Descripción del Beneficiario" for="description_beneficiary">Descripción del Beneficiario</label>
+                                                        <input type="text" name="description_beneficiary" class="form-control" ng-model="model.description_beneficiary">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </uib-tab>
+                                        <uib-tab index="2">
+                                            <uib-tab-heading>
+                                                <h5 title="Datos del Usuario"><b>Niveles Afectivo Social</b></h5>
+                                            </uib-tab-heading>
+                                            <div class="tab-index">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <p class="section-inner">Nivel Afectivo y Social</p>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_nervius"> Nervioso
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_distracted"> Distraido
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_sensitive"> Sensible
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_amable"> Amable
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_aggressive"> Es Agresivo
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_shy"> Tímido
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_friendly"> Amistoso
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                                            <label class="control-label" title="Otros" for="affective_social_level_other">Otros</label>
+                                                            <textarea name="background" id="background" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                        </div>
+
+                                                        <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                                            <label class="control-label" title="Observaciones" for="affective_social_level_observation">Observaciones</label>
+                                                            <input type="text" name="affective_social_level_other" id="affective_social_level_other" ng-model="model.affective_social_level_other" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </uib-tab>
+                                    </uib-tabset>
+                                </div>
+                                <div class="row" ng-if="existError || hasMessage">
+                                    <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <p ng-if="hasMessage">{{messages.title}}</p>
+                                        <ul ng-if="messages.details.length">
+                                            <li ng-repeat="ms in messages.details">{{ms}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Nav tabs -->
+                            <div class="clearfix "></div>
+                            <div class="ln_solid " ng-if="!loading "></div>
+                            <div class="form-group " ng-if="!loading ">
+                                <button type="submit" class="btn btn-primary" ng-disabled="saving" ng-click="save(saveForm)">
+                                    <span ng-if="!saving"><i class="fa fa-save"></i> Guardar</span>
+                                    <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                                </button>
+                                <button type="submit" class="btn btn-default" ng-disabled="saving" ng-click="saveAndClose(saveForm)">
+                                    <span ng-if="!saving"><i class="fa fa-save"></i> Guardar y cerrar</span>
+                                    <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                                </button>
+                                <a class="btn btn-link" ui-sref="root.psychoAssessment">Cancelar</a>
+                            </div>
+                        </form>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>
