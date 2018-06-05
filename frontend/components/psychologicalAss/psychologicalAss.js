@@ -1,13 +1,59 @@
 /**
-	EVALICACIÓN PSICOLÓGICA	
+    EVALICACIÓN PSICOLÓGICA 
 **/
 
 define(['app'], (app) => {
 
-    app.register.service('PshychoService', function() {
+    app.register.service('PshychoService', ['$uibModal', '$q', function($uibModal, $q) {
         var _this = this;
         _this.messageFlag = {};
-    });
+
+        _this.openModalSearchUser = function() {
+            debugger;
+            var deferred = $q.defer();
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: false,
+                size: 'lg',
+                templateUrl: 'frontend/components/psychologicalAss/search-user.html',
+                resolve: {
+                    modalContent: function() {
+                        return parent;
+                    }
+                },
+                controller: function($scope) {
+                    $scope.searchCriteria = {
+                        num_idetification: true,
+                        names: false
+                    };
+
+                    $scope.changeSearchCritaria = function(value) {
+                        console.log(value)
+                    }
+                    // var parent = modalContent;
+                    // $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
+                    // $scope.modalContent = {};
+                    // $http.get(envService.read('api') + "pUsers/getParent?parent=" + parent).then(function(result) {
+                    //     $scope.modalContent = result.data
+                    // });
+
+                    // $scope.ok = function(parent) {
+                    //     $uibModalInstance.close();
+                    //     deferred.resolve(parent);
+                    // }
+                }
+
+            });
+
+            modalInstance.result.then(function() {
+                deferred.resolve();
+            }).catch(function() {
+                deferred.reject();
+            })
+
+            return deferred.promise;
+        }
+    }]);
 
     app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PshychoService', function($scope, apiResource, DTOptionsBuilder, PshychoService) {
 
@@ -69,8 +115,17 @@ define(['app'], (app) => {
 
     }]);
 
-    app.register.controller('PsychologicalAssCreateCtrl', ['$scope', function($scope) {
-        console.log('entra')
+    app.register.controller('PsychologicalAssCreateCtrl', ['$scope', 'apiResource', 'PshychoService', function($scope, apiResource, PshychoService) {
+
+        $scope.isEdit = false;
+        $scope.loading = true;
+        $scope.saving = false;
+        $scope.existError = false;
+        $scope.model = apiResource.resource('puserinscriptions').create();
+        $scope.loading = false;
+
+        $scope.openModalSearchUser = PshychoService.openModalSearchUser;
+
     }]);
 
     app.register.controller('PsychologicalAssEditCtrl', ['$scope', function($scope) {

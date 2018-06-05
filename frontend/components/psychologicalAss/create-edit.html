@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="row">
                                     <div ng-if="!isEdit" class="col-md-3 col-md-offset-4 col-xs-12">
-                                        <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Buscar Usuario</button>
+                                        <button type="button" ng-click="openModalSearchUser()" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Buscar Usuario</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -63,7 +63,11 @@
                                                         <label class="control-label" title="Edad del Usuario" for="age">Edad</label>
                                                         <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="age" type="text" class="form-control" name="age" ng-model="model.age">
                                                     </div>
-                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" title="Fecha de Nacimiento" for="date_both">Fecha de Nacimiento</label>
+                                                        <input readonly ng-disabled="saving" id="date_both" type="text" class="form-control" name="date_both" ng-model="model.date_both">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Lugar de Nacimiento" for="place_both">Lugar de Nacimiento</label>
                                                         <input readonly ng-disabled="saving" id="place_both" type="text" class="form-control" name="place_both" ng-model="model.age">
                                                     </div>
@@ -74,11 +78,11 @@
                                                         <input readonly ng-disabled="saving" id="genre" type="text" class="form-control" name="genre" ng-model="model.genre">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                                        <label class="control-label" for="schooling" title="Escolarización del Usuario">Escolarización</label>
+                                                        <label class="control-label" for="schooling" title="Escolarización del Usuario">Escolaridad</label>
                                                         <input type="text" class="form-control" name="" readonly="">
                                                     </div>
                                                     <div class="col-md-7 col-sm-7 col-xs-12 form-group" ng-if="!loading">
-                                                        <label class="control-label" for="address" title="Dirección domiciliaria">Dirección domiciliaria</label>
+                                                        <label class="control-label" for="address" title="Dirección domiciliaria">Dirección Domiciliaria</label>
                                                         <input ng-disabled="saving" id="address" type="text" class="form-control" name="address" ng-model="model.address" readonly>
                                                     </div>
                                                 </div>
@@ -91,7 +95,7 @@
                                                 <!-- ANTECEDENTES FAMILIARES -->
                                                 <p class="section-inner">Ant. Familiares</p>
                                                 <div class="row">
-                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Cedula del Padre o Madre del Usuario" class="control-label">Nombre del Padre</label>
                                                         <input ng-disabled="saving" id="father_name" type="text" class="form-control" name="father_name" ng-model="model.father">
                                                     </div>
@@ -99,17 +103,17 @@
                                                         <label class="control-label" title="Edad del Padre o madre del Usuario" for="father_age">Edad</label>
                                                         <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
-                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Estado Civil del Padre o madre" for="father_age">Estado Civil</label>
                                                         <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
-                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Escolaridad del Padre o Madre del usuario" for="father_age">Escolaridad</label>
                                                         <input ng-disabled="saving" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Cedula de la Madre del Usuario" class="control-label">Nombre de la Madre</label>
                                                         <input ng-disabled="saving" id="father_name" type="text" class="form-control" name="mother_name" ng-model="model.mother">
                                                     </div>
@@ -117,11 +121,11 @@
                                                         <label class="control-label" title="Edad del Padre o madre del Usuario" for="father_age">Edad</label>
                                                         <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
-                                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Estado Civil del Padre o madre" for="father_age">Estado Civil</label>
                                                         <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
-                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Escolaridad del Padre o Madre del usuario" for="father_age">Escolaridad</label>
                                                         <input ng-disabled="saving" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
@@ -157,11 +161,11 @@
                                         </uib-tab>
                                         <uib-tab index="2">
                                             <uib-tab-heading>
-                                                <h5 title="Datos del Usuario"><b>Niveles Afectivo Social</b></h5>
+                                                <h5 title="Niveles"><b>Niveles</b></h5>
                                             </uib-tab-heading>
                                             <div class="tab-index">
                                                 <div class="row">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4 col-xs-12">
                                                         <p class="section-inner">Nivel Afectivo y Social</p>
                                                         <div class="checkbox">
                                                             <label>
@@ -185,7 +189,7 @@
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_aggressive"> Es Agresivo
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_aggressive"> gresivo
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
@@ -198,16 +202,235 @@
                                                                 <input type="checkbox" ng-model="model.affective_social_level_is_friendly"> Amistoso
                                                             </label>
                                                         </div>
-                                                        <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                                                            <label class="control-label" title="Otros" for="affective_social_level_other">Otros</label>
-                                                            <textarea name="background" id="background" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                        <label class="control-label" title="Otros" for="affective_social_level_other">Otros</label>
+                                                        <textarea name="background" id="background" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                        <label class="control-label" title="Observaciones" for="affective_social_level_observation">Observaciones</label>
+                                                        <textarea name="affective_social_level_other" id="affective_social_level_other" ng-model="model.affective_social_level_other" class="form-control"></textarea>
+                                                    </div>
+                                                    <div class="col-md-4 col-xs-12">
+                                                        <p class="section-inner">Nivel Verbal y Lenguaje</p>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_silence"> Silencioso
+                                                            </label>
                                                         </div>
-
-                                                        <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                                                            <label class="control-label" title="Observaciones" for="affective_social_level_observation">Observaciones</label>
-                                                            <input type="text" name="affective_social_level_other" id="affective_social_level_other" ng-model="model.affective_social_level_other" class="form-control">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_repetitive"> Repetitivo
+                                                            </label>
                                                         </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_stutterer"> Tartamudez
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_reluctant_answer"> Renuente a Contestar
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_reluctant_answer"> Renuente a Contestar
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_excessive_verbalization"> Verbalización Excesiva
+                                                            </label>
+                                                        </div>
+                                                        <label>
+                                                            Tiene dificultad en el lenguaje
+                                                        </label>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_language_expresive"> Expresivo
+                                                            </label>
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.language_level_is_language_comprexive"> Comprensivo
+                                                            </label>
+                                                        </div>
+                                                        
+                                                        <!-- OTROS -->
+                                                        <label class="control-label" title="Otros" for="language_level_other">Otros</label>
+                                                        <textarea ng-disabled="saving" id="language_level_other" rows="3" class="form-control no-resize" name="language_level_other" ng-model="model.language_level_other"></textarea>
 
+                                                        <!-- OBSERVACIONES -->
+                                                        <label class="control-label" title="Observaciones" for="physical_level_observation">Observaciones</label>
+                                                        <textarea ng-disabled="saving" id="language_level_observation" class="form-control no-resize" name="language_level_observation" ng-model="model.language_level_observation"></textarea>
+                                                    </div>
+                                                    <div class="col-md-4 col-xs-12">
+                                                        <p class="section-inner">Nivel Físico</p>
+                                                        <!-- Apariencia Personal -->
+                                                        <label class="control-label" title="Apariencia personal" for="physical_level_personal_appearance">Apariencia Personal <small>(aseado, no aseado)</small></label>
+                                                        <input ng-disabled="saving" id="physical_level_personal_appearance" type="text" class="form-control" name="physical_level_personal_appearance" ng-model="model.physical_level_personal_appearance">
+                                                        <!-- Posturas Inadecuadas -->
+                                                        <label class="control-label" title="Posturas Inadecuadas" for="physical_level_inadequate_postures">Posturas Inadecuadas</label>
+                                                        <input ng-disabled="saving" id="physical_level_inadequate_postures" type="text" class="form-control" name="physical_level_inadequate_postures" ng-model="model.physical_level_inadequate_postures">
+                                                        <!-- Malformaciones físicas -->
+                                                        <label class="control-label" title="Malformaciones físicas" for="physical_level_physical_malformations">Malformaciones físicas</label>
+                                                        <input ng-disabled="saving" id="physical_level_physical_malformations" type="text" class="form-control" name="physical_level_physical_malformations" ng-model="model.physical_level_physical_malformations">
+                                                        <!-- NIÑO ZURDO O DERECHO -->
+                                                        <label class="control-label" title="El Niño es Zurdo o derecho" for="physical_level_physical_malformations">El niño es</label>
+                                                        <br>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.physical_level_is_left_hand"> Izquierdo
+                                                            </label>
+                                                            <label>
+                                                                <input type="checkbox" ng-model="model.physical_level_is_right_hand"> Derecho
+                                                            </label>
+                                                        </div>
+                                                        <br>
+                                                        <!-- OBSERVACIONES -->
+                                                        <label class="control-label" title="Malformaciones físicas" for="physical_level_observation">Observaciones</label>
+                                                        <textarea ng-disabled="saving" id="physical_level_observation" class="form-control no-resize" name="physical_level_observation" rows="3" ng-model="model.physical_level_observation"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </uib-tab>
+                                        <uib-tab index="3">
+                                            <uib-tab-heading>
+                                                <h5 title="Área Conductual"><b>Área Conductual</b></h5>
+                                            </uib-tab-heading>
+                                            <div class="tab-index">
+                                                <div class="row">
+                                                    <!-- ¿A qué hora duerme? Con quien? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿A qué hora duerme? Con quien?" for="cunductual_level_time_sleep_who_sleep">¿A qué hora duerme? Con quien?</label>
+                                                        <input type="text" name="cunductual_level_time_sleep_who_sleep" id="cunductual_level_time_sleep_who_sleep" class="form-control" ng-model="model.cunductual_level_time_sleep_who_sleep">
+                                                    </div>
+                                                    <!-- ¿Necesita algo especial para dormir, que ? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Necesita algo especial para dormir, que ?" for="cunductual_needs_someone_what">¿Necesita algo especial para dormir, que ?</label>
+                                                        <input type="text" name="cunductual_needs_someone_what" id="cunductual_needs_someone_what" class="form-control" ng-model="model.cunductual_needs_someone_what">
+                                                    </div>
+                                                    <!-- ¿Despierta con frecuencia, cuantas? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Despierta con frecuencia, cuantas?" for="cunductual_wake_up_frecuence">¿Despierta con frecuencia, cuantas?</label>
+                                                        <input type="text" name="cunductual_wake_up_frecuence" id="cunductual_wake_up_frecuence" class="form-control" ng-model="model.cunductual_wake_up_frecuence">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- ¿Acepta todo tipo de alimentos? Cuáles no? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Acepta todo tipo de alimentos? Cuáles no?" for="cunductual_accept_other_food_what">¿Acepta todo tipo de alimentos? Cuáles no?</label>
+                                                        <input type="text" name="cunductual_accept_other_food_what" id="cunductual_accept_other_food_what" class="form-control" ng-model="model.cunductual_accept_other_food_what">
+                                                    </div>
+                                                    <!-- ¿Tiene buen apetito? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Tiene buen apetito?" for="cunductual_has_appetite">¿Tiene buen apetito?</label>
+                                                        <input type="text" name="cunductual_has_appetite" id="cunductual_has_appetite" class="form-control" ng-model="model.cunductual_has_appetite">
+                                                    </div>
+                                                    <!-- Observaciones -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="Observaciones" for="cunductual_observation">Observaciones</label>
+                                                        <input type="text" name="cunductual_observation" id="cunductual_observation" class="form-control" ng-model="model.cunductual_observation">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </uib-tab>
+                                        <!-- Historia Escolar -->
+                                        <uib-tab index="4">
+                                            <uib-tab-heading>
+                                                <h5 title="Historia Escolar"><b>Historia Escolar</b></h5>
+                                            </uib-tab-heading>
+                                            <div class="tab-index">
+                                                <div class="row">
+                                                    <!-- ¿Está escolarizado/a? -->
+                                                    <div class="col-md-4 col-sm-3 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Está escolarizado/a?" for="cunductual_level_time_sleep_who_sleep">¿Está escolarizado/a?</label>
+                                                        <input type="text" name="school_history_is_school" id="school_history_is_school" class="form-control" ng-model="model.school_history_is_school">
+                                                    </div>
+                                                    <!-- ¿Grado escolar que cursa actualmente? -->
+                                                    <div class="col-md-4 col-sm-3 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Grado escolar que cursa actualmente?" for="school_history_current">¿Grado escolar que cursa actualmente?</label>
+                                                        <input type="text" name="school_history_current" id="school_history_current" class="form-control" ng-model="model.school_history_current">
+                                                    </div>
+                                                    <!-- ¿Le gusta ir a la escuela/colegio? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Le gusta ir a la escuela/colegio?" for="school_history_like_go_school">¿Le gusta ir a la escuela/colegio?</label>
+                                                        <input type="text" name="school_history_like_go_school" id="school_history_like_go_school" class="form-control" ng-model="model.school_history_like_go_school">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- ¿Se generan quejas de él/ella constantemente?¿De qué tipo? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Se generan quejas de él/ella constantemente?¿De qué tipo?" for="school_history_generate_problems">¿Se generan quejas de él/ella constantemente?¿De qué tipo?</label>
+                                                        <input type="text" name="school_history_generate_problems" id="school_history_generate_problems" class="form-control" ng-model="model.school_history_generate_problems">
+                                                    </div>
+                                                    <!-- ¿Participa dentro de actividades colectivas en la escuela/colegio? -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Participa dentro de actividades colectivas en la escuela/colegio?" for="school_history_participate_shcool">¿Participa dentro de actividades colectivas en la escuela/colegio?</label>
+                                                        <input type="text" name="school_history_participate_shcool" id="school_history_participate_shcool" class="form-control" ng-model="model.school_history_participate_shcool">
+                                                    </div>
+                                                    <!-- Observaciones -->
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                                                        <label class="control-label" title="Observaciones" for="school_history_observation">Observaciones</label>
+                                                        <input type="text" name="school_history_observation" id="school_history_observation" class="form-control" ng-model="model.school_history_observation">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </uib-tab>
+                                        <!-- Historia Escolar -->
+                                        <uib-tab index="5">
+                                            <uib-tab-heading>
+                                                <h5 title="Consideraciones Médicas"><b>Consideraciones Médicas</b></h5>
+                                            </uib-tab-heading>
+                                            <div class="tab-index">
+                                                <div class="row">
+                                                    <!-- ¿Toma medicamentos?¿Cuáles? -->
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Toma medicamentos?¿Cuáles?" for="medical_take_medicine_what">¿Toma medicamentos?¿Cuáles?</label>
+                                                        <input type="text" name="medical_take_medicine_what" id="medical_take_medicine_what" class="form-control" ng-model="model.medical_take_medicine_what">
+                                                    </div>
+                                                    <!-- ¿Convulsiona o ha Convulsionado? -->
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Convulsiona o ha Convulsionado?" for="medical_convulsing_or_convulsed">¿Convulsiona o ha Convulsionado?</label>
+                                                        <input type="text" name="medical_convulsing_or_convulsed" id="medical_convulsing_or_convulsed" class="form-control" ng-model="model.medical_convulsing_or_convulsed">
+                                                    </div>
+                                                    <!-- ¿Ha tenido alguna cirugía?¿Cuál? -->
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Ha tenido alguna cirugía?¿Cuál?" for="medical_has_had_surgery">¿Ha tenido alguna cirugía?¿Cuál?</label>
+                                                        <input type="text" name="medical_has_had_surgery" id="medical_has_had_surgery" class="form-control" ng-model="model.medical_has_had_surgery">
+                                                    </div>
+                                                    <!-- ¿Ha sufrido golpes en la cabeza? -->
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                                                        <label class="control-label" title="¿Ha sufrido golpes en la cabeza?" for="medical_suffered_blows_head">¿Ha sufrido golpes en la cabeza?</label>
+                                                        <input type="text" name="medical_suffered_blows_head" id="medical_suffered_blows_head" class="form-control" ng-model="model.medical_suffered_blows_head">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- ¿Ha sufrido golpes en la cabeza? -->
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                                                        <label class="control-label" title="Alergías (medicinas,comidas, otros)" for="medical_hav_alergy">Alergías <small>(medicinas,comidas, otros)</small></label>
+                                                        <input type="text" name="medical_hav_alergy" id="medical_hav_alergy" class="form-control" ng-model="model.medical_hav_alergy">
+                                                    </div>
+                                                    <!-- ¿Ha sufrido golpes en la cabeza? -->
+                                                    <div class="col-md-9 col-sm-9 col-xs-12 form-group">
+                                                        <label class="control-label" title="Cual considera que es el problema más grande del niño/a" for="medical_what_is_the_big_problem">Cual considera que es el problema más grande del niño/a</label>
+                                                        <input type="text" name="medical_what_is_the_big_problem" id="medical_what_is_the_big_problem" class="form-control" ng-model="model.medical_what_is_the_big_problem">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- Observaciones -->
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                                        <label class="control-label" title="Observaciones" for="medical_observation">Observaciones</label>
+                                                        <textarea name="medical_observation" rows="2" class="form-control no-resize" id="medical_observation" ng-model="model.medical_observation"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- Establecimiento de la demanda -->
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                                        <label class="control-label" title="Establecimiento de la demanda" for="demand_establishment">Establecimiento de la demanda</label>
+                                                        <textarea name="demand_establishment" rows="2" class="form-control no-resize" id="demand_establishment" ng-model="model.demand_establishment"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- Establecimiento de la demanda -->
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                                        <label class="control-label" title="Comportamiento del niño/a durante la entrevista" for="behaivor_child_interview">Comportamiento del niño/a durante la entrevista</label>
+                                                        <textarea name="behaivor_child_interview" rows="2" class="form-control no-resize" id="behaivor_child_interview" ng-model="model.behaivor_child_interview"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
