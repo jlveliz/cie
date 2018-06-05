@@ -22,25 +22,16 @@ define(['app'], (app) => {
                     }
                 },
                 controller: function($scope) {
+                    $scope.criteria = "1";
+
                     $scope.searchCriteria = {
                         num_idetification: true,
                         names: false
                     };
 
-                    $scope.changeSearchCritaria = function(value) {
-                        console.log(value)
+                    $scope.changeSearchCriteria = function() {
+                        $scope.queryCriteria = '';
                     }
-                    // var parent = modalContent;
-                    // $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
-                    // $scope.modalContent = {};
-                    // $http.get(envService.read('api') + "pUsers/getParent?parent=" + parent).then(function(result) {
-                    //     $scope.modalContent = result.data
-                    // });
-
-                    // $scope.ok = function(parent) {
-                    //     $uibModalInstance.close();
-                    //     deferred.resolve(parent);
-                    // }
                 }
 
             });

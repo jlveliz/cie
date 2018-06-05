@@ -7,15 +7,15 @@
         <div class="panel-heading"><b>Seleccione un criterio de busqueda</b></div>
         <div class="panel-body">
             <div class="col-md-3">
-                <select class="form-control" ng-model="searchCriteria" ng-change="changeSearchCritaria()">
-                    <option value="num_identification">Cédula</option>
-                    <option value="names">Nombres</option>
+                <select class="form-control" ng-model="criteria" ng-change="changeSearchCriteria()">
+                    <option value="1">Cédula</option>
+                    <option value="0">Nombres</option>
                 </select>
             </div>
             <div class="col-md-6">
-                <input ng-if="searchCriteria.num_idetification" type="text" class="form-control" name="" placeholder="Ingrese la cédula">
+                <input ng-show="criteria == 1" type="text" ng-model="queryCriteria" class="form-control" name="" placeholder="Ingrese la cédula">
 
-                <input ng-if="searchCriteria.names" type="text" class="form-control" name="" placeholder="Ingrese el nombre o apellido del usuario">
+                <input ng-show="criteria == 0" type="text" ng-model="queryCriteria" class="form-control" name="" placeholder="Ingrese el nombre o apellido del usuario">
             </div>
             <div class="col-md-2 col-md-offset-1">
                 <button type="button" class="btn btn-default"><i class="fa fa-search"></i> Buscar</button>
