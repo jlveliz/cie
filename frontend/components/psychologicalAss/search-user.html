@@ -7,22 +7,22 @@
         <div class="panel-heading"><b>Seleccione un criterio de busqueda</b></div>
         <div class="panel-body">
             <div class="col-md-3">
-                <select class="form-control" ng-model="criteria" ng-change="changeSearchCriteria()">
+                <select class="form-control change-option" ng-model="criteria" ng-change="model.queryCriteria = ''">
                     <option value="1">Cédula</option>
                     <option value="0">Nombres</option>
                 </select>
             </div>
             <div class="col-md-6">
-                <input ng-show="criteria == 1" type="text" ng-model="queryCriteria" class="form-control" name="" placeholder="Ingrese la cédula">
-
-                <input ng-show="criteria == 0" type="text" ng-model="queryCriteria" class="form-control" name="" placeholder="Ingrese el nombre o apellido del usuario">
+                <div class="col-md-6 no-padding place-input">
+                    <input id="query-criteria-dni" type="text" maxlength="10" minlength="10" ng-model="model.queryCriteria" class="form-control" placeholder="0999999999" numbers-only> 
+                </div>
             </div>
             <div class="col-md-2 col-md-offset-1">
-                <button type="button" class="btn btn-default"><i class="fa fa-search"></i> Buscar</button>
+                <button ng-disabled="!model.queryCriteria" type="button" class="btn btn-default" ng-click="search()"><i class="fa fa-search"></i> Buscar</button>
             </div>
         </div>
     </div>
-    <table class="table table-striped" dt-options="dtOptions" datatable="ng">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Persona</th>

@@ -26,13 +26,17 @@ class PatientUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->pUserRepo->enum()->toJson();
-        // $users = $this->pUserRepo->paginate()->toJson();
-        // dd($users);
-        $users = $this->encodeResponse($users);
-        return response()->json($users,200);
+        try {
+            $users = $this->pUserRepo->enum($request->all())->toJson();
+            $users = $this->encodeResponse($users);
+            return response()->json($users,200);
+        } catch (PatientUserException $e) {
+            return response()->json(['message'=>$e->getMessage()],$e->getCode());
+        }catch (\Exception $e) {
+            
+        }
     }
 
     /**
@@ -74,7 +78,6 @@ class PatientUserController extends Controller
      */
     public function show($id)
     {
-        
         try {
             $user = $this->pUserRepo->find($id)->toJson();
             $user = $this->encodeResponse($user);

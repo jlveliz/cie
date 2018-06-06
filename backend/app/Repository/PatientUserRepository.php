@@ -29,9 +29,19 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
 	public function enum($params = null)
 	{
-		// $paUsers = PatientUser::toSql();
-		$paUsers = PatientUser::get();
-		// dd($paUsers);
+		$paUsers = null;
+		if ($params) {
+			if (is_array($params)) {
+				if (array_key_exists('num_identification', $params) && isset($params['num_identification'])) {
+					$paUsers = $this->find($params);
+				} elseif (array_key_exists('name', $params) && isset($params['name'])) {
+					$paUsers = PatientUser::where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%')->get();
+				}
+			}
+		} else {
+			$paUsers = PatientUser::get();
+		}
+		
 		if (!$paUsers) {
 			throw new PatientUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 		}
@@ -44,7 +54,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	{
 		if (is_array($field)) {
 			if (array_key_exists('num_identification', $field)) { 
-				$paUser = PatientUser::where('patient_user.num_identification',$field['num_identification'])->first();
+				$paUser = PatientUser::where('person.num_identification',$field['num_identification'])->first();
 			} elseif (array_key_exists('conadis_id', $field)) {
 				$paUser = PatientUser::where('patient_user.conadis_id',$field['conadis_id'])->first();	
 			} elseif (array_key_exists('person_id', $field)) {
