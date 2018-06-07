@@ -34,8 +34,10 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			if (is_array($params)) {
 				if (array_key_exists('num_identification', $params) && isset($params['num_identification'])) {
 					$paUsers = $this->find($params);
+					//USADO PARA LA BUSQUEDA DE USUARIOS EN EVALUACIONES PSICOLOGICA Y MÉDICA
 				} elseif (array_key_exists('name', $params) && isset($params['name'])) {
 					$paUsers = PatientUser::where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%')->get();
+					if (!count($paUsers)) throw new PatientUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda, Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 				}
 			}
 		} else {
@@ -60,7 +62,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			} elseif (array_key_exists('person_id', $field)) {
 				$paUser = PatientUser::where('patient_user.person_id',$field['person_id'])->first();	
 			} else {
-				throw new PatientUserException(['title'=>'No se puede buscar el Usuario','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+				throw new PatientUserException(['title'=>'No se puede buscar el Usuario','detail'=>'No se puede buscar el Usuario, Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
@@ -69,7 +71,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			throw new PatientUserException(['title'=>'Se ha producido un error al buscar el Usuario','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
 
-		if (!$paUser) throw new PatientUserException(['title'=>'No se puede buscar el Usuario','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+		if (!$paUser) throw new PatientUserException(['title'=>'No se puede buscar el Usuario','detail'=>'No se ha encontrado el usuario, Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 		
 		return $paUser;
 

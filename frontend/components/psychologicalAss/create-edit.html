@@ -49,47 +49,47 @@
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group">
                                                         <label for="date_eval" title="Fecha de evaluación" class="control-label">Fecha de evaluación<span class="text-danger">*</span></label>
-                                                        <input ng-disabled="saving" id="date_eval" type="date" class="form-control max-date-today" name="date_eval" ng-model="model.date_eval" style="padding-left: 2px; padding-right: 0px">
+                                                        <input ng-disabled="saving || !existPatientUserSelected" id="date_eval" type="date" class="form-control max-date-today" name="date_eval" ng-model="model.date_eval" style="padding-left: 2px; padding-right: 0px">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="name" title="Nombres del Usuario">Nombres</label>
-                                                        <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name">
+                                                        <input readonly ng-disabled="saving  || !existPatientUserSelected" id="name" type="text" class="form-control" name="name" ng-model="model.patientUser.last_name +' '+ model.patientUser.name">
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="name" title="Nombres del Usuario">Como lo llaman en casa</label>
-                                                        <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name">
+                                                        <input ng-disabled="saving  || !existPatientUserSelected" id="name" type="text" class="form-control" name="name" ng-model="model.name">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Usuario" for="age">Edad</label>
-                                                        <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="age" type="text" class="form-control" name="age" ng-model="model.age">
+                                                        <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="age" type="text" class="form-control" name="age" ng-model="model.patientUser.age">
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Fecha de Nacimiento" for="date_both">Fecha de Nacimiento</label>
-                                                        <input readonly ng-disabled="saving" id="date_both" type="text" class="form-control" name="date_both" ng-model="model.date_both">
+                                                        <input readonly ng-disabled="saving  || !existPatientUserSelected" id="date_birth" type="text" class="form-control" name="date_birth" ng-model="model.patientUser.date_birth">
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Lugar de Nacimiento" for="place_both">Lugar de Nacimiento</label>
-                                                        <input readonly ng-disabled="saving" id="place_both" type="text" class="form-control" name="place_both" ng-model="model.age">
+                                                        <input readonly ng-disabled="saving  || !existPatientUserSelected" id="place_both" type="text" class="form-control" name="place_both" ng-model="model.patientUser.province.name +' '+model.patientUser.city.name">
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="genre" title="Género del Usuario">Género</label>
-                                                        <input readonly ng-disabled="saving" id="genre" type="text" class="form-control" name="genre" ng-model="model.genre">
+                                                        <input readonly  id="genre" type="text" class="form-control" name="genre" ng-model="model.patienUser.genre">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="schooling" title="Escolarización del Usuario">Escolaridad</label>
-                                                        <input type="text" class="form-control" name="" readonly="">
+                                                        <input readonly type="text" class="form-control" name="" ng-disabled=" saving || !existPatientUserSelected" ng-model="model.patienUser.schooling_name">
                                                     </div>
                                                     <div class="col-md-7 col-sm-7 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="address" title="Dirección domiciliaria">Dirección Domiciliaria</label>
-                                                        <input ng-disabled="saving" id="address" type="text" class="form-control" name="address" ng-model="model.address" readonly>
+                                                        <input readonly id="address" type="text" class="form-control" name="address" ng-model="model.patienUser.address">
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="address" title="Diagnóstico del Usuario">Diagnóstico <small>(si ha sido otorgado por alguna Institución o Profesional)</small> </label>
-                                                        <input type="text" name="address" id="address" class="form-control">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" type="text" name="address" id="address" class="form-control">
                                                     </div>
                                                 </div>
                                                 <!-- ANTECEDENTES FAMILIARES -->
@@ -97,42 +97,42 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Cedula del Padre o Madre del Usuario" class="control-label">Nombre del Padre</label>
-                                                        <input ng-disabled="saving" id="father_name" type="text" class="form-control" name="father_name" ng-model="model.father">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" id="father_name" type="text" class="form-control" name="father_name" ng-model="model.father">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Padre o madre del Usuario" for="father_age">Edad</label>
-                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Estado Civil del Padre o madre" for="father_age">Estado Civil</label>
-                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Escolaridad del Padre o Madre del usuario" for="father_age">Escolaridad</label>
-                                                        <input ng-disabled="saving" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Cedula de la Madre del Usuario" class="control-label">Nombre de la Madre</label>
-                                                        <input ng-disabled="saving" id="father_name" type="text" class="form-control" name="mother_name" ng-model="model.mother">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" id="father_name" type="text" class="form-control" name="mother_name" ng-model="model.mother">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Padre o madre del Usuario" for="father_age">Edad</label>
-                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Estado Civil del Padre o madre" for="father_age">Estado Civil</label>
-                                                        <input ng-disabled="saving" readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected"readonly maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Escolaridad del Padre o Madre del usuario" for="father_age">Escolaridad</label>
-                                                        <input ng-disabled="saving" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
+                                                        <input ng-disabled=" saving || !existPatientUserSelected" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father.age">
                                                     </div>
                                                 </div>
                                             </div>
                                         </uib-tab>
-                                        <uib-tab index="1">
+                                        <uib-tab index="1" ng-if="existPatientUserSelected">
                                             <uib-tab-heading>
                                                 <h5 title="Datos del Usuario"><b>Motivos</b></h5>
                                             </uib-tab-heading>
@@ -159,7 +159,7 @@
                                                 </div>
                                             </div>
                                         </uib-tab>
-                                        <uib-tab index="2">
+                                        <uib-tab index="2" ng-if="existPatientUserSelected">
                                             <uib-tab-heading>
                                                 <h5 title="Niveles"><b>Niveles</b></h5>
                                             </uib-tab-heading>
@@ -250,11 +250,9 @@
                                                                 <input type="checkbox" ng-model="model.language_level_is_language_comprexive"> Comprensivo
                                                             </label>
                                                         </div>
-                                                        
                                                         <!-- OTROS -->
                                                         <label class="control-label" title="Otros" for="language_level_other">Otros</label>
                                                         <textarea ng-disabled="saving" id="language_level_other" rows="3" class="form-control no-resize" name="language_level_other" ng-model="model.language_level_other"></textarea>
-
                                                         <!-- OBSERVACIONES -->
                                                         <label class="control-label" title="Observaciones" for="physical_level_observation">Observaciones</label>
                                                         <textarea ng-disabled="saving" id="language_level_observation" class="form-control no-resize" name="language_level_observation" ng-model="model.language_level_observation"></textarea>
@@ -289,7 +287,7 @@
                                                 </div>
                                             </div>
                                         </uib-tab>
-                                        <uib-tab index="3">
+                                        <uib-tab index="3" ng-if="existPatientUserSelected">
                                             <uib-tab-heading>
                                                 <h5 title="Área Conductual"><b>Área Conductual</b></h5>
                                             </uib-tab-heading>
@@ -331,7 +329,7 @@
                                             </div>
                                         </uib-tab>
                                         <!-- Historia Escolar -->
-                                        <uib-tab index="4">
+                                        <uib-tab index="4" ng-if="existPatientUserSelected">
                                             <uib-tab-heading>
                                                 <h5 title="Historia Escolar"><b>Historia Escolar</b></h5>
                                             </uib-tab-heading>
@@ -373,7 +371,7 @@
                                             </div>
                                         </uib-tab>
                                         <!-- Historia Escolar -->
-                                        <uib-tab index="5">
+                                        <uib-tab index="5" ng-if="existPatientUserSelected">
                                             <uib-tab-heading>
                                                 <h5 title="Consideraciones Médicas"><b>Consideraciones Médicas</b></h5>
                                             </uib-tab-heading>
@@ -451,11 +449,11 @@
                             <div class="clearfix "></div>
                             <div class="ln_solid " ng-if="!loading "></div>
                             <div class="form-group " ng-if="!loading ">
-                                <button type="submit" class="btn btn-primary" ng-disabled="saving" ng-click="save(saveForm)">
+                                <button type="submit" class="btn btn-primary" ng-disabled=" saving || !existPatientUserSelected" ng-click="save(saveForm)">
                                     <span ng-if="!saving"><i class="fa fa-save"></i> Guardar</span>
                                     <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
                                 </button>
-                                <button type="submit" class="btn btn-default" ng-disabled="saving" ng-click="saveAndClose(saveForm)">
+                                <button type="submit" class="btn btn-default" ng-disabled=" saving || !existPatientUserSelected" ng-click="saveAndClose(saveForm)">
                                     <span ng-if="!saving"><i class="fa fa-save"></i> Guardar y cerrar</span>
                                     <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
                                 </button>

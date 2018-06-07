@@ -10,8 +10,8 @@ define(['app'], (app) => {
             link: function(scope, iElement, iAttrs) {
 
                 angular.element(iElement).on('change', function(event) {
-                    var htmlNameField = "<input id='query-criteria-name' type='text' class='form-control' placeholder='APELLIDOS NOMBRES' ng-model='model.queryCriteria' />";
-                    var htmlIdField = "<input id='query-criteria-dni' type='text' maxlength='10' minlength='10' ng-model='model.queryCriteria' class='form-control' placeholder='0999999999' numbers-only>";
+                    var htmlNameField = "<input id='query-criteria-name' type='text' class='form-control' placeholder='APELLIDOS NOMBRES' ng-model='model.queryCriteria' ng-disabled='searching'/>";
+                    var htmlIdField = "<input id='query-criteria-dni' type='text' maxlength='10' minlength='10' ng-model='model.queryCriteria' class='form-control' placeholder='0999999999' numbers-only ng-disabled='searching'> ";
 
                     scope.$apply(function() {
                         if (scope.criteria == '0') {
@@ -43,46 +43,56 @@ define(['app'], (app) => {
             var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: false,
-                size: 'lg',
                 templateUrl: 'frontend/components/psychologicalAss/search-user.html',
                 resolve: {
                     modalContent: function() {
                         return parent;
                     }
                 },
-                controller: function($scope, $http, envService) {
+                controller: function($scope, $http, envService, $uibModalInstance) {
                     $scope.criteria = "1";
-                    $scope.model = { queryCriteria: '' }
-
+                    $scope.existError = false;
+                    $scope.model = { queryCriteria: '', errors: '' };
+                    $scope.users = [];
+                    $scope.searching = false;
                     $scope.searchCriteria = {
                         num_idetification: true,
                         names: false
                     };
 
                     $scope.search = function() {
-                        debugger;
-                        var params = "num_idetification=";
+                        $scope.searching = true;
+                        $scope.existError = false;
+                        $scope.users = [];
+                        var params = "num_identification=";
+                        //if search by name
                         if ($scope.criteria == '0') params = 'name=';
                         $http.get(envService.read('api') + 'pUsers?' + params + $scope.model.queryCriteria).then(function(res) {
                             value = base64.decode(res.data);
                             var val = JSON.parse(value);
-                            console.log(val);
+                            if (!val.length) {
+                                $scope.users.push(val);
+                            } else {
+                                angular.forEach(val, function(element, index) {
+                                    $scope.users.push(element);
+                                });
+                            }
+                            $scope.searching = false;
                         }, function(err) {
-                            console.log(err)
-
+                            $scope.model.errors = err.data.message;
+                            $scope.existError = true;
+                            $scope.searching = false;
                         })
+                    }
+
+                    $scope.selectAndClose = function(patienUser) {
+                        $uibModalInstance.close()
+                        deferred.resolve(patienUser);
                     }
 
                 }
 
             });
-
-            modalInstance.result.then(function() {
-                deferred.resolve();
-            }).catch(function() {
-                deferred.reject();
-            })
-
             return deferred.promise;
         }
     }]);
@@ -153,11 +163,19 @@ define(['app'], (app) => {
         $scope.loading = true;
         $scope.saving = false;
         $scope.existError = false;
-        $scope.model = apiResource.resource('puserinscriptions').create();
+        $scope.existPatientUserSelected = false;
+        $scope.model = apiResource.resource('puserinscriptions').create({
+            date_eval: new Date()
+        });
         $scope.loading = false;
 
-        $scope.openModalSearchUser = PshychoService.openModalSearchUser;
-
+        $scope.openModalSearchUser = function() {
+            PshychoService.openModalSearchUser().then(function(patienUser) {
+                $scope.existPatientUserSelected = true;
+                $scope.model.patientUser = patienUser;
+                $scope.model.patient_user_id = patienUser.id;
+            })
+        }
     }]);
 
     app.register.controller('PsychologicalAssEditCtrl', ['$scope', function($scope) {

@@ -28,7 +28,6 @@ class PatientUser extends BaseModel
         'father',
         'mother',
         'representant',
-        'user',
         'province',
         'city',
         'parish',
@@ -146,7 +145,7 @@ class PatientUser extends BaseModel
         return $this->belongsTo('Cie\Models\Parish','parish_id');
     }
 
-    public function user()
+    public function creator()
     {
         return $this->belongsTo('Cie\Models\User','created_user_id');
     }
