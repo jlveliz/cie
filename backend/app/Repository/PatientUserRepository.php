@@ -221,7 +221,8 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 				$dataFather['identification_type_id'] = $this->getIdentification('cedula');
 				$father = Person::where('num_identification',$dataFather['num_identification'])->first();
 				if($father) {
-					$paUser->father->update($dataFather);
+					$father->fill($dataFather);
+					$father->update();
 				} else {
 					$father = new Person();
 					$dataFather['genre'] = $father->getMale();
@@ -245,7 +246,8 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 				$dataMother['identification_type_id'] = $this->getIdentification('cedula');
 				$mother = Person::where('num_identification',$dataMother['num_identification'])->first();
 				if ($mother) {
-					$paUser->mother->update($dataMother);
+					$mother->fill($dataMother);
+					$mother->update();
 				} else {
 					$mother = new Person();
 					$dataMother['genre'] = $mother->getFemale();

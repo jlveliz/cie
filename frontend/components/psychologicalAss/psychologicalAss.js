@@ -2,7 +2,7 @@
     EVALICACIÓN PSICOLÓGICA 
 **/
 
-define(['app'], (app) => {
+define(['app', 'moment'], (app, moment) => {
 
     app.register.directive('changeOption', ['$compile', function($compile) {
         return {
@@ -34,9 +34,25 @@ define(['app'], (app) => {
         };
     }])
 
-    app.register.service('PshychoService', ['$uibModal', '$q', function($uibModal, $q) {
+    app.register.service('PsyChoService', ['$uibModal', '$q', function($uibModal, $q) {
         var _this = this;
         _this.messageFlag = {};
+
+        _this.statusCivil = [
+            { id: 1, value: 'Casados' },
+            { id: 2, value: 'Divorciados' },
+            { id: 3, value: 'Separados' },
+            { id: 4, value: 'Unión Libre' },
+            { id: 5, value: 'Solteros' },
+        ];
+
+        _this.schoolingParents = [
+            { id: 'ninguna', value: 'Ninguna' },
+            { id: 'Primaria', value: 'Primaria' },
+            { id: 'secundaria', value: 'Secundaria' },
+            { id: 'superior', value: 'Superior' }
+        ];
+
 
         _this.openModalSearchUser = function() {
             var deferred = $q.defer();
@@ -85,19 +101,57 @@ define(['app'], (app) => {
                         })
                     }
 
-                    $scope.selectAndClose = function(patienUser) {
+                    $scope.selectAndClose = function(patientUser) {
                         $uibModalInstance.close()
-                        deferred.resolve(patienUser);
+                        deferred.resolve(patientUser);
                     }
 
                 }
 
             });
             return deferred.promise;
+        };
+
+        _this.getGenre = function(genre) {
+            if (!genre) return '';
+            if (genre == 'M') {
+                return 'Masculino';
+            } else {
+                return "Femenino";
+            }
+        };
+
+        _this.getSchoolingUserType = function(schoolingTypeVal) {
+            var schoolingType = '';
+            angular.forEach(_this.schoolingType, function(item) {
+                if (item.id == schoolingTypeVal) schoolingType = item.value;
+            })
+            return schoolingType;
+        };
+
+        _this.save = function(model) {
+
+            var deferred = $q.defer();
+
+            var successCallback = function(model) {
+                deferred.resolve(model);
+            }
+
+            var failCallback = function(error) {
+                deferred.reject(error);
+            }
+
+            if (model.id) {
+                model.$update(model.id, successCallback, failCallback);
+            } else {
+                model.$save(successCallback, failCallback);
+            }
+
+            return deferred.promise;
         }
     }]);
 
-    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PshychoService', function($scope, apiResource, DTOptionsBuilder, PshychoService) {
+    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PsyChoService', function($scope, apiResource, DTOptionsBuilder, PsyChoService) {
 
         $scope.models = [];
         $scope.loading = true;
@@ -121,10 +175,10 @@ define(['app'], (app) => {
         apiResource.resource('psycho-assessments').query().then(function(results) {
             $scope.loading = false;
             $scope.models = results;
-            $scope.messages = PshychoService.messageFlag;
+            $scope.messages = PsyChoService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
-                PshychoService.messageFlag = {};
+                PsyChoService.messageFlag = {};
             }
         });
 
@@ -141,9 +195,9 @@ define(['app'], (app) => {
                     if (idx > -1) {
                         $scope.models[idx].$deleting = true;
                         object.$delete(function() {
-                            PshychoService.messageFlag.title = "Evaluación eliminada correctamente";
-                            PshychoService.messageFlag.type = "info";
-                            $scope.messages = PshychoService.messageFlag;
+                            PsyChoService.messageFlag.title = "Evaluación eliminada correctamente";
+                            PsyChoService.messageFlag.type = "info";
+                            $scope.messages = PsyChoService.messageFlag;
                             $scope.hasMessage = true;
                             $scope.models[idx].$deleting = false;
                             $scope.models.splice(idx, 1);
@@ -157,25 +211,88 @@ define(['app'], (app) => {
 
     }]);
 
-    app.register.controller('PsychologicalAssCreateCtrl', ['$scope', 'apiResource', 'PshychoService', function($scope, apiResource, PshychoService) {
+    app.register.controller('PsychologicalAssCreateCtrl', ['$scope', 'apiResource', 'PsyChoService', '$state', function($scope, apiResource, PsyChoService, $state) {
 
         $scope.isEdit = false;
         $scope.loading = true;
         $scope.saving = false;
         $scope.existError = false;
         $scope.existPatientUserSelected = false;
-        $scope.model = apiResource.resource('puserinscriptions').create({
-            date_eval: new Date()
+        $scope.statusCivil = PsyChoService.statusCivil;
+        $scope.schoolingParents = PsyChoService.schoolingParents;
+        $scope.model = apiResource.resource('psycho-assessments').create({
+            date_eval: new Date(),
+            patientUser: {
+                genre: ''
+            }
         });
         $scope.loading = false;
 
         $scope.openModalSearchUser = function() {
-            PshychoService.openModalSearchUser().then(function(patienUser) {
+            //when press aceptar on modal
+            PsyChoService.openModalSearchUser().then(function(patientUser) {
                 $scope.existPatientUserSelected = true;
-                $scope.model.patientUser = patienUser;
-                $scope.model.patient_user_id = patienUser.id;
-            })
+                $scope.model.patientUser = patientUser;
+                $scope.model.patientUser.name = $scope.model.patientUser.last_name + ' ' + $scope.model.patientUser.name;
+                $scope.model.patientUser.genre = $scope.model.patientUser.genre == 'M' ? 'Masculino' : 'Femenino';
+                $scope.model.patientUser.date_birth = moment($scope.model.patientUser.date_birth).format('YYYY-MM-DD');
+                $scope.model.patientUser.schooling = $scope.model.patientUser.schooling == 3 ? 'NO POSEE' : PsyChoService.getSchoolingUserType($scope.model.patientUser.schooling_type) + ' ' + $scope.model.patientUser.schooling_name;
+                $scope.model.patientUser.place_birth = $scope.model.patientUser.province.name + ' - ' + $scope.model.patientUser.city.name + ' - ' + $scope.model.patientUser.parish.name;
+                $scope.model.patientUser.diagnostic = $scope.model.patientUser.diagnostic_id ? $scope.model.patientUser.diagnostic.name : 'NO POSEE';
+                $scope.model.mother_name = $scope.model.patientUser.has_mother ? $scope.model.patientUser.mother.last_name + ' ' + $scope.model.patientUser.mother.last_name : '';
+                $scope.model.mother_age = $scope.model.patientUser.has_mother ? $scope.model.patientUser.mother.age : '';
+                $scope.model.father_name = $scope.model.patientUser.has_father ? $scope.model.patientUser.father.last_name + ' ' + $scope.model.patientUser.father.last_name : '';
+                $scope.model.father_age = $scope.model.patientUser.has_father ? $scope.model.patientUser.father.age : '';
+                $scope.model.patient_user_id = patientUser.id;
+            });
+        };
+
+
+        $scope.save = function(saveForm, returnIndex) {
+
+            var successCallback = function(data) {
+                $scope.saving = false;
+                $scope.hasMessage = true;
+                apiResource.resource('psycho-assessments').setOnCache(data);
+                PsyChoService.messageFlag.title = "Entrevista psicológica de  " + $scope.model.patientUser.name + " Ingresada correctamente";
+                PsyChoService.messageFlag.type = "info";
+                $scope.messages = PsyChoService.messageFlag;
+                if (returnIndex) {
+                    $state.go('root.psychoAssessment');
+                } else {
+                    $state.go('root.psychoAssessment.edit', {
+                        psychoAssId: data.id
+                    })
+                }
+            }
+
+            var failCallback = function(reason) {
+                $scope.saving = false
+                $scope.existError = true;
+                $scope.messages.title = reason.data.title;
+                $scope.messages.type = 'error';
+                $scope.messages.details = [];
+                var json = JSON.parse(reason.data.detail);
+                angular.forEach(json, function(elem, idx) {
+                    angular.forEach(elem, function(el, idex) {
+                        $scope.messages.details.push(el)
+                    })
+                })
+            }
+
+            if (saveForm.validate()) {
+                $scope.saving = true;
+                // $scope.changeRepresentant();
+                PsyChoService.save($scope.model).then(successCallback, failCallback);
+            }
+
+        };
+
+        $scope.saveAndClose = function(form) {
+            $scope.save(form, true);
         }
+
+
     }]);
 
     app.register.controller('PsychologicalAssEditCtrl', ['$scope', function($scope) {

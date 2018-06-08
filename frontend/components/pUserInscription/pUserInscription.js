@@ -84,13 +84,13 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
             { id: 8, value: 'Otros' }
         ];
 
-        _this.scooling = [
+        _this.schooling = [
             { id: 1, value: 'Regular' },
             { id: 2, value: 'Especial' },
             { id: 3, value: 'No Posee' },
         ];
 
-        _this.scoolingType = [
+        _this.schoolingType = [
             { id: 1, value: 'Fiscal' },
             { id: 2, value: 'Particular' },
             { id: 3, value: 'Fiscomisional' },
@@ -193,7 +193,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
 
         _this.getHasSchooling = function(schoolingVal) {
             var schooling = null;
-            angular.forEach(_this.scooling, function(item) {
+            angular.forEach(_this.schooling, function(item) {
                 if (item.id == schoolingVal) schooling = item.value;
             })
             return schooling;
@@ -201,7 +201,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
 
         _this.getHasSchoolingType = function(schoolingTypeVal) {
             var schoolingType = '';
-            angular.forEach(_this.scoolingType, function(item) {
+            angular.forEach(_this.schoolingType, function(item) {
                 if (item.id == schoolingTypeVal) schoolingType = item.value;
             })
             return schoolingType;
@@ -991,8 +991,8 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
         $scope.assistOtherTherapeuticCenter = PUserInscriptionService.yesOrNot;
         $scope.insurances = PUserInscriptionService.insurances;
         $scope.medicalCenters = PUserInscriptionService.medicalAttentions;
-        $scope.scooling = PUserInscriptionService.scooling;
-        $scope.scoolingType = PUserInscriptionService.scoolingType;
+        $scope.schooling = PUserInscriptionService.schooling;
+        $scope.schoolingType = PUserInscriptionService.schoolingType;
         $scope.statusCivil = PUserInscriptionService.statusCivil;
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
@@ -1178,7 +1178,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
                 },
                 father_age: {
                     // required: true,
-                    number: true,
+                    // number: true,
                     min: 18,
                     max: 99
                 },
@@ -1210,7 +1210,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
                 },
                 mother_age: {
                     // required: true,
-                    number: true,
+                    // number: true,
                     min: 18,
                     max: 99
                 },
@@ -1484,9 +1484,17 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
             $scope.model.father.age = PUserInscriptionService.calculateAge(dateBirth);
         };
 
+        $scope.$watch('model.father.date_birth', function(newVal, oldVal) {
+            if (newVal) $scope.calculateAgeFather(newVal)
+        })
+
         $scope.calculateAgeMother = function(dateBirth) {
             $scope.model.mother.age = PUserInscriptionService.calculateAge(dateBirth);
         };
+
+        $scope.$watch('model.mother.date_birth', function(newVal, oldVal) {
+            if (newVal) $scope.calculateAgeMother(newVal)
+        })
 
         $scope.calculateAgeRepresentant = function(dateBirth) {
             $scope.model.representant.age = PUserInscriptionService.calculateAge(dateBirth);
@@ -1632,8 +1640,8 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
         $scope.insurances = PUserInscriptionService.insurances;
         $scope.medicalCenters = PUserInscriptionService.medicalAttentions;
         $scope.medicalCenters = PUserInscriptionService.medicalAttentions;
-        $scope.scooling = PUserInscriptionService.scooling;
-        $scope.scoolingType = PUserInscriptionService.scoolingType;
+        $scope.schooling = PUserInscriptionService.schooling;
+        $scope.schoolingType = PUserInscriptionService.schoolingType;
         $scope.statusCivil = PUserInscriptionService.statusCivil;
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
@@ -1717,10 +1725,18 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
                 $scope.model.father.age = PUserInscriptionService.calculateAge(dateBirth);
         };
 
+        $scope.$watch('model.father.date_birth', function(newVal, oldVal) {
+            if (newVal) $scope.calculateAgeFather(newVal)
+        })
+
         $scope.calculateAgeMother = function(dateBirth) {
             if ($scope.model.mother)
                 $scope.model.mother.age = PUserInscriptionService.calculateAge(dateBirth);
         };
+
+         $scope.$watch('model.mother.date_birth', function(newVal, oldVal) {
+            if (newVal) $scope.calculateAgeMother(newVal)
+        })
 
         $scope.calculateAgeRepresentant = function(dateBirth) {
             $scope.model.representant.age = PUserInscriptionService.calculateAge(dateBirth);
@@ -1940,7 +1956,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
                 },
                 father_age: {
                     // required: true,
-                    number: true,
+                    // number: true,
                     min: 18,
                     max: 99
                 },
@@ -1972,7 +1988,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
                 },
                 mother_age: {
                     // required: true,
-                    number: true,
+                    // number: true,
                     min: 18,
                     max: 99
                 },

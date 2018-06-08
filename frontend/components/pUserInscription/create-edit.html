@@ -256,14 +256,14 @@
                                                         <label class="control-label" for="schooling" title="Escolarización del Usuario">Escolarización
                                                             <!-- <span class="text-danger">*</span> -->
                                                         </label>
-                                                        <select ng-disabled="saving" class="form-control" name="schooling" id="schooling" ng-model="model.schooling" ng-options="esc.id as esc.value for esc in scooling" ng-change="changeSchooling()">
+                                                        <select ng-disabled="saving" class="form-control" name="schooling" id="schooling" ng-model="model.schooling" ng-options="esc.id as esc.value for esc in schooling" ng-change="changeSchooling()">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="schooling_type" title="Tipo de Escolarización que recibe el Usuario">Tipo Escolarización
                                                             <!-- <span class="text-danger" ng-if="model.schooling < 3 && model.schooling > 0">*</span> -->
                                                         </label>
-                                                        <select ng-disabled="saving || !model.schooling || model.schooling == 3" class="form-control" name="schooling_type" id="schooling_type" ng-model="model.schooling_type" ng-options="esc.id as esc.value for esc in scoolingType">
+                                                        <select ng-disabled="saving || !model.schooling || model.schooling == 3" class="form-control" name="schooling_type" id="schooling_type" ng-model="model.schooling_type" ng-options="esc.id as esc.value for esc in schoolingType">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-5 col-sm-5 col-xs-12 form-group" ng-if="!loading">
