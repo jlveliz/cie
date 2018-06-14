@@ -321,7 +321,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
                             [
                                 { text: [{ text: 'Grado de Discapacidad: ', bold: true }, model.grade_of_disability ? _this.getGradeDisability(model.grade_of_disability) : 'N/A'] },
                                 { text: [{ text: 'Tiene Diagnóstico?: ', bold: true }, model.has_diagnostic == 1 ? 'Si' : 'No'] },
-                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.pathology ? model.pathology.name : ''] },
+                                { text: [{ text: 'Diagnóstico: ', bold: true }, model.diagnostic ? model.diagnostic.name : ''] },
                             ],
                             [
                                 { colSpan: 3, text: [{ text: 'Otros Diagnósticos: ', bold: true }, model.other_diagnostic == null || model.other_diagnostic == '' ? '' : model.other_diagnostic] },
@@ -1055,47 +1055,47 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
         $scope.validateOptions = {
             rules: {
                 num_identification: {
-                    // required: true,
+                    required: true,
                     minlength: 10,
                     maxlength: 10,
                     isValidId: true,
                     uniquePatient: 'num_identification'
                 },
                 name: {
-                    // required: true
+                    required: true
                 },
                 last_name: {
-                    // required: true
+                    required: true
                 },
                 date_birth: {
-                    // required: true,
+                    required: true,
                     date: true
                 },
                 age: {
-                    // required: true,
+                    required: true,
                     number: true,
                 },
                 genre: {
-                    // valueNotEquals: '? undefined:undefined ?',
+                    valueNotEquals: '? undefined:undefined ?',
                 },
                 address: {
-                    // required: true,
+                    required: true,
                     minlength: 10,
                 },
                 province_id: {
-                    // valueNotEquals: '?',
+                    valueNotEquals: '?',
                 },
                 city_id: {
-                    // required: function() {
-                    //     return $("#province_id").val() == '?';
-                    // },
-                    // valueNotEquals: '?',
+                    required: function() {
+                        return $("#province_id").val() == '?';
+                    },
+                    valueNotEquals: '?',
                 },
                 parish_id: {
-                    // required: function() {
-                    //     return $("#city_id").val() == '?';
-                    // },
-                    // valueNotEquals: '?',
+                    required: function() {
+                        return $("#city_id").val() == '?';
+                    },
+                    valueNotEquals: '?',
                 },
                 physical_disability: {
                     // valueNotEquals: '?',

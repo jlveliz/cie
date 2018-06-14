@@ -77,6 +77,23 @@ class Handler extends ExceptionHandler
     }
 
 
+    /**
+     * Convert the data to base64 
+     */
+
+    public function encodeResponse(&$data)
+    {
+        return base64_encode($data);
+  
+    }
+
+    public function transformArrayToJson(array &$data)
+    {
+        $data = json_encode($data);
+        return $this;
+    }
+
+
 
     private function handle($request, Exception $e)
     {
@@ -90,6 +107,7 @@ class Handler extends ExceptionHandler
                 'detail' => $data['detail'],
             ];
             $this->report($e);
+            $data = $this->transformArrayToJson($data)->encodeResponse($data);
             return response()->json($data, $status);        
 
         } else {

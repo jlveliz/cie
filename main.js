@@ -42,26 +42,30 @@ require.config({
             deps: ['jquery'],
         },
         'angular-ui-router': {
+            exports: 'angularUiRouter',
             deps: ['angular']
         },
         'angular-resource': {
-            exports: 'angular-resource',
+            exports: 'angularResource',
             deps: ['angular'],
         },
         'angular-ui-router-styles': {
+            exports:'angularUiRouterStyles',
             deps: ['angular']
         },
         'satellizer': {
             deps: ['angular']
         },
         'angular-environments': {
+            exports:'angularEnvironments',
             deps: ['angular']
         },
         'angular-validation': {
-            exports: 'angular-validation',
+            exports: 'angularValidation',
             deps: ['angular', 'jquery-validation'],
         },
         'angular-permission': {
+             exports: 'angularPermission',
             deps: ['angular']
         },
         'bootstrap': {
@@ -69,15 +73,15 @@ require.config({
             deps: ['jquery'],
         },
         'angular-datatables': {
-            exports: 'angular-datatables',
+            exports: 'angularDatatables',
             deps: ['jquery-datatables', 'angular'],
         },
         'angular-bootstrap': {
-            exports: 'angular-bootstrap',
+            exports: 'angularBootstrap',
             deps: ['angular'],
         },
         'angular-datatables-bootstrap': {
-            exports: 'angular-datatables-bootstrap',
+            exports: 'angularDatatablesBootstrap',
             deps: ['angular-datatables'],
         },
         'moment': {
@@ -101,7 +105,7 @@ require.config({
             deps: ['angular'],
         },
         'angular-material': {
-            exports: 'angular-material',
+            exports: 'angularMaterial',
             deps: ['angular-animate', 'angular-aria', 'angular-messages'],
         },
         'pdfmake': {
@@ -122,7 +126,7 @@ require.config({
             deps: ['jquery'],
         },
         'ng-dropzone': {
-            exports: 'ng-dropzone',
+            exports: 'ngdropzone',
             deps: ['dropzone'],
         },
     },

@@ -3,7 +3,7 @@
 namespace Cie\Http\Controllers;
 
 use Cie\RepositoryInterface\PsychologicalAssessmentRepositoryInterface;
-use Cie\Http\Validators\PatientUserValidator; //TODO
+use Cie\Http\Validators\PsychologicalAssessmentValidator; //TODO
 use Cie\Exceptions\PsychologicalAssessmentException;
 use Illuminate\Http\Request;
 
@@ -26,9 +26,9 @@ class PsychologicalAssessmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $psAsse = $this->psAsse->enum()->toJson();
+        $psAsse = $this->psAsse->enum($request->all())->toJson();
         $psAsse = $this->encodeResponse($psAsse);
         return response()->json($psAsse,200);
     }
@@ -39,15 +39,17 @@ class PsychologicalAssessmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PatientUserValidator $validator, Request $request)
+    public function store(PsychologicalAssessmentValidator $validator, Request $request)
     {
         try {
             $data = $request->all();
             $psAsse = $this->psAsse->save($data)->toJson();
             $psAsse = $this->encodeResponse($psAsse);
             return response()->json($psAsse,200);
-        } catch (PatientUserException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+        } catch (PsychologicalAssessmentException $e) {
+            dd($e);
+            $error = $this->encodeResponse($e->getMessage());
+            return response()->json($error,$e->getCode());
         }
     }
 
@@ -64,8 +66,9 @@ class PsychologicalAssessmentController extends Controller
             $psAsse = $this->psAsse->find($id)->toJson();
             $psAsse = $this->encodeResponse($psAsse);
             return response()->json($psAsse,200);
-        } catch (PatientUserException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+        } catch (PsychologicalAssessmentException $e) {
+            $error = $this->encodeResponse($e->getMessage());
+            return response()->json($error,$e->getCode());
         }
     }
 
@@ -77,7 +80,7 @@ class PsychologicalAssessmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PatientUserValidator $validator, Request $request, $id)
+    public function update(PsychologicalAssessmentValidator $validator, Request $request, $id)
     {
         try {
             $data = $request->all();
@@ -85,8 +88,9 @@ class PsychologicalAssessmentController extends Controller
             $psAsse = $this->psAsse->edit($id, $data)->toJson();
             $psAsse = $this->encodeResponse($psAsse);
             return response()->json($psAsse,200);
-        } catch (PatientUserException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+        } catch (PsychologicalAssessmentException $e) {
+            $error = $this->encodeResponse($e->getMessage());
+            return response()->json($error,$e->getCode());
         }
     }
 
@@ -104,7 +108,7 @@ class PsychologicalAssessmentController extends Controller
                 $psAsse = $this->encodeResponse(json_encode(['exitoso'=>true]));
                 return response()->json($psAsse,200);
             }
-        } catch (PatientUserException $e) {
+        } catch (PsychologicalAssessmentException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
     }

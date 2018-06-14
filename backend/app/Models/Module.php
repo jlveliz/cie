@@ -10,6 +10,10 @@ class Module extends BaseModel
 
     protected $primaryKey = "id";
 
+    protected $casts = [
+        'order' => 'int'
+    ];
+
     protected $fillable = [
     	'name',
     	'order'

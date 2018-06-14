@@ -43,6 +43,7 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 
 	public function rules($method = null) {
 
+		
 		// $rules = [
 		// 	'num_identification' => 'required|min:10|max:10|is_valid_id',
 		// 	'name'=>'required',
@@ -82,12 +83,14 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 		// ];
 
 		$rules = [
-			// 'num_identification' => 'min:10|max:10|is_valid_id',
-			// 'date_birth' => 'date',
-			// 'address' =>'min:10',
-			// 'province_id' => 'exists:province,id',
-			// 'city_id' =>'exists:city,id',
-			// 'parish_id' =>'exists:parish,id',
+			'num_identification' => 'min:10|max:10|is_valid_id',
+			'name' => 'required',
+			'last_name' => 'required',
+			//'date_birth' => 'date',
+			'address' =>'min:10',
+			'province_id' => 'exists:province,id',
+			'city_id' =>'exists:city,id',
+			'parish_id' =>'exists:parish,id',
 			// 'physical_disability' => 'int',
 			// 'intellectual_disability' => 'int',
 			// 'visual_disability' => 'int',

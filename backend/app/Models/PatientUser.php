@@ -31,7 +31,7 @@ class PatientUser extends BaseModel
         'province',
         'city',
         'parish',
-        'pathology',
+        'diagnostic',
         'attached',
     ];
 
@@ -150,7 +150,7 @@ class PatientUser extends BaseModel
         return $this->belongsTo('Cie\Models\User','created_user_id');
     }
 
-    public function pathology()
+    public function diagnostic()
     {
         return $this->belongsTo('Cie\Models\Pathology','diagnostic_id');
     }

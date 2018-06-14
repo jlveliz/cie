@@ -4,6 +4,7 @@ namespace Cie\Repository;
 use Cie\RepositoryInterface\PsychologicalAssessmentRepositoryInterface;
 use Cie\Exceptions\PsychologicalAssessmentException;
 use Cie\Models\PsychologicalAssessment;
+use Cie\Models\PatientUser;
 
 
 /**
@@ -20,9 +21,29 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 
 	public function enum($params = null)
 	{
-		$paUsers = PsychologicalAssessment::get();
-		if (!$paUsers) {
-			throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+		if ($params) {
+			if(is_array($params)) {
+				if(array_key_exists('num_identification', $params) && isset($params['num_identification'])) {
+					$paUsers = $this->find($params);
+					//USADO PARA LA BUSQUEDA DE USUARIOS EN EVALUACIONES PSICOLOGICA Y MÉDICA
+				} elseif(array_key_exists('name', $params) && isset($params['name'])) {
+					$paUsers = PatientUser::leftJoin('psychological_assessment',function($join){
+						$join->on('patient_user.id','=','psychological_assessment.patient_user_id')->whereRaw('psychological_assessment.deleted_at is null');
+					})->where(function($query) use ($params){
+						$query->where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%');
+					})->whereNull('psychological_assessment.id')->get();
+					
+					if(!count($paUsers))
+						throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista psicológica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+					
+
+				}
+			}
+		} else {
+			$paUsers = PsychologicalAssessment::get();
+			if (!$paUsers) {
+				throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+			}
 		}
 		return $paUsers;
 	}
@@ -34,12 +55,20 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 		if (is_array($field)) {
 			if (array_key_exists('patient_user_id', $field)) { 
 				$paUser = PsychologicalAssessment::where('patient_user_id',$field['patient_user_id'])->first();
+			}elseif (array_key_exists('num_identification', $field)) {
+				//USADO PARA BUSCAR UNA EVALUACIÓN PSICOLÓGICA POR CÉDULA EN EL MODAL DE CREACIÓN Y EVALUACIÓN PSICOLOGICA
+				$paUser = PatientUser::leftJoin('psychological_assessment',function($join){
+						$join->on('patient_user.id','=','psychological_assessment.patient_user_id')->whereRaw('psychological_assessment.deleted_at is null');
+					})->where('person.num_identification',$field['num_identification'])->whereNull('psychological_assessment.id')->first();
+				// dd($paUser);
+				if(!$paUser)
+					throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista psicológica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 			} else {
-				throw new PsychologicalAssessmentException(['title'=>'No se puede buscar la Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+				throw new PsychologicalAssessmentException(['title'=>'No se puede buscar la entrevista psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			$paUser = PsychologicalAssessment::where('patient_user_id',$field)->first();
+			$paUser = PsychologicalAssessment::find($field);
 		} else {
 			throw new PsychologicalAssessmentException(['title'=>'No se puede buscar la Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
@@ -77,7 +106,7 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 
 			$assessment->fill($data);
 			if($assessment->update()){
-				$key = $paUser->getKey();
+				$key = $assessment->getKey();
 				return $this->find($key);
 			} else {
 				throw new PsychologicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia psicológica de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");

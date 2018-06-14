@@ -2,10 +2,14 @@
 
 namespace Cie\Models;
 
+use  Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Model;
 
 class PsychologicalAssessment extends BaseModel
 {
+    
+    use SoftDeletes;
+
     protected $table = "psychological_assessment";
 
     protected $with = ['patientUser'];
@@ -51,7 +55,7 @@ class PsychologicalAssessment extends BaseModel
         'language_level_is_language_comprexive',
         'language_level_other',
         'language_level_observation',
-        'physical_level_personal appearance',
+        'physical_level_personal_appearance',
         'physical_level_inadequate_postures',
         'physical_level_physical_malformations',
         'physical_level_is_left_hand',
@@ -69,12 +73,13 @@ class PsychologicalAssessment extends BaseModel
         'school_history_generate_problems',
         'school_history_participate_shcool',
         'school_history_observation',
-        'psychological_take_medicine_what',
-        'psychological_convulsing_or_convulsed',
-        'psychological_has_had_surgery',
-        'psychological_hav_alergy',
-        'psychological_what_is_the_big_problem',
-        'psychological_observation',
+        'medical_take_medicine_what',
+        'medical_convulsing_or_convulsed',
+        'medical_has_had_surgery',
+        'medical_suffered_blows_head',
+        'medical_hav_alergy',
+        'medical_what_is_the_big_problem',
+        'medical_observation',
         'demand_establishment',
         'behaivor_child_interview'
     ];

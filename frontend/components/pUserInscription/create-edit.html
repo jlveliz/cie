@@ -54,31 +54,31 @@
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="num_identification" title="Cedula del Usuario" class="control-label">Cédula
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <input maxlength="10" minlength="10" ng-disabled="saving" id="num_identification" type="text" class="form-control" name="num_identification" ng-model="model.num_identification" autofocus numbers-only>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="name" title="Nombres del Usuario">Nombres
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label " for="last_name" title="Apellidos del Usuario">Apellidos
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <input ng-disabled="saving" id="last_name" type="text" class="form-control" name="last_name" ng-model="model.last_name">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="date_birth" title="Fecha de Nacimiento de  Usuario">Fecha de Nacimiento
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <input ng-disabled="saving" id="date_birth" type="date" class="form-control" name="date_birth" ng-change="calculateAge(model.date_birth)" ng-model="model.date_birth">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Usuario" for="age">Edad
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <input readonly ng-disabled="saving" maxlength="2" minlength="1" id="age" type="text" class="form-control" name="age" ng-model="model.age">
                                                     </div>
@@ -86,7 +86,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="genre" title="Género del Usuario">Género
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <select ng-disabled="saving" class="form-control" name="genre" id="genre" ng-model="model.genre">
                                                             <option value="M">Masculino</option>
@@ -95,7 +95,7 @@
                                                     </div>
                                                     <div class="col-md-8 col-sm-8 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="address" title="Domicilio del Usuario">Domicilio
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <input ng-disabled="saving" id="address" type="text" class="form-control" name="address" ng-model="model.address">
                                                     </div>
@@ -103,21 +103,21 @@
                                                 <div class="row">
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="province" title="Provincia de Residencia del Usuario">Provincia
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <select ng-disabled="saving" class="form-control" name="province_id" id="province_id" ng-model="model.province_id" ng-options="province.id as province.name for province in provinces">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="province" title="Ciudad de Residencia del Usuario">Ciudad
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <select ng-disabled="saving || !model.province_id" class="form-control" name="city_id" id="city_id" ng-model="model.city_id" ng-options="city.id as city.name for city in cities | filter:filterCities">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="parish" title="Parroquia de Residencia del Usuario">Parroquia
-                                                            <!-- <span class="text-danger">*</span> -->
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                         <select ng-disabled="saving || !model.province_id || !model.city_id" class="form-control" name="parish_id" id="parish_id" ng-model="model.parish_id" ng-options="parish.id as parish.name for parish in parishies | filter:filterParishies">
                                                         </select>

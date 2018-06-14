@@ -15,7 +15,7 @@
                     <uib-tab index="1">
                         <uib-tab-heading>
                             <h5 ng-if="!isEdit"><b><i class="fa fa-plus"></i> Crear</b></h5>
-                            <h5 ng-if="isEdit"><b><i class="fa fa-plus"></i> Editar</b></h5>
+                            <h5 ng-if="isEdit"><b><i class="fa fa-edit"></i> Editar</b></h5>
                         </uib-tab-heading>
                         <h4 class="text-center" ng-if="loading">
                             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -48,19 +48,20 @@
                                                 <p class="section-inner">Datos de Usuario</p>
                                                 <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group">
-                                                        <label for="date_eval" title="Fecha de evaluación" class="control-label">Fecha de evaluación<span class="text-danger">*</span></label>
-                                                        <input ng-disabled="saving || !existPatientUserSelected" id="date_eval" type="date" class="form-control max-date-today" name="date_eval" ng-model="model.date_eval" style="padding-left: 2px; padding-right: 0px">
+                                                        <label for="date_eval" title="Fecha de evaluación" class="control-label">Fecha de evaluación <span class="text-danger">*</span></label>
+                                                        <input ng-if="!isEdit" ng-disabled="saving || !existPatientUserSelected" id="date_eval" type="date" class="form-control max-date-today" name="date_eval" ng-model="model.date_eval" style="padding-left: 2px; padding-right: 0px">
+                                                        <input ng-if="isEdit" disabled id="date_eval" type="text" class="form-control max-date-today" name="date_eval" ng-model="model.date_eval" style="padding-left: 2px; padding-right: 0px">
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label class="control-label" for="name" title="Nombres del Usuario">Nombres</label>
                                                         <input readonly ng-disabled="saving  || !existPatientUserSelected" id="name" type="text" class="form-control" ng-model="model.patientUser.name" name="name">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                                        <label class="control-label" for="name" title="Nombres del Usuario">Como lo llaman en casa</label>
-                                                        <input ng-disabled="saving  || !existPatientUserSelected" id="name" type="text" class="form-control" name="name" ng-model="model.call_user_in_home">
+                                                        <label class="control-label" for="name" title="Nombres del Usuario">Como lo llaman en casa <span class="text-danger">*</span></label>
+                                                        <input ng-disabled="saving  || !existPatientUserSelected" id="call_user_in_home" type="text" class="form-control" name="call_user_in_home" ng-model="model.call_user_in_home">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
-                                                        <label class="control-label" title="Edad del Usuario" for="age">Edad</label>
+                                                        <label class="control-label" title="Edad del Usuario" for="age">Edad <span class="text-danger">*</span></label>
                                                         <input ng-disabled="saving || !existPatientUserSelected" maxlength="2" minlength="1" id="age" type="text" class="form-control" name="age" ng-model="model.patientUser.age">
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
@@ -142,21 +143,21 @@
                                             <div class="tab-index">
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Motivo de Consulta" for="father_age">Motivo de Consulta</label>
-                                                        <textarea name="reason_consultation" id="reason_consultation" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                        <label class="control-label" title="Motivo de Consulta" for="father_age">Motivo de Consulta <span class="text-danger">*</span></label>
+                                                        <textarea name="reason_consultation" id="reason_consultation" ng-model="model.reason_consultation" class="form-control no-resize" rows="3"></textarea>
                                                     </div>
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Antecendentes de la consulta" for="background">Antecedentes</label>
-                                                        <textarea name="background" id="background" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                        <label class="control-label" title="Antecendentes de la consulta" for="background">Antecedentes <span class="text-danger">*</span></label>
+                                                        <textarea name="background" id="background" ng-model="model.background" class="form-control no-resize" rows="3"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Situación Actual" for="current_situation">Situación Actual</label>
+                                                        <label class="control-label" title="Situación Actual" for="current_situation">Situación Actual <span class="text-danger">*</span></label>
                                                         <input type="text" name="current_situation" class="form-control" ng-model="model.current_situation">
                                                     </div>
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Descripción del Beneficiario" for="description_beneficiary">Descripción del Beneficiario</label>
+                                                        <label class="control-label" title="Descripción del Beneficiario" for="description_beneficiary">Descripción del Beneficiario <span class="text-danger">*</span></label>
                                                         <input type="text" name="description_beneficiary" class="form-control" ng-model="model.description_beneficiary">
                                                     </div>
                                                 </div>
@@ -172,41 +173,42 @@
                                                         <p class="section-inner">Nivel Afectivo y Social</p>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_nervius"> Nervioso
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_nervius" name="affective_level[]" ng-true-value="1" ng-false-value="0"> Nervioso
+                                                                
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_distracted"> Distraido
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_distracted" name="affective_level[]" ng-true-value="1" ng-false-value="0"> Distraido
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_sensitive"> Sensible
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_sensitive" ng-true-value="1" ng-false-value="0"> Sensible
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_amable"> Amable
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_amable" ng-true-value="1" ng-false-value="0"> Amable
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_aggressive"> gresivo
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_aggressive" ng-true-value="1" ng-false-value="0"> gresivo
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_shy"> Tímido
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_shy" ng-true-value="1" ng-false-value="0"> Tímido
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.affective_social_level_is_friendly"> Amistoso
+                                                                <input type="checkbox" ng-model="model.affective_social_level_is_friendly" ng-true-value="1" ng-false-value="0"> Amistoso
                                                             </label>
                                                         </div>
                                                         <label class="control-label" title="Otros" for="affective_social_level_other">Otros</label>
-                                                        <textarea name="background" id="background" ng-model="reason_consultation" class="form-control no-resize" rows="3"></textarea>
+                                                        <textarea name="background" id="background" ng-model="model.affective_social_level_other" class="form-control no-resize" rows="3"></textarea>
                                                         <label class="control-label" title="Observaciones" for="affective_social_level_observation">Observaciones</label>
                                                         <textarea name="affective_social_level_observation" id="affective_social_level_observation" ng-model="model.affective_social_level_observation" class="form-control no-resize"></textarea>
                                                     </div>
@@ -214,32 +216,27 @@
                                                         <p class="section-inner">Nivel Verbal y Lenguaje</p>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_silence"> Silencioso
+                                                                <input type="checkbox" ng-model="model.language_level_is_silence" ng-true-value="1" ng-false-value="0"> Silencioso
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_repetitive"> Repetitivo
+                                                                <input type="checkbox" ng-model="model.language_level_is_repetitive" ng-true-value="1" ng-false-value="0"> Repetitivo
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_stutterer"> Tartamudez
+                                                                <input type="checkbox" ng-model="model.language_level_is_stutterer" ng-true-value="1" ng-false-value="0"> Tartamudez
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_reluctant_answer"> Renuente a Contestar
+                                                                <input type="checkbox" ng-model="model.language_level_is_reluctant_answer" ng-true-value="1" ng-false-value="0"> Renuente a Contestar
                                                             </label>
                                                         </div>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_reluctant_answer"> Renuente a Contestar
-                                                            </label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_excessive_verbalization"> Verbalización Excesiva
+                                                                <input type="checkbox" ng-model="model.language_level_is_excessive_verbalization" ng-true-value="1" ng-false-value="0"> Verbalización Excesiva
                                                             </label>
                                                         </div>
                                                         <label>
@@ -247,10 +244,10 @@
                                                         </label>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_language_expresive"> Expresivo
+                                                                <input type="checkbox" name="language_level_is_language_expresive" id="language_level_is_language_expresive" ng-model="model.language_level_is_language_expresive" ng-true-value="1" ng-false-value="0"> Expresivo
                                                             </label>
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.language_level_is_language_comprexive"> Comprensivo
+                                                                <input type="checkbox" ng-model="model.language_level_is_language_comprexive" name="language_level_is_language_comprexive" id="language_level_is_language_comprexive" ng-true-value="1" ng-false-value="0"> Comprensivo
                                                             </label>
                                                         </div>
                                                         <!-- OTROS -->
@@ -272,14 +269,14 @@
                                                         <label class="control-label" title="Malformaciones físicas" for="physical_level_physical_malformations">Malformaciones físicas</label>
                                                         <input ng-disabled="saving" id="physical_level_physical_malformations" type="text" class="form-control" name="physical_level_physical_malformations" ng-model="model.physical_level_physical_malformations">
                                                         <!-- NIÑO ZURDO O DERECHO -->
-                                                        <label class="control-label" title="El Niño es Zurdo o derecho" for="physical_level_physical_malformations">El niño es</label>
+                                                        <label class="control-label" title="El Niño es Zurdo o derecho">El niño es</label>
                                                         <br>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.physical_level_is_left_hand"> Izquierdo
+                                                                <input type="checkbox" ng-model="model.physical_level_is_left_hand" name="physical_level_is_left_hand" id="physical_level_is_left_hand" ng-true-value="1" ng-false-value="0"> Izquierdo
                                                             </label>
                                                             <label>
-                                                                <input type="checkbox" ng-model="model.physical_level_is_right_hand"> Derecho
+                                                                <input type="checkbox" ng-model="model.physical_level_is_right_hand" name="physical_level_is_right_hand" id="physical_level_is_right_hand" ng-true-value="1" ng-false-value="0"> Derecho
                                                             </label>
                                                         </div>
                                                         <br>
@@ -423,14 +420,14 @@
                                                 <div class="row">
                                                     <!-- Establecimiento de la demanda -->
                                                     <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                                                        <label class="control-label" title="Establecimiento de la demanda" for="demand_establishment">Establecimiento de la demanda</label>
+                                                        <label class="control-label" title="Establecimiento de la demanda" for="demand_establishment">Establecimiento de la demanda <span class="text-danger">*</span></label>
                                                         <textarea name="demand_establishment" rows="2" class="form-control no-resize" id="demand_establishment" ng-model="model.demand_establishment"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <!-- Establecimiento de la demanda -->
                                                     <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                                                        <label class="control-label" title="Comportamiento del niño/a durante la entrevista" for="behaivor_child_interview">Comportamiento del niño/a durante la entrevista</label>
+                                                        <label class="control-label" title="Comportamiento del niño/a durante la entrevista" for="behaivor_child_interview">Comportamiento del niño/a durante la entrevista <span class="text-danger">*</span></label>
                                                         <textarea name="behaivor_child_interview" rows="2" class="form-control no-resize" id="behaivor_child_interview" ng-model="model.behaivor_child_interview"></textarea>
                                                     </div>
                                                 </div>

@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 
 define([
     'angularAMD',
@@ -11,7 +11,6 @@ define([
     'underscore',
     'angular',
     'angular-material',
-    'jquery-validation',
     'angular-ui-router',
     'angular-resource',
     'angular-ui-router-styles',
@@ -22,9 +21,8 @@ define([
     'bootstrap',
     'angular-datatables',
     'angular-bootstrap',
-    'angular-datatables-bootstrap',
-    'angular-moment'
-], function(angularAMD, moment, $, base64, Dropzone) {
+    'angular-datatables-bootstrap'
+], function(angularAMD, moment, $, base64, Dropzone, pdfmake, ngdropzone, underscore, angularMaterial, angularUiRouter, angularResource, angularUiRouterStyles, satellizer, angularEnvironments, angularValidation, angularPermission, bootstrap, angularDatatables, angularBootstrap, angularDatatablesBootstrap) {
 
     var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial', 'thatisuday.dropzone']);
 
@@ -1205,9 +1203,11 @@ define([
 
     }])
 
-    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', 'dropzoneOpsProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider, dropzoneOpsProvider) {
+    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', 'dropzoneOpsProvider', '$qProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider, dropzoneOpsProvider, $qProvider) {
 
         $locationProvider.html5Mode(true);
+
+        // $qProvider.errorOnUnhandledRejections(false);
 
         //PDF CONFIG FONTS
         pdfMake.fonts = {
@@ -2406,7 +2406,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2426,7 +2426,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2445,7 +2445,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
