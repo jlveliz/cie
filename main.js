@@ -121,15 +121,6 @@ require.config({
             deps: ['jquery']
 
         }
-        // ,
-        // 'dropzone': {
-        //     exports: 'dropzone',
-        //     deps: ['jquery'],
-        // },
-        // 'ng-dropzone': {
-        //     exports: 'ngdropzone',
-        //     deps: ['dropzone'],
-        // },
     },
     deps: ['app']
 });

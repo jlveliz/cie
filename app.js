@@ -5,8 +5,6 @@ define([
     'moment',
     'jquery',
     'base64',
-    // 'dropzone',
-    // 'ng-dropzone',
     'pdfmake',
     'underscore',
     'angular',
@@ -1219,23 +1217,6 @@ define([
             }
         }
         //PDF CONFIG FONTS
-
-        // //DROPZONE
-        // var previewTemplate = '<div class="file-row"><img data-dz-thumbnail /></div>';
-        // dropzoneOpsProvider.setOptions({
-        //     paramName: 'file',
-        //     url: '/process.php',
-        //     maxFiles: 1,
-        //     maxFilesize: 5, // MB
-        //     uploadMultiple: false,
-        //     autoProcessQueue: false,
-        //     previewTemplate: previewTemplate,
-        //     autoQueue: false,
-        //     thumbnailWidth: 230,
-        //     thumbnailHeight: 330,
-        //     clickable: '.dropzone'
-        // });
-
 
         envServiceProvider.config({
             domains: {
