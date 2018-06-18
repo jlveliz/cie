@@ -7,3 +7,4 @@ local/
 backend/.env
 backend/public/uploads
 nodejs/npm-debug.log
+node_modules/
