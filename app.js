@@ -5,9 +5,9 @@ define([
     'moment',
     'jquery',
     'base64',
-    'dropzone',
+    // 'dropzone',
+    // 'ng-dropzone',
     'pdfmake',
-    'ng-dropzone',
     'underscore',
     'angular',
     'angular-material',
@@ -22,9 +22,9 @@ define([
     'angular-datatables',
     'angular-bootstrap',
     'angular-datatables-bootstrap'
-], function(angularAMD, moment, $, base64, Dropzone, pdfmake, ngdropzone, underscore, angularMaterial, angularUiRouter, angularResource, angularUiRouterStyles, satellizer, angularEnvironments, angularValidation, angularPermission, bootstrap, angularDatatables, angularBootstrap, angularDatatablesBootstrap) {
+], function(angularAMD, moment, $, base64, pdfmake,  underscore, angularMaterial, angularUiRouter, angularResource, angularUiRouterStyles, satellizer, angularEnvironments, angularValidation, angularPermission, bootstrap, angularDatatables, angularBootstrap, angularDatatablesBootstrap) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial', 'thatisuday.dropzone']);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial']);
 
     cie.constant('appName', 'CIE');
 
@@ -1203,7 +1203,7 @@ define([
 
     }])
 
-    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', 'dropzoneOpsProvider', '$qProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider, dropzoneOpsProvider, $qProvider) {
+    cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', '$qProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider, $qProvider) {
 
         $locationProvider.html5Mode(true);
 
@@ -1220,21 +1220,21 @@ define([
         }
         //PDF CONFIG FONTS
 
-        //DROPZONE
-        var previewTemplate = '<div class="file-row"><img data-dz-thumbnail /></div>';
-        dropzoneOpsProvider.setOptions({
-            paramName: 'file',
-            url: '/process.php',
-            maxFiles: 1,
-            maxFilesize: 5, // MB
-            uploadMultiple: false,
-            autoProcessQueue: false,
-            previewTemplate: previewTemplate,
-            autoQueue: false,
-            thumbnailWidth: 230,
-            thumbnailHeight: 330,
-            clickable: '.dropzone'
-        });
+        // //DROPZONE
+        // var previewTemplate = '<div class="file-row"><img data-dz-thumbnail /></div>';
+        // dropzoneOpsProvider.setOptions({
+        //     paramName: 'file',
+        //     url: '/process.php',
+        //     maxFiles: 1,
+        //     maxFilesize: 5, // MB
+        //     uploadMultiple: false,
+        //     autoProcessQueue: false,
+        //     previewTemplate: previewTemplate,
+        //     autoQueue: false,
+        //     thumbnailWidth: 230,
+        //     thumbnailHeight: 330,
+        //     clickable: '.dropzone'
+        // });
 
 
         envServiceProvider.config({

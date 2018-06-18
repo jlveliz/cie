@@ -27,8 +27,8 @@ require.config({
         'pdfmake': 'frontend/bower_components/pdfmake/build/pdfmake.min',
         'vfs_fonts': 'frontend/assets/js/pdfmake/vfs_fonts',
         'base64': 'frontend/assets/js/base64/base64_utf8',
-        'dropzone': 'frontend/assets/js/dropzone/dropzone-amd-module',
-        'ng-dropzone': 'frontend/bower_components/ng-dropzone/dist/ng-dropzone',
+        // 'dropzone': 'frontend/assets/js/dropzone/dropzone-amd-module',
+        // 'ng-dropzone': 'frontend/bower_components/ng-dropzone/dist/ng-dropzone',
     },
     shim: {
         'jquery': {
@@ -120,15 +120,16 @@ require.config({
             exports: 'base64',
             deps: ['jquery']
 
-        },
-        'dropzone': {
-            exports: 'dropzone',
-            deps: ['jquery'],
-        },
-        'ng-dropzone': {
-            exports: 'ngdropzone',
-            deps: ['dropzone'],
-        },
+        }
+        // ,
+        // 'dropzone': {
+        //     exports: 'dropzone',
+        //     deps: ['jquery'],
+        // },
+        // 'ng-dropzone': {
+        //     exports: 'ngdropzone',
+        //     deps: ['dropzone'],
+        // },
     },
     deps: ['app']
 });
