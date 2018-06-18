@@ -1,7 +1,7 @@
 require.config({
     waitSeconds: 0,
     paths: {
-        'jquery': 'frontend/bower_components/jquery/dist/jquery',
+        'jquery': 'frontend/bower_components/jquery/dist/jquery.min',
         'jquery-validation': 'frontend/bower_components/jquery-validation/dist/jquery.validate.min',
         'jquery-datatables': 'frontend/bower_components/datatables.net/js/jquery.dataTables.min',
         'angularAMD': 'frontend/bower_components/angularAMD/angularAMD',
@@ -18,17 +18,11 @@ require.config({
         'angular-bootstrap': 'frontend/bower_components/angular-bootstrap/ui-bootstrap-tpls',
         'angular-datatables-bootstrap': 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min',
         'angular-moment': 'frontend/bower_components/angular-moment/angular-moment.min',
-        'angular-animate': 'frontend/bower_components/angular-animate/angular-animate',
-        'angular-messages': 'frontend/bower_components/angular-messages/angular-messages.min',
-        'angular-aria': 'frontend/bower_components/angular-aria/angular-aria.min',
-        'angular-material': 'frontend/bower_components/angular-material/angular-material',
-        'moment': 'frontend/bower_components/moment/min/moment-with-locales',
+        'moment': 'frontend/bower_components/moment/min/moment-with-locales.min',
         'underscore': 'frontend/bower_components/underscore/underscore-min',
         'pdfmake': 'frontend/bower_components/pdfmake/build/pdfmake.min',
         'vfs_fonts': 'frontend/assets/js/pdfmake/vfs_fonts',
-        'base64': 'frontend/assets/js/base64/base64_utf8',
-        // 'dropzone': 'frontend/assets/js/dropzone/dropzone-amd-module',
-        // 'ng-dropzone': 'frontend/bower_components/ng-dropzone/dist/ng-dropzone',
+        'base64': 'frontend/assets/js/base64/base64_utf8'
     },
     shim: {
         'jquery': {
@@ -50,14 +44,14 @@ require.config({
             deps: ['angular'],
         },
         'angular-ui-router-styles': {
-            exports:'angularUiRouterStyles',
+            exports: 'angularUiRouterStyles',
             deps: ['angular']
         },
         'satellizer': {
             deps: ['angular']
         },
         'angular-environments': {
-            exports:'angularEnvironments',
+            exports: 'angularEnvironments',
             deps: ['angular']
         },
         'angular-validation': {
@@ -65,7 +59,7 @@ require.config({
             deps: ['angular', 'jquery-validation'],
         },
         'angular-permission': {
-             exports: 'angularPermission',
+            exports: 'angularPermission',
             deps: ['angular']
         },
         'bootstrap': {
@@ -103,10 +97,6 @@ require.config({
         'angular-aria': {
             exports: 'angular-aria',
             deps: ['angular'],
-        },
-        'angular-material': {
-            exports: 'angularMaterial',
-            deps: ['angular-animate', 'angular-aria', 'angular-messages'],
         },
         'pdfmake': {
             exports: 'pdfmake',

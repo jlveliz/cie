@@ -8,7 +8,6 @@ define([
     'pdfmake',
     'underscore',
     'angular',
-    'angular-material',
     'angular-ui-router',
     'angular-resource',
     'angular-ui-router-styles',
@@ -20,9 +19,9 @@ define([
     'angular-datatables',
     'angular-bootstrap',
     'angular-datatables-bootstrap'
-], function(angularAMD, moment, $, base64, pdfmake,  underscore, angularMaterial, angularUiRouter, angularResource, angularUiRouterStyles, satellizer, angularEnvironments, angularValidation, angularPermission, bootstrap, angularDatatables, angularBootstrap, angularDatatablesBootstrap) {
+], function(angularAMD, moment, $, base64, pdfmake,  underscore,  angularUiRouter, angularResource, angularUiRouterStyles, satellizer, angularEnvironments, angularValidation, angularPermission, bootstrap, angularDatatables, angularBootstrap, angularDatatablesBootstrap) {
 
-    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap', 'ngMaterial']);
+    var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap']);
 
     cie.constant('appName', 'CIE');
 
@@ -1490,7 +1489,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/assets/css/custom.css', 'frontend/assets/css/animate.css', 'frontend/bower_components/angular-bootstrap/ui-bootstrap-csp.css', 'frontend/bower_components/angular-material/angular-material.css'],
+                css: ['frontend/assets/css/custom.css', 'frontend/assets/css/animate.css', 'frontend/bower_components/angular-bootstrap/ui-bootstrap-csp.css'],
             }
         }));
 
