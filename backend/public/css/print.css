@@ -1,0 +1,193 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+
+/*****
+
+
+	PRINT 
+	1. BODY
+	2. HEADER
+	3. FOOTER
+	4. CONTENT
+
+
+***/
+
+@page {
+	margin: 0cm;
+}
+body {
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+	margin-top: 3cm;
+	 /*margin-left: 2cm;*/
+	 /*margin-right: 2cm;*/
+	 margin-bottom: 2cm;
+
+}
+
+p{
+	display: block;
+	text-align: justify;
+	padding: 10px 0px;
+}
+
+ul {
+	display: block
+}
+
+ul li {
+	display: block;
+	margin-bottom: 10px;
+	text-align: justify;
+}
+
+table {
+	width: 100%;
+	 
+}
+
+.page-break {
+    page-break-after: always;
+}
+
+.content {
+	margin: 0 20px;
+	width: 100%;
+}
+
+
+/* HEADER */
+#header {
+	position: fixed;
+	top: 0cm;
+	left: 0cm;
+	right: 0cm;
+	height: 3cm;
+}
+
+#header img {
+	width: 100%;
+	height: 100%
+}
+
+
+/* FOOTER */
+#footer {
+	position: fixed; 
+    bottom: 0cm; 
+    left: 0cm; 
+    right: 0cm;
+    height: 4cm;
+}
+
+#footer img {
+	width: 100%;
+	height: 100%
+}
+
+/* CONTENT */ 
+h1.title {
+	text-align: center;
+	margin-top:20px;
+	font-weight: bold;
+	font-size: 15px
+}
+
+h2.subtitle {
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	margin-top: 20px;
+}
+
+.content-form {
+	/*margin-top: 35px;*/
+	/*padding: 0px 30px;  */
+}
+
+.section {
+	text-transform: uppercase;
+	text-decoration: underline;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.table-section {
+	margin-bottom: 20px
+}
+
+.header-section{
+	background: #cdcdcd;
+	padding: 3px;
+	font-weight: bold;
+	border:1px solid #000;
+	/*margin-top:15px; */
+}
+
+.content-section {
+	/*margin-top: 15px;*/
+}
+
+.field {
+	font-weight: bold;
+}
+
+.table-signature{
+	margin-top: 50px;
+	width: 50%
+}
+
+.table-signature td {
+	border-top: 1px solid #000;
+	padding-bottom: 40px
+}
+
+

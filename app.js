@@ -1,11 +1,10 @@
-// "use strict";
+"use strict";
 
 define([
     'angularAMD',
     'moment',
     'jquery',
     'base64',
-    'pdfmake',
     'underscore',
     'angular',
     'angular-ui-router',
@@ -19,7 +18,7 @@ define([
     'angular-datatables',
     'angular-bootstrap',
     'angular-datatables-bootstrap'
-], function(angularAMD, moment, $, base64, pdfmake,  underscore,  angularUiRouter, angularResource, angularUiRouterStyles, satellizer, angularEnvironments, angularValidation, angularPermission, bootstrap, angularDatatables, angularBootstrap, angularDatatablesBootstrap) {
+], function(angularAMD, moment, $, base64, underscore, angularUiRouter, angularResource, angularUiRouterStyles, satellizer, angularEnvironments, angularValidation, angularPermission, bootstrap, angularDatatables, angularBootstrap, angularDatatablesBootstrap) {
 
     var cie = angular.module('cieApp', ['ui.router', 'ngResource', 'uiRouterStyles', 'satellizer', 'environment', 'ngValidate', 'permission', 'datatables', 'ui.bootstrap', 'datatables.bootstrap']);
 
@@ -517,6 +516,7 @@ define([
                 });
                 return deferred.promise;
             },
+            getToken: $auth.getToken,
             verify: function() {
                 var deferred = $q.defer();
                 $http.get(envService.read('api') + 'authenticate/verify')
@@ -1155,7 +1155,7 @@ define([
                         return params
                     }
                 },
-                controller: function($scope, params, $uibModalInstance, $sce) {
+                controller: function($scope, params, $uibModalInstance, $sce, authFactory) {
                     $scope.title = params.title;
                     var content = params.content ? params.content : null;
                     $scope.type = params.type ? params.type : 'pdf';
@@ -1163,20 +1163,20 @@ define([
                     $scope.content = null;
 
                     switch ($scope.type) {
-                        default: pdfMake.createPdf(content).getBase64(function(result) {
-                            $scope.content = $sce.trustAsResourceUrl('data:application/pdf;base64,' + result);
-                            $scope.loading = false;
-                        });
+                        default:
+                        var token = '?token='+authFactory.getToken();
+                        $scope.content = $sce.trustAsResourceUrl(content + token);
+                        $scope.loading = false;
                         break;
                     }
 
 
                     $scope.print = function() {
-                        pdfMake.createPdf(content).print()
+                        // pdfMake.createPdf(content).print()
                     }
 
                     $scope.download = function() {
-                        pdfMake.createPdf(content).download($scope.title + '_' + moment().format('l'))
+                        // pdfMake.createPdf(content).download($scope.title + '_' + moment().format('l'))
                     }
 
                     $scope.ok = function() {
@@ -1206,17 +1206,9 @@ define([
 
         // $qProvider.errorOnUnhandledRejections(false);
 
-        //PDF CONFIG FONTS
-        pdfMake.fonts = {
-            timeNewRoman: {
-                normal: 'times.ttf',
-                bold: 'timesbd.ttf',
-                italics: 'timesi.ttf',
-                bolditalics: 'timesbi.ttf'
-            }
-        }
-        //PDF CONFIG FONTS
+       
 
+        //PDF CONFIG FONTS
         envServiceProvider.config({
             domains: {
                 development: ['cie2.local'],

@@ -6,7 +6,7 @@ use Cie\RepositoryInterface\PatientUserRepositoryInterface;
 use Cie\Http\Validators\PatientUserValidator;
 use Cie\Exceptions\PatientUserException;
 use Illuminate\Http\Request;
-
+use PDF;
 
 
 class PatientUserController extends Controller
@@ -160,5 +160,14 @@ class PatientUserController extends Controller
     public function import()
     {
         $this->pUserRepo->importData();
+    }
+
+
+
+    public function generatePdF($id)
+    {
+        $pUser =  $this->pUserRepo->find($id);
+        // return view('pdf.puserinscriptions',compact('pUser'));
+        return PDF::loadView('pdf.puserinscriptions',compact('pUser'))->stream($pUser->last_name . ' ' . $pUser->name.'.pdf');
     }
 }

@@ -20,8 +20,8 @@ require.config({
         'angular-moment': 'frontend/bower_components/angular-moment/angular-moment.min',
         'moment': 'frontend/bower_components/moment/min/moment-with-locales.min',
         'underscore': 'frontend/bower_components/underscore/underscore-min',
-        'pdfmake': 'frontend/bower_components/pdfmake/build/pdfmake.min',
-        'vfs_fonts': 'frontend/assets/js/pdfmake/vfs_fonts',
+        // 'pdfmake': 'frontend/bower_components/pdfmake/build/pdfmake.min',
+        // 'vfs_fonts': 'frontend/assets/js/pdfmake/vfs_fonts',
         'base64': 'frontend/assets/js/base64/base64_utf8'
     },
     shim: {
@@ -98,14 +98,7 @@ require.config({
             exports: 'angular-aria',
             deps: ['angular'],
         },
-        'pdfmake': {
-            exports: 'pdfmake',
-            deps: ['jquery'],
-        },
-        'vfs_fonts': {
-            exports: 'vfs_fonts',
-            deps: ['pdfmake'],
-        },
+
         'base64': {
             exports: 'base64',
             deps: ['jquery']

@@ -23,6 +23,49 @@ class PatientUser extends BaseModel
      */
     protected $dates = ['deleted_at'];
 
+    
+    /**
+        DATA DUMMY
+    **/
+    private $gradeDisability = [
+        ['id' => 'l', 'value' =>  'Leve' ],
+        [ 'id'=> 'm', 'value'=> 'Moderado' ],
+        [ 'id'=> 's', 'value'=> 'Severo' ],
+        [ 'id'=> 'g', 'value'=> 'Grave' ],
+    ];
+
+    private  $insurances = [
+        [ 'id'=>1, 'value'=>'IESS' ],
+        [ 'id'=>2, 'value'=>'Seguro Particular' ],
+        [ 'id'=>3, 'value'=>'Otros' ],
+        [ 'id'=>4, 'value'=>'No tiene Seguro' ],
+    ];
+
+    private $medicalAttentions = [
+        ['id' => 1, 'value' => 'Seguro Particular'],
+        ['id' => 2, 'value' => 'IESS'],
+        ['id' => 3, 'value' => 'ISFA'],
+        ['id' => 4, 'value' => 'MSP'],
+        ['id' => 5, 'value' => 'Fundaciones'],
+        ['id' => 6, 'value' => 'Dispensarios Médicos'],
+        ['id' => 7, 'value' => 'Junta de Beneficiencia'],
+        ['id' => 8, 'value' => 'Otros'],
+    ];
+
+    private $schoolings = [
+        ['id' => 1,'value' => 'Regular'],
+        ['id' => 2,'value' => 'Especial'],
+        ['id' => 3,'value' => 'No Posee'],
+    ];
+
+    private $schoolingTypes = [
+        ['id' => 1, 'value' => 'Fiscal'],
+        ['id' => 2, 'value' => 'Particular'],
+        ['id' => 3, 'value' => 'Fiscomisional'],
+        ['id' => 4, 'value' => 'Otros'],
+    ];
+
+
 
     protected $with = [
         'father',
@@ -170,6 +213,53 @@ class PatientUser extends BaseModel
         }
 
         return false;
+    }
+
+
+    public function getGradeDisability()
+    {
+        $grade = null;
+        foreach ($this->gradeDisability as $key => $value) {
+            if ($value['id'] == $this->grade_of_disability) $grade = $value['value'];
+        }
+        return $grade;
+    }
+
+
+    public function getHasTypeInsurance()
+    {
+        $type = null;
+        foreach ($this->insurances as $key => $value) {
+            if ($value['id'] == $this->has_insurance) $type = $value['value'];
+        }
+        return $type;
+    }
+
+    public function getNameMedicalAttention()
+    {
+        $medicalAte = null;
+        foreach($this->medicalAttentions as $key => $value ) {
+            if ($value['id'] == $this->receives_medical_attention) $medicalAte = $value['value'];
+        }
+        return $medicalAte;
+    }
+
+    public function getHasSchooling()
+    {
+        $schooling = null;
+        foreach($this->schoolings as $key => $value) {
+            if ($value['id'] == $this->schooling) $schooling = $value['value'];
+        }     
+        return $schooling;
+    }
+
+    public function getHasSchoolingType()
+    {
+        $schoolingType = '';
+        foreach($this->schoolingTypes as $key => $value) {
+            if ($value['id'] == $this->schooling_type) $schoolingType = $value['value'];
+        }
+        return $schoolingType;
     }
 
    

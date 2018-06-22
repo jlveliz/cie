@@ -25,7 +25,6 @@
         "angular-datatables": "0.6.0",
         "angular-bootstrap": "^2.5.0",
         "angular-moment": "^1.0.1",
-        "pdfmake": "^0.1.35",
         "animate.css": "^3.5.2"
     },
     "resolutions":

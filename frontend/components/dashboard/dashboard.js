@@ -1,5 +1,6 @@
 define(['app'], function(app) {
 
+
     app.register.controller('DashboardCtrl', ['$scope', 'envService', 'apiResource', function($scope, envService, apiResource) {
 
         $scope.loading = true;
@@ -12,8 +13,8 @@ define(['app'], function(app) {
 
 
         apiResource.loadFromApi(req).then(function(dashboard) {
-        	$scope.totalUsersToday = dashboard.total_users_today;
-        	$scope.loading = false;
+            $scope.totalUsersToday = dashboard.total_users_today;
+            $scope.loading = false;
         });
 
     }]);

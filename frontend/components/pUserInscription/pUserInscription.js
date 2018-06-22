@@ -1,7 +1,7 @@
 /**
  ** Inscriptions controller
  **/
-define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
+define(['app', 'moment'], function(app, moment) {
 
     app.register.service('PUserInscriptionService', ['$q', 'layoutReportFactory', '$uibModal', function($q, layoutReportFactory, $uibModal) {
 
@@ -891,7 +891,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
 
     }]);
 
-    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter) {
+    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter, envService) {
 
         $scope.inscriptions = [];
         $scope.loading = true;
@@ -914,7 +914,6 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
         });
 
         apiResource.resource('puserinscriptions').query().then(function(results) {
-            // debugger;
             $scope.loading = false;
             $scope.inscriptions = results;
             $scope.messages = PUserInscriptionService.messageFlag;
@@ -926,17 +925,14 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
 
         $scope.print = function(inscripId) {
             apiResource.resource('puserinscriptions').getCopy(inscripId).then(function(result) {
-                PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
-                    var params = {
-                        type: 'pdf',
-                        content: docDefinition,
-                        title: result.last_name + ' ' + result.name
-                    };
-                    $rootScope.openPreviewModal(params);
-
-
-                });
-            })
+                var params = {
+                    type: 'pdf',
+                    content: envService.read('api')+'pUsers/print-inscription/'+inscripId,
+                    title: result.last_name + ' ' + result.name
+                };
+                console.log(params)
+                $rootScope.openPreviewModal(params);
+            });
         }
 
         $scope.delete = function(id) {
@@ -1734,7 +1730,7 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
                 $scope.model.mother.age = PUserInscriptionService.calculateAge(dateBirth);
         };
 
-         $scope.$watch('model.mother.date_birth', function(newVal, oldVal) {
+        $scope.$watch('model.mother.date_birth', function(newVal, oldVal) {
             if (newVal) $scope.calculateAgeMother(newVal)
         })
 
@@ -1815,15 +1811,15 @@ define(['app', 'moment', 'vfs_fonts'], function(app, moment) {
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(result) {
                 PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
                     if (option == 'print') {
-                        pdfMake.createPdf(docDefinition).print();
+                        // pdfMake.createPdf(docDefinition).print();
                     } else if (option == 'download') {
-                        pdfMake.createPdf(docDefinition).download($scope.model.last_name + ' ' + $scope.model.name + '_' + moment().format('l'))
+                        // pdfMake.createPdf(docDefinition).download($scope.model.last_name + ' ' + $scope.model.name + '_' + moment().format('l'))
                     } else {
-                        pdfMake.createPdf(docDefinition).getBase64(function(doc) {
-                            $scope.docContent = $sce.trustAsResourceUrl('data:application/pdf;base64,' + doc);
-                            $scope.loadingDocs = false;
-                            $scope.$apply();
-                        })
+                        // pdfMake.createPdf(docDefinition).getBase64(function(doc) {
+                        //     $scope.docContent = $sce.trustAsResourceUrl('data:application/pdf;base64,' + doc);
+                        //     $scope.loadingDocs = false;
+                        //     $scope.$apply();
+                        // })
                     }
                 });
             })

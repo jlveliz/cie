@@ -40,6 +40,7 @@ Route::group(['prefix'=>'api'],function() {
 	//custom route for patient user inscripton
 	Route::resource('pUsers','PatientUserController',['except'=>['create','update']]);
 	Route::post('pUsers/{pUserId}/update','PatientUserController@update');
+	Route::get('pUsers/print-inscription/{pUserId}','PatientUserController@generatePdF');
 	Route::resource('psycho-assessments','PsychologicalAssessmentController',['except'=>['create']]);
 	Route::resource('provinces','ProvinceController',['except'=>['create']]);
 	Route::resource('cities','CityController',['except'=>['create']]);
