@@ -55,26 +55,58 @@
                                 <div class="row">
                                     <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                         <label for="permisos" id="permisos" class="form-label">Permisos</label>
-                                        <table class="table" ng-repeat="module in modules">
-                                            <thead>
-                                                <tr>
-                                                    <th class="col-md-8 col-sm-6 col-xs-12">{{module.name}}</th>
-                                                    <th class="text-center col-md-4 col-sm-6 col-xs-12">Permitir?</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="(keyPerm, valuePerm) in module.permissions | filter:filterTypePermission">
-                                                    <td>{{valuePerm.name}}</td>
-                                                    <td colspan="1" class="text-center">
-                                                        <div class="checkbox checkbox-primary" style="margin:0px">
-                                                            <input id="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}" type="checkbox" ng-model="valuePerm.$selected" ng-change="setPermission(valuePerm.id,valuePerm.$selected)">
-                                                            <label for="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}">
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <uib-tabset active="0">
+                                            <uib-tab index="0">
+                                                <uib-tab-heading>
+                                                    <h5>Menú</h5>
+                                                </uib-tab-heading>
+                                                <table class="table" ng-repeat="module in modules">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-md-8 col-sm-6 col-xs-12">{{module.name}}</th>
+                                                            <th class="text-center col-md-4 col-sm-6 col-xs-12">Permitir?</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(keyPerm, valuePerm) in module.permissions | filter:filterTypePermissionMenu">
+                                                            <td><label for="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}" class="no-weight">{{valuePerm.name}}</label></td>
+                                                            <td colspan="1" class="text-center">
+                                                                <div class="checkbox checkbox-primary" style="margin:0px">
+                                                                    <input id="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}" type="checkbox" ng-model="valuePerm.$selected" ng-change="setPermission(valuePerm.id,valuePerm.$selected)">
+                                                                    <label for="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}">
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </uib-tab>
+                                            <uib-tab index="1">
+                                                <uib-tab-heading>
+                                                    <h5>Opciones</h5>
+                                                </uib-tab-heading>
+                                                <table  class="table" ng-repeat="module in modules">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-md-8 col-sm-6 col-xs-12">{{module.name}}</th>
+                                                            <th class="text-center col-md-4 col-sm-6 col-xs-12">Permitir?</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(keyPerm, valuePerm) in module.permissions | filter:filterTypePermissionOption">
+                                                            <td><label for="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}" class="no-weight">{{valuePerm.name}}</label></td>
+                                                            <td colspan="1" class="text-center">
+                                                                <div class="checkbox checkbox-primary" style="margin:0px">
+                                                                    <input id="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}" type="checkbox" ng-model="valuePerm.$selected" ng-change="setPermission(valuePerm.id,valuePerm.$selected)">
+                                                                    <label for="checkbox_{{valuePerm.code +_+ valuePerm.id + keyPerm}}">
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </uib-tab>
+                                        </uib-tabset>
                                     </div>
                                 </div>
                             </div>

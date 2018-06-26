@@ -40,11 +40,19 @@
                                         <td> {{inscription.representant ? inscription.representant.last_name +' ' +  inscription.representant.name : "-"}}</td>
                                         <td>{{inscription.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting" ui-sref="root.inscription.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
+
+                                            <a title="Ver Usuario {{inscription.name}} {{inscription.last_name}}" alt="Ver Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.show({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-eye"></i> Ver</a>
+                                            
+
+                                            <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button" permission permission-only="['admin','dirTerapia']"> <i class="fa fa-pencil"></i> Editar</a>
+                                            
 
                                             <button title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting" class="btn btn-default btn-sm" type="button" ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</button>
+
                                             
-                                            <a title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting" ng-click="delete(inscription.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <a permission  permission-only="['admin','dirTerapia']" title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}"  ng-click="delete(inscription.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            
+                                           
 
                                             <p ng-show="inscription.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
@@ -53,7 +61,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" permission  permission-only="['admin','dirTerapia']">
                         <uib-tab-heading>
                             <a ui-sref="root.inscription.create" title="Crear Ficha de Inscripción"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

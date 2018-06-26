@@ -1155,28 +1155,32 @@ define([
                         return params
                     }
                 },
-                controller: function($scope, params, $uibModalInstance, $sce, authFactory) {
+                controller: function($scope, params, $uibModalInstance, $sce, authFactory, $window, $timeout) {
                     $scope.title = params.title;
                     var content = params.content ? params.content : null;
                     $scope.type = params.type ? params.type : 'pdf';
                     $scope.loading = true;
                     $scope.content = null;
+                    var token = 'token=' + authFactory.getToken();
 
                     switch ($scope.type) {
-                        default:
-                        var token = '?token='+authFactory.getToken();
-                        $scope.content = $sce.trustAsResourceUrl(content + token);
-                        $scope.loading = false;
+                        default: 
+                        $timeout(function(){
+                            $scope.content = $sce.trustAsResourceUrl(content + '?' + token);
+                            $scope.loading = false;
+                        },1000)
                         break;
                     }
 
 
                     $scope.print = function() {
-                        // pdfMake.createPdf(content).print()
+                        var pdf = document.getElementById('iframe-print');
+                        pdf.focus();
+                        pdf.contentWindow.print();
                     }
 
                     $scope.download = function() {
-                        // pdfMake.createPdf(content).download($scope.title + '_' + moment().format('l'))
+                        $window.open(content + '?download=true&' + token);
                     }
 
                     $scope.ok = function() {
@@ -1206,7 +1210,7 @@ define([
 
         // $qProvider.errorOnUnhandledRejections(false);
 
-       
+
 
         //PDF CONFIG FONTS
         envServiceProvider.config({
@@ -2108,7 +2112,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['UsNormal', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia','recepcion'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2128,7 +2132,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'UsNormal', 'dirTerapia'],
+                    only: ['admin','dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2149,12 +2153,33 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'UsNormal', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
                 css: ['frontend/assets/css/input-file.css'],
                 pageTitle: "Edición de Fichas de Inscripción"
+            }
+
+        }));
+
+        $stateProvider.state('root.inscription.show', angularAMD.route({
+            url: '/{pInsId:int}/show',
+            controllerUrl: 'frontend/components/pUserInscription/pUserInscription',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/pUserInscription/create-edit.html',
+                    controller: 'pUserInscriptionShowCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin', 'dirTerapia','recepcion'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/assets/css/input-file.css'],
+                pageTitle: "Ver Ficha de Inscripción"
             }
 
         }));

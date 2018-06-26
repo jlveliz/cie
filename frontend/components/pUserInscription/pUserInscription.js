@@ -118,10 +118,10 @@ define(['app', 'moment'], function(app, moment) {
             { id: 3, value: 'Otro', $visible: true },
         ];
 
-        _this.statesForm = [
-            { id: 1, value: 'Inactivo' },
-            { id: 2, value: 'Activo' },
-        ];
+        // _this.statesForm = [
+        //     { id: 1, value: 'Inactivo' },
+        //     { id: 2, value: 'Activo' },
+        // ];
 
         _this.changeRepresentant = function(model, representant) {
             var familyType = representant.family;
@@ -891,7 +891,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter, envService) {
+    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies',function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies) {
 
         $scope.inscriptions = [];
         $scope.loading = true;
@@ -899,6 +899,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.messages = {};
         $scope.hasMessage = false;
 
+      
         angular.extend($scope.dtOptions, {
             orderable: false,
             columnDefs: [{
@@ -927,10 +928,9 @@ define(['app', 'moment'], function(app, moment) {
             apiResource.resource('puserinscriptions').getCopy(inscripId).then(function(result) {
                 var params = {
                     type: 'pdf',
-                    content: envService.read('api')+'pUsers/print-inscription/'+inscripId,
+                    content: envService.read('api') + 'pUsers/print-inscription/' + inscripId,
                     title: result.last_name + ' ' + result.name
                 };
-                console.log(params)
                 $rootScope.openPreviewModal(params);
             });
         }
@@ -979,7 +979,7 @@ define(['app', 'moment'], function(app, moment) {
         };
         $scope.hasFather = [];
         $scope.hasMother = [];
-        $scope.states = [];
+        // $scope.states = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
         $scope.gradeDisability = PUserInscriptionService.gradeDisability;
@@ -992,7 +992,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.statusCivil = PUserInscriptionService.statusCivil;
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
-        $scope.states = PUserInscriptionService.statesForm;
+        // $scope.states = PUserInscriptionService.statesForm;
         $scope.hasFather = PUserInscriptionService.yesOrNot;
         $scope.hasMother = PUserInscriptionService.yesOrNot;
 
@@ -1609,7 +1609,7 @@ define(['app', 'moment'], function(app, moment) {
         }
     }]);
 
-    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', 'envService', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce, envService) {
+    app.register.controller('pUserInscriptionEditCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', 'envService', 'authFactory', '$window', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce, envService, authFactory, $window) {
 
         var inscriptionId = $stateParams.pInsId;
         $scope.isEdit = true
@@ -1625,7 +1625,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.representant = {
             family: 1
         };
-        $scope.states = [];
+        // $scope.states = [];
         $scope.hasFather = [];
         $scope.hasMother = [];
 
@@ -1641,7 +1641,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.statusCivil = PUserInscriptionService.statusCivil;
         $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
         $scope.representants = PUserInscriptionService.representants;
-        $scope.states = PUserInscriptionService.statesForm;
+        // $scope.states = PUserInscriptionService.statesForm;
         $scope.hasFather = PUserInscriptionService.yesOrNot;
         $scope.hasMother = PUserInscriptionService.yesOrNot;
 
@@ -1810,16 +1810,20 @@ define(['app', 'moment'], function(app, moment) {
             if (!option) $scope.loadingDocs = true;
             apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(result) {
                 PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
+                    var token = 'token=' + authFactory.getToken();
+                    var url = envService.read('api') + 'pUsers/print-inscription/' + inscriptionId;
+
                     if (option == 'print') {
-                        // pdfMake.createPdf(docDefinition).print();
+                        var pdf = document.getElementById('iframe-print');
+                        pdf.focus();
+                        pdf.contentWindow.print();
                     } else if (option == 'download') {
-                        // pdfMake.createPdf(docDefinition).download($scope.model.last_name + ' ' + $scope.model.name + '_' + moment().format('l'))
+                        $window.open(url + '?download=true&' + token);
                     } else {
-                        // pdfMake.createPdf(docDefinition).getBase64(function(doc) {
-                        //     $scope.docContent = $sce.trustAsResourceUrl('data:application/pdf;base64,' + doc);
-                        //     $scope.loadingDocs = false;
-                        //     $scope.$apply();
-                        // })
+
+                        $scope.docContent = $sce.trustAsResourceUrl(url + '?' + token);
+                        $scope.loadingDocs = false;
+                        // $scope.$apply();
                     }
                 });
             })
@@ -2301,5 +2305,229 @@ define(['app', 'moment'], function(app, moment) {
             $scope.save(form, true);
         };
 
+    }]);
+
+    app.register.controller('pUserInscriptionShowCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', 'envService', 'authFactory', '$window', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce, envService, authFactory, $window) {
+
+        var inscriptionId = $stateParams.pInsId;
+        $scope.isShow = true
+        $scope.docContent = null;
+        $scope.hasMessage = false;
+        $scope.messages = {};
+        $scope.loading = true;
+        $scope.model = {};
+        $scope.provinces = [];
+        $scope.cities = [];
+        $scope.parishies = [];
+        $scope.pathologies = [];
+        $scope.representant = {
+            family: 1
+        };
+        // $scope.states = [];
+        $scope.hasFather = [];
+        $scope.hasMother = [];
+
+        $scope.porcentages = PUserInscriptionService.getPorcentages();
+        $scope.gradeDisability = PUserInscriptionService.gradeDisability;
+        $scope.hasDiagnostic = PUserInscriptionService.yesOrNot;
+        $scope.assistOtherTherapeuticCenter = PUserInscriptionService.yesOrNot;
+        $scope.insurances = PUserInscriptionService.insurances;
+        $scope.medicalCenters = PUserInscriptionService.medicalAttentions;
+        $scope.medicalCenters = PUserInscriptionService.medicalAttentions;
+        $scope.schooling = PUserInscriptionService.schooling;
+        $scope.schoolingType = PUserInscriptionService.schoolingType;
+        $scope.statusCivil = PUserInscriptionService.statusCivil;
+        $scope.usrLiveWith = PUserInscriptionService.usrLiveWith;
+        $scope.representants = PUserInscriptionService.representants;
+        // $scope.states = PUserInscriptionService.statesForm;
+        $scope.hasFather = PUserInscriptionService.yesOrNot;
+        $scope.hasMother = PUserInscriptionService.yesOrNot;
+
+
+
+        var deps = $q.all([
+            apiResource.resource('provinces').queryCopy().then(function(provinces) {
+                $scope.provinces = provinces;
+            }),
+            apiResource.resource('cities').queryCopy().then(function(cities) {
+                $scope.cities = cities;
+            }),
+            apiResource.resource('parishies').queryCopy().then(function(parishies) {
+                $scope.parishies = parishies;
+            }),
+            apiResource.resource('pathologies').queryCopy().then(function(pathologies) {
+                $scope.pathologies = pathologies;
+            }),
+        ]);
+
+        deps.then(function() {
+            apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(model) {
+                $scope.model = model;
+                //attached
+                $scope.model.representant_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.representant_identification_card : null;
+                $scope.model.user_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.user_identification_card : null;
+                $scope.model.conadis_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.conadis_identification_card : null;
+                $scope.model.specialist_certificate = $scope.model.attached ? envService.read('public') + $scope.model.attached.specialist_certificate : null;
+
+                $scope.model.date_birth = new Date($scope.model.date_birth);
+                $scope.model.date_admission = new Date($scope.model.date_admission);
+                if ($scope.model.mother)
+                    $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
+
+                if ($scope.model.father)
+                    $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
+
+                if ($scope.model.representant)
+                    $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
+
+                if ($scope.model.mother && ($scope.model.representant_id == $scope.model.mother.id)) {
+                    $scope.model.mother.is_representant = 1;
+                    $scope.representant.family = 1;
+                    $scope.model.representant = {};
+                } else if ($scope.model.father && ($scope.model.representant_id == $scope.model.father.id)) {
+                    $scope.model.father.is_representant = 1;
+                    $scope.representant.family = 2;
+                    $scope.model.representant = {};
+                } else {
+                    $scope.representant.family = 3;
+                }
+
+                $scope.messages = PUserInscriptionService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    PUserInscriptionService.messageFlag = {};
+                }
+
+
+                //verify if parent is representant
+                $scope.verifyHasFatherRepresentant();
+                $scope.verifyHasMotherRepresentant();
+                $scope.filterRepresentant('father');
+                $scope.filterRepresentant('mother');
+                $scope.filterUserLiveWith('father');
+                $scope.filterUserLiveWith('mother');
+                $scope.loading = false;
+            });
+        });
+
+        $scope.calculateAge = function(dateBirth) {
+            $scope.model.age = PUserInscriptionService.calculateAge(dateBirth);
+        };
+
+        $scope.calculateAgeFather = function(dateBirth) {
+            if ($scope.model.father)
+                $scope.model.father.age = PUserInscriptionService.calculateAge(dateBirth);
+        };
+
+        $scope.$watch('model.father.date_birth', function(newVal, oldVal) {
+            if (newVal) $scope.calculateAgeFather(newVal)
+        })
+
+        $scope.calculateAgeMother = function(dateBirth) {
+            if ($scope.model.mother)
+                $scope.model.mother.age = PUserInscriptionService.calculateAge(dateBirth);
+        };
+
+        $scope.$watch('model.mother.date_birth', function(newVal, oldVal) {
+            if (newVal) $scope.calculateAgeMother(newVal)
+        })
+
+        $scope.calculateAgeRepresentant = function(dateBirth) {
+            $scope.model.representant.age = PUserInscriptionService.calculateAge(dateBirth);
+        };
+
+
+        $scope.filterCities = function(value) {
+            if (value.province_id == $scope.model.province_id) return value;
+            return false;
+        }
+
+        $scope.filterParishies = function(value) {
+            if (value.city_id == $scope.model.city_id) return value;
+            return false;
+        }
+
+        $scope.changeRepresentant = function() {
+            $scope.model = PUserInscriptionService.changeRepresentant($scope.model, $scope.representant);
+        }
+
+        $scope.changeDiagnostic = function() {
+            return PUserInscriptionService.setNullDiagnostic($scope.model);
+        };
+
+        $scope.changeAssistOtherTherapeuticCenter = function() {
+            return PUserInscriptionService.setNullNameCenterTherapeutic($scope.model);
+        };
+
+        $scope.changeReceivesMedicalAttention = function() {
+            return PUserInscriptionService.setNullNameMedicalAttention($scope.model);
+        };
+
+        $scope.changeSchooling = function() {
+            return PUserInscriptionService.setNullSchooling($scope.model)
+        };
+
+        $scope.verifyHasFatherRepresentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "father");
+        };
+
+        $scope.verifyHasMotherRepresentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "mother");
+        };
+
+        $scope.verifyRepresentant = function() {
+            return PUserInscriptionService.verifyRrepesentant($scope.model, "representant");
+        }
+
+        $scope.filterRepresentant = function(parent) {
+            $scope.representants = PUserInscriptionService.filterRepresentant($scope.model, parent);
+        };
+
+        $scope.filterUserLiveWith = function(parent) {
+            $scope.usrLiveWith = PUserInscriptionService.filterUserLiveWithRepresentant($scope.model, parent);
+        };
+
+        $scope.searchFather = function() {
+            PUserInscriptionService.openModalSearchParent('father').then(function(father) {
+                $scope.model.father = {};
+                father.date_birth = new Date(father.date_birth);
+                $scope.model.father = father;
+            });
+        };
+
+
+        $scope.searchMother = function() {
+            PUserInscriptionService.openModalSearchParent('mother').then(function(mother) {
+                $scope.model.mother = {};
+                mother.date_birth = new Date(mother.date_birth);
+                $scope.model.mother = mother;
+            });
+        };
+
+        $scope.loadDocs = function(option) {
+            if (!option) $scope.loadingDocs = true;
+            apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(result) {
+                PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
+                    var token = 'token=' + authFactory.getToken();
+                    var url = envService.read('api') + 'pUsers/print-inscription/' + inscriptionId;
+
+                    if (option == 'print') {
+                        var pdf = document.getElementById('iframe-print');
+                        pdf.focus();
+                        pdf.contentWindow.print();
+                    } else if (option == 'download') {
+                        $window.open(url + '?download=true&' + token);
+                    } else {
+
+                        $scope.docContent = $sce.trustAsResourceUrl(url + '?' + token);
+                        $scope.loadingDocs = false;
+                        // $scope.$apply();
+                    }
+                });
+            })
+        };
+
+
+        
     }]);
 });

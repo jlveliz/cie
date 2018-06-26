@@ -3,6 +3,7 @@
  **/
 define(['app'], function(app) {
 
+
     app.register.service('RoleService', ['apiResource', function(apiResource) {
 
         var _this = this;
@@ -49,8 +50,8 @@ define(['app'], function(app) {
 
         }
 
-        _this.filterTypePermission = function(value) {
-            if (value && value.type.code == 'menu') return value;
+        _this.filterTypePermission = function(value, type) {
+            if (value && value.type.code == type) return value;
             return false
         }
     }]);
@@ -129,7 +130,7 @@ define(['app'], function(app) {
             apiResource.resource('modules').queryCopy().then(function(modules) {
                 $scope.modules = modules;
             }),
-            apiResource.resource('permissions').queryCopy({ type: 'menu' }).then(function(permissions) {
+            apiResource.resource('permissions').queryCopy().then(function(permissions) {
                 listPermissions = permissions;
                 angular.forEach(listPermissions, function(per) {
                     per.$selected = false;
@@ -180,7 +181,7 @@ define(['app'], function(app) {
                 var idx = _.indexOf($scope.model.permissions, permissionId);
                 if (idx > -1) $scope.model.permissions.splice(idx, 1);
             } else {
-                
+
                 $scope.model.permissions.push(permissionId);
             }
         }
@@ -193,8 +194,14 @@ define(['app'], function(app) {
             return false;
         }
 
-        $scope.filterTypePermission = function(value) {
-            return RoleService.filterTypePermission(value);
+        $scope.filterTypePermissionMenu = function(value) {
+            debugger;
+            return RoleService.filterTypePermission(value, 'menu');
+        }
+
+        $scope.filterTypePermissionOption = function(value) {
+            debugger;
+            return RoleService.filterTypePermission(value, 'opcion');
         }
 
         $scope.save = function(form, returnIndex) {
@@ -347,8 +354,12 @@ define(['app'], function(app) {
             return false;
         }
 
-        $scope.filterTypePermission = function(value) {
-            return RoleService.filterTypePermission(value);
+        $scope.filterTypePermissionMenu = function(value) {
+            return RoleService.filterTypePermission(value, 'menu');
+        }
+
+        $scope.filterTypePermissionOption = function(value) {
+            return RoleService.filterTypePermission(value, 'opcion');
         }
 
 

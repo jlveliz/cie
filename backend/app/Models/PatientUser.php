@@ -12,6 +12,8 @@ class PatientUser extends BaseModel
     
     use SoftDeletes;
 
+    const STATEREGISTRED = 1;
+
     protected $table = "patient_user";
 
     protected $primaryKey = "id";
@@ -108,7 +110,7 @@ class PatientUser extends BaseModel
         'city_id' => 'int',
         'parish_id' => 'int',
         'age' => 'int',
-        'state' => 'int',
+        'state_id' => 'int',
         'has_father' => 'int',
         'has_mother' => 'int',
     ];
@@ -142,7 +144,7 @@ class PatientUser extends BaseModel
         'mother_id',
         'representant_id',
         'other_diagnostic',
-        'state',
+        'state_id',
         'has_father',
         'has_mother',
     ];
@@ -269,6 +271,7 @@ class PatientUser extends BaseModel
     {
         parent::boot();
         static::saving(function($pUser){
+            $puser->state_id =  self::STATEREGISTRED;
             $pUser->created_user_id = Auth::user() ? Auth::user()->id : 1;
         });
 

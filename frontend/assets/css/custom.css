@@ -5693,3 +5693,7 @@ md-switch {
 .no-resize {
     resize: none;
 }
+
+.no-weight {
+    font-weight: normal;
+}

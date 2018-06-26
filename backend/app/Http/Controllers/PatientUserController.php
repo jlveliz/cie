@@ -164,10 +164,15 @@ class PatientUserController extends Controller
 
 
 
-    public function generatePdF($id)
+    public function generatePdF($id, Request $request)
     {
         $pUser =  $this->pUserRepo->find($id);
         // return view('pdf.puserinscriptions',compact('pUser'));
-        return PDF::loadView('pdf.puserinscriptions',compact('pUser'))->stream($pUser->last_name . ' ' . $pUser->name.'.pdf');
+        if ($request->has('download') && $request->get('download')) {
+            return PDF::loadView('pdf.puserinscriptions',compact('pUser'))->download('Ficha Inscripción '.$pUser->last_name . ' ' . $pUser->name.'.pdf');
+        } else {
+            return PDF::loadView('pdf.puserinscriptions',compact('pUser'))->stream('Ficha Inscripción ' . $pUser->last_name . ' ' . $pUser->name.'.pdf');
+            
+        }
     }
 }
