@@ -46,7 +46,7 @@ class HistoricalPatientUser extends BaseModel
         'parish_id' => 'int',
         'age' => 'int',
         'assist_other_therapeutic_center' => 'int',
-        'state' => 'int',
+        'state_id' => 'int',
         'has_father' => 'int',
         'has_mother' => 'int',
     ];
@@ -80,7 +80,7 @@ class HistoricalPatientUser extends BaseModel
         'mother_id',
         'representant_id',
         'other_diagnostic',
-        'state',
+        'state_id',
         'has_father',
         'has_mother',
     ];
@@ -144,8 +144,8 @@ class HistoricalPatientUser extends BaseModel
     public static function boot()
     {
         parent::boot();
-        static::saving(function($pUser){
-            $pUser->created_user_id = Auth::user()->id;
+        static::creating(function($pUser){
+            $pUser->created_user_id = Auth::user() ? Auth::user()->id : 1;
         });
 
         static::deleted(function($pUser){

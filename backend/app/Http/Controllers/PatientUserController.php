@@ -29,7 +29,8 @@ class PatientUserController extends Controller
     public function index(Request $request)
     {
         try {
-            $users = $this->pUserRepo->enum($request->all())->toJson();
+            // $users = $this->pUserRepo->enum($request->all())->toJson();
+            $users = $this->pUserRepo->paginate()->toJson();
             $users = $this->encodeResponse($users);
             return response()->json($users,200);
         } catch (PatientUserException $e) {

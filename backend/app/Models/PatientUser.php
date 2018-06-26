@@ -270,14 +270,14 @@ class PatientUser extends BaseModel
     public static function boot()
     {
         parent::boot();
-        static::saving(function($pUser){
-            $puser->state_id =  self::STATEREGISTRED;
+        static::creating(function($pUser){
+            // $puser->state_id =  self::STATEREGISTRED;
             $pUser->created_user_id = Auth::user() ? Auth::user()->id : 1;
         });
 
         static::deleted(function($pUser){
             $pUser->person()->delete();
-            $puser->attached()->delete();
+            $pUser->attached()->delete();
         });
 
         static::addGlobalScope(new PatientUserScope());
