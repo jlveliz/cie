@@ -35,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('Cie\RepositoryInterface\RoleRepositoryInterface','Cie\Repository\RoleRepository');
         //Patient
         $this->app->bind('Cie\RepositoryInterface\PatientUserRepositoryInterface','Cie\Repository\PatientUserRepository');
+        //Grade of Disability
+        $this->app->bind('Cie\RepositoryInterface\GradeOfDisabilityRepositoryInterface','Cie\Repository\GradeOfDisabilityRepository');
         //Province
         $this->app->bind('Cie\RepositoryInterface\ProvinceRepositoryInterface','Cie\Repository\ProvinceRepository');
         //CIty

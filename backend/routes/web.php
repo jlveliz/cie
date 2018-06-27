@@ -36,6 +36,8 @@ Route::group(['prefix'=>'api'],function() {
 	Route::resource('permissions','PermissionController',['except'=>['create']]);
 	Route::resource('typepermissions','PermissionTypeController',['except'=>['create']]);
 	Route::resource('roles','RoleController',['except'=>['create']]);
+	Route::resource('grades-disability','GradeOfDisabilityController',['except'=>['create']]);
+
 	Route::get('pUsers/getParent','PatientUserController@getParent');
 	//custom route for patient user inscripton
 	Route::resource('pUsers','PatientUserController',['except'=>['create','update']]);

@@ -973,6 +973,11 @@ define([
             id: '@id'
         }).register();
 
+        //Grades of Disability
+        apiResource.resource('grades-disability', envService.read('api') + 'grades-disability/:id', {
+            id: '@id'
+        }).register();
+
 
 
     }]);
@@ -2447,6 +2452,53 @@ define([
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Edición de Evaluación Psicológica"
+            }
+        }));
+
+
+         /**
+            GRADES OF DISABILITIES
+        **/
+        $stateProvider.state('root.gradeDisability', angularAMD.route({
+            url: 'grades-disability',
+            controllerUrl: 'frontend/components/gradedisability/gradedisability',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/gradedisability/index.html',
+                    controller: 'GradeDisabilityIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Grados de Discapacidad de un Usuario"
+            }
+        }));
+
+        /**
+            GRADES OF DISABILITIES
+        **/
+        $stateProvider.state('root.gradeDisability.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/gradedisability/gradedisability',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/gradedisability/create-edit.html',
+                    controller: 'GradeDisabilityCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Grados de Discapacidad de un Usuario"
             }
         }));
 
