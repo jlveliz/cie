@@ -8,6 +8,7 @@ use Cie\Models\Person;
 use Cie\Models\PersonType;
 use Cie\Models\IdentificationType;
 use Cie\Models\Province;
+use Cie\Models\StatePatientUser;
 use Cie\Models\City;
 use Cie\Models\Parish;
 use Cie\Models\Historical\HistoricalPatientUser;
@@ -164,6 +165,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		if ($pUPerson->save()) {
 			$personKey = $pUPerson->getKey();
 			$pUPatient = new PatientUser();
+			$data['state_id'] = $this->getStateInitial();
 			$data['person_id'] = $personKey;
 			$data['father_id'] = $fatherKey;
 			$data['mother_id'] = $motherKey;
@@ -328,6 +330,11 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	public function getIdentification($type)
     {
         return  IdentificationType::where('code',$type)->first()->id;
+    }
+
+    public function getStateInitial()
+    {
+    	return  StatePatientUser::select('id')->where('code','inscrito')->first()->id;
     }
 
 
@@ -522,7 +529,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
         			'visual_disability' => $person->tipo_discapacidad == 'Visual' ? ltrim($person->porcentaje ,"0.") : 0,
         			'psychosocial_disability' => $person->tipo_discapacidad == 'Psicosocial' ? ltrim($person->porcentaje ,"0.") : 0,
         			'language_disability' => $person->tipo_discapacidad == 'Lenguaje' ? ltrim($person->porcentaje ,"0.") : 0,
-        			'grade_of_disability' => getDisabilityGrade($person->grado),
+        			'grade_of_disability_id' => getDisabilityGrade($person->grado),
         			'conadis_id' => $person->conadis_carnet,
         			'other_diagnostic' => $person->diagnostico_secundario .' '. $person->otro_diagnostico,
         			'entity_send_diagnostic' => $person->entidad_emitio_diagnostico,

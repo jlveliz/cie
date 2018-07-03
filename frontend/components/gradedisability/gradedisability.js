@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('GradeDisabilityIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'GradeDisabilityService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, CityService, $rootScope) {
+    app.register.controller('GradeDisabilityIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'GradeDisabilityService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, GradeDisabilityService, $rootScope) {
 
         $scope.grades = [];
         $scope.loading = true;
@@ -22,12 +22,11 @@ define(['app'], function(app) {
             orderable: false,
             columnDefs: [{
                 orderable: false,
-                targets: 3
+                targets: 2
             }],
             order: [
                 [0, 'asc'],
                 [1, 'asc'],
-                [2, 'asc'],
             ],
             responsive: true
         });
@@ -35,10 +34,10 @@ define(['app'], function(app) {
         apiResource.resource('grades-disability').query().then(function(results) {
             $scope.loading = false;
             $scope.grades = results;
-            $scope.messages = CityService.messageFlag;
+            $scope.messages = GradeDisabilityService.messageFlag;
             if (!_.isEmpty($scope.messages)) {
                 $scope.hasMessage = true;
-                CityService.messageFlag = {};
+                GradeDisabilityService.messageFlag = {};
             }
         });
 
@@ -55,9 +54,9 @@ define(['app'], function(app) {
                     if (idx > -1) {
                         $scope.grades[idx].$deleting = true;
                         object.$delete(function() {
-                            CityService.messageFlag.title = "Grado de Discapacidad eliminada correctamente";
-                            CityService.messageFlag.type = "info";
-                            $scope.messages = CityService.messageFlag;
+                            GradeDisabilityService.messageFlag.title = "Grado de Discapacidad eliminada correctamente";
+                            GradeDisabilityService.messageFlag.type = "info";
+                            $scope.messages = GradeDisabilityService.messageFlag;
                             $scope.hasMessage = true;
                             $scope.grades[idx].$deleting = false;
                             $scope.grades.splice(idx, 1);
@@ -70,7 +69,7 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('GradeDisabilityCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'CityService', '$q', function($scope, apiResource, $stateParams, $state, CityService, $q) {
+    app.register.controller('GradeDisabilityCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'GradeDisabilityService', function($scope, apiResource, $stateParams, $state, GradeDisabilityService) {
 
         $scope.saving = false;
         $scope.loading = true;
@@ -79,37 +78,22 @@ define(['app'], function(app) {
         $scope.messages = [];
         $scope.provinces = [];
 
-        var deps = $q.all([
-            apiResource.resource('provinces').query().then(function(provinces) {
-                $scope.provinces = provinces
-            })
-        ])
 
-        deps.then(function() {
-            $scope.loading = false;
-            $scope.model = apiResource.resource('cities').create();
-        })
+        $scope.loading = false;
+        $scope.model = apiResource.resource('grades-disability').create();
 
 
         $scope.validateOptions = {
             rules: {
                 name: {
                     required: true,
-                    // unique: 'city,name'
-                },
-                province_id: {
-                    required: true,
-                    valueNotEquals: '?',
+                    unique: 'grade_disability,name'
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
                     // unique: 'La Ciudad ya fue tomada'
-                },
-                province_id: {
-                    required: "Campo requerido",
-                    valueNotEquals: 'Campo requerido',
                 }
             }
 
@@ -120,14 +104,14 @@ define(['app'], function(app) {
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
-                    apiResource.resource('cities').setOnCache(data);
-                    CityService.messageFlag.title = "Ciudad creada correctamente";
-                    CityService.messageFlag.type = "info";
+                    apiResource.resource('grades-disability').setOnCache(data);
+                    GradeDisabilityService.messageFlag.title = "Grado de discapacidad creada correctamente";
+                    GradeDisabilityService.messageFlag.type = "info";
                     if (returnIndex) {
-                        $state.go('root.city');
+                        $state.go('root.gradeDisability');
                     } else {
-                        $state.go('root.city.edit', {
-                            cityId: data.id
+                        $state.go('root.gradeDisability.edit', {
+                            gradeId: data.id
                         })
                     }
 
@@ -154,74 +138,60 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('GradeDisabilityEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'CityService', '$q', function($scope, apiResource, $stateParams, $state, CityService, $q) {
+    app.register.controller('GradeDisabilityEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'GradeDisabilityService',  function($scope, apiResource, $stateParams, $state, GradeDisabilityService) {
 
-        var cityId = $stateParams.cityId;
+        var gradeId = $stateParams.gradeId;
         $scope.isEdit = true;
         $scope.provinces = [];
 
-        var deps = $q.all([
-            apiResource.resource('provinces').query().then(function(provinces) {
-                $scope.provinces = provinces
-            })
-        ])
 
         $scope.loading = true;
         $scope.model = {};
         $scope.messages = {};
         $scope.existError = false;
 
-        deps.then(function() {
-            apiResource.resource('cities').getCopy(cityId).then(function(model) {
-                $scope.model = model;
-                $scope.messages = CityService.messageFlag;
-                if (!_.isEmpty($scope.messages)) {
-                    $scope.hasMessage = true;
-                    CityService.messageFlag = {};
-                }
-                $scope.loading = false;
-            });
-        })
+        apiResource.resource('grades-disability').getCopy(gradeId).then(function(model) {
+            $scope.model = model;
+            $scope.messages = GradeDisabilityService.messageFlag;
+            if (!_.isEmpty($scope.messages)) {
+                $scope.hasMessage = true;
+                GradeDisabilityService.messageFlag = {};
+            }
+            $scope.loading = false;
+        });
+       
 
-
-        $scope.validateOptions = {
+       $scope.validateOptions = {
             rules: {
                 name: {
                     required: true,
-                    // unique: 'city,name,' + cityId
-                },
-                province_id: {
-                    required: true,
-                    valueNotEquals: '?',
+                    // unique: 'grade_disability,name,'+$scope.model.id
                 }
             },
             messages: {
                 name: {
                     required: "Campo requerido",
-                    // unique: 'la Ciudad ya fue tomada'
-                },
-                province_id: {
-                    required: "Campo requerido",
-                    valueNotEquals: 'Campo requerido',
+                    // unique: 'La Ciudad ya fue tomada'
                 }
             }
 
         };
 
+
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
                 $scope.saving = true;
-                $scope.model.key = cityId;
-                $scope.model.$update(cityId, function(data) {
+                $scope.model.key = gradeId;
+                $scope.model.$update(gradeId, function(data) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
-                    apiResource.resource('cities').setOnCache(data);
-                    CityService.messageFlag.title = "Ciudad " + $scope.model.name + " Actualizada correctamente";
-                    CityService.messageFlag.type = "info";
-                    $scope.messages = CityService.messageFlag;
+                    apiResource.resource('grades-disability').setOnCache(data);
+                    GradeDisabilityService.messageFlag.title = "Grado de discapacidad " + $scope.model.name + " Actualizada correctamente";
+                    GradeDisabilityService.messageFlag.type = "info";
+                    $scope.messages = GradeDisabilityService.messageFlag;
                     if (returnIndex) {
-                        $state.go('root.city');
+                        $state.go('root.gradeDisability');
                     }
                 }, function(reason) {
                     $scope.saving = false;

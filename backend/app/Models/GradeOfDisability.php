@@ -10,6 +10,10 @@ class GradeOfDisability extends BaseModel
 
     protected $primaryKey = "id";
 
+     protected $no_uppercase = [ 
+     	'value'
+     ];
+
     protected $casts = [
         'city_id' => 'int',
     ];

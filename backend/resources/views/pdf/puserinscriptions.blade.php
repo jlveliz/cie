@@ -82,9 +82,9 @@
 					<td> <b class="field">Psicosocial:</b> <span class="data-field">{{$pUser->psychosocial_disability}}%</span></td>
 				</tr>
 				<tr>
-					<td colspan="1"> <b class="field">Grado de Discapacidad:</b> <span class="data-field">{{$pUser->grade_of_disability ? $pUser->getGradeDisability() : 'N/A' }} </span> </td>
+					<td colspan="2"> <b class="field">Grado de Discapacidad:</b> <span class="data-field">{{$pUser->grade_of_disability_id ? $pUser->gradeDisability->name : 'N/A' }} </span> </td>
 					<td colspan="1"> <b class="field">Tiene Diagnóstico?:</b> <span class="data-field">{{$pUser->has_diagnostic == 1 ? 'Si' : 'No' }} </span> </td>
-					<td colspan="3"> <b class="field">Diagnóstico:</b> <span class="data-field">{{$pUser->diagnostic ? $pUser->diagnostic->name : 'N/A' }} </span> </td>
+					<td colspan="2"> <b class="field">Diagnóstico:</b> <span class="data-field">{{$pUser->diagnostic ? $pUser->diagnostic->name : 'N/A' }} </span> </td>
 				</tr>
 				<tr>
 					<td colspan="5"> <b class="field">Otros Diagnósticos:</b> <span class="data-field">{{$pUser->other_diagnostic ? $pUser->other_diagnostic : 'N/A' }} </span> </td>

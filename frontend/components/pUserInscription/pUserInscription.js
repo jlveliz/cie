@@ -319,7 +319,7 @@ define(['app', 'moment'], function(app, moment) {
                         widths: ['*', '*', '*'],
                         body: [
                             [
-                                { text: [{ text: 'Grado de Discapacidad: ', bold: true }, model.grade_of_disability ? _this.getGradeDisability(model.grade_of_disability) : 'N/A'] },
+                                { text: [{ text: 'Grado de Discapacidad: ', bold: true }, model.grade_of_disability_id ? _this.getGradeDisability(model.grade_of_disability_id) : 'N/A'] },
                                 { text: [{ text: 'Tiene Diagnóstico?: ', bold: true }, model.has_diagnostic == 1 ? 'Si' : 'No'] },
                                 { text: [{ text: 'Diagnóstico: ', bold: true }, model.diagnostic ? model.diagnostic.name : ''] },
                             ],
@@ -891,7 +891,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies',function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies) {
+    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies) {
 
         $scope.inscriptions = [];
         $scope.loading = true;
@@ -899,7 +899,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.messages = {};
         $scope.hasMessage = false;
 
-      
+
         angular.extend($scope.dtOptions, {
             orderable: false,
             columnDefs: [{
@@ -982,7 +982,7 @@ define(['app', 'moment'], function(app, moment) {
         // $scope.states = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
-        $scope.gradeDisability = PUserInscriptionService.gradeDisability;
+        // $scope.gradeDisability = PUserInscriptionService.gradeDisability;
         $scope.hasDiagnostic = PUserInscriptionService.yesOrNot;
         $scope.assistOtherTherapeuticCenter = PUserInscriptionService.yesOrNot;
         $scope.insurances = PUserInscriptionService.insurances;
@@ -998,6 +998,11 @@ define(['app', 'moment'], function(app, moment) {
 
 
         var deps = $q.all([
+
+            apiResource.resource('grades-disability').query().then(function(gradeDisability) {
+                $scope.gradeDisability = gradeDisability;
+            }),
+
             apiResource.resource('provinces').queryCopy().then(function(provinces) {
                 $scope.provinces = provinces;
             }),
@@ -1020,7 +1025,7 @@ define(['app', 'moment'], function(app, moment) {
                 assist_other_therapeutic_center: null,
                 receives_medical_attention: null,
                 state: 2,
-                date_admission: new Date(),
+                date_admission: moment().format('YYYY'),
                 schooling: null,
                 representant: {},
                 has_mother: 0,
@@ -1111,7 +1116,7 @@ define(['app', 'moment'], function(app, moment) {
                 conadis_id: {
                     // required: true
                 },
-                grade_of_disability: {
+                grade_of_disability_id: {
                     // valueNotEquals: '?'
                 },
                 has_diagnostic: {
@@ -1323,7 +1328,7 @@ define(['app', 'moment'], function(app, moment) {
                 conadis_id: {
                     required: "Conadis Requerida"
                 },
-                grade_of_disability: {
+                grade_of_disability_id: {
                     valueNotEquals: 'Es Requerida'
                 },
                 has_diagnostic: {
@@ -1630,7 +1635,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.hasMother = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
-        $scope.gradeDisability = PUserInscriptionService.gradeDisability;
+        // $scope.gradeDisability = PUserInscriptionService.gradeDisability;
         $scope.hasDiagnostic = PUserInscriptionService.yesOrNot;
         $scope.assistOtherTherapeuticCenter = PUserInscriptionService.yesOrNot;
         $scope.insurances = PUserInscriptionService.insurances;
@@ -1648,6 +1653,11 @@ define(['app', 'moment'], function(app, moment) {
 
 
         var deps = $q.all([
+
+            apiResource.resource('grades-disability').query().then(function(gradeDisability) {
+                $scope.gradeDisability = gradeDisability;
+            }),
+
             apiResource.resource('provinces').queryCopy().then(function(provinces) {
                 $scope.provinces = provinces;
             }),
@@ -1896,7 +1906,7 @@ define(['app', 'moment'], function(app, moment) {
                 conadis_id: {
                     // required: true
                 },
-                grade_of_disability: {
+                grade_of_disability_id: {
                     // valueNotEquals: '?'
                 },
                 has_diagnostic: {
@@ -2102,7 +2112,7 @@ define(['app', 'moment'], function(app, moment) {
                 conadis_id: {
                     required: "Conadis Requerida"
                 },
-                grade_of_disability: {
+                grade_of_disability_id: {
                     valueNotEquals: 'Es Requerida'
                 },
                 has_diagnostic: {
@@ -2328,7 +2338,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.hasMother = [];
 
         $scope.porcentages = PUserInscriptionService.getPorcentages();
-        $scope.gradeDisability = PUserInscriptionService.gradeDisability;
+        // $scope.gradeDisability = PUserInscriptionService.gradeDisability;
         $scope.hasDiagnostic = PUserInscriptionService.yesOrNot;
         $scope.assistOtherTherapeuticCenter = PUserInscriptionService.yesOrNot;
         $scope.insurances = PUserInscriptionService.insurances;
@@ -2346,6 +2356,10 @@ define(['app', 'moment'], function(app, moment) {
 
 
         var deps = $q.all([
+            apiResource.resource('grades-disability').query().then(function(gradeDisability) {
+                $scope.gradeDisability = gradeDisability;
+            }),
+
             apiResource.resource('provinces').queryCopy().then(function(provinces) {
                 $scope.provinces = provinces;
             }),
@@ -2528,6 +2542,6 @@ define(['app', 'moment'], function(app, moment) {
         };
 
 
-        
+
     }]);
 });

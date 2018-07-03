@@ -29,12 +29,6 @@ class PatientUser extends BaseModel
     /**
         DATA DUMMY
     **/
-    private $gradeDisability = [
-        ['id' => 'l', 'value' =>  'Leve' ],
-        [ 'id'=> 'm', 'value'=> 'Moderado' ],
-        [ 'id'=> 's', 'value'=> 'Severo' ],
-        [ 'id'=> 'g', 'value'=> 'Grave' ],
-    ];
 
     private  $insurances = [
         [ 'id'=>1, 'value'=>'IESS' ],
@@ -81,7 +75,7 @@ class PatientUser extends BaseModel
     ];
 
     protected $no_uppercase = [
-        'grade_of_disability',
+        'grade_of_disability_id',
     ];
 
     protected $casts = [
@@ -113,6 +107,7 @@ class PatientUser extends BaseModel
         'state_id' => 'int',
         'has_father' => 'int',
         'has_mother' => 'int',
+        'grade_of_disability_id' => 'int'
     ];
 
     protected $fillable = [
@@ -125,7 +120,6 @@ class PatientUser extends BaseModel
         'hearing_disability',
         'psychosocial_disability',
         'language_disability',
-        'grade_of_disability',
         'has_diagnostic',
         'diagnostic_id',
         'entity_send_diagnostic',
@@ -147,6 +141,7 @@ class PatientUser extends BaseModel
         'state_id',
         'has_father',
         'has_mother',
+        'grade_of_disability_id'
     ];
 
 
@@ -205,6 +200,11 @@ class PatientUser extends BaseModel
         return $this->hasOne('Cie\Models\PatienUserAttached','patient_user_id');
     }
 
+    public function gradeDisability()
+    {
+        return $this->belongsTo('Cie\Models\GradeOfDisability','grade_of_disability_id');
+    }
+
 
     //FUNCIONES
     public function hasAllDocumentAttached()
@@ -218,14 +218,14 @@ class PatientUser extends BaseModel
     }
 
 
-    public function getGradeDisability()
-    {
-        $grade = null;
-        foreach ($this->gradeDisability as $key => $value) {
-            if ($value['id'] == $this->grade_of_disability) $grade = $value['value'];
-        }
-        return $grade;
-    }
+    // public function getGradeDisability()
+    // {
+    //     $grade = null;
+    //     foreach ($this->gradeDisability as $key => $value) {
+    //         if ($value['id'] == $this->grade_of_disability_id) $grade = $value['value'];
+    //     }
+    //     return $grade;
+    // }
 
 
     public function getHasTypeInsurance()

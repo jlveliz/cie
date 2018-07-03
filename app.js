@@ -2479,9 +2479,7 @@ define([
             }
         }));
 
-        /**
-            GRADES OF DISABILITIES
-        **/
+       
         $stateProvider.state('root.gradeDisability.create', angularAMD.route({
             url: '/create',
             controllerUrl: 'frontend/components/gradedisability/gradedisability',
@@ -2489,6 +2487,26 @@ define([
                 "content@root": {
                     templateUrl: 'frontend/components/gradedisability/create-edit.html',
                     controller: 'GradeDisabilityCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Grados de Discapacidad de un Usuario"
+            }
+        }));
+
+        $stateProvider.state('root.gradeDisability.edit', angularAMD.route({
+            url: '/{gradeId:int}/edit',
+            controllerUrl: 'frontend/components/gradedisability/gradedisability',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/gradedisability/create-edit.html',
+                    controller: 'GradeDisabilityEditCtrl'
                 }
             },
             data: {
