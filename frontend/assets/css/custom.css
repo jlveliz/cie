@@ -5697,3 +5697,7 @@ md-switch {
 .no-weight {
     font-weight: normal;
 }
+
+.clickable {
+    cursor: pointer;
+}

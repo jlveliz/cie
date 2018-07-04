@@ -1229,13 +1229,13 @@ define([
                 development: {
                     authorization: 'http://cie2.local/backend/api/authenticate/login',
                     api: 'http://cie2.local/backend/api/',
-                    public: 'http://cie2.local/backend/',
+                    public: 'http://cie2.local/backend/public/',
                 },
                 home: {
                     assets: 'http://cie.local/frontend/assets',
                     authorization: 'http://cie.local/backend/api/authenticate/login',
                     api: 'http://cie.local/backend/api/',
-                    public: 'http://cie.local/backend/',
+                    public: 'http://cie.local/backend/public/',
                 },
                 server_develop_public: {
                     assets: 'http://10.101.0.51/frontend/assets',
@@ -1247,7 +1247,7 @@ define([
                     assets: 'http://cie.guayas.gob.ec/frontend/assets',
                     authorization: "http://cie.guayas.gob.ec/backend/api/authenticate/login",
                     api: 'http://cie.guayas.gob.ec/backend/api/',
-                    public: 'http://cie.guayas.gob.ec/backend'
+                    public: 'http://cie.guayas.gob.ec/backend/public/'
                 }
             }
         });

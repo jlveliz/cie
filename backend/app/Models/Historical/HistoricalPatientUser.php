@@ -15,10 +15,7 @@ class HistoricalPatientUser extends BaseModel
 
     protected $with = ['father','mother','representant','user','province','city','parish','pathology'];
 
-    protected $no_uppercase = [
-        'grade_of_disability_id',
-    ];
-
+   
     protected $casts = [
         'patient_user_id' => 'int',
         'date_birth' => 'date',
@@ -49,6 +46,7 @@ class HistoricalPatientUser extends BaseModel
         'state_id' => 'int',
         'has_father' => 'int',
         'has_mother' => 'int',
+        'grade_of_disability_id' => 'int'
     ];
 
     protected $fillable = [
@@ -134,6 +132,11 @@ class HistoricalPatientUser extends BaseModel
     public function pathology()
     {
         return $this->belongsTo('Cie\Models\Pathology','diagnostic_id');
+    }
+
+    public function gradeDisability()
+    {
+        return $this->belongsTo('Cie\Models\GradeOfDisability','grade_of_disability_id');
     }
 
    

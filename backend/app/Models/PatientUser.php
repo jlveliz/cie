@@ -74,10 +74,7 @@ class PatientUser extends BaseModel
         'attached',
     ];
 
-    protected $no_uppercase = [
-        'grade_of_disability_id',
-    ];
-
+  
     protected $casts = [
         'date_birth' => 'date',
         'date_admission' => 'date',
