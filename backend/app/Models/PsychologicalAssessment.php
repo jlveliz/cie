@@ -18,6 +18,25 @@ class PsychologicalAssessment extends BaseModel
 
     protected $casts = [
         'patient_user_id' => 'int',
+        'father_state_civil_id'  => 'int',
+        'mother_state_civil_id'  => 'int',
+        'affective_social_level_is_nervius' => 'int',
+        'affective_social_level_is_distracted' => 'int',
+        'affective_social_level_is_sensitive' => 'int',
+        'affective_social_level_is_amable' => 'int',
+        'affective_social_level_is_aggressive' => 'int',
+        'affective_social_level_is_shy' => 'int',
+        'affective_social_level_is_friendly' => 'int',
+        // 'psychological_has_head_blow',
+        'language_level_is_silence' => 'int',
+        'language_level_is_repetitive' => 'int',
+        'language_level_is_stutterer' => 'int',
+        'language_level_is_reluctant_answer' => 'int',
+        'language_level_is_excessive_verbalization' => 'int',
+        'language_level_is_language_expresive' => 'int',
+        'language_level_is_language_comprexive' => 'int',
+        'physical_level_is_left_hand' => 'int',
+        'physical_level_is_right_hand' => 'int'
     ];
 
     protected $fillable = [
@@ -43,7 +62,7 @@ class PsychologicalAssessment extends BaseModel
         'affective_social_level_is_aggressive',
         'affective_social_level_is_shy',
         'affective_social_level_is_friendly',
-        'psychological_has_head_blow',
+        // 'psychological_has_head_blow',
         'affective_social_level_other',
         'affective_social_level_observation',
         'language_level_is_silence',
