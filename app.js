@@ -978,6 +978,11 @@ define([
             id: '@id'
         }).register();
 
+        //Medical Ass
+        apiResource.resource("medical-assessments", envService.read('api') + 'medical-assessments/:id', {
+            id: '@id'
+        }).register();
+
 
 
     }]);
@@ -1169,11 +1174,10 @@ define([
                     var token = 'token=' + authFactory.getToken();
 
                     switch ($scope.type) {
-                        default: 
-                        $timeout(function(){
+                        default: $timeout(function() {
                             $scope.content = $sce.trustAsResourceUrl(content + '?' + token);
                             $scope.loading = false;
-                        },1000)
+                        }, 1000)
                         break;
                     }
 
@@ -2117,7 +2121,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia','recepcion'],
+                    only: ['admin', 'dirTerapia', 'recepcion'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2137,7 +2141,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin','dirTerapia'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2179,7 +2183,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia','recepcion'],
+                    only: ['admin', 'dirTerapia', 'recepcion'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2456,7 +2460,7 @@ define([
         }));
 
 
-         /**
+        /**
             GRADES OF DISABILITIES
         **/
         $stateProvider.state('root.gradeDisability', angularAMD.route({
@@ -2479,7 +2483,7 @@ define([
             }
         }));
 
-       
+
         $stateProvider.state('root.gradeDisability.create', angularAMD.route({
             url: '/create',
             controllerUrl: 'frontend/components/gradedisability/gradedisability',
@@ -2495,7 +2499,6 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Grados de Discapacidad de un Usuario"
             }
         }));
@@ -2515,10 +2518,75 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
                 pageTitle: "Grados de Discapacidad de un Usuario"
             }
         }));
+
+
+
+        /**
+            MEDICAL ASSESSMENT
+        **/
+        $stateProvider.state('root.MedicalAssessment', angularAMD.route({
+            url: 'medical-assessments',
+            controllerUrl: 'frontend/components/medicalAss/medicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/medicalAss/index.html',
+                    controller: 'MedicalAssIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Entrevistas Médicas"
+            }
+        }));
+
+
+        $stateProvider.state('root.MedicalAssessment.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/medicalAss/medicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/medicalAss/create-edit.html',
+                    controller: 'MedicalAssCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Entrevistas Médicas"
+            }
+        }));
+
+        $stateProvider.state('root.MedicalAssessment.edit', angularAMD.route({
+            url: '/{assesId:int}/edit',
+            controllerUrl: 'frontend/components/medicalAss/medicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/medicalAss/create-edit.html',
+                    controller: 'MedicalAssEditCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Entrevistas Médicas"
+            }
+        }));
+
+
 
 
     }]);
