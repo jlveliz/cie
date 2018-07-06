@@ -44,6 +44,7 @@ Route::group(['prefix'=>'api'],function() {
 	Route::post('pUsers/{pUserId}/update','PatientUserController@update');
 	Route::get('pUsers/print-inscription/{pUserId}','PatientUserController@generatePdF');
 	Route::resource('psycho-assessments','PsychologicalAssessmentController',['except'=>['create']]);
+	Route::resource('medical-assessments','MedicalAssessmentController',['except'=>['create']]);
 	Route::resource('provinces','ProvinceController',['except'=>['create']]);
 	Route::resource('cities','CityController',['except'=>['create']]);
 	Route::resource('parishies','ParishController',['except'=>['create']]);
