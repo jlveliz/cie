@@ -53,67 +53,6 @@ define(['app', 'moment'], (app, moment) => {
             { id: 'superior', value: 'Superior' }
         ];
 
-
-        _this.openModalSearchUser = function() {
-            var deferred = $q.defer();
-            var modalInstance = $uibModal.open({
-                animation: true,
-                backdrop: false,
-                templateUrl: 'frontend/components/psychologicalAss/search-user.html',
-                resolve: {
-                    modalContent: function() {
-                        return parent;
-                    }
-                },
-                controller: function($scope, $http, envService, $uibModalInstance) {
-                    $scope.criteria = "1";
-                    $scope.existError = false;
-                    $scope.model = { queryCriteria: '', errors: '' };
-                    $scope.users = [];
-                    $scope.searching = false;
-                    $scope.searchCriteria = {
-                        num_idetification: true,
-                        names: false
-                    };
-
-                    $scope.search = function() {
-                        $scope.searching = true;
-                        $scope.existError = false;
-                        $scope.users = [];
-                        var params = "num_identification=";
-                        //if search by name
-                        if ($scope.criteria == '0') params = 'name=';
-                        $http.get(envService.read('api') + 'psycho-assessments?' + params + $scope.model.queryCriteria).then(function(res) {
-                            value = base64.decode(res.data);
-                            var val = JSON.parse(value);
-                            if (!val.length) {
-                                $scope.users.push(val);
-                            } else {
-                                angular.forEach(val, function(element, index) {
-                                    $scope.users.push(element);
-                                });
-                            }
-                            $scope.searching = false;
-                        }, function(err) {
-                            value = base64.decode(err.data);
-                            var val = JSON.parse(value);
-                            $scope.model.errors = val.detail;
-                            $scope.existError = true;
-                            $scope.searching = false;
-                        })
-                    }
-
-                    $scope.selectAndClose = function(patientUser) {
-                        $uibModalInstance.close()
-                        deferred.resolve(patientUser);
-                    }
-
-                }
-
-            });
-            return deferred.promise;
-        };
-
         _this.getGenre = function(genre) {
             if (!genre) return '';
             if (genre == 'M') {
@@ -280,7 +219,7 @@ define(['app', 'moment'], (app, moment) => {
         };
     }]);
 
-    app.register.controller('PsychologicalAssCreateCtrl', ['$scope', 'apiResource', 'PsyChoService', '$state', function($scope, apiResource, PsyChoService, $state) {
+    app.register.controller('PsychologicalAssCreateCtrl', ['$scope', 'apiResource', 'PsyChoService', '$state', '$rootScope', function($scope, apiResource, PsyChoService, $state, $rootScope) {
 
         $scope.isEdit = false;
         $scope.loading = true;
@@ -326,7 +265,10 @@ define(['app', 'moment'], (app, moment) => {
 
         $scope.openModalSearchUser = function() {
             //when press aceptar on modal
-            PsyChoService.openModalSearchUser().then(function(patientUser) {
+            var params = {
+                resource: 'psycho-assessments'
+            }
+            $rootScope.openModalSearchUser(params).then(function(patientUser) {
                 $scope.existPatientUserSelected = true;
                 $scope.model.patientUser = patientUser;
                 $scope.model.patientUser.name = PsyChoService.formatPatientUser('name', $scope.model.patientUser);

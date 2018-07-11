@@ -1211,6 +1211,68 @@ define([
             }
         }, 3600000);
 
+
+        $rootScope.openModalSearchUser = function(params) {
+            if (!angular.isObject(params)) throw "Parametro no aceptado, ingrese un objeto";
+            var deferred = $q.defer();
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: false,
+                templateUrl: 'frontend/partials/search-user.html',
+                resolve: {
+                    modalContent: function() {
+                        return parent;
+                    }
+                },
+                controller: function($scope, $http, envService, $uibModalInstance) {
+                    $scope.criteria = "1";
+                    $scope.existError = false;
+                    $scope.model = { queryCriteria: '', errors: '' };
+                    $scope.users = [];
+                    $scope.searching = false;
+                    // $scope.searchCriteria = {
+                    //     num_idetification: true,
+                    //     names: false
+                    // };
+
+                    $scope.search = function() {
+                        $scope.searching = true;
+                        $scope.existError = false;
+                        $scope.users = [];
+                        params.query = "num_identification=";
+                        //if search by name
+                        if ($scope.criteria == '0') params.query = 'name=';
+                        $http.get(envService.read('api') + params.resource + '?' + params.query + $scope.model.queryCriteria).then(function(res) {
+                            var value = base64.decode(res.data);
+                            var val = JSON.parse(value);
+                            if (!val.length) {
+                                $scope.users.push(val);
+                            } else {
+                                angular.forEach(val, function(element, index) {
+                                    $scope.users.push(element);
+                                });
+                            }
+                            $scope.searching = false;
+                        }, function(err) {
+                            var value = base64.decode(err.data);
+                            var val = JSON.parse(value);
+                            $scope.model.errors = val.detail;
+                            $scope.existError = true;
+                            $scope.searching = false;
+                        })
+                    }
+
+                    $scope.selectAndClose = function(patientUser) {
+                        $uibModalInstance.close()
+                        deferred.resolve(patientUser);
+                    }
+
+                }
+
+            });
+            return deferred.promise;
+        }
+
     }])
 
     cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envServiceProvider', '$authProvider', '$validatorProvider', '$qProvider', function($stateProvider, $locationProvider, $urlRouterProvider, envServiceProvider, $authProvider, $validatorProvider, $qProvider) {
