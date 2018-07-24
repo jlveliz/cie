@@ -4,36 +4,6 @@
 
 define(['app', 'moment'], (app, moment) => {
 
-    app.register.directive('changeOption', ['$compile', function($compile) {
-        return {
-            restrict: 'C',
-            link: function(scope, iElement, iAttrs) {
-
-                angular.element(iElement).on('change', function(event) {
-                    var htmlNameField = "<input id='query-criteria-name' type='text' class='form-control' placeholder='APELLIDOS NOMBRES' ng-model='model.queryCriteria' ng-disabled='searching'/>";
-                    var htmlIdField = "<input id='query-criteria-dni' type='text' maxlength='10' minlength='10' ng-model='model.queryCriteria' class='form-control' placeholder='0999999999' numbers-only ng-disabled='searching'> ";
-
-                    scope.$apply(function() {
-                        if (scope.criteria == '0') {
-                            angular.element("#query-criteria-dni").remove();
-                            var compiled = $compile(htmlNameField)(scope)
-                            angular.element('.place-input').removeClass('col-md-6').append(compiled);
-                            angular.element('query-criteria-name').focus();
-                        } else {
-                            angular.element("#query-criteria-name").remove();
-                            var compiled = $compile(htmlIdField)(scope);
-                            angular.element('.place-input').addClass('col-md-6').append(compiled);
-                            angular.element('query-criteria-dni').focus();
-
-                        }
-                    });
-                });
-
-
-            }
-        };
-    }])
-
     app.register.service('PsyChoService', ['$uibModal', '$q', function($uibModal, $q) {
         var _this = this;
         _this.messageFlag = {};

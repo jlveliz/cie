@@ -1230,10 +1230,10 @@ define([
                     $scope.model = { queryCriteria: '', errors: '' };
                     $scope.users = [];
                     $scope.searching = false;
-                    // $scope.searchCriteria = {
-                    //     num_idetification: true,
-                    //     names: false
-                    // };
+                    $scope.searchCriteria = {
+                        num_idetification: true,
+                        names: false
+                    };
 
                     $scope.search = function() {
                         $scope.searching = true;
@@ -2589,7 +2589,7 @@ define([
         /**
             MEDICAL ASSESSMENT
         **/
-        $stateProvider.state('root.MedicalAssessment', angularAMD.route({
+        $stateProvider.state('root.medicalAssessment', angularAMD.route({
             url: 'medical-assessments',
             controllerUrl: 'frontend/components/medicalAss/medicalAss',
             views: {
@@ -2610,7 +2610,7 @@ define([
         }));
 
 
-        $stateProvider.state('root.MedicalAssessment.create', angularAMD.route({
+        $stateProvider.state('root.medicalAssessment.create', angularAMD.route({
             url: '/create',
             controllerUrl: 'frontend/components/medicalAss/medicalAss',
             views: {
@@ -2629,7 +2629,7 @@ define([
             }
         }));
 
-        $stateProvider.state('root.MedicalAssessment.edit', angularAMD.route({
+        $stateProvider.state('root.medicalAssessment.edit', angularAMD.route({
             url: '/{assesId:int}/edit',
             controllerUrl: 'frontend/components/medicalAss/medicalAss',
             views: {

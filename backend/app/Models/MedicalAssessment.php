@@ -13,6 +13,8 @@ class MedicalAssessment extends BaseModel
 
 	protected $primaryKey = "id";
 
+	protected $with = ['patientUser'];
+
 	protected $fillable = [
     	'patient_user_id',
         'personal_data_procedence',
@@ -293,6 +295,7 @@ class MedicalAssessment extends BaseModel
         'pre_natal_oxygen_during_childbirth' => 'int',
         'pre_natal_jaundice_during_childbirth' => 'int',
         'pre_natal_incubator' => 'int',
+        'pre_natal_incubator_days' => 'int',
         'pre_natal_cried_birth'  => 'int',
         'pre_natal_weight_child_birth'  => 'float',
         'pre_natal_height_child_birth' => 'float',

@@ -8,14 +8,15 @@
         <div class="panel-body">
             <form ng-submit="search()">
                 <div class="col-md-3">
-                    <select class="form-control change-option" ng-model="criteria" ng-change="model.queryCriteria = ''">
+                    <select class="form-control change-option" ng-model="criteria">
                         <option value="1">Cédula</option>
                         <option value="0">Nombres</option>
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <div class="col-md-6 no-padding place-input">
-                        <input id="query-criteria-dni" type="text" maxlength="10" minlength="10" ng-model="model.queryCriteria" ng-disabled="searching" class="form-control" placeholder="0999999999" numbers-only>
+                    <div class="no-padding place-input" ng-class="{'col-md-6':criteria == '1','col-md-12':criteria == '0'}">
+                        <input ng-if="criteria == '1'" id="query-criteria-dni" type="text" maxlength="10" minlength="10" ng-model="model.queryCriteria" ng-disabled="searching" class="form-control" placeholder="0999999999" numbers-only>
+                        <input ng-if="criteria == '0'" id="query-criteria-name" type="text" ng-model="model.queryCriteria" ng-disabled="searching" class="form-control" placeholder="NOMBRES APELLIDOS">
                     </div>
                 </div>
                 <div class="col-md-2 col-md-offset-1">
@@ -24,7 +25,6 @@
             </form>
         </div>
     </div>
-    
     <!-- IF HAS ERROR -->
     <div class="row" ng-if="existError">
         <div class="alert col-md-12 col-xs-12 col-sm-12 alert-danger" role="alert ">
@@ -32,7 +32,6 @@
             <p>{{model.errors}}</p>
         </div>
     </div>
-
     <!-- QUERY SHOW -->
     <p ng-if="searching" class="text-center">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
