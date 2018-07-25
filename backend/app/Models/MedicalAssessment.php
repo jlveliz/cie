@@ -17,6 +17,7 @@ class MedicalAssessment extends BaseModel
 
 	protected $fillable = [
     	'patient_user_id',
+    	'date_eval',
         'personal_data_procedence',
         'personal_data_residence',
         'pre_history_mother_age',

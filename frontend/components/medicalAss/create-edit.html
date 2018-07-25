@@ -350,12 +350,11 @@
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group">
                                                         <label for="post_natal_babbles_age" title="Edad del Balbuceo" class="control-label">Edad</label>
-                                                        <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="post_natal_babbles_age" id="post_natal_babbles_age" ng-model="model.post_natal_babbles" class="form-control" numbers-only>
+                                                        <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="post_natal_babbles_age" id="post_natal_babbles_age" ng-model="model.post_natal_babbles_age" class="form-control" numbers-only>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group">
                                                         <label for="post_natal_first_words" title="Primeras palabras" class="control-label">Primeras palabras</label>
-                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="post_natal_first_words" id="post_natal_first_words" ng-model="model.post_natal_first_words" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
-                                                        </select>
+                                                        <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="post_natal_first_words" id="post_natal_first_words" ng-model="model.post_natal_first_words" class="form-control">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group">
                                                         <label for="post_natal_first_words_age" title="Primeras palabras" class="control-label">Edad</label>
@@ -363,13 +362,11 @@
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group">
                                                         <label for="post_natal_control_esfinter_day" title="Primeras palabras" class="control-label">Control Esfinter: Diurno</label>
-                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="post_natal_control_esfinter_day" id="post_natal_control_esfinter_day" ng-model="model.post_natal_control_esfinter_day" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
-                                                        </select>
+                                                        <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="post_natal_control_esfinter_day" id="post_natal_control_esfinter_day" ng-model="model.post_natal_control_esfinter_day" class="form-control">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group">
                                                         <label for="post_natal_control_esfinter_night" title="Primeras palabras" class="control-label">Control Esfinter: Nocturno</label>
-                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="post_natal_control_esfinter_night" id="post_natal_control_esfinter_night" ng-model="model.post_natal_control_esfinter_night" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
-                                                        </select>
+                                                        <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="post_natal_control_esfinter_night" id="post_natal_control_esfinter_night" ng-model="model.post_natal_control_esfinter_night" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -554,9 +551,10 @@
                                                         <label class="control-label" title="Dientes" for="tooth_description">Dientes:</label>
                                                         <input type="text" name="tooth_description" id="tooth_description" ng-model="model.tooth_description" class="form-control" ng-disabled="saving  || !existPatientUserSelected">
                                                     </div>
-                                                    <div class="col-md-4 col-sm-4 col-xs-2 form-group" ng-if="!loading">
+                                                    <div class="col-md-2 col-sm-2 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Bruxismo" for="tooth_bruxism">Bruxismo:</label>
-                                                        <input type="text" name="tooth_bruxism" id="tooth_bruxism" ng-model="model.tooth_bruxism" class="form-control" ng-disabled="saving  || !existPatientUserSelected">
+                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="tooth_bruxism" id="tooth_bruxism" class="form-control" ng-model="model.tooth_bruxism" ng-options="sc.value as sc.label for sc in answersClosed">
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -732,7 +730,8 @@
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Secreción" for="general_inspection_noise_secretion">Secreción:</label>
-                                                        <input type="text" name="general_inspection_noise_secretion" class="form-control" id="general_inspection_noise_secretion" ng-model="model.general_inspection_noise_secretion" ng-disabled="saving  || !existPatientUserSelected">
+                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="general_inspection_noise_secretion" id="general_inspection_mogeneral_inspection_noise_secretionves_uncoordinated" class="form-control" ng-model="model.general_inspection_noise_secretion" ng-options="sc.value as sc.label for sc in answersClosed">
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -1170,16 +1169,13 @@
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Con quien Duerme?" for="current_social_develop_whoo_sleep_with">Con quien Duerme?</label>
-                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="current_social_develop_whoo_sleep_with" id="current_social_develop_whoo_sleep_with" ng-model="model.current_social_develop_whoo_sleep_with" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
-                                                        </select>
+                                                        <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="current_social_develop_whoo_sleep_with" id="current_social_develop_whoo_sleep_with" ng-model="model.current_social_develop_whoo_sleep_with" class="form-control">
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Se Despierta?" for="current_social_develop_wake_up">Se Despierta?</label>
                                                         <select ng-disabled="saving  || !existPatientUserSelected" name="current_social_develop_wake_up" id="current_social_develop_wake_up" ng-model="model.current_social_develop_wake_up" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
                                                         </select>
                                                     </div>
-                                                </div>
-                                                <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Desarrollo Personal" for="current_personal_develop">Desarrollo Personal</label>
                                                         <input type="text" name="current_personal_develop" class="form-control" id="current_personal_develop" ng-model="model.current_personal_develop" ng-disabled="saving  || !existPatientUserSelected">
@@ -1194,6 +1190,8 @@
                                                         <select ng-disabled="saving  || !existPatientUserSelected" name="current_personal_develop_dress_alone" id="current_personal_develop_dress_alone" ng-model="model.current_personal_develop_dress_alone" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
                                                         </select>
                                                     </div>
+                                                </div>
+                                                <div class="row">
                                                     <div class="col-md-2 col-sm-2 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Se Desviste Solo" for="current_personal_develop_undress_alone">Se Desviste Solo</label>
                                                         <select ng-disabled="saving  || !existPatientUserSelected" name="current_personal_develop_undress_alone" id="current_personal_develop_undress_alone" ng-model="model.current_personal_develop_undress_alone" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
@@ -1331,7 +1329,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-4 col-sm-4 col-xs-2 form-group" ng-if="!loading">
+                                                    <div class="col-md-5 col-sm-5 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Además de los Padres, otras personas que se ocupan de él/ella :" for="current_structural_familiar_live_other_familiar">Además de los Padres, otras personas que se ocupan de él/ella :</label>
                                                         <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="current_structural_familiar_live_other_familiar" id="current_structural_familiar_live_other_familiar" ng-model="model.current_structural_familiar_live_other_familiar" class="form-control">
                                                     </div>
@@ -1388,11 +1386,6 @@
                                                         <select ng-disabled="saving  || !existPatientUserSelected" name="current_socio_economic_report_street_lighting" id="current_socio_economic_report_street_lighting" ng-model="model.current_socio_economic_report_street_lighting" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2 col-sm-2 col-xs-2 form-group" ng-if="!loading">
-                                                        <label class="control-label" title="Alumbrado Público" for="current_socio_economic_report_street_lighting">Alumbrado Público</label>
-                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="current_socio_economic_report_street_lighting" id="current_socio_economic_report_street_lighting" ng-model="model.current_socio_economic_report_street_lighting" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
-                                                        </select>
-                                                    </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Alquilada" for="current_socio_economic_report_rented">Alquilada</label>
                                                         <select ng-disabled="saving  || !existPatientUserSelected" name="current_socio_economic_report_rented" id="current_socio_economic_report_rented" ng-model="model.current_socio_economic_report_rented" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
@@ -1435,17 +1428,17 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-6 col-sm-6 col-xs-2 form-group" ng-if="!loading">
+                                                    <div class="col-md-4 col-sm-4 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Observación" for="observation">Observación</label>
                                                         <textarea type="text" ng-disabled="saving  || !existPatientUserSelected" name="observation" id="observation" ng-model="model.observation" class="form-control"></textarea>
                                                     </div>
-                                                    <div class="col-md-3 col-sm-3 col-xs-2 form-group" ng-if="!loading">
+                                                    <div class="col-md-4 col-sm-4 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Impresión Diagnóstico" for="impretion_diagnostic">Impresión Diagnóstico</label>
-                                                        <input type="text" name="impretion_diagnostic" class="form-control" id="impretion_diagnostic" ng-model="model.impretion_diagnostic" ng-disabled="saving  || !existPatientUserSelected" maxlength="300">
+                                                        <textarea ng-disabled="saving  || !existPatientUserSelected" name="impretion_diagnostic" id="impretion_diagnostic" ng-model="model.impretion_diagnostic" class="form-control no-resize"></textarea>
                                                     </div>
-                                                    <div class="col-md-3 col-sm-3 col-xs-2 form-group" ng-if="!loading">
+                                                    <div class="col-md-4 col-sm-4 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Diagnóstico Definitivo" for="definitive_diagnostic">Diagnóstico Definitivo</label>
-                                                        <input type="text" name="definitive_diagnostic" class="form-control" id="definitive_diagnostic" ng-model="model.definitive_diagnostic" ng-disabled="saving  || !existPatientUserSelected" maxlength="300">
+                                                        <textarea ng-disabled="saving  || !existPatientUserSelected" name="definitive_diagnostic" id="definitive_diagnostic" ng-model="model.definitive_diagnostic" class="form-control no-resize"></textarea>
                                                     </div>
                                                 </div>
                                             </div>

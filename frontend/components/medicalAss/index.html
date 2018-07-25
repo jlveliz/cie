@@ -38,7 +38,7 @@
                                        <td class="col-md-6 col-sm-6">{{model.patient_user.last_name}} {{model.patient_user.name}} </td>
                                         <td> {{model.created_at ? model.created_at : "-"}}</td>
                                         <td>
-                                            <a ng-hide="model.$deleting" ui-sref="root.model.edit({assesId:model.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
+                                            <a ng-hide="model.$deleting" ui-sref="root.medicalAssessment.edit({assesId:model.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
                                             <a ng-hide="model.$deleting" ng-click="delete(model.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
                                             <p ng-show="model.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>

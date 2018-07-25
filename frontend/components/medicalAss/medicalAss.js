@@ -138,7 +138,7 @@ define(['app', 'moment'], function(app, moment) {
     }]);
 
     //create
-    app.register.controller('MedicalAssCreateCtrl', ['$scope', 'MedicalAssService', 'apiResource', '$rootScope', function($scope, MedicalAssService, apiResource, $rootScope) {
+    app.register.controller('MedicalAssCreateCtrl', ['$scope', 'MedicalAssService', 'apiResource', '$rootScope', '$state', function($scope, MedicalAssService, apiResource, $rootScope, $state) {
 
         $scope.loading = true;
         $scope.saving = false;
@@ -225,12 +225,83 @@ define(['app', 'moment'], function(app, moment) {
     }]);
 
     //edit
-    app.register.controller('MedicalAssEditCtrl', ['$scope', 'MedicalAssService', function($scope, MedicalAssService) {
+    app.register.controller('MedicalAssEditCtrl', ['$scope', 'MedicalAssService', '$state', '$stateParams', 'apiResource', function($scope, MedicalAssService, $state, $stateParams, apiResource) {
 
         $scope.loading = true;
         $scope.saving = false;
         $scope.existError = false;
-        $scope.isEdit = false;
+        $scope.isEdit = true;
+        var assesId = $stateParams.assesId;
+        $scope.existPatientUserSelected = true;
+        $scope.messages = {};
+        $scope.model = {};
+        $scope.answersClosed = MedicalAssService.answersClosed;
+
+        $scope.validateOptions = {
+            rules: {
+
+            },
+            messages: {
+
+            }
+        };
+
+        apiResource.resource('medical-assessments').getCopy(assesId).then(function(model) {
+            $scope.model = model;
+            $scope.model.patientUser = model.patient_user;
+            $scope.model.patientUser.name = MedicalAssService.formatPatientUser('name', model.patient_user);
+            $scope.model.patientUser.age = model.patient_user.age;
+            $scope.model.patientUser.genre = MedicalAssService.formatPatientUser('genre', model.patient_user);
+            $scope.model.patientUser.date_birth = MedicalAssService.formatPatientUser('dbirth', model.patient_user);
+            $scope.model.patientUser.personal_data_procedence = MedicalAssService.formatPatientUser('procedence', model.patient_user);
+            $scope.model.patient_user_id = model.patient_user.id;
+            $scope.loading = false;
+        });
+
+        $scope.save = function(saveForm, returnIndex) {
+
+            var successCallback = function(data) {
+                $scope.saving = false;
+                $scope.hasMessage = true;
+                apiResource.resource('medical-assessments').setOnCache(data);
+                $scope.model.patientUser = {};
+                $scope.model.patientUser.name = MedicalAssService.formatPatientUser('name', data.patient_user);
+                $scope.model.patientUser.genre = MedicalAssService.formatPatientUser('genre', data.patient_user);
+                $scope.model.patientUser.date_birth = MedicalAssService.formatPatientUser('dbirth', data.patient_user);
+                $scope.model.patientUser.personal_data_procedence = MedicalAssService.formatPatientUser('procedence', data.patient_user);
+                MedicalAssService.messageFlag.title = "Entrevista médica de  " + data.patient_user.name + " ha sido actualizada correctamente";
+                MedicalAssService.messageFlag.type = "info";
+                $scope.messages = MedicalAssService.messageFlag;
+                if (returnIndex) {
+                    $state.go('root.medicalAssessment');
+                }
+            }
+
+            var failCallback = function(reason) {
+                $scope.saving = false
+                $scope.existError = true;
+                $scope.messages.title = reason.data.title;
+                $scope.messages.type = 'error';
+                $scope.messages.details = [];
+                var json = JSON.parse(reason.data.detail);
+                angular.forEach(json, function(elem, idx) {
+                    angular.forEach(elem, function(el, idex) {
+                        $scope.messages.details.push(el)
+                    })
+                })
+            }
+
+            if (saveForm.validate()) {
+                $scope.saving = true;
+                MedicalAssService.save($scope.model).then(successCallback, failCallback);
+            }
+        };
+
+        $scope.saveAndClose = function(form) {
+            $scope.save(form, true);
+        };
+
+
 
     }]);
 
