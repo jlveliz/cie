@@ -22,12 +22,12 @@ trait ConvertToUpper
             if($this->no_upper !== null){
                 if (!in_array($key, $this->no_uppercase)) {
                     if(!in_array($key, $this->no_upper)){
-                        $this->attributes[$key] = trim(strtoupper($value));
+                        $this->attributes[$key] = trim(mb_strtoupper($value,'UTF-8'));
                     }
                 }
             }else{
                 if (!in_array($key, $this->no_uppercase)) {
-                    $this->attributes[$key] = trim(strtoupper($value));
+                    $this->attributes[$key] = trim(mb_strtoupper($value,'UTF-8'));
                 } 
             }
         }

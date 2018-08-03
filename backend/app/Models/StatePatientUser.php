@@ -24,11 +24,11 @@ class StatePatientUser extends BaseModel
         $istance = new Static;
         parent::boot();
         static::saving(function($permission) use($istance){
-            $permission->code =  str_replace(" ", '_', strtolower($istance->removeAccent($permission->name)));
+            $permission->code =  $istance->removeAccent($permission->name);
         });
 
         static::updating(function($permission) use($istance) {
-            $permission->code =  str_replace(" ", '_', strtolower($istance->removeAccent($permission->name)));
+            $permission->code =  $istance->removeAccent($permission->name);
         });
     }
 

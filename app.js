@@ -2600,7 +2600,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2621,7 +2621,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2640,7 +2640,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },

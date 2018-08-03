@@ -4,8 +4,8 @@ namespace Cie\Repository;
 use Cie\RepositoryInterface\PsychologicalAssessmentRepositoryInterface;
 use Cie\Exceptions\PsychologicalAssessmentException;
 use Cie\Models\PsychologicalAssessment;
+use Cie\Models\StatePatientUser;
 use Cie\Models\PatientUser;
-
 
 /**
 * 
@@ -83,11 +83,13 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 	{
 
 		$assessment = new PsychologicalAssessment();
-			
 		$assessment->fill($data);
 
 		if ($assessment->save()) {
 			$key = $assessment->getKey();
+			//update status
+			$assessment->patientUser->state_id = $this->getStatus();
+			$assessment->patientUser->save();
 			return $this->find($key);
 		} else {
 			throw new PsychologicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia psicológica de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
@@ -107,6 +109,9 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 			$assessment->fill($data);
 			if($assessment->update()){
 				$key = $assessment->getKey();
+				//update status
+				$assessment->patientUser->state_id = $this->getStatus();
+				$assessment->patientUser->save();
 				return $this->find($key);
 			} else {
 				throw new PsychologicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia psicológica de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
@@ -128,5 +133,13 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 			return true;
 		}
 		throw new PsychologicalAssessmentException(['title'=>'Ha ocurrido un error al eliminar la Asistencia psicológica ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+	}
+
+	/**
+	 * return default state 
+	 */
+	public function getStatus()
+	{
+		return  StatePatientUser::select('id')->where('code','valorado_psicologicamente')->first()->id;
 	}
 }

@@ -6,7 +6,7 @@ use Cie\RepositoryInterface\MedicalAssessmentRepositoryInterface;
 use Cie\Exceptions\MedicalAssessmentException;
 use Cie\Models\MedicalAssessment;
 use Cie\Models\PatientUser;
-
+use Cie\Models\StatePatientUser;
 /**
   * 
   */
@@ -81,11 +81,13 @@ use Cie\Models\PatientUser;
 	{
 
 		$assessment = new MedicalAssessment();
-			
 		$assessment->fill($data);
 
 		if ($assessment->save()) {
 			$key = $assessment->getKey();
+			//update status
+			$assessment->patientUser->state_id = $this->getStatus();
+			$assessment->patientUser->save();
 			return $this->find($key);
 		} else {
 			throw new MedicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Entrevista médica de '.$data['name'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
@@ -103,6 +105,9 @@ use Cie\Models\PatientUser;
 			$assessment->fill($data);
 			if($assessment->update()){
 				$key = $assessment->getKey();
+				//update status
+				$assessment->patientUser->state_id = $this->getStatus();
+				$assessment->patientUser->save();
 				return $this->find($key);
 			} else {
 				throw new MedicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Entrevista médica de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
@@ -124,6 +129,15 @@ use Cie\Models\PatientUser;
 			return true;
 		}
 		throw new PsychologicalAssessmentException(['title'=>'Ha ocurrido un error al eliminar la Entrevista médica ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+	}
+
+
+	/**
+	 * return default state 
+	 */
+	public function getStatus()
+	{
+		return  StatePatientUser::select('id')->where('code','valorado_fisicamente')->first()->id;
 	}
 
  } 
