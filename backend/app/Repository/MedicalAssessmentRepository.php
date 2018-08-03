@@ -30,7 +30,7 @@ use Cie\Models\StatePatientUser;
 						$join->on('patient_user.id','=','medical_assessment.patient_user_id')->whereRaw('medical_assessment.deleted_at is null');
 					})->where(function($query) use ($params){
 						$query->where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%');
-					})->whereNull('medical_assessment.id')->get();
+					})->where('patient_user.state_id','<',$this->getStatusInscrito())->whereNull('medical_assessment.id')->get();
 					
 					if(!count($paUsers))
 						throw new MedicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista médica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -138,6 +138,14 @@ use Cie\Models\StatePatientUser;
 	public function getStatus()
 	{
 		return  StatePatientUser::select('id')->where('code','valorado_fisicamente')->first()->id;
+	}
+
+	/**
+	 * return default state 
+	 */
+	public function getStatusInscrito()
+	{
+		return  StatePatientUser::select('id')->where('code','inscrito')->first()->id;
 	}
 
  } 

@@ -25,7 +25,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	
 	public function paginate()
 	{
-		return PatientUser::paginate(200);
+		return PatientUser::paginate(500);
 	}
 
 	public function enum($params = null)
