@@ -2,9 +2,9 @@
     <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
     <span class="sr-only">Cargando...</span>
 </h4>
-
 <div class="row title_count" ng-if="!loading">
-    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+    <h2  class="section_dashboard">Estadisticas</h2>
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6">
         <div class="tile-stats">
             <div class="icon"><i class="fa fa-users"></i></div>
             <div class="count">{{totalUsersToday || '0'}}</div>
@@ -12,13 +12,116 @@
             <p>Que se han ingresado Ficha de Inscripción hoy.</p>
         </div>
     </div>
+</div>
 
-    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12 clickable" ng-click="downloadRegistrationForm()">
+<div class="row" ng-if="!loading">
+    <h2 class="section_dashboard">Formatos de Documentos Descargables</h2>
+    <!-- proceso de inscripcion -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadRegistrationForm()">
         <div class="tile-stats">
             <div class="icon"><i class="fa fa-file-text-o"></i></div>
             <div class="count">3</div>
-            <h3>Formatos</h3>
-            <p>Ficha de inscripción, carta de Autorización de uso de imagen y Compromiso.</p>
+            <h3>P. Inscripción</h3>
+            <p>Ficha de inscripción y otros.</p>
+        </div>
+    </div>
+    <!-- Bailoterapia -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadBailoterapiaForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Bailoterapia</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+    
+    <!-- Deportes -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadDeportesForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Deportes</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Hidroterapia -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadHidroterapiaForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Hidroterapia</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Horticultura -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadHorticulturaForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Horticultura</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Lenguaje -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadLenguajeForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Lenguaje</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Lenguaje -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadMecanoterapiaForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Mecanoterapia</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Lenguaje -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadMusicoterapiaForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Musicoterapia</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Ocupaional -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadOcupacionalForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Ocupacional</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Psicologia -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadPsicologiaForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">9</div>
+            <h3>Psicología</h3>
+            <p>Entrevista inicial y otros.</p>
+        </div>
+    </div>
+
+    <!-- Recepcion -->
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="downloadRecepcionForm()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+            <div class="count">5</div>
+            <h3>Recepción</h3>
+            <p>Entrevista inicial y otros.</p>
         </div>
     </div>
 </div>
