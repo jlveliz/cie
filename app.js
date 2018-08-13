@@ -797,6 +797,22 @@ define([
                 iElement.attr('max', today);
             }
         };
+    }]);
+
+    cie.directive('downloadableDoc', [function () {
+        return {
+            restrict: 'E',
+            templateUrl: '/frontend/partials/downlaodable.html',
+            scope: {
+                ngModel : '='
+            },
+            link: function (scope, iElement, iAttrs) {
+                scope.count = iAttrs.count;
+                scope.icon = iAttrs.icon;
+                scope.title = iAttrs.title;
+                scope.description = iAttrs.description
+            }
+        };
     }])
 
 
