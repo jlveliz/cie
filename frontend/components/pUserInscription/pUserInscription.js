@@ -891,38 +891,42 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies) {
+    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies', '$http', '$q', '$state',function($scope, apiResource, $stateParams, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies, $http, $q, $state) {
 
         $scope.inscriptions = [];
         $scope.loading = true;
-        $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
         $scope.messages = {};
         $scope.hasMessage = false;
+        $scope.options = {
+            query: ''
+        }
+        $scope.totalItems = null;
+        $scope.currentPage = 1;
+        $scope.hidePaginator = false;
 
 
-        angular.extend($scope.dtOptions, {
-            orderable: false,
-            columnDefs: [{
-                orderable: false,
-                targets: 3
-            }],
-            order: [
-                [0, 'asc'],
-                [1, 'asc'],
-                [2, 'asc'],
-            ],
-            responsive: true,
-        });
 
-        apiResource.resource('puserinscriptions').query().then(function(results) {
-            $scope.loading = false;
-            $scope.inscriptions = results;
-            $scope.messages = PUserInscriptionService.messageFlag;
-            if (!_.isEmpty($scope.messages)) {
-                $scope.hasMessage = true;
-                PUserInscriptionService.messageFlag = {};
-            }
-        });
+        var loadList = (num) => {
+            apiResource.resource('puserinscriptions').paginate(num).then(function(results) {
+                $scope.loading = false;
+                $scope.inscriptions = results.data;
+                $scope.totalItems = results.total;
+                $scope.maxSize = 5;
+
+                $scope.messages = PUserInscriptionService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    PUserInscriptionService.messageFlag = {};
+                }
+            });
+        };
+
+        loadList();
+
+        $scope.changePage = (num) => {
+            loadList(num);
+        };
+
 
         $scope.print = function(inscripId) {
             apiResource.resource('puserinscriptions').getCopy(inscripId).then(function(result) {
@@ -959,6 +963,78 @@ define(['app', 'moment'], function(app, moment) {
                     }
                 })
             });
+        };
+
+
+        $scope.find = function() {
+            let query = $scope.options.query;
+            //format view 
+            $scope.existError = false;
+            $scope.hasMessage = false;
+            PUserInscriptionService.messageFlag = {};
+            
+           
+            if (!query) {
+                loadList();
+                return;
+            }
+
+            $scope.hidePaginator = true;
+            $scope.loading = true;
+            var params = envService.read('api') + 'pUsers';
+            var promise = null;
+           
+            //si es cédula
+            if (parseInt(query)) {
+                promise = loadData(params + '?num_identification=' + query);
+            } else {
+                promise = loadData(params + '?name=' + query);
+            }
+
+            promise.then(
+                (result) => {
+                    var decoded = base64.decode(result.data);
+                    decoded = JSON.parse(decoded);
+                    //if search for C.I
+                    if (!decoded.data && angular.isObject(decoded)) {
+                        $scope.inscriptions = [];
+                        $scope.inscriptions.push(decoded)
+                        $scope.totalItems = 1;
+                    } else {
+                        $scope.inscriptions = decoded.data;
+                        $scope.totalItems = decoded.total;
+                        
+                    }
+                    $scope.maxSize = 1 || decoded.total;
+                    $scope.loading = false;
+                },
+                (error) => {
+                    $scope.existError = true;
+                    $scope.inscriptions = [];
+                    $scope.totalItems = null;
+                    $scope.hasMessage = true;
+                    $scope.messages.title = error.data.message;
+                    $scope.loading = false;
+                }
+            );
+
+            function loadData(url) {
+                var deferred = $q.defer();
+                $http.get(url).then(
+                    (result) => {
+                        deferred.resolve(result);
+                    },
+                    (error) => {
+                        deferred.reject(error);
+                    }
+                )
+
+                return deferred.promise
+            }
+        };
+
+        $scope.goCreate = function() {
+            $state.go('root.inscription.create');
         };
     }]);
 
@@ -1025,7 +1101,7 @@ define(['app', 'moment'], function(app, moment) {
                 assist_other_therapeutic_center: null,
                 receives_medical_attention: null,
                 state: 2,
-                date_admission: moment().format('YYYY'),
+                date_admission: new Date(),
                 schooling: null,
                 representant: {},
                 has_mother: 0,
@@ -1611,6 +1687,10 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goIndex = function() {
+            $state.go('root.inscription');
         }
     }]);
 
@@ -2315,6 +2395,10 @@ define(['app', 'moment'], function(app, moment) {
             $scope.save(form, true);
         };
 
+        $scope.goIndex = function() {
+            $state.go('root.inscription');
+        }
+
     }]);
 
     app.register.controller('pUserInscriptionShowCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', '$sce', 'envService', 'authFactory', '$window', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state, $sce, envService, authFactory, $window) {
@@ -2541,7 +2625,8 @@ define(['app', 'moment'], function(app, moment) {
             })
         };
 
-
-
+        $scope.goIndex = function() {
+            $state.go('root.inscription');
+        }
     }]);
 });

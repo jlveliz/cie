@@ -628,7 +628,7 @@ h3,
 }
 
 a {
-    color: #353535;
+    color: #1c3c6a;
     text-decoration: none;
 }
 
@@ -650,6 +650,7 @@ a:active,
 
 a:hover,
 a:focus {
+    color: #F68529;
     text-decoration: none;
 }
 
@@ -1749,7 +1750,7 @@ ul.msg_list li a .message {
 }
 
 .dropdown-menu>li>a {
-    color: #5A738E;
+    color: #000000;
 }
 
 .navbar-nav .open .dropdown-menu {
@@ -5750,4 +5751,8 @@ md-switch {
 
 .section_dashboard {
     border-bottom: 2px solid #E6E9ED;
+}
+
+.no-margin-bottom{
+    margin-bottom: 0px;
 }

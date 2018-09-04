@@ -25,7 +25,17 @@
                                     <p ng-if="hasMessage">{{messages.title}}</p>
                                 </div>
                             </div>
-                            <table datatable="ng" dt-options="dtOptions" id="inscription-list" class="table table-striped">
+                            
+                            <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
+                                <form name="form" ng-submit="find()" class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" name="find" class="form-control" placeholder="Buscar nombre o cédula" ng-model="options.query">
+                                    </div>
+                                    <button ng-disabled="loading" type="submit" class="btn btn-primary no-margin-bottom"><i ng-if="!loading" class="fa fa-search"></i> <span ng-if="!loading">Buscar</span> <i class="fa fa-spinner fa-spin" ng-if="loading"></i> </button>
+                                </form>
+                            </div>    
+                            
+                            <table id="inscription-list" class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>Usuario</th>
@@ -36,34 +46,44 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="inscription in inscriptions track by $index">
-                                        <td>{{inscription.last_name}} {{inscription.name}} </td>
+                                        <td><a ui-sref="root.inscription.show({pInsId:inscription.id})" title="ver {{inscription.last_name}} {{inscription.name}}">{{inscription.last_name}} {{inscription.name}} </a></td>
                                         <td> {{inscription.representant ? inscription.representant.last_name +' ' +  inscription.representant.name : "-"}}</td>
                                         <td>{{inscription.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
                                         <td>
 
-                                            <a title="Ver Usuario {{inscription.name}} {{inscription.last_name}}" alt="Ver Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.show({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-eye"></i> Ver</a>
-                                            
-
-                                            <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.edit({pInsId:inscription.id})" class="btn btn-default btn-sm" type="button" permission permission-only="['admin','dirTerapia']"> <i class="fa fa-pencil"></i> Editar</a>
-                                            
-
-                                            <button title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting" class="btn btn-default btn-sm" type="button" ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</button>
-
-                                            
-                                            <a permission  permission-only="['admin','dirTerapia']" title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}"  ng-click="delete(inscription.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
-                                            
-                                           
-
+                                            <div class="btn-group"  role="group">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a title="Ver Usuario {{inscription.name}} {{inscription.last_name}}" alt="Ver Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.show({pInsId:inscription.id})"> <i class="fa fa-eye"></i> Ver</a>
+                                                    </li>
+                                                    <li>
+                                                        <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.edit({pInsId:inscription.id})" permission permission-only="['admin','dirTerapia']"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting"  ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</a>
+                                                    </li>
+                                                    <li>
+                                                        <a permission  permission-only="['admin','dirTerapia']" title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}"  ng-click="delete(inscription.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="inscription.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="col-md-12 col-xs-12 text-right" ng-if="!hidePaginator">
+                                <ul boundary-links="true" boundary-link-numbers="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" class="pagination-sm" uib-pagination max-size="maxSize" total-items="totalItems" ng-model="currentPage" ng-change="changePage(currentPage)"></ul>
+                            </div>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1" permission  permission-only="['admin','dirTerapia']">
+                    <uib-tab index="1" permission  permission-only="['admin','dirTerapia']" select="goCreate()">
                         <uib-tab-heading>
-                            <a ui-sref="root.inscription.create" title="Crear Ficha de Inscripción"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                            <a ui-sref="root.inscription.create()"  title="Crear Ficha de Inscripción"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>
                     </uib-tab>
                 </uib-tabset>

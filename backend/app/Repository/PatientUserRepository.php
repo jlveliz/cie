@@ -25,7 +25,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	
 	public function paginate()
 	{
-		return PatientUser::paginate(500);
+		return PatientUser::paginate(10);
 	}
 
 	public function enum($params = null)
@@ -37,7 +37,9 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 					$paUsers = $this->find($params);
 					//USADO PARA LA BUSQUEDA DE USUARIOS EN EVALUACIONES PSICOLOGICA Y MÉDICA
 				} elseif (array_key_exists('name', $params) && isset($params['name'])) {
-					$paUsers = PatientUser::where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%')->get();
+					$paUsers = PatientUser::where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%'); // refactor
+					$counter = $paUsers->count();
+					$paUsers = $paUsers->paginate($counter);
 					if (!count($paUsers)) throw new PatientUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda, Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 				}
 			}

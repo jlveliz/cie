@@ -227,14 +227,30 @@ define([
                                 }
                                 throw "Recurso " + nameResource + " no existe";
                             },
+                            paginate: function(pageNum) {
+                                pageNum =  pageNum || 1;
+                                if (!names[nameResource]) {
+                                    throw "Recurso " + nameResource + " no existe";
+                                }
+                                let _this = this;
+                                let deferred = $q.defer();
+                                let r = _this.create();
+                                let params = { page: pageNum };
+                                r.$query(params).then((result) => {
+                                    deferred.resolve(result);
+                                });
+                                return deferred.promise;
+                            },
                             query: function(params) {
                                 var _this = this;
                                 var deferred = $q.defer();
                                 var r = _this.create();
                                 var keyCache = nameResource;
                                 //if nested resource
-                                if (params && params.parentId) {
-                                    keyCache += '/' + params.parentId;
+                                if (params) {
+                                    if (params.parentId) {
+                                        keyCache += '/' + params.parentId;
+                                    }
                                 }
 
                                 var existOnCache = getFromCache(keyCache);
@@ -253,7 +269,7 @@ define([
                                     //set on cache list array
                                     _this.setOnCache(resources, params && params.parentId ? params.parentId : null);
                                     result.data = resources;
-                                    deferred.resolve(result.data)
+                                    deferred.resolve(result.data);
                                 }, function(error) {
                                     deferred.reject(error)
                                 });
@@ -799,14 +815,14 @@ define([
         };
     }]);
 
-    cie.directive('downloadableDoc', [function () {
+    cie.directive('downloadableDoc', [function() {
         return {
             restrict: 'E',
             templateUrl: '/frontend/partials/downlaodable.html',
             scope: {
-                ngModel : '='
+                ngModel: '='
             },
-            link: function (scope, iElement, iAttrs) {
+            link: function(scope, iElement, iAttrs) {
                 scope.count = iAttrs.count;
                 scope.icon = iAttrs.icon;
                 scope.title = iAttrs.title;
