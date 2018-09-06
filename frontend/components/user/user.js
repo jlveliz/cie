@@ -71,7 +71,7 @@ define(['app'], function(app) {
         }
     })
 
-    app.register.controller('UserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'UserService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, UserService, $rootScope) {
+    app.register.controller('UserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'UserService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, UserService, $rootScope, $state) {
 
         $scope.users = [];
         $scope.loading = true;
@@ -124,6 +124,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goCreate = function() {
+            $state.go('root.user.create')
         }
     }]);
 
@@ -253,6 +257,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goIndex = function() {
+            $state.go('root.user')
         }
     }]);
 
@@ -424,6 +432,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goIndex = function() {
+            $state.go('root.user')
         }
     }]);
 

@@ -12,7 +12,8 @@
                 </h4>
                 <uib-tabset active="0" ng-if="!loading">
                     <uib-tab index="0">
-                        <uib-tab-heading><h5><b>PERMISOS</b></h5></uib-tab-heading>
+                        <uib-tab-heading>
+                            <h5><b>PERMISOS</b></h5></uib-tab-heading>
                         <div class="tab-index">
                             <uib-tabset active="0">
                                 <uib-tab index="0">
@@ -42,14 +43,25 @@
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="permission in permissions">
-                                                    <td>{{permission.name | capitalize:'oneLetter'}}</td>
+                                                    <td><a ui-sref="root.permission.edit({permissionId:permission.id})" title="{{permission.name | capitalize:'oneLetter'}}">{{permission.name | capitalize:'oneLetter'}}</a></td>
                                                     <td>{{permission.parent.name}}</td>
                                                     <td>{{permission.module.name}}</td>
                                                     <td>{{permission.type.name}}</td>
                                                     <td>{{permission.created_at | filterTimestamp }} - {{permission.updated_at | filterTimestamp }}</td>
                                                     <td>
-                                                        <a ng-hide="permission.$deleting" ui-sref="root.permission.edit({permissionId:permission.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                                        <a ng-hide="permission.$deleting" ng-click="delete(permission.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                        <div class="btn-group" role="group" ng-hide="permission.$deleting">
+                                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog"></i> Opciones
+                                                            <span class="caret"></span></button>
+
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                     <a ui-sref="root.permission.edit({permissionId:permission.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a ng-click="delete(permission.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>      
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                         <p ng-show="permission.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                                     </td>
                                                 </tr>
@@ -57,7 +69,7 @@
                                         </table>
                                     </div>
                                 </uib-tab>
-                                <uib-tab index="1">
+                                <uib-tab index="1" select="goCreate()">
                                     <uib-tab-heading>
                                         <a ui-sref="root.permission.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                                     </uib-tab-heading>
@@ -65,8 +77,10 @@
                             </uib-tabset>
                         </div>
                     </uib-tab>
-                    <uib-tab index="0">
-                        <uib-tab-heading><h5><a ui-sref="root.tpermission"><b>TIPOS</b></h5></a></uib-tab-heading>
+                    <uib-tab index="0" select="goIndexType()">
+                        <uib-tab-heading>
+                            <h5><a ui-sref="root.tpermission"><b>TIPOS</b></h5></a>
+                        </uib-tab-heading>
                     </uib-tab>
                 </uib-tabset>
             </div>

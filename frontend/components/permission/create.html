@@ -15,8 +15,8 @@
                         <uib-tab-heading><a ui-sref="root.permission"><h5><b>PERMISOS</b></h5></a></uib-tab-heading>
                         <div class="tab-index">
                             <uib-tabset active="1">
-                                <uib-tab index="0">
-                                    <uib-tab-heading>
+                                <uib-tab index="0" select="goIndex()">
+                                    <uib-tab-heading >
                                         <a ui-sref="root.permission" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
                                     </uib-tab-heading>
                                 </uib-tab>
@@ -98,7 +98,7 @@
                             </uib-tabset>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goIndexType()">
                         <uib-tab-heading><a ui-sref="root.tpermission"><h5><b>TIPOS</b></h5></a></uib-tab-heading>
                     </uib-tab>
                 </uib-tabset>

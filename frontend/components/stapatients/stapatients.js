@@ -10,7 +10,7 @@ define(['app'], function(app) {
 
     });
 
-    app.register.controller('StatePatientUserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'StatePatientUserService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, StatePatientUserService, $rootScope) {
+    app.register.controller('StatePatientUserIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'StatePatientUserService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, StatePatientUserService, $rootScope, $state) {
 
         $scope.states = [];
         $scope.loading = true;
@@ -66,6 +66,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.stapatients.create')
         }
     }]);
 
@@ -131,6 +135,11 @@ define(['app'], function(app) {
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
         }
+
+        $scope.goToIndex = function() {
+            $state.go('root.stapatients')
+        }
+
 
     }]);
 
@@ -204,6 +213,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.stapatients')
         }
 
     }]);

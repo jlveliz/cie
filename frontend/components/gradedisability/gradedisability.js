@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('GradeDisabilityIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'GradeDisabilityService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, GradeDisabilityService, $rootScope) {
+    app.register.controller('GradeDisabilityIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'GradeDisabilityService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, GradeDisabilityService, $rootScope, $state) {
 
         $scope.grades = [];
         $scope.loading = true;
@@ -65,6 +65,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.gradeDisability.create')
         }
 
     }]);
@@ -134,11 +138,15 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.gradeDisability')
         }
 
     }]);
 
-    app.register.controller('GradeDisabilityEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'GradeDisabilityService',  function($scope, apiResource, $stateParams, $state, GradeDisabilityService) {
+    app.register.controller('GradeDisabilityEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'GradeDisabilityService', function($scope, apiResource, $stateParams, $state, GradeDisabilityService) {
 
         var gradeId = $stateParams.gradeId;
         $scope.isEdit = true;
@@ -159,9 +167,9 @@ define(['app'], function(app) {
             }
             $scope.loading = false;
         });
-       
 
-       $scope.validateOptions = {
+
+        $scope.validateOptions = {
             rules: {
                 name: {
                     required: true,
@@ -211,6 +219,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.gradeDisability')
         }
 
     }]);

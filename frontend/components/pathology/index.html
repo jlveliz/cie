@@ -35,11 +35,23 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="pathology in pathologies">
-                                        <td>{{pathology.name | capitalize:'oneLetter'}}</td>
+                                        <td><a ui-sref="root.pathology.edit({pathologyId:pathology.id})" title="{{pathology.name | capitalize:'oneLetter'}}">{{pathology.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{pathology.created_at | filterTimestamp }} - {{pathology.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="pathology.$deleting" ui-sref="root.pathology.edit({pathologyId:pathology.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="pathology.$deleting" ng-click="delete(pathology.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <div class="btn-group" role="group" ng-hide="pathology.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ui-sref="root.pathology.edit({pathologyId:pathology.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="delete(pathology.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="pathology.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -47,7 +59,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goToCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.pathology.create" title="Crear Ciudad"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

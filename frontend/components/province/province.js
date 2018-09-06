@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('ProvinceIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ProvinceService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, ProvinceService, $rootScope) {
+    app.register.controller('ProvinceIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ProvinceService', '$rootScope', '$state',function($scope, apiResource, $stateParams, DTOptionsBuilder, ProvinceService, $rootScope, $state) {
 
         $scope.provinces = [];
         $scope.loading = true;
@@ -65,6 +65,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.province.create');
         }
 
     }]);
@@ -130,6 +134,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.province');
         }
 
     }]);
@@ -204,6 +212,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+         $scope.goToIndex = function() {
+            $state.go('root.province');
         }
 
     }]);

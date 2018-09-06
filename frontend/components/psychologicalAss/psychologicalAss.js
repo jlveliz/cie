@@ -131,7 +131,7 @@ define(['app', 'moment'], (app, moment) => {
         }
     }]);
 
-    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PsyChoService', '$rootScope', function($scope, apiResource, DTOptionsBuilder, PsyChoService, $rootScope) {
+    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PsyChoService', '$rootScope', '$state',function($scope, apiResource, DTOptionsBuilder, PsyChoService, $rootScope,$state) {
 
         $scope.models = [];
         $scope.loading = true;
@@ -187,6 +187,10 @@ define(['app', 'moment'], (app, moment) => {
                 })
             });
         };
+
+        $scope.goCreate = function() {
+            $state.go('root.psychoAssessment.create')
+        }
     }]);
 
     app.register.controller('PsychologicalAssCreateCtrl', ['$scope', 'apiResource', 'PsyChoService', '$state', '$rootScope', function($scope, apiResource, PsyChoService, $state, $rootScope) {
@@ -297,6 +301,10 @@ define(['app', 'moment'], (app, moment) => {
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
         };
+
+        $scope.goIndex = function() {
+            $state.go('root.psychoAssessment')
+        }
     }]);
 
     app.register.controller('PsychologicalAssEditCtrl', ['$scope', '$stateParams', '$state', 'apiResource', 'PsyChoService', function($scope, $stateParams, $state, apiResource, PsyChoService) {
@@ -394,7 +402,9 @@ define(['app', 'moment'], (app, moment) => {
             $scope.save(form, true);
         };
 
-
+        $scope.goIndex = function() {
+            $state.go('root.psychoAssessment')
+        }
 
 
     }]);

@@ -36,12 +36,24 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="idenType in identiTypes">
-                                        <td>{{idenType.name | capitalize:'oneLetter'}}</td>
+                                        <td><a ui-sref="root.identitypes.edit({idenTypeId:idenType.id})" title="{{idenType.name | capitalize:'oneLetter'}}">{{idenType.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{idenType.code | capitalize:'oneLetter'}}</td>
                                         <td>{{idenType.created_at | filterTimestamp }} - {{idenType.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="idenType.$deleting" ui-sref="root.identitypes.edit({idenTypeId:idenType.id})" class="btn btn-default btn-sm" type="button" title="Editar Tipo de Identificación"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="idenType.$deleting" ng-click="delete(idenType.id)" class="btn btn-link btn-sm" type="button" title="Eliminar Tipo de Identificación"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <div class="btn-group" role="group" ng-hide="idenType.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ui-sref="root.identitypes.edit({idenTypeId:idenType.id})" title="Editar Tipo de Identificación"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="delete(idenType.id)" title="Eliminar Tipo de Identificación"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="idenType.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -49,7 +61,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goToCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.identitypes.create" title="Crear Tipo de Identificación"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

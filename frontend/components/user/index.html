@@ -37,21 +37,33 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="user in users">
-                                        <td>{{user.username}}</td>
+                                        <td><a ui-sref="root.user.edit({userId:user.id})" title="{{user.username}}">{{user.username}}</a></td>
                                         <td>{{user.person.name | capitalize:'oneLetter'}} {{user.person.last_name | capitalize:'oneLetter'}}</td>
                                         <td>{{user.last_login | filterTimestamp }}</td>
                                         <td>{{user.created_at | filterTimestamp }} - {{user.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="user.$deleting" ui-sref="root.user.edit({userId:user.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="user.$deleting" ng-click="delete(user.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
-                                            <p ng-show="user.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
+                                            <div class="btn-group" role="group" ng-hide="user.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ui-sref="root.user.edit({userId:user.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="delete(user.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                                <p ng-show="user.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.user.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

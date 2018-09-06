@@ -18,7 +18,7 @@ define(['app'], function(app) {
 
     })
 
-    app.register.controller('TPermissionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'TPermissionService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, TPermissionService, $rootScope) {
+    app.register.controller('TPermissionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'TPermissionService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, TPermissionService, $rootScope, $state) {
 
         $scope.tpermissions = [];
         $scope.loading = true;
@@ -73,6 +73,14 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToPermission = function() {
+            $state.go('root.permission')
+        };
+
+        $scope.goCreate = function() {
+            $state.go('root.tpermission.create');
         }
 
     }]);
@@ -152,6 +160,14 @@ define(['app'], function(app) {
             $scope.save(form, true);
         }
 
+        $scope.goToPermission = function() {
+            $state.go('root.permission')
+        };
+
+        $scope.goIndex = function() {
+            $state.go('root.tpermission');
+        }
+
     }]);
 
     app.register.controller('TPermissionEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'TPermissionService', function($scope, apiResource, $stateParams, $state, TPermissionService) {
@@ -228,6 +244,14 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+         $scope.goToPermission = function() {
+            $state.go('root.permission')
+        };
+
+        $scope.goIndex = function() {
+            $state.go('root.tpermission');
         }
 
     }]);

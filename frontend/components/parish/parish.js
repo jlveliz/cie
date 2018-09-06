@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('ParishIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ParishService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, ParishService, $rootScope) {
+    app.register.controller('ParishIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ParishService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, ParishService, $rootScope, $state) {
 
         $scope.parishies = [];
         $scope.loading = true;
@@ -66,6 +66,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.parish.create')
         }
 
     }]);
@@ -150,6 +154,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.parish')
         }
 
     }]);
@@ -239,6 +247,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.parish')
         }
 
     }]);

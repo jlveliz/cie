@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('IdenTypeIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'IdenTypeService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, IdenTypeService, $rootScope) {
+    app.register.controller('IdenTypeIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'IdenTypeService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, IdenTypeService, $rootScope, $state) {
 
         $scope.identiTypes = [];
         $scope.loading = true;
@@ -66,6 +66,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.identitypes.create')
         }
     }]);
 
@@ -133,6 +137,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.identitypes')
         }
 
     }]);
@@ -208,6 +216,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.identitypes')
         }
 
     }]);

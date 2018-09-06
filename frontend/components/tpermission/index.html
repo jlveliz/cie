@@ -11,7 +11,7 @@
                     <span class="sr-only">Cargando...</span>
                 </h4>
                 <uib-tabset active="1" ng-if="!loading">
-                    <uib-tab index="0">
+                    <uib-tab index="0" select="goToPermission()">
                         <uib-tab-heading><a ui-sref="root.permission"><h5><b>PERMISOS</b></h5></a></uib-tab-heading>
                     </uib-tab>
                     <uib-tab index="1">
@@ -45,8 +45,18 @@
                                                     <td>{{tpermission.name | capitalize:'oneLetter'}}</td>
                                                     <td>{{tpermission.created_at | filterTimestamp }} - {{tpermission.updated_at | filterTimestamp }}</td>
                                                     <td>
-                                                        <a ng-hide="tpermission.$deleting" ui-sref="root.tpermission.edit({tPermissionId:tpermission.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                                        <a ng-hide="tpermission.$deleting" ng-click="delete(tpermission.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                        <div class="btn-group" role="group" ng-hide="tpermission.$deleting">
+                                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog"></i> Opciones
+                                                                <span class="caret"></span></button>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a ui-sref="root.tpermission.edit({tPermissionId:tpermission.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a ng-click="delete(tpermission.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                         <p ng-show="tpermission.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                                     </td>
                                                 </tr>
@@ -54,7 +64,7 @@
                                         </table>
                                     </div>
                                 </uib-tab>
-                                <uib-tab index="1">
+                                <uib-tab index="1" select="goCreate()">
                                     <uib-tab-heading>
                                         <a ui-sref="root.tpermission.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                                     </uib-tab-heading>

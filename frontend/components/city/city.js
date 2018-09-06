@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('CityIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'CityService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, CityService, $rootScope) {
+    app.register.controller('CityIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'CityService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, CityService, $rootScope, $state) {
 
         $scope.cities = [];
         $scope.loading = true;
@@ -66,6 +66,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.city.create')
         }
 
     }]);
@@ -150,6 +154,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.city')
         }
 
     }]);
@@ -241,6 +249,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.city')
         }
 
     }]);

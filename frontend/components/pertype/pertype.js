@@ -10,7 +10,8 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('PerTypeIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PerTypeService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PerTypeService, $rootScope) {
+    app.register.controller('PerTypeIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PerTypeService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, PerTypeService, $rootScope, $state) {
+
 
         $scope.pertypes = [];
         $scope.loading = true;
@@ -66,6 +67,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.pertypes.create')
         }
     }]);
 
@@ -134,6 +139,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.pertypes')
         }
 
     }]);
@@ -210,6 +219,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.pertypes')
         }
 
     }]);

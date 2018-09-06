@@ -51,7 +51,7 @@
                                         <td>{{inscription.created_at | filterTimestamp }} - {{inscription.updated_at | filterTimestamp }}</td>
                                         <td>
 
-                                            <div class="btn-group"  role="group">
+                                            <div class="btn-group"  role="group" ng-hide="inscription.$deleting">
                                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fa fa-cog"></i> Opciones
                                                     <span class="caret"></span>
@@ -64,7 +64,7 @@
                                                         <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.edit({pInsId:inscription.id})" permission permission-only="['admin','dirTerapia']"> <i class="fa fa-pencil"></i> Editar</a>
                                                     </li>
                                                     <li>
-                                                        <a title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" ng-hide="inscription.$deleting"  ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</a>
+                                                        <a title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}"   ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</a>
                                                     </li>
                                                     <li>
                                                         <a permission  permission-only="['admin','dirTerapia']" title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}"  ng-click="delete(inscription.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>

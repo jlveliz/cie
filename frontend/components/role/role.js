@@ -56,7 +56,7 @@ define(['app'], function(app) {
         }
     }]);
 
-    app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope) {
+    app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope, $state) {
 
         $scope.roles = [];
         $scope.loading = true;
@@ -113,6 +113,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        }
+
+        $scope.goCreate = function() {
+            $state.go('root.role.create');
         }
 
     }]);
@@ -195,12 +199,10 @@ define(['app'], function(app) {
         }
 
         $scope.filterTypePermissionMenu = function(value) {
-            debugger;
             return RoleService.filterTypePermission(value, 'menu');
         }
 
         $scope.filterTypePermissionOption = function(value) {
-            debugger;
             return RoleService.filterTypePermission(value, 'opcion');
         }
 
@@ -242,6 +244,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goIndex = function() {
+            $state.go('root.role');
         }
 
     }]);
@@ -403,6 +409,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goIndex = function() {
+            $state.go('root.role');
         }
 
     }]);

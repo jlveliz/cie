@@ -77,7 +77,7 @@ define(['app', 'moment'], function(app, moment) {
     }]);
 
 
-    app.register.controller('MedicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'MedicalAssService', '$rootScope', function($scope, apiResource, DTOptionsBuilder, MedicalAssService, $rootScope) {
+    app.register.controller('MedicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'MedicalAssService', '$rootScope', '$state', function($scope, apiResource, DTOptionsBuilder, MedicalAssService, $rootScope, $state) {
 
         $scope.loading = true;
         $scope.models = [];
@@ -132,6 +132,10 @@ define(['app', 'moment'], function(app, moment) {
                     }
                 })
             });
+        };
+
+        $scope.goCreate = function() {
+            $state.go('root.medicalAssessment.create')
         }
 
 
@@ -222,6 +226,11 @@ define(['app', 'moment'], function(app, moment) {
             $scope.save(form, true);
         }
 
+        $scope.goIndex = function() {
+            $state.go('root.medicalAssessment')
+        }
+
+
     }]);
 
     //edit
@@ -300,6 +309,10 @@ define(['app', 'moment'], function(app, moment) {
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
         };
+
+         $scope.goIndex = function() {
+            $state.go('root.medicalAssessment')
+        }
 
 
 

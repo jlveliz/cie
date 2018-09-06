@@ -11,14 +11,14 @@
                     <span class="sr-only">Cargando...</span>
                 </h4>
                 <uib-tabset active="1" ng-if="!loading">
-                    <uib-tab index="0">
+                    <uib-tab index="0" select="goToPermission()">
                         <uib-tab-heading><a ui-sref="root.permission" title="Permisos"><h5><b>PERMISOS</b></h5></a></uib-tab-heading>
                     </uib-tab>
                     <uib-tab index="1">
                         <uib-tab-heading><a ui-sref="root.tpermission" title="Tipos"><h5><b>TIPOS</b></h5></a></uib-tab-heading>
                         <div class="tab-index">
                             <uib-tabset active="1">
-                                <uib-tab index="0">
+                                <uib-tab index="0" select="goIndex()">
                                     <uib-tab-heading>
                                         <a ui-sref="root.tpermission" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
                                     </uib-tab-heading>

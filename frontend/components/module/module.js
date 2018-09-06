@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('ModuleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ModuleService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, ModuleService, $rootScope) {
+    app.register.controller('ModuleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'ModuleService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, ModuleService, $rootScope, $state) {
 
         $scope.modules = [];
         $scope.loading = true;
@@ -65,6 +65,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.module.create');
         }
 
     }]);
@@ -138,6 +142,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.module')
         }
 
     }]);
@@ -219,6 +227,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.module')
         }
 
     }]);

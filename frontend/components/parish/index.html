@@ -36,12 +36,24 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="parish in parishies">
-                                        <td>{{parish.name | capitalize:'oneLetter'}}</td>
+                                        <td><a ui-sref="root.parish.edit({parishId:parish.id})" title="{{parish.name | capitalize:'oneLetter'}}">{{parish.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{parish.city.name | capitalize:'oneLetter'}}</td>
                                         <td>{{parish.created_at | filterTimestamp }} - {{parish.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="parish.$deleting" ui-sref="root.parish.edit({parishId:parish.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="parish.$deleting" ng-click="delete(parish.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <div class="btn-group" role="group" ng-hide="parish.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ui-sref="root.parish.edit({parishId:parish.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="delete(parish.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="parish.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -49,7 +61,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goToCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.parish.create" title="Crear Parroquia"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

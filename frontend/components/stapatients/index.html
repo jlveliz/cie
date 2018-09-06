@@ -37,11 +37,21 @@
                                 <tbody>
                                     <tr ng-repeat="state in states">
                                         <td>{{state.id}}</td>
-                                        <td>{{state.name | capitalize:'oneLetter'}}</td>
+                                        <td><a ui-sref="root.stapatients.edit({statePaId:state.id})" title="{{state.name | capitalize:'oneLetter'}}">{{state.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{state.created_at | filterTimestamp }} - {{state.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="state.$deleting" ui-sref="root.stapatients.edit({statePaId:state.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="state.$deleting" ng-click="delete(state.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <div class="btn-group" role="group" ng-hide="state.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li> <a ui-sref="root.stapatients.edit({statePaId:state.id})"> <i class="fa fa-pencil"></i> Editar</a></li>
+                                                    <li>
+                                                        <a ng-click="delete(state.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="state.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -49,7 +59,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goToCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.stapatients.create" title="Crear Estado de Usuario Paciente"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

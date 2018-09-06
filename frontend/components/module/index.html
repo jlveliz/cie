@@ -35,11 +35,23 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="module in modules">
-                                        <td>{{module.name | capitalize:'oneLetter'}}</td>
+                                        <td><a  ui-sref="root.module.edit({moduleId:module.id})" title="{{module.name | capitalize:'oneLetter'}}">{{module.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{module.created_at | filterTimestamp }} - {{module.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="module.$deleting" ui-sref="root.module.edit({moduleId:module.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="module.$deleting" ng-click="delete(module.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <div class="btn-group" role="group" ng-hide="module.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ui-sref="root.module.edit({moduleId:module.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="delete(module.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="module.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -47,8 +59,8 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
-                        <uib-tab-heading>
+                    <uib-tab index="1" select="goToCreate()">
+                        <uib-tab-heading >
                             <a ui-sref="root.module.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>
                     </uib-tab>

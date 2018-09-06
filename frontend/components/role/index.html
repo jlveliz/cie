@@ -37,13 +37,24 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="role in roles">
-                                        <td>{{role.name | capitalize:'oneLetter'}}</td>
+                                        <td><a ui-sref="root.role.edit({roleId:role.id})" title="{{role.name | capitalize:'oneLetter'}}">{{role.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{role.description}}</td>
                                         <td>{{role.is_default == '1' ? 'Si' : 'No'}}</td>
                                         <td>{{role.created_at | filterTimestamp }} - {{role.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="role.$deleting" ui-sref="root.role.edit({roleId:role.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="role.$deleting" ng-click="delete(role.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <div class="btn-group" role="group" ng-hide="user.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span></button>
+
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-hide="role.$deleting" ui-sref="root.role.edit({roleId:role.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-hide="role.$deleting" ng-click="delete(role.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="role.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -51,7 +62,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1"  ng-click="goCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.role.create" title="Crear Rol"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

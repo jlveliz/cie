@@ -35,11 +35,23 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="grade in grades">
-                                        <td>{{grade.name}}</td>
+                                        <td><a ui-sref="root.gradeDisability.edit({gradeId:grade.id})" title="{{grade.name}}">{{grade.name}}</a></td>
                                         <td>{{grade.created_at | filterTimestamp }} - {{grade.updated_at | filterTimestamp }}</td>
                                         <td>
-                                            <a ng-hide="grade.$deleting" ui-sref="root.gradeDisability.edit({gradeId:grade.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>
-                                            <a ng-hide="grade.$deleting" ng-click="delete(grade.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                            <div class="btn-group" role="group" ng-hide="grade.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ui-sref="root.gradeDisability.edit({gradeId:grade.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="delete(grade.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="grade.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -47,7 +59,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goToCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.gradeDisability.create" title="Crear Grado de discapacidad"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

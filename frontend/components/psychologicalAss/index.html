@@ -34,14 +34,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     <tr ng-repeat="model in models track by $index">
-                                        <td class="col-md-6 col-sm-6">{{model.patient_user.last_name}} {{model.patient_user.name}} </td>
+                                        <td class="col-md-6 col-sm-6"><a ui-sref="root.psychoAssessment.edit({psychoAssId:model.id})" title="{{model.patient_user.last_name}} {{model.patient_user.name}}">{{model.patient_user.last_name}} {{model.patient_user.name}} </a></td>
                                         <td> {{model.date_eval ? model.date_eval : "-"}}</td>
                                         <td>
-                                            <a title="Editar Entrevista {{model.models.name}} {{model.patient_user.last_name}}" alt="Editar Usuario {{model.patient_user.name}} {{model.patient_user.last_name}}" ng-hide="model.$deleting" ui-sref="root.psychoAssessment.edit({psychoAssId:model.id})" class="btn btn-default btn-sm" type="button"> <i class="fa fa-pencil"></i> Editar</a>                                            
-                                            <a title="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" alt="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" ng-hide="model.$deleting" ng-click="delete(model.id)" class="btn btn-link btn-sm" type="button"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
-
+                                            <div class="btn-group" role="group" ng-hide="model.$deleting">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i> Opciones
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a title="Editar Entrevista {{model.models.name}} {{model.patient_user.last_name}}" alt="Editar Usuario {{model.patient_user.name}} {{model.patient_user.last_name}}"  ui-sref="root.psychoAssessment.edit({psychoAssId:model.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                    </li>
+                                                    <li>
+                                                        <a title="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" alt="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <p ng-show="model.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
@@ -49,7 +59,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1">
+                    <uib-tab index="1" select="goCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.psychoAssessment.create" title="Crear Entrevista de Psicológica"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
     })
 
-    app.register.controller('PathologyIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PathologyService', '$rootScope', function($scope, apiResource, $stateParams, DTOptionsBuilder, PathologyService, $rootScope) {
+    app.register.controller('PathologyIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PathologyService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, PathologyService, $rootScope, $state) {
 
         $scope.pathologies = [];
         $scope.loading = true;
@@ -65,6 +65,10 @@ define(['app'], function(app) {
                     }
                 })
             });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.pathology.create')
         }
 
     }]);
@@ -133,6 +137,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.pathology')
         }
 
     }]);
@@ -208,6 +216,10 @@ define(['app'], function(app) {
 
         $scope.saveAndClose = function(form) {
             $scope.save(form, true);
+        };
+
+        $scope.goToIndex = function() {
+            $state.go('root.pathology')
         }
 
     }]);
