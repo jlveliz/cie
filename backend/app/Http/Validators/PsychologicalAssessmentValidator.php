@@ -33,10 +33,10 @@ class PsychologicalAssessmentValidator extends Validator implements ValidatorInt
 			'patient_user_id' =>'required|exists:patient_user,id',
 			'call_user_in_home' => 'required',
 			'date_eval' => 'required',
-			'reason_consultation' => 'required',
-			'background' => 'required',
-			'current_situation' => 'required',
-			'description_beneficiary' => 'required'
+			// 'reason_consultation' => 'required',
+			// 'background' => 'required',
+			// 'current_situation' => 'required',
+			// 'description_beneficiary' => 'required'
 		];
 	}
 

@@ -16,6 +16,10 @@ class PsychologicalAssessment extends BaseModel
 
     protected $primaryKey = "id";
 
+    protected $no_uppercase = [
+        'physical_level_is_left_right_both_hand'
+    ];
+
     protected $casts = [
         'patient_user_id' => 'int',
         'father_state_civil_id'  => 'int',
@@ -51,6 +55,7 @@ class PsychologicalAssessment extends BaseModel
         'mother_age',
         'mother_state_civil_id',
         'mother_schooling',
+        'family_history_observation',
         'reason_consultation',
         'background',
         'current_situation',
@@ -77,8 +82,9 @@ class PsychologicalAssessment extends BaseModel
         'physical_level_personal_appearance',
         'physical_level_inadequate_postures',
         'physical_level_physical_malformations',
-        'physical_level_is_left_hand',
-        'physical_level_is_right_hand',
+        'physical_level_is_left_right_both_hand',
+        // 'physical_level_is_right_hand',
+        'physical_level_is_not_defined',
         'physical_level_observation',
         'cunductual_level_time_sleep_who_sleep',
         'cunductual_needs_someone_what',

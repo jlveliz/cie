@@ -207,7 +207,8 @@ define(['app', 'moment'], (app, moment) => {
             date_eval: new Date(),
             patientUser: {
                 genre: ''
-            }
+            },
+            physical_level_is_left_right_both_hand: "derecho"
         });
 
         $scope.loading = false;
@@ -294,6 +295,7 @@ define(['app', 'moment'], (app, moment) => {
 
             if (saveForm.validate()) {
                 $scope.saving = true;
+                console.log($scope.model)
                 PsyChoService.save($scope.model).then(successCallback, failCallback);
             }
         };
