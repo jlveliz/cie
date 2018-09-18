@@ -2,7 +2,7 @@
 
 namespace Cie\Listeners;
 
-use Illuminate\Auth\Events\Login;
+use  Cie\Events\PatientUserFormCreated;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Carbon\Carbon;
@@ -22,10 +22,10 @@ class RegisterLastLogin
     /**
      * Handle the event.
      *
-     * @param  Login  $event
+     * @param  PatientUserFormCreated  $event
      * @return void
      */
-    public function handle(Login $event)
+    public function handle(PatientUserFormCreated $event)
     {
         $event->user->last_login = new Carbon();
         $event->user->update();

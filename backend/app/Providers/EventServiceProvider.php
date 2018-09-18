@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Illuminate\Auth\Events\Login' => [
             'Cie\Listeners\RegisterLastLogin'
+        ],
+        'Cie\Events\PatientUserFormCreated' => [
+            'Cie\Listener\RegisterLastLogin'
         ]
     ];
 

@@ -6,6 +6,7 @@ use Cie\RepositoryInterface\PatientUserRepositoryInterface;
 use Cie\Http\Validators\PatientUserValidator;
 use Cie\Exceptions\PatientUserException;
 use Illuminate\Http\Request;
+use Cie\Events\PatientUserFormCreated;
 use PDF;
 
 
@@ -69,6 +70,7 @@ class PatientUserController extends Controller
 
             $user = $this->pUserRepo->save($data)->toJson();
             $user = $this->encodeResponse($user);
+            event(new PatientUserFormCreated($user));
             return response()->json($user,200);
         } catch (PatientUserException $e) {
             return response()->json($e->getMessage(),$e->getCode());

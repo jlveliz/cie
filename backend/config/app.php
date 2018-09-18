@@ -174,7 +174,7 @@ return [
          */
         Cie\Providers\AppServiceProvider::class,
         Cie\Providers\AuthServiceProvider::class,
-        // Cie\Providers\BroadcastServiceProvider::class,
+        Cie\Providers\BroadcastServiceProvider::class,
         Cie\Providers\EventServiceProvider::class,
         Cie\Providers\ExtendValidatorServiceProvider::class,
         Cie\Providers\RouteServiceProvider::class,
