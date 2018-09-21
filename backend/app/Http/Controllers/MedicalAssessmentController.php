@@ -18,6 +18,7 @@ class MedicalAssessmentController extends Controller
     public function __construct(MedicalAssessmentRepositoryInterface $psAsse, Request $request)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('checkrole:admin,dr-val-medica,dirTerapia');
         parent::__construct($request);
         $this->psAsse = $psAsse;
     }

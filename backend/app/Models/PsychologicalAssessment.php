@@ -3,7 +3,7 @@
 namespace Cie\Models;
 
 use  Illuminate\Database\Eloquent\SoftDeletes;
-// use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class PsychologicalAssessment extends BaseModel
 {
@@ -106,11 +106,20 @@ class PsychologicalAssessment extends BaseModel
         'medical_what_is_the_big_problem',
         'medical_observation',
         'demand_establishment',
-        'behaivor_child_interview'
+        'behaivor_child_interview',
+        'created_user_id'
     ];
 
     public function patientUser()
     {
         return $this->belongsTo('Cie\Models\PatientUser','patient_user_id');
+    }
+
+    public static function boot () {
+        parent::boot();
+
+        static::creating(function($form){
+            $form->created_user_id = Auth::user()->id;
+        });
     }
 }

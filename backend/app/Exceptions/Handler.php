@@ -106,6 +106,7 @@ class Handler extends ExceptionHandler
                 'title' => $data['title'],
                 'detail' => $data['detail'],
             ];
+
             $this->report($e);
             $data = $this->transformArrayToJson($data)->encodeResponse($data);
             return response()->json($data, $status);        

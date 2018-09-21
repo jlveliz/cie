@@ -338,6 +338,8 @@ define([
                                     copy = _this.create(copy);
                                     copy.$original = result;
                                     deferred.resolve(copy);
+                                },function(error) {
+                                    deferred.reject(error)
                                 })
                                 return deferred.promise;
                             },
@@ -509,6 +511,8 @@ define([
                 $auth.logout().then(function() {
                     localStorage.removeItem('user');
                     $rootScope.currentUser = null;
+                    //remove all cache
+                    apiResource.clearAllCache();
                     deferred.resolve();
                 });
                 return deferred.promise;
@@ -2506,7 +2510,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia', 'doc-val-psic'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2526,7 +2530,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia', 'doc-val-psic'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2545,7 +2549,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia', 'doc-val-psic'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2632,7 +2636,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia','dr-val-medica'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2653,7 +2657,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia','dr-val-medica'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2672,7 +2676,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia','dr-val-medica'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },

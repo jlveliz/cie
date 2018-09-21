@@ -363,6 +363,10 @@ define(['app', 'moment'], (app, moment) => {
             $scope.model.father_name = PsyChoService.formatPatientUser('father', $scope.model.patientUser);
             $scope.model.father_age = $scope.model.patientUser.has_father ? $scope.model.patientUser.father.age : '';
             $scope.loading = false;
+        }, function(error) {
+            if (error.status == 404) {
+                $state.go('root.psychoAssessment');
+            }
         });
 
 

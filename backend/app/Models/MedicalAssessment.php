@@ -285,7 +285,8 @@ class MedicalAssessment extends BaseModel
 		'impretion_diagnostic',
 		'definitive_diagnostic',
 		'post_natal_thick_motor',
-		'post_natal_fine_motor'
+		'post_natal_fine_motor',
+		'created_user_id'
     ];
 
     protected $casts = [

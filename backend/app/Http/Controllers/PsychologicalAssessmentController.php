@@ -18,6 +18,7 @@ class PsychologicalAssessmentController extends Controller
     public function __construct(PsychologicalAssessmentRepositoryInterface $psAsse, Request $request)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('checkrole:admin,doc-val-psic,dirTerapia');
         parent::__construct($request);
         $this->psAsse = $psAsse;
     }
@@ -47,7 +48,6 @@ class PsychologicalAssessmentController extends Controller
             $psAsse = $this->encodeResponse($psAsse);
             return response()->json($psAsse,200);
         } catch (PsychologicalAssessmentException $e) {
-            dd($e);
             $error = $this->encodeResponse($e->getMessage());
             return response()->json($error,$e->getCode());
         }
@@ -67,7 +67,8 @@ class PsychologicalAssessmentController extends Controller
             $psAsse = $this->encodeResponse($psAsse);
             return response()->json($psAsse,200);
         } catch (PsychologicalAssessmentException $e) {
-            $error = $this->encodeResponse($e->getMessage());
+
+            $error = $this->encodeResponse(json_encode(['error'=>$e->getMessage()]));
             return response()->json($error,$e->getCode());
         }
     }

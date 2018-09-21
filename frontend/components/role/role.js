@@ -80,6 +80,7 @@ define(['app'], function(app) {
         });
 
         apiResource.resource('roles').queryCopy().then(function(results) {
+
             $scope.loading = false;
             $scope.roles = results;
             $scope.messages = RoleService.messageFlag;
@@ -144,6 +145,7 @@ define(['app'], function(app) {
 
         deps.then(function() {
             $scope.modules = RoleService.matchPermissions($scope.modules, listPermissions);
+
             $scope.model = apiResource.resource('roles').create({ is_default: '0', permissions: [] });
             $scope.loading = false;
         });
@@ -199,11 +201,11 @@ define(['app'], function(app) {
         }
 
         $scope.filterTypePermissionMenu = function(value) {
-            return RoleService.filterTypePermission(value, 'menu');
+            return RoleService.filterTypePermission(value, 'MENU');
         }
 
         $scope.filterTypePermissionOption = function(value) {
-            return RoleService.filterTypePermission(value, 'opcion');
+            return RoleService.filterTypePermission(value, 'OPCION');
         }
 
         $scope.save = function(form, returnIndex) {
@@ -361,11 +363,11 @@ define(['app'], function(app) {
         }
 
         $scope.filterTypePermissionMenu = function(value) {
-            return RoleService.filterTypePermission(value, 'menu');
+            return RoleService.filterTypePermission(value, 'MENU');
         }
 
         $scope.filterTypePermissionOption = function(value) {
-            return RoleService.filterTypePermission(value, 'opcion');
+            return RoleService.filterTypePermission(value, 'OPCION');
         }
 
 

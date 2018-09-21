@@ -6,6 +6,7 @@ use Cie\Exceptions\PsychologicalAssessmentException;
 use Cie\Models\PsychologicalAssessment;
 use Cie\Models\StatePatientUser;
 use Cie\Models\PatientUser;
+use Auth;
 
 /**
 * 
@@ -13,7 +14,9 @@ use Cie\Models\PatientUser;
 class PsychologicalAssessmentRepository implements PsychologicalAssessmentRepositoryInterface
 {
 	
-	
+
+
+
 	public function paginate()
 	{
 		return PsychologicalAssessment::paginate();
@@ -24,8 +27,10 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 		if ($params) {
 			if(is_array($params)) {
 				if(array_key_exists('num_identification', $params) && isset($params['num_identification'])) {
-					$paUsers = $this->find($params);
+				
 					//USADO PARA LA BUSQUEDA DE USUARIOS EN EVALUACIONES PSICOLOGICA Y MÉDICA
+					$paUsers = $this->find($params);
+					
 				} elseif(array_key_exists('name', $params) && isset($params['name'])) {
 					$paUsers = PatientUser::leftJoin('psychological_assessment',function($join){
 						$join->on('patient_user.id','=','psychological_assessment.patient_user_id')->whereRaw('psychological_assessment.deleted_at is null');
@@ -39,7 +44,15 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 				}
 			}
 		} else {
-			$paUsers = PsychologicalAssessment::get();
+
+			//load Psychologicalassessment
+			if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) {
+				$paUsers = PsychologicalAssessment::get();
+			} elseif(Auth::user()->hasRole('doc-val-psic')) {
+				$paUsers = PsychologicalAssessment::where('created_user_id',Auth::user()->id)->get();
+			}
+
+
 			if (!$paUsers) {
 				throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 			}
@@ -51,23 +64,48 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 
 	public function find($field)
 	{
+		
+
 		if (is_array($field)) {
 			if (array_key_exists('patient_user_id', $field)) { 
-				$paUser = PsychologicalAssessment::where('patient_user_id',$field['patient_user_id'])->first();
+
+				if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) 
+				{
+					$paUser = PsychologicalAssessment::where('patient_user_id',$field['patient_user_id'])->first();
+					
+				} 
+				elseif (Auth::user()->hasRole('doc-val-psic')) 
+				{
+					$paUser = PsychologicalAssessment::where('patient_user_id',$field['patient_user_id'])->where('created_user_id',Auth::user()->id)->first();
+				}
+		
 			}elseif (array_key_exists('num_identification', $field)) {
+
 				//USADO PARA BUSCAR UNA EVALUACIÓN PSICOLÓGICA POR CÉDULA EN EL MODAL DE CREACIÓN Y EVALUACIÓN PSICOLOGICA
 				$paUser = PatientUser::leftJoin('psychological_assessment',function($join){
 						$join->on('patient_user.id','=','psychological_assessment.patient_user_id')->whereRaw('psychological_assessment.deleted_at is null');
 					})->where('person.num_identification',$field['num_identification'])->whereNull('psychological_assessment.id')->first();
-				// dd($paUser);
+				
 				if(!$paUser)
 					throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista psicológica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+
 			} else {
+
 				throw new PsychologicalAssessmentException(['title'=>'No se puede buscar la entrevista psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			$paUser = PsychologicalAssessment::find($field);
+			
+			if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) 
+			{
+				$paUser = PsychologicalAssessment::find($field);
+			} 
+			elseif (Auth::user()->hasRole('doc-val-psic')) 
+			{
+				$paUser = PsychologicalAssessment::where('created_user_id',Auth::user()->id)->where('id',$field)->first();
+			}
+
+
 		} else {
 			throw new PsychologicalAssessmentException(['title'=>'No se puede buscar la Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
