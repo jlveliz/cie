@@ -51,14 +51,14 @@ class HelperController extends Controller
 
 	private function verifyUnique($table,$columnKey,$columnValue, $key = null) {
 		
-		$exist = DB::table($table)->where($columnKey,$columnValue)->where('id','<>',$key)->first();
+		$exist = DB::table($table)->where($columnKey,$columnValue)->where('id','<>',$key)->whereNull('deleted_at')->first();
 		if($exist) return true;
 		return false;
 	}
 
 	public function verifyExist($tableName,$value)
 	{
-		$exist = DB::table($tableName)->where('id',$value)->first();
+		$exist = DB::table($tableName)->where('id',$value)->whereNull('deleted_at')->first();
 		return $exist;
 	}
 
@@ -66,8 +66,13 @@ class HelperController extends Controller
 
 	public function verifyUniquePatient($columnName,$value, $key = null)
 	{
-		$exist = DB::table('patient_user')->join('person','person.id','=','patient_user.person_id')->whereRaw("person.".$columnName.'='.$value)
-		->where('patient_user.id','<>',$key)->first();
+		$exist = DB::table('patient_user')->join('person',function($query){
+			
+			$query->where('person.id','=','patient_user.person_id')
+			->whereNull('person.deleted_at');
+
+		})->whereRaw("person.".$columnName.'='.$value)
+		->where('patient_user.id','<>',$key)->whereNull('patient_user.deleted_at')->first();
 		if($exist) return true;
 		return false;
 	}

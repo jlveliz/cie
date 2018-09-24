@@ -17,7 +17,7 @@ class ParishController extends Controller
     {
         parent::__construct($request);
         $this->middleware('jwt.auth');
-        $this->middleware('checkrole:admin');
+        $this->middleware('checkrole:admin',['except'=>['index']]);
         $this->parishRepo = $parishRepo;
     }
     /**

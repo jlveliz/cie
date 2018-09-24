@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
             'Cie\Listeners\RegisterLastLogin'
         ],
         'Cie\Events\PatientUserFormCreated' => [
-            'Cie\Listener\NotificatePatientUserEntered'
+            'Cie\Listeners\NotificatePatientUserEntered'
         ]
     ];
 

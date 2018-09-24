@@ -28,6 +28,11 @@ class Role extends BaseModel
     	return $this->belongsToMany('Cie\Models\Permission','role_permission','role_id','permission_id');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany('Cie\Models\User','user_role','role_id','user_id');
+    }
+
     public function getIsDefaultAttribute($value)
     {
         return (string)$value;

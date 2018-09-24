@@ -19,6 +19,7 @@ class PatientUserController extends Controller
     public function __construct(PatientUserRepositoryInterface $pUserRepo, Request $request)
     {
         $this->middleware('jwt.auth',['except'=>['import']]);
+        // $this->middleware('checkrole:recepcion',['only'=>'store']);
         $this->middleware('checkrole:admin,dirTerapia,recepcion');
         parent::__construct($request);
         $this->pUserRepo = $pUserRepo;

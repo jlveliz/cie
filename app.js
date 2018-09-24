@@ -2239,7 +2239,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia'],
+                    only: ['admin', 'dirTerapia','recepcion'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
