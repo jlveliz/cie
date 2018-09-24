@@ -15,8 +15,9 @@ class PermissionController extends Controller
 
     public function __construct(PermissionRepositoryInterface $permissionRepo, Request $request)
     {
-        parent::__construct($request);
         $this->middleware('jwt.auth',['except'=>['index']]);
+        $this->middleware('checkrole:admin',['except'=>['index']]);
+        parent::__construct($request);
         $this->permissionRepo = $permissionRepo;
     }
     /**

@@ -15,8 +15,9 @@ class RoleController extends Controller
 
     public function __construct(RoleRepositoryInterface $roleRepo, Request $request)
     {
-        parent::__construct($request);
         $this->middleware('jwt.auth',['except'=>['index']]);
+        $this->middleware('checkrole:admin',['except'=>['index']]);
+        parent::__construct($request);
         $this->roleRepo = $roleRepo;
     }
     /**

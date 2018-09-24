@@ -17,6 +17,7 @@ class GradeOfDisabilityController extends Controller
     {
         parent::__construct($request);
         $this->middleware('jwt.auth');
+        $this->middleware('checkrole:admin');
         $this->grade = $grade;
     }
     /**

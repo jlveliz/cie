@@ -16,6 +16,7 @@ class UserController extends Controller
     public function __construct(UserRepositoryInterface $userRepo, Request $request)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('checkrole:admin');
         parent::__construct($request);
         $this->userRepo = $userRepo;
     }

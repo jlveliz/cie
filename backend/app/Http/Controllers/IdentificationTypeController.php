@@ -17,6 +17,7 @@ class IdentificationTypeController extends Controller
     {
         parent::__construct($request);
         $this->middleware('jwt.auth');
+        $this->middleware('checkrole:admin');
         $this->identifyTypeRepo = $identifyTypeRepo;
     }
     /**

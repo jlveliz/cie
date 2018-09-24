@@ -7,6 +7,8 @@ use Cie\Exceptions\MedicalAssessmentException;
 use Cie\Models\MedicalAssessment;
 use Cie\Models\PatientUser;
 use Cie\Models\StatePatientUser;
+use Auth;
+
 /**
   * 
   */
@@ -39,7 +41,15 @@ use Cie\Models\StatePatientUser;
 				}
 			}
 		} else {
-			$paUsers = MedicalAssessment::get();
+
+			//load all MedicalAssessment
+			//load Psychologicalassessment
+			if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) { 
+				$paUsers = MedicalAssessment::get();
+			} elseif(Auth::user()->hasRole('dr-val-medica')) {
+				$paUsers = MedicalAssessment::where('created_user_id',Auth::user()->id)->get();
+
+			}
 			if (!$paUsers) {
 				throw new MedicalAssessmentException(['title'=>'No se han encontrado el listado de Entrevistas Médicas','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 			}
@@ -51,7 +61,17 @@ use Cie\Models\StatePatientUser;
 	{
 		if (is_array($field)) {
 			if (array_key_exists('patient_user_id', $field)) { 
-				$paUser = MedicalAssessment::where('patient_user_id',$field['patient_user_id'])->first();
+
+				if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) {
+
+					$paUser = MedicalAssessment::where('patient_user_id',$field['patient_user_id'])->first();
+
+				} elseif (Auth::user()->hasRole('dr-val-medica')) {
+
+					$paUser = MedicalAssessment::where('patient_user_id',$field['patient_user_id'])->where('created_user_id',Auth::user()->id)->first();
+
+				}
+
 			}elseif (array_key_exists('num_identification', $field)) {
 				//USADO PARA BUSCAR UNA EVALUACIÓN PSICOLÓGICA POR CÉDULA EN EL MODAL DE CREACIÓN Y EVALUACIÓN PSICOLOGICA
 				$paUser = PatientUser::leftJoin('medical_assessment',function($join){
@@ -65,7 +85,15 @@ use Cie\Models\StatePatientUser;
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			$paUser = MedicalAssessment::find($field);
+			if (Auth::user()->hasAnyRole(['admin','dirTerapia']))  {
+
+				$paUser = MedicalAssessment::find($field);
+				
+			} elseif (Auth::user()->hasRole('dr-val-medica')) {
+				dd();
+				$paUser = MedicalAssessment::where('id',$field)->where('created_user_id',Auth::user()->id)->first();
+			}
+
 		} else {
 			throw new MedicalAssessmentException(['title'=>'No se puede buscar la Asistencia médica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}

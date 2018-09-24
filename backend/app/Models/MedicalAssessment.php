@@ -2,6 +2,8 @@
 
 namespace Cie\Models;
 
+use  Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 
 /**
  * 
@@ -9,6 +11,9 @@ namespace Cie\Models;
 class MedicalAssessment extends BaseModel
 {
 	
+	
+	use SoftDeletes;
+
 	protected $table = "medical_assessment";
 
 	protected $primaryKey = "id";
@@ -452,5 +457,13 @@ class MedicalAssessment extends BaseModel
      public function patientUser()
     {
         return $this->belongsTo('Cie\Models\PatientUser','patient_user_id');
+    }
+
+    public static function boot () {
+        parent::boot();
+
+        static::creating(function($form){
+            $form->created_user_id = Auth::user()->id;
+        });
     }
 }

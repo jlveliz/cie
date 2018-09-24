@@ -15,8 +15,9 @@ class ModuleController extends Controller
 
     public function __construct(ModuleRepositoryInterface $moduleRepo, Request $request)
     {
-        parent::__construct($request);
         $this->middleware('jwt.auth');
+        $this->middleware('checkrole:admin');
+        parent::__construct($request);
         $this->moduleRepo = $moduleRepo;
     }
     /**

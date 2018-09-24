@@ -43,8 +43,10 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 					if (!count($paUsers)) throw new PatientUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda, Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 				}
 			}
-		} else {
+		} elseif (Auth::user()->hasAnyRole(['admin','dirTerapia','recepcion'])) {
+
 			$paUsers = PatientUser::get();
+			
 		}
 		
 		if (!$paUsers) {
