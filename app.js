@@ -1508,8 +1508,11 @@ define([
                 id = params[1];
             }
 
+            let urlGet = envServiceProvider.read('api') + 'validator/uniquePatient?columnname=' + params[0] + '&value=' + value;
+            if (id) urlGet+= '&id=' + id;
+
             $.ajax({
-                url: envServiceProvider.read('api') + 'validator/uniquePatient?columnname=' + params[0] + '&value=' + value + '&id=' + id,
+                url: urlGet,
                 type: 'GET',
                 async: false,
                 success: function(result) {

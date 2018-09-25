@@ -281,11 +281,6 @@ class PatientUser extends BaseModel
 
     }
 
-    public function setDateAdmissionAttribute($value)
-    {
-        $this->attributes['date_admission'] = date('Y-m-d',strtotime($value));
-    }
-
 
 
 

@@ -64,15 +64,19 @@ class HelperController extends Controller
 
 	
 
-	public function verifyUniquePatient($columnName,$value, $key = null)
+	public function verifyUniquePatient($columnName, $value, $key = null)
 	{
-		$exist = DB::table('patient_user')->join('person',function($query){
-			
-			$query->where('person.id','=','patient_user.person_id')
-			->whereNull('person.deleted_at');
+		$exist = DB::table('person')->join('patient_user',function($join){
+			$join->on('person.id','=','patient_user.person_id')
+			      ->whereNull('patient_user.deleted_at');
+		})->where($columnName,$value)->whereNull('person.deleted_at');
 
-		})->whereRaw("person.".$columnName.'='.$value)
-		->where('patient_user.id','<>',$key)->whereNull('patient_user.deleted_at')->first();
+		//VERIFICA SI SE ESTÁ EDITANDO EL REGISTRO
+		if ($key) {
+			$exist->where('patient_user.id','<>',$key);
+		}
+
+		$exist = $exist->first();
 		if($exist) return true;
 		return false;
 	}

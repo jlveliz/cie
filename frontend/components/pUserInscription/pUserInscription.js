@@ -1681,6 +1681,8 @@ define(['app', 'moment'], function(app, moment) {
             if (saveForm.validate()) {
                 $scope.saving = true;
                 // $scope.changeRepresentant();
+                $scope.model.date_admission = moment($scope.model.date_admission).format('YYYY-MM-DD');
+                $scope.model.date_birth = moment($scope.model.date_birth).format('YYYY-MM-DD');
                 PUserInscriptionService.save($scope.model).then(successCallback, failCallback);
             }
         };
@@ -1760,7 +1762,6 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.user_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.user_identification_card : null;
                 $scope.model.conadis_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.conadis_identification_card : null;
                 $scope.model.specialist_certificate = $scope.model.attached ? envService.read('public') + $scope.model.attached.specialist_certificate : null;
-
                 $scope.model.date_birth = new Date($scope.model.date_birth);
                 $scope.model.date_admission = new Date($scope.model.date_admission);
                 if ($scope.model.mother)
@@ -2373,6 +2374,7 @@ define(['app', 'moment'], function(app, moment) {
             }
 
             var failCallback = function(reason) {
+                debugger
                 $scope.saving = false
                 $scope.existError = true;
                 $scope.messages.title = reason.data.title;
@@ -2387,6 +2389,8 @@ define(['app', 'moment'], function(app, moment) {
 
             if (saveForm.validate()) {
                 $scope.saving = true;
+                $scope.model.date_admission = moment($scope.model.date_admission).format('YYYY-MM-DD');
+                $scope.model.date_birth = moment($scope.model.date_birth).format('YYYY-MM-DD');
                 PUserInscriptionService.save($scope.model).then(successCallback, failCallback);
             }
         };
