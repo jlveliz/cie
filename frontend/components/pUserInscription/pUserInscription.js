@@ -891,7 +891,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies', '$http', '$q', '$state',function($scope, apiResource, $stateParams, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies, $http, $q, $state) {
+    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies', '$http', '$q', '$state','authFactory',function($scope, apiResource, $stateParams, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies, $http, $q, $state, authFactory) {
 
         $scope.inscriptions = [];
         $scope.loading = true;
@@ -1036,6 +1036,16 @@ define(['app', 'moment'], function(app, moment) {
         $scope.goCreate = function() {
             $state.go('root.inscription.create');
         };
+
+        $scope.hasPermission = (permissionKey) =>{
+            debugger;
+            var hasAccess = false;
+            if (authFactory.hasPermission(permissionKey)) {
+                hasAccess = true;
+            }
+            
+            return hasAccess;
+        }
     }]);
 
     app.register.controller('pUserInscriptionCreateCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state) {

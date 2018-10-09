@@ -57,17 +57,17 @@
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li>
+                                                    <li ng-if="hasPermission('ver_ficha_inscripcion')">
                                                         <a title="Ver Usuario {{inscription.name}} {{inscription.last_name}}" alt="Ver Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.show({pInsId:inscription.id})"> <i class="fa fa-eye"></i> Ver</a>
                                                     </li>
-                                                    <li>
+                                                    <li ng-if="hasPermission('editar_ficha_inscripcion')">
                                                         <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.edit({pInsId:inscription.id})" permission permission-only="['admin','dirTerapia']"> <i class="fa fa-pencil"></i> Editar</a>
                                                     </li>
-                                                    <li>
+                                                    <li ng-if="hasPermission('descargar_ficha_inscripcion')">
                                                         <a title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}"   ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</a>
                                                     </li>
-                                                    <li>
-                                                        <a permission  permission-only="['admin','dirTerapia']" title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}"  ng-click="delete(inscription.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                    <li ng-if="hasPermission('eliminar_ficha_inscripcion')">
+                                                        <a title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}"  ng-click="delete(inscription.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1" permission  permission-only="['admin','dirTerapia','recepcion']" select="goCreate()">
+                    <uib-tab index="1" ng-if="hasPermission('crear_ficha_inscripcion')" select="goCreate()">
                         <uib-tab-heading>
                             <a ui-sref="root.inscription.create()"  title="Crear Ficha de Inscripción"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>

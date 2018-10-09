@@ -20,7 +20,7 @@ class PatientUserController extends Controller
     {
         $this->middleware('jwt.auth',['except'=>['import']]);
         // $this->middleware('checkrole:recepcion',['only'=>'store']);
-        $this->middleware('checkrole:admin,dirTerapia,recepcion');
+        $this->middleware('checkrole:admin,dirTerapia,recepcion,jefapsi,director',['except'=>'import']);
         parent::__construct($request);
         $this->pUserRepo = $pUserRepo;
     }

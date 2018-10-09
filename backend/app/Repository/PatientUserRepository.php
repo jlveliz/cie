@@ -506,7 +506,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			return $value;
 		}
 
-		Excel::load(public_path()."/tester.xlsx",function($payload){
+		Excel::load("public/tester.xlsx",function($payload){
 			$results = $payload->get();
             foreach ($results as $person) {
             	$dataToSave = [
@@ -515,15 +515,15 @@ class PatientUserRepository implements PatientUserRepositoryInterface
             		'date_birth' => $person->fecha_nacimiento,
         			'age' => $person->edad,
                     'genre' => $person->sexo,
-            		'num_identification'=> $person->cedula,
+            		'num_identification'=> $person->identificacion,
             		'schooling'=> getSchooling($person->tiene_escolarizacion),
             		'schooling_type' => getSchoolingType($person->tipo_escolarizacion),
             		'schooling_name' => $person->institucion_escolarizacion,
         			'province_id' => Province::select('id')->where('name',$person->provincia)->first() ? Province::select('id')->where('name',$person->provincia)->first()->id : null,
         			'city_id'=> City::select('id')->where('name',$person->canton)->first() ? City::select('id')->where('name',$person->canton)->first()->id : null, 
         			'parish_id'=> Parish::select('id')->where('name',$person->parroquia)->first()? Parish::select('id')->where('name',$person->parroquia)->first()->id : null,
-        			'address' => $person->direccion,
-        			'date_admission' => $person->fecha_ingreso,
+        			'address' => $person->direccion_domiciliaria,
+        			'date_admission' => $person->fecha_ingreo,
         			// 'state' => $person->estado == 'Activo' ? 1 : 0,
         			'state_id' => 4,
         			'physical_disability' => $person->tipo_discapacidad == 'Física' ? ltrim($person->porcentaje,"0.") : 0,
@@ -532,7 +532,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
         			'visual_disability' => $person->tipo_discapacidad == 'Visual' ? ltrim($person->porcentaje ,"0.") : 0,
         			'psychosocial_disability' => $person->tipo_discapacidad == 'Psicosocial' ? ltrim($person->porcentaje ,"0.") : 0,
         			'language_disability' => $person->tipo_discapacidad == 'Lenguaje' ? ltrim($person->porcentaje ,"0.") : 0,
-        			'grade_of_disability_id' => getDisabilityGrade($person->grado),
+        			'grade_of_disability_id' => getDisabilityGrade($person->grado_discapacidad),
         			'conadis_id' => $person->conadis_carnet,
         			'other_diagnostic' => $person->diagnostico_secundario .' '. $person->otro_diagnostico,
         			'entity_send_diagnostic' => $person->entidad_emitio_diagnostico,
@@ -546,6 +546,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
             	];
             	// dd($dataToSave);
             	if ($pUser = PatientUser::where('person.num_identification',$dataToSave['num_identification'])->first()) {
+            		// dd($dataToSave,$pUser);
             		$this->edit($pUser->id,$dataToSave);
             	} else {
             		$this->save($dataToSave);

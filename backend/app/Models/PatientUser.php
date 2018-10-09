@@ -76,8 +76,8 @@ class PatientUser extends BaseModel
 
   
     protected $casts = [
-        'date_birth' => 'date',
-        'date_admission' => 'date',
+        // 'date_birth' => 'date',
+        // 'date_admission' => 'date',
         'person_id' => 'int',
         'physical_disability' => 'int',
         'visual_disability' => 'int',

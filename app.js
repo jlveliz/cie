@@ -548,13 +548,11 @@ define([
                 return deferred.promise;
             },
             hasPermission: function(key) {
-
-                var deferred = $q.defer();
                 if (this.authenticated()) {
+                    
                     var roles = $rootScope.currentUser.roles;
-                    var permUsers = $rootScope.currentUser.permissions;
-
-                    var permissions = [];
+                    
+                    let permissions = [];
 
                     angular.forEach(roles, function(role) {
                         angular.forEach(role.permissions, function(perm) {
@@ -562,31 +560,29 @@ define([
                         })
                     });
 
-                    angular.forEach(permUsers, function(perm) {
-                        permissions.push(perm.code);
-                    })
-
                     var found = _.findIndex(permissions, function(el) {
                         if (el == key) return true;
                     });
 
                     if (found > -1)
-                        deferred.resolve()
+                        return true;
                     else
-                        deferred.reject();
-
-                    return deferred.promise;
+                        return false;
                 }
             },
             hasRole: function(keyRol) {
-                var deferred = $q.defer();
                 if (this.authenticated()) {
-                    var rolesUser = $rootScope.currentUser.roles;
-                    var found = _.findIndex(rolesUser, function(el) {
+                    let rolesUser = $rootScope.currentUser.roles;
+                    let found = _.findIndex(rolesUser, function(el) {
                         if (el.code == keyRol) return true;
                     });
-                    found > -1 ? deferred.resolve() : deferred.reject();
-                    return deferred.promise;
+                    
+                    if(found > -1) {
+                      return true;  
+                    } 
+                    return false;
+                     
+                    // return deferred.promise;
 
                 }
             }
@@ -2222,7 +2218,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia', 'recepcion'],
+                    only: ['admin', 'director', 'dirTerapia'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2242,7 +2238,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia','recepcion'],
+                    only: ['admin', 'dirTerapia','crear_ficha_inscripcion','jefapsi'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2450,7 +2446,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin'],
+                    only: ['admin',],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
