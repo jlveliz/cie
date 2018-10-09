@@ -228,7 +228,7 @@ define([
                                 throw "Recurso " + nameResource + " no existe";
                             },
                             paginate: function(pageNum) {
-                                pageNum =  pageNum || 1;
+                                pageNum = pageNum || 1;
                                 if (!names[nameResource]) {
                                     throw "Recurso " + nameResource + " no existe";
                                 }
@@ -338,7 +338,7 @@ define([
                                     copy = _this.create(copy);
                                     copy.$original = result;
                                     deferred.resolve(copy);
-                                },function(error) {
+                                }, function(error) {
                                     deferred.reject(error)
                                 })
                                 return deferred.promise;
@@ -549,9 +549,9 @@ define([
             },
             hasPermission: function(key) {
                 if (this.authenticated()) {
-                    
+
                     var roles = $rootScope.currentUser.roles;
-                    
+
                     let permissions = [];
 
                     angular.forEach(roles, function(role) {
@@ -576,12 +576,12 @@ define([
                     let found = _.findIndex(rolesUser, function(el) {
                         if (el.code == keyRol) return true;
                     });
-                    
-                    if(found > -1) {
-                      return true;  
-                    } 
+
+                    if (found > -1) {
+                        return true;
+                    }
                     return false;
-                     
+
                     // return deferred.promise;
 
                 }
@@ -1206,11 +1206,12 @@ define([
                     var token = 'token=' + authFactory.getToken();
 
                     switch ($scope.type) {
-                        default: $timeout(function() {
-                            $scope.content = $sce.trustAsResourceUrl(content + '?' + token);
-                            $scope.loading = false;
-                        }, 1000)
-                        break;
+                        default:
+                            $timeout(function() {
+                                $scope.content = $sce.trustAsResourceUrl(content + '?' + token);
+                                $scope.loading = false;
+                            }, 1000)
+                            break;
                     }
 
 
@@ -1505,7 +1506,7 @@ define([
             }
 
             let urlGet = envServiceProvider.read('api') + 'validator/uniquePatient?columnname=' + params[0] + '&value=' + value;
-            if (id) urlGet+= '&id=' + id;
+            if (id) urlGet += '&id=' + id;
 
             $.ajax({
                 url: urlGet,
@@ -2218,7 +2219,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'director', 'dirTerapia'],
+                    only: ['admin', 'director', 'dirTerapia', 'jefapsi', 'secretaria', 'asisjefatura', 'recepcion', 'medico', 'psicologia', 'tera-famil', 'tera-fisica', 'mecanoterapia', 'hidroterapia', 'psicopedagogia', 'equinoterapia', 'ocupacional', 'lenguaje', 'est-temprana', 'musicoterapia', 'bailoterapia', 'horticultura', 'arte', 'deportes'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2238,7 +2239,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia','crear_ficha_inscripcion','jefapsi'],
+                    only: ['admin', 'dirTerapia', 'crear_ficha_inscripcion', 'jefapsi'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2446,7 +2447,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin',],
+                    only: ['admin', ],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2509,7 +2510,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia', 'doc-val-psic'],
+                    only: ['admin', 'director', 'dirTerapia', 'jefapsi', 'secretaria', 'asisjefatura', 'recepcion', 'medico', 'psicologia', 'tera-famil', 'tera-fisica', 'mecanoterapia', 'hidroterapia', 'psicopedagogia', 'equinoterapia', 'ocupacional', 'lenguaje', 'est-temprana', 'musicoterapia', 'bailoterapia', 'horticultura', 'arte', 'deportes'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2635,7 +2636,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia','dr-val-medica'],
+                    only: ['admin', 'director', 'dirTerapia', 'jefapsi', 'secretaria', 'asisjefatura', 'recepcion', 'medico', 'psicologia', 'tera-famil', 'tera-fisica', 'mecanoterapia', 'hidroterapia', 'psicopedagogia', 'equinoterapia', 'ocupacional', 'lenguaje', 'est-temprana', 'musicoterapia', 'bailoterapia', 'horticultura', 'arte', 'deportes'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2656,7 +2657,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia','dr-val-medica'],
+                    only: ['admin', 'dirTerapia', 'dr-val-medica'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
@@ -2675,7 +2676,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia','dr-val-medica'],
+                    only: ['admin', 'dirTerapia', 'dr-val-medica'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
