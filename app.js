@@ -1068,6 +1068,35 @@ define([
         });
 
 
+        $rootScope.hasPermission = (permissionKey) =>{
+            
+            var hasAccess = false;
+            if (authFactory.hasPermission(permissionKey)) {
+                hasAccess = true;
+            }
+            
+            return hasAccess;
+        };
+
+        $rootScope.hasRole = (roleKey) => {
+            
+            var hasAccess = false;
+            if (angular.isArray(roleKey)) {
+                angular.forEach(roleKey, function(element) {
+                    if (authFactory.hasRole(permissionKey)) {
+                        hasAccess = true;
+                    }
+                });
+            } else {
+                if (authFactory.hasRole(roleKey)) {
+                    hasAccess = true;
+                }
+            }
+            
+            return hasAccess;
+        }
+
+
         /**
             ===========PERMISSIONS & ROLES ====================
         **/

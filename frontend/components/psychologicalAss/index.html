@@ -44,10 +44,10 @@
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li>
+                                                    <li ng-if="hasPermission('edi_ev_psicologica') || hasRole('admin')">
                                                         <a title="Editar Entrevista {{model.models.name}} {{model.patient_user.last_name}}" alt="Editar Usuario {{model.patient_user.name}} {{model.patient_user.last_name}}"  ui-sref="root.psychoAssessment.edit({psychoAssId:model.id})"> <i class="fa fa-pencil"></i> Editar</a>
                                                     </li>
-                                                    <li>
+                                                    <li ng-if="hasPermission('eli_eva_psicologica') || hasRole('admin')">
                                                         <a title="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" alt="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
                                                     </li>
                                                 </ul>
@@ -59,7 +59,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1" select="goCreate()">
+                    <uib-tab index="1" select="goCreate()" ng-if="hasPermission('cre_val_psicologica') || hasRole('admin')">
                         <uib-tab-heading>
                             <a ui-sref="root.psychoAssessment.create" title="Crear Entrevista de Psicológica"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>
