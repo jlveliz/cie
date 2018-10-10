@@ -1038,14 +1038,31 @@ define(['app', 'moment'], function(app, moment) {
         };
 
         $scope.hasPermission = (permissionKey) =>{
-            debugger;
             var hasAccess = false;
             if (authFactory.hasPermission(permissionKey)) {
                 hasAccess = true;
             }
             
             return hasAccess;
+        };
+
+        $scope.hasRole = (roleKey) => {
+            var hasAccess = false;
+            if (angular.isArray(roleKey)) {
+                angular.forEach(roleKey, function(element) {
+                    if (authFactory.hasRole(permissionKey)) {
+                        hasAccess = true;
+                    }
+                });
+            } else {
+                if (authFactory.hasRole(roleKey)) {
+                    hasAccess = true;
+                }
+            }
+            
+            return hasAccess;
         }
+
     }]);
 
     app.register.controller('pUserInscriptionCreateCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'PUserInscriptionService', '$q', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, PUserInscriptionService, $q, $state) {
