@@ -44,8 +44,8 @@
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a  ui-sref="root.medicalAssessment.edit({assesId:model.id})"> <i class="fa fa-pencil"></i> Editar</a></li>
-                                                    <li><a ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a></li>
+                                                    <li ng-if="hasPermission('edit_val_medica') || hasRole('admin')"><a  ui-sref="root.medicalAssessment.edit({assesId:model.id})"> <i class="fa fa-pencil"></i> Editar</a></li>
+                                                    <li ng-if="hasPermission('eli_val_medica') || hasRole('admin')"><a ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a></li>
                                                 </ul>
                                             </div>
                                             <p ng-show="model.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
@@ -55,7 +55,7 @@
                             </table>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1" select="goCreate()">
+                    <uib-tab index="1" select="goCreate()" ng-if="hasPermission('crear_val_medica') || hasRole('admin')">
                         <uib-tab-heading>
                             <a ui-sref="root.medicalAssessment.create" title="Crear Usuario"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
                         </uib-tab-heading>
