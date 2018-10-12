@@ -46,10 +46,10 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 		} else {
 
 			//load Psychologicalassessment
-			if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) {
-				$paUsers = PsychologicalAssessment::get();
-			} elseif(Auth::user()->hasRole('doc-val-psic')) {
+			if (Auth::user()->hasRole('doc-val-psic')) {
 				$paUsers = PsychologicalAssessment::where('created_user_id',Auth::user()->id)->get();
+			} else{
+				$paUsers = PsychologicalAssessment::get();
 			}
 
 

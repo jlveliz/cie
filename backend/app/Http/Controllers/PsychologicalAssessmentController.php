@@ -18,7 +18,7 @@ class PsychologicalAssessmentController extends Controller
     public function __construct(PsychologicalAssessmentRepositoryInterface $psAsse, Request $request)
     {
         $this->middleware('jwt.auth');
-        $this->middleware('checkrole:admin,doc-val-psic,dirTerapia');
+        // $this->middleware('checkrole:admin,doc-val-psic,dirTerapia');
         parent::__construct($request);
         $this->psAsse = $psAsse;
     }

@@ -44,10 +44,10 @@ use Auth;
 
 			//load all MedicalAssessment
 			//load Psychologicalassessment
-			if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) { 
-				$paUsers = MedicalAssessment::get();
-			} elseif(Auth::user()->hasRole('dr-val-medica')) {
+			if (Auth::user()->hasRole('dr-val-medica')) { 
 				$paUsers = MedicalAssessment::where('created_user_id',Auth::user()->id)->get();
+			} else {
+				$paUsers = MedicalAssessment::get();
 
 			}
 			if (!$paUsers) {

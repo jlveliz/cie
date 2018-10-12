@@ -22,7 +22,9 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/DOCS_FICHA_INSCRIPCION_min.pdf',
-                title: 'Fichas de Inscripción'
+                title: 'Fichas de Inscripción',
+                permissions: { download: 'descargar_ficha_inscripcion', print: '' },
+                role: 'admin'
             };
             $rootScope.openPreviewModal(params);
         };
@@ -31,7 +33,9 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/formato_bailoterapia.pdf',
-                title: 'Formularios de Bailoterapia'
+                title: 'Formularios de Bailoterapia',
+                permissions: { download: 'descargar_doc_terapias', print: '' },
+                role: 'admin'
             };
             $rootScope.openPreviewModal(params);
         }
@@ -40,7 +44,9 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/deporte_formatos.pdf',
-                title: 'Formularios de Deportes'
+                title: 'Formularios de Deportes',
+                permissions: { download: 'descargar_doc_terapias', print: '' },
+                role: 'admin'
             };
             $rootScope.openPreviewModal(params);
         }
@@ -49,16 +55,20 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/hidroterapia_forms.pdf',
-                title: 'Formularios de Hidroterapia'
+                title: 'Formularios de Hidroterapia',
+                permissions: { download: 'descargar_doc_terapias' , print: '' },
+                role: 'admin' 
             };
             $rootScope.openPreviewModal(params);
         }
-        
+
         $scope.downloadHorticulturaForm = function() {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/horticultura_forms.pdf',
-                title: 'Formularios de Horticultura'
+                title: 'Formularios de Horticultura',
+                permissions: { download: 'descargar_doc_terapias' , print: '' },
+                role: 'admin' 
             };
             $rootScope.openPreviewModal(params);
         }
@@ -67,17 +77,21 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/lenguaje_forms.pdf',
-                title: 'Formularios de Lenguaje'
+                title: 'Formularios de Lenguaje',
+                permissions: { download: 'descargar_doc_terapias' , print: '' },
+                role: 'admin' 
             };
             $rootScope.openPreviewModal(params);
         }
 
-     
+
         $scope.downloadMecanoterapiaForm = function() {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/mecanoterapia_forms.pdf',
-                title: 'Formularios de Mecanoterapia'
+                title: 'Formularios de Mecanoterapia',
+                permissions: { download: 'descargar_doc_terapias' , print: '' },
+                role: 'admin' 
             };
             $rootScope.openPreviewModal(params);
         }
@@ -86,7 +100,9 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/musicoterapia_forms.pdf',
-                title: 'Formularios de Musicoterapia'
+                title: 'Formularios de Musicoterapia',
+                permissions: { download: 'descargar_doc_terapias' , print: '' },
+                role: 'admin' 
             };
             $rootScope.openPreviewModal(params);
         }
@@ -95,7 +111,9 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/ocupacional_forms.pdf',
-                title: 'Formularios de Ocupacional'
+                title: 'Formularios de Ocupacional',
+                permissions: { download: 'descargar_doc_terapias' , print: '' },
+                role: 'admin' 
             };
             $rootScope.openPreviewModal(params);
         }
@@ -104,7 +122,9 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/psicologia_forms.pdf',
-                title: 'Formularios de Psicología'
+                title: 'Formularios de Psicología',
+                permissions: { download: 'descargar_doc_terapias' , print: '' },
+                role: 'admin' 
             };
             $rootScope.openPreviewModal(params);
         }
@@ -113,7 +133,9 @@ define(['app'], function(app) {
             var params = {
                 type: 'pdf',
                 content: envService.read('public') + 'uploads/file/recepcion_formatos.pdf',
-                title: 'Formularios de Recepción'
+                title: 'Formularios de Recepción',
+                permissions: { download: 'descargar_recepcion', print: '' },
+                role: 'admin'
             };
             $rootScope.openPreviewModal(params);
         }

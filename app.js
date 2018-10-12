@@ -1226,12 +1226,26 @@ define([
                         return params
                     }
                 },
-                controller: function($scope, params, $uibModalInstance, $sce, authFactory, $window, $timeout) {
+                controller: function($scope, params, $uibModalInstance, $sce, authFactory, $window, $timeout, $rootScope) {
                     $scope.title = params.title;
                     var content = params.content ? params.content : null;
                     $scope.type = params.type ? params.type : 'pdf';
                     $scope.loading = true;
                     $scope.content = null;
+                    $scope.visiblePrint = false;
+                    $scope.visibleDownload = false;
+
+                    
+                    //check roles
+                    if ($rootScope.hasPermission(params.permissions.print) || $rootScope.hasRole(params.role)) {
+                        $scope.visiblePrint = true;
+                    }
+
+                    if ($rootScope.hasPermission(params.permissions.download) || $rootScope.hasRole(params.role)) {
+                        $scope.visibleDownload = true;
+                    }
+                    
+
                     var token = 'token=' + authFactory.getToken();
 
                     switch ($scope.type) {
@@ -2310,7 +2324,7 @@ define([
             },
             data: {
                 permissions: {
-                    only: ['admin', 'dirTerapia', 'recepcion'],
+                    // only: ['admin', 'dirTerapia', 'recepcion'],
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },

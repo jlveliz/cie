@@ -57,5 +57,8 @@ class AppServiceProvider extends ServiceProvider
 
         //Medical Assessment
         $this->app->bind('Cie\RepositoryInterface\MedicalAssessmentRepositoryInterface','Cie\Repository\MedicalAssessmentRepository');
+
+        //Physical Assessment
+        $this->app->bind('Cie\RepositoryInterface\PsychologicalAssessmentRepositoryInterface','Cie\Repository\PsychologicalAssessmentRepository');
     }
 }

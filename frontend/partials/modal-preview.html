@@ -12,6 +12,6 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="$dismiss()">Aceptar</button>
-    <button ng-if="type == 'pdf'" class="btn btn-success" type="button" ng-click="print()">Imprimir</button>
-    <button ng-if="type == 'pdf'" class="btn btn-warning" type="button" ng-click="download()">Descargar</button>
+    <button ng-if="type == 'pdf' && visiblePrint" class="btn btn-success" type="button" ng-click="print()">Imprimir</button>
+    <button ng-if="type == 'pdf' && visibleDownload" class="btn btn-warning" type="button" ng-click="download()">Descargar</button>
 </div>
