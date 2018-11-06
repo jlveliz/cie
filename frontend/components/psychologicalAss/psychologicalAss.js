@@ -2,7 +2,7 @@
     EVALICACIÓN PSICOLÓGICA 
 **/
 
-define(['app', 'moment'], (app, moment) => {
+define(['app', 'moment'], function(app, moment) {
 
     app.register.service('PsyChoService', ['$uibModal', '$q', function($uibModal, $q) {
         var _this = this;

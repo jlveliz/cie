@@ -1015,6 +1015,11 @@ define([
             id: '@id'
         }).register();
 
+        //Physical Ass
+        apiResource.resource("physical-assessments", envService.read('api') + 'physical-assessments/:id', {
+            id: '@id'
+        }).register();
+
 
 
     }]);
@@ -2724,6 +2729,48 @@ define([
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Entrevistas Médicas"
+            }
+        }));
+
+        /**
+            PHYSICAL ASSESSMENT
+        **/
+        $stateProvider.state('root.physicalAssessment', angularAMD.route({
+            url: 'physical-assessments',
+            controllerUrl: 'frontend/components/physicalAss/physicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/physicalAss/index.html',
+                    controller: 'PhysicalAssIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Evaluación Física-Ortopédica"
+            }
+        })); 
+
+        $stateProvider.state('root.physicalAssessment.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/physicalAss/physicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/physicalAss/create-edit.html',
+                    controller: 'PhysicalAssCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Creación de Evaluación Física-Ortopédica"
             }
         }));
 
