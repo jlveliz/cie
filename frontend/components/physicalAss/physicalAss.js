@@ -25,6 +25,27 @@ define(['app', 'moment'], function(app, moment) {
             }
 
             return stringRet;
+        };
+
+        _this.save = function(model) {
+
+            var deferred = $q.defer();
+
+            var successCallback = function(model) {
+                deferred.resolve(model);
+            }
+
+            var failCallback = function(error) {
+                deferred.reject(error);
+            }
+
+            if (model.id) {
+                model.$update(model.id, successCallback, failCallback);
+            } else {
+                model.$save(successCallback, failCallback);
+            }
+
+            return deferred.promise;
         }
 
     }]);
@@ -108,6 +129,14 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.goIndex = function() {
             $state.go('root.physicalAssessment')
+        }
+
+        $scope.save = function(saveForm,returnIndex) {
+            console.log($scope.model)
+            // if (saveForm.validate()) {
+            //     $scope.saving = true;
+            //     // PysicalService.save($scope.model).then(successCallback, failCallback);
+            // }
         }
 
 

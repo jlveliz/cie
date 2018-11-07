@@ -41,6 +41,23 @@
                                                 class="fa fa-search"></i> Buscar Usuario</button>
                                     </div>
                                 </div>
+
+                                <!-- DATOS PERSONALES -->
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-12 form-group">
+                                        <label for="username" class="control-label">Nombre del Usuario</label>
+                                        <input type="text" name="username" ng-model="model.patienUser.username" id="username" class="form-control">
+                                    </div>
+                                    <div class="col-md-2 col-xs-12 form-group">
+                                        <label for="date_birth" class="control-label">Fecha de Nacimiento</label>
+                                        <input type="text" name="date_birth" ng-model="model.patienUser.date_birth" id="date_birth" class="form-control" readonly>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12 form-group">
+                                        <label for="diagnostic" class="control-label">Diagnóstico</label>
+                                        <input type="text" name="diagnostic" ng-model="model.patienUser.diagnostic" id="diagnostic" class="form-control" readonly>
+                                    </div>
+                                </div>
+
                                 <!-- POSTURA -->
                                 <div class="row">
                                     <div class="col-md-12 col-md-12 form-group text-left">
