@@ -109,10 +109,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.existError = false;
         $scope.messages = {};
 
-        $scope.model = apiResource.resource('physical-assessments').create({
-            date_created_at : new moment().format('YYYY-MM-DD'),
-            hour_created_at: new moment().format('HH:mm')
-        });
+        $scope.model = apiResource.resource('physical-assessments').create();
         $scope.loading = false;
 
         $scope.openModalSearchUser = function() {
@@ -129,7 +126,9 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic',$scope.model.patientUser);
                 // $scope.model.created_at = new moment();
                 $scope.model.creator = $rootScope.currentUser.person.last_name +' '+ $rootScope.currentUser.person.name;
-                $scope.model.user_created_id = $rootScope.currentUser.id
+                $scope.model.user_created_id = $rootScope.currentUser.id;
+                $scope.model.date_created_at = new moment().format('YYYY-MM-DD');
+                $scope.model.hour_created_at = new moment().format('HH:mm')
             })
         };
 
