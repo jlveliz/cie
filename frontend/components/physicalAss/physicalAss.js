@@ -109,7 +109,10 @@ define(['app', 'moment'], function(app, moment) {
         $scope.existError = false;
         $scope.messages = {};
 
-        $scope.model = apiResource.resource('physical-assessments').create();
+        $scope.model = apiResource.resource('physical-assessments').create({
+            date_created_at : new moment().format('YYYY-MM-DD'),
+            hour_created_at: new moment().format('HH:mm')
+        });
         $scope.loading = false;
 
         $scope.openModalSearchUser = function() {
@@ -124,7 +127,55 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.patientUser.name = PysicalService.formatPatientUser('name',$scope.model.patientUser);
                 $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth',$scope.model.patientUser);
                 $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic',$scope.model.patientUser);
+                // $scope.model.created_at = new moment();
+                $scope.model.creator = $rootScope.currentUser.person.last_name +' '+ $rootScope.currentUser.person.name;
+                $scope.model.user_created_id = $rootScope.currentUser.id
             })
+        };
+
+        $scope.validateOptions = {
+            rules : {
+                'position[]': {
+                    required: true,
+                    minlength:1
+                },
+                'muscular_tone[]' : {
+                    required: true,
+                    minlength:1
+                },
+                cephalic_control :{
+                    required:true
+                },
+                'column[]' : {
+                    required: true,
+                    minlength:1
+                }, 
+                'muscular_tone_down[]' : {
+                    required : true,
+                    minlength:1
+                }
+            },
+            messages :{
+                'position[]': {
+                    required: 'Seleccione al menos una postura o describa una',
+                    minlength:'Seleccione al menos una postura o describa una'
+                },
+                'muscular_tone[]' : {
+                    required: 'Seleccione al menos un tono múscular o describa una',
+                    minlength:'Seleccione al menos un tono múscular o describa una'
+                },
+                cephalic_control :{
+                    required:true
+                },
+                'column[]' : {
+                    required: 'Seleccione al menos una opción',
+                    minlength:'Seleccione al menos una opción',
+                }, 
+                'muscular_tone_down[]' : {
+                    required : 'Seleccione al menos una opción',
+                    minlength:'Seleccione al menos una opción'
+                } 
+            }
         }
 
         $scope.goIndex = function() {
@@ -133,10 +184,10 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.save = function(saveForm,returnIndex) {
             console.log($scope.model)
-            // if (saveForm.validate()) {
-            //     $scope.saving = true;
-            //     // PysicalService.save($scope.model).then(successCallback, failCallback);
-            // }
+            if (saveForm.validate()) {
+                $scope.saving = true;
+                // PysicalService.save($scope.model).then(successCallback, failCallback);
+            }
         }
 
 

@@ -17,8 +17,11 @@ class PhysicalAssessment extends Model
    	protected $casts = [
         'patient_user_id' => 'int',
         'user_created_id' => 'int',
-        'cephalic_control' => 'int',
+        'cephalic_control' => 'int'
+    ];
 
+    protected $with = [
+        'creator'
     ];
 
     protected $fillable = [
@@ -34,6 +37,10 @@ class PhysicalAssessment extends Model
 		'observation',
 		'trunk',
     ];
+
+    public function creator () {
+        return $this->belongsTo('Cie\Models\User','user_created_id');
+    }
 
     public static function boot () {
         parent::boot();

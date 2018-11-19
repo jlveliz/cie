@@ -45,16 +45,31 @@
                                 <!-- DATOS PERSONALES -->
                                 <div class="row">
                                     <div class="col-md-4 col-xs-12 form-group">
-                                        <label for="username" class="control-label">Nombre del Usuario</label>
-                                        <input type="text" name="username" ng-model="model.patienUser.username" id="username" class="form-control">
+                                        <label for="name" class="control-label">Nombre del Usuario</label>
+                                        <input type="text" name="name" ng-model="model.patientUser.name" id="username" class="form-control" readonly>
                                     </div>
-                                    <div class="col-md-2 col-xs-12 form-group">
+                                    <div class="col-md-2 col-xs-5 form-group">
                                         <label for="date_birth" class="control-label">Fecha de Nacimiento</label>
-                                        <input type="text" name="date_birth" ng-model="model.patienUser.date_birth" id="date_birth" class="form-control" readonly>
+                                        <input type="text" name="date_birth" ng-model="model.patientUser.date_birth" id="date_birth" class="form-control" readonly>
                                     </div>
-                                    <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-md-6 col-xs-7 form-group">
                                         <label for="diagnostic" class="control-label">Diagnóstico</label>
-                                        <input type="text" name="diagnostic" ng-model="model.patienUser.diagnostic" id="diagnostic" class="form-control" readonly>
+                                        <input type="text" name="diagnostic" ng-model="model.patientUser.diagnostic" id="diagnostic" class="form-control" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2 col-xs-6 form-group">
+                                        <label for="date_created_at" class="control-label">Fecha de Evaluación</label>
+                                        <input type="text" class="form-control" name="date_created_at" id="date_created_at" ng-model="model.date_created_at" readonly>
+                                    </div>
+                                    <div class="col-md-2 col-xs-6 form-group">
+                                        <label for="hour_created_at" class="control-label">Hora de Evaluación</label>
+                                        <input type="text" class="form-control" name="hour_created_at" id="date_created_at" ng-model="model.hour_created_at" readonly>
+                                    </div>
+                                    <div class="col-md-3 col-xs-12 form-group">
+                                        <label for="user_created_id" class="control-label">Profesional Responsable</label>
+                                        <input type="text" class="form-control" name="user_created_id" id="user_created_id" ng-model="model.creator" readonly>
                                     </div>
                                 </div>
 
@@ -64,24 +79,24 @@
                                         <label for="" class="control-label col-md-12 col-md-12">POSTURA <span class="text-danger">*</span></label>
                                         <div class="checkbox col-md-4">
                                             <label for="session">
-                                                <input type="checkbox" model="model.position.session" name="session" id="session">
+                                                <input type="checkbox" model="model.position.session" name="position[]" id="session">
                                                 Sedente
                                             </label>
                                         </div>
                                         <div class="checkbox col-md-4" style="margin-top:10px">
                                             <label for="bipedestation">
-                                                <input type="checkbox" model="model.position.bipedestation" name="bipedestation"
+                                                <input type="checkbox" model="model.position.bipedestation" name="position[]"
                                                     id="bipedestation"> Bipedestación
                                             </label>
                                         </div>
                                         <div class="checkbox col-md-4" style="margin-top:10px">
                                             <label for="decubito">
-                                                <input type="checkbox" model="model.position.decubito" name="decubito"
+                                                <input type="checkbox" model="model.position.decubito" name="position[]"
                                                     id="decubito"> Decubito
                                             </label>
                                         </div>
                                         <label for="position.others">Otros</label>
-                                        <textarea name="position.others" id="model.position.others" class="form-control no-resize"
+                                        <textarea name="position[]" id="model.position.others" class="form-control no-resize"
                                             ng-model="model.position.others"></textarea>
                                     </div>
                                 </div>
@@ -92,82 +107,82 @@
                                                 class="text-danger">*</span></label>
                                         <div class="checkbox col-md-6">
                                             <label for="hipotonic">
-                                                <input type="checkbox" model="model.muscular_tone.hipotonic" name="hipotonic"
+                                                <input type="checkbox" model="model.muscular_tone.hipotonic" name="muscular_tone[]"
                                                     id="hipotonic"> Hipotónico
                                             </label>
                                         </div>
                                         <div class="checkbox col-md-6" style="margin-top:10px">
                                             <label for="hipertonic">
-                                                <input type="checkbox" model="model.muscular_tone.hipertonic" name="hipertonic"
+                                                <input type="checkbox" model="model.muscular_tone.hipertonic" name="muscular_tone[]"
                                                     id="hipertonic"> Hipertónico
                                             </label>
                                         </div>
                                         <label for="position.others">Otros</label>
-                                        <textarea name="muscular_tone_others" id="muscular_tone_others" class="form-control no-resize"
+                                        <textarea name="muscular_tone[]" id="muscular_tone_others" class="form-control no-resize"
                                             ng-model="model.muscular_tone.others"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label for="">Control Cefálico</label>
+                                        <label for="">Control Cefálico <span class="text text-danger">*</span></label>
                                         <div class="radio">
                                             <label for="cephalic_control_yes">
-                                                <input type="radio" ng-model="model.cephalic_control" id="cephalic_control_yes"
+                                                <input type="radio" name="cephalic_control" ng-model="model.cephalic_control" id="cephalic_control_yes"
                                                     value="1"> Si
                                             </label>
                                         </div>
                                         <div class="radio">
                                             <label for="cephalic_control_no">
-                                                <input type="radio" ng-model="model.cephalic_control" id="cephalic_control_no"
+                                                <input type="radio" name="cephalic_control" ng-model="model.cephalic_control" id="cephalic_control_no"
                                                     value="0"> No
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="">Columna</label>
+                                        <label for="">Columna <span class="text text-danger">*</span></label>
                                         <div class="checkbox">
                                             <label for="column_normal">
-                                                <input type="checkbox" ng-model="model.column.normal" id="column_normal">
+                                                <input type="checkbox" ng-model="model.column.normal" name="column[]" id="column_normal">
                                                 Normal
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="column_escoliosis">
-                                                <input type="checkbox" ng-model="model.column.escoliosis" id="column_escoliosis">
+                                                <input type="checkbox" ng-model="model.column.escoliosis" name="column[]" id="column_escoliosis">
                                                 Escoliosis
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="column_lordosis">
-                                                <input type="checkbox" ng-model="model.column.lordosis" id="column_lordosis">
+                                                <input type="checkbox" ng-model="model.column.lordosis" name="column[]" id="column_lordosis">
                                                 Lordosis
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="column_xifosis">
-                                                <input type="checkbox" ng-model="model.column.xifosis" id="column_xifosis">
+                                                <input type="checkbox" ng-model="model.column.xifosis" name="column[]" id="column_xifosis">
                                                 Xifosis
                                             </label>
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label for="">Tono Muscular</label>
+                                        <label for="">Tono Muscular <span class="text text-danger">*</span></label>
                                         <div class="checkbox">
                                             <label for="muscular_tone_hipotonic">
-                                                <input type="checkbox" ng-model="model.muscular_tone.hipotonic" id="muscular_tone_hipotonic">
+                                                <input type="checkbox" ng-model="model.muscular_tone.hipotonic" id="muscular_tone_hipotonic" name="muscular_tone_down[]">
                                                 Hipotónico
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="muscular_tone_hipertonic">
-                                                <input type="checkbox" ng-model="model.muscular_tone.hipertonic" id="muscular_tone_hipertonic">
+                                                <input type="checkbox" ng-model="model.muscular_tone.hipertonic" id="muscular_tone_hipertonic" name="muscular_tone_down[]">
                                                 Hipertónico
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="muscular_tone_normal">
-                                                <input type="checkbox" ng-model="model.muscular_tone.normal" id="muscular_tone_normal">
+                                                <input type="checkbox" ng-model="model.muscular_tone.normal" id="muscular_tone_normal" name="muscular_tone_down[]">
                                                 Normal
                                             </label>
                                         </div>
