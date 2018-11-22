@@ -35,7 +35,7 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="model in models track by $index">
-                                        <td class="col-md-6 col-sm-6"><a ui-sref="root.psychoAssessment.edit({psychoAssId:model.id})" title="{{model.patient_user.last_name}} {{model.patient_user.name}}">{{model.patient_user.last_name}} {{model.patient_user.name}} </a></td>
+                                        <td class="col-md-6 col-sm-6"><a ui-sref="root.physicalAssessment.edit({physicalAssId:model.id})" title="{{model.patient_user.last_name}} {{model.patient_user.name}}">{{model.patient_user.last_name}} {{model.patient_user.name}} </a></td>
                                         <td> {{model.date_eval ? model.date_eval : "-"}}</td>
                                         <td>
                                             <div class="btn-group" role="group" ng-hide="model.$deleting">
@@ -45,7 +45,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li ng-if="hasPermission('edi_ev_psicologica') || hasRole('admin')">
-                                                        <a title="Editar Entrevista {{model.models.name}} {{model.patient_user.last_name}}" alt="Editar Usuario {{model.patient_user.name}} {{model.patient_user.last_name}}"  ui-sref="root.psychoAssessment.edit({psychoAssId:model.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                        <a title="Editar Entrevista {{model.models.name}} {{model.patient_user.last_name}}" alt="Editar Usuario {{model.patient_user.name}} {{model.patient_user.last_name}}"  ui-sref="root.physicalAssessment.edit({physicalAssId:model.id})"> <i class="fa fa-pencil"></i> Editar</a>
                                                     </li>
                                                     <li ng-if="hasPermission('eli_eva_psicologica') || hasRole('admin')">
                                                         <a title="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" alt="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>

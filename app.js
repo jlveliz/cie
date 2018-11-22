@@ -293,37 +293,43 @@ define([
                                 var r = this.create();
                                 var _this = this;
 
-                                //exist in cache ?
-                                var keyCache = params.id + '_' + nameResource;
-                                if (params && params.parentId) {
-                                    keyCache += '/' + params.parentId;
-                                }
+                                if (params && params.noCache == true) {
 
-                                var resource = getFromCache(keyCache);
-                                if (resource) {
-                                    deferred.resolve(resource);
-                                    return deferred.promise;
-                                }
+                                    r.$get(param).then(function(result) {
+                                        _this.setOnCache(result, params && params.parentId ? params.parentId : null)
+                                        deferred.resolve(result);
+                                    }, function(error) {
+                                        deferred.reject(error)
+                                    })
 
-                                var keyCache = nameResource;
-                                var arrayCache = getFromCache(keyCache);
+                                } else {
+                                    //exist in cache ?
+                                    var keyCache = params.id + '_' + nameResource;
+                                    if (params && params.parentId) {
+                                        keyCache += '/' + params.parentId;
+                                    }
 
-                                if (arrayCache && arrayCache.length > 0) {
-                                    var idxArray = _.findIndex(arrayCache, function(item) {
-                                        return item.id == param.id;
-                                    });
-                                    if (idxArray > -1) {
-                                        deferred.resolve(arrayCache[idxArray]);
+                                    var resource = getFromCache(keyCache);
+                                    if (resource) {
+                                        deferred.resolve(resource);
                                         return deferred.promise;
                                     }
+
+                                    var keyCache = nameResource;
+                                    var arrayCache = getFromCache(keyCache);
+
+                                    if (arrayCache && arrayCache.length > 0) {
+                                        var idxArray = _.findIndex(arrayCache, function(item) {
+                                            return item.id == param.id;
+                                        });
+                                        if (idxArray > -1) {
+                                            deferred.resolve(arrayCache[idxArray]);
+                                            return deferred.promise;
+                                        }
+                                    }                                    
                                 }
 
-                                r.$get(param).then(function(result) {
-                                    _this.setOnCache(result, params && params.parentId ? params.parentId : null)
-                                    deferred.resolve(result);
-                                }, function(error) {
-                                    deferred.reject(error)
-                                })
+
                                 return deferred.promise;
                             },
                             getCopy: function(params) {
@@ -2771,6 +2777,25 @@ define([
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Creación de Evaluación Física-Ortopédica"
+            }
+        }));
+
+        $stateProvider.state('root.physicalAssessment.edit', angularAMD.route({
+            url: '/{physicalAssId:int}/edit',
+            controllerUrl: 'frontend/components/physicalAss/physicalAss',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/physicalAss/create-edit.html',
+                    controller: 'PhysicalAssEditCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Edición de Evaluación Física-Ortopédica"
             }
         }));
 

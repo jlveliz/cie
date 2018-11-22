@@ -60,8 +60,8 @@
 
                                 <div class="row">
                                     <div class="col-md-2 col-xs-6 form-group">
-                                        <label for="date_created_at" class="control-label">Fecha de Evaluación</label>
-                                        <input type="text" class="form-control" name="date_created_at" id="date_created_at" ng-model="model.date_created_at" readonly>
+                                        <label for="date_eval" class="control-label">Fecha de Evaluación</label>
+                                        <input type="text" class="form-control" name="date_eval" id="date_eval" ng-model="model.date_eval" readonly>
                                     </div>
                                     <div class="col-md-2 col-xs-6 form-group">
                                         <label for="hour_created_at" class="control-label">Hora de Evaluación</label>
@@ -78,43 +78,43 @@
                                     <div class="col-md-12 col-md-12 form-group text-left">
                                         <label for="" class="control-label col-md-12 col-md-12">POSTURA <span class="text-danger">*</span></label>
                                         <div class="checkbox col-md-4">
-                                            <label for="session">
-                                                <input type="checkbox" model="model.position.session" name="position[]" id="session" ng-disabled="!existPatientUserSelected">
+                                            <label for="position.session">
+                                                <input type="checkbox" ng-model="model.position.session" name="position[]" id="position.session" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Sedente
                                             </label>
                                         </div>
                                         <div class="checkbox col-md-4" style="margin-top:10px">
-                                            <label for="bipedestation">
-                                                <input type="checkbox" model="model.position.bipedestation" name="position[]" id="bipedestation" ng-disabled="!existPatientUserSelected"> Bipedestación
+                                            <label for="position.bipedestation">
+                                                <input type="checkbox" ng-model="model.position.bipedestation" name="position[]" id="position.bipedestation" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0"> Bipedestación
                                             </label>
                                         </div>
                                         <div class="checkbox col-md-4" style="margin-top:10px">
-                                            <label for="decubito">
-                                                <input type="checkbox" model="model.position.decubito" name="position[]" id="decubito" ng-disabled="!existPatientUserSelected"> Decubito
+                                            <label for="position.decubito">
+                                                <input type="checkbox" ng-model="model.position.decubito" name="position[]" id="position.decubito" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0"> Decubito
                                             </label>
                                         </div>
                                         <label for="position.others">Otros</label>
-                                        <textarea name="position[]" id="model.position.others" class="form-control no-resize" ng-model="model.position.others" ng-disabled="!existPatientUserSelected"></textarea>
+                                        <textarea name="position[]" id="position.others" class="form-control no-resize" ng-model="model.position.others" ng-disabled="!existPatientUserSelected"></textarea>
                                     </div>
                                 </div>
                                 <!-- TONO MUSCULAR -->
                                 <div class="row">
                                     <div class="col-md-12 col-md-12 form-group text-left">
-                                        <label for="" class="control-label col-md-12 col-md-12">TONO MUSCULAR <span
+                                        <label for="" class="control-label col-md-12 col-md-12">TONO MUSCULAR GENERAL <span
                                                 class="text-danger">*</span></label>
                                         <div class="checkbox col-md-6">
-                                            <label for="hipotonic">
-                                                <input type="checkbox" model="model.muscular_tone.hipotonic" name="muscular_tone[]" id="hipotonic" ng-disabled="!existPatientUserSelected"> Hipotónico
+                                            <label for="muscular_tone_general.hipotonic">
+                                                <input type="checkbox" ng-model="model.muscular_tone_general.hipotonic" name="muscular_tone_general[]" id="muscular_tone_general.hipotonic" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0"> Hipotónico
                                             </label>
                                         </div>
                                         <div class="checkbox col-md-6" style="margin-top:10px">
-                                            <label for="hipertonic">
-                                                <input type="checkbox" model="model.muscular_tone.hipertonic" name="muscular_tone[]" ng-disabled="!existPatientUserSelected" id="hipertonic"> Hipertónico
+                                            <label for="muscular_tone_general.hipertonic">
+                                                <input type="checkbox" ng-model="model.muscular_tone_general.hipertonic" name="muscular_tone_general[]" ng-disabled="!existPatientUserSelected" id="muscular_tone_general.hipertonic" ng-true-value="1" ng-false-value="0"> Hipertónico
                                             </label>
                                         </div>
-                                        <label for="position.others">Otros</label>
-                                        <textarea name="muscular_tone[]" id="muscular_tone_others" class="form-control no-resize"
-                                        ng-disabled="!existPatientUserSelected" ng-model="model.muscular_tone.others"></textarea>
+                                        <label for="muscular_tone_general.others">Otros</label>
+                                        <textarea name="muscular_tone_general[]" id="muscular_tone_general.others" class="form-control no-resize"
+                                        ng-disabled="!existPatientUserSelected" ng-model="model.muscular_tone_general.others"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -122,14 +122,13 @@
                                         <label for="">Control Cefálico <span class="text text-danger">*</span></label>
                                         <div class="radio">
                                             <label for="cephalic_control_yes">
-                                                <input type="radio" name="cephalic_control" ng-model="model.cephalic_control" id="cephalic_control_yes"
-                                                    value="1" ng-disabled="!existPatientUserSelected"> Si
+                                                <input type="radio" name="cephalic_control" ng-model="model.cephalic_control" id="cephalic_control_yes" ng-value="1" value="1" ng-disabled="!existPatientUserSelected"> Si
                                             </label>
                                         </div>
                                         <div class="radio">
                                             <label for="cephalic_control_no">
                                                 <input type="radio" name="cephalic_control" ng-model="model.cephalic_control" id="cephalic_control_no"
-                                                    value="0" ng-disabled="!existPatientUserSelected"> No
+                                                    ng-value="0" value="0" ng-disabled="!existPatientUserSelected"> No
                                             </label>
                                         </div>
                                     </div>
@@ -137,25 +136,25 @@
                                         <label for="">Columna <span class="text text-danger">*</span></label>
                                         <div class="checkbox">
                                             <label for="column_normal">
-                                                <input type="checkbox" ng-model="model.column.normal" name="column[]" id="column_normal" ng-disabled="!existPatientUserSelected">
+                                                <input type="checkbox" ng-model="model.column.normal" name="column[]" id="column_normal" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Normal
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="column_escoliosis">
-                                                <input type="checkbox" ng-model="model.column.escoliosis" name="column[]" id="column_escoliosis" ng-disabled="!existPatientUserSelected">
+                                                <input type="checkbox" ng-model="model.column.escoliosis" name="column[]" id="column_escoliosis" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Escoliosis
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="column_lordosis">
-                                                <input type="checkbox" ng-model="model.column.lordosis" name="column[]" id="column_lordosis" ng-disabled="!existPatientUserSelected">
+                                                <input type="checkbox" ng-model="model.column.lordosis" name="column[]" id="column_lordosis" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Lordosis
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="column_xifosis">
-                                                <input type="checkbox" ng-model="model.column.xifosis" name="column[]" id="column_xifosis" ng-disabled="!existPatientUserSelected">
+                                                <input type="checkbox" ng-model="model.column.xifosis" name="column[]" id="column_xifosis" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Xifosis
                                             </label>
                                         </div>
@@ -165,19 +164,19 @@
                                         <label for="">Tono Muscular <span class="text text-danger">*</span></label>
                                         <div class="checkbox">
                                             <label for="muscular_tone_hipotonic">
-                                                <input type="checkbox" ng-model="model.muscular_tone.hipotonic" id="muscular_tone_hipotonic" name="muscular_tone_down[]" ng-disabled="!existPatientUserSelected">
+                                                <input type="checkbox" ng-model="model.muscular_tone.hipotonic" id="muscular_tone_hipotonic" name="muscular_tone_down[]" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Hipotónico
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="muscular_tone_hipertonic">
-                                                <input type="checkbox" ng-model="model.muscular_tone.hipertonic" id="muscular_tone_hipertonic" name="muscular_tone_down[]" ng-disabled="!existPatientUserSelected">
+                                                <input type="checkbox" ng-model="model.muscular_tone.hipertonic" id="muscular_tone_hipertonic" name="muscular_tone_down[]" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Hipertónico
                                             </label>
                                         </div>
                                         <div class="checkbox">
                                             <label for="muscular_tone_normal">
-                                                <input type="checkbox" ng-model="model.muscular_tone.normal" id="muscular_tone_normal" name="muscular_tone_down[]" ng-disabled="!existPatientUserSelected">
+                                                <input type="checkbox" ng-model="model.muscular_tone.normal" id="muscular_tone_normal" name="muscular_tone_down[]" ng-disabled="!existPatientUserSelected" ng-true-value="1" ng-false-value="0">
                                                 Normal
                                             </label>
                                         </div>

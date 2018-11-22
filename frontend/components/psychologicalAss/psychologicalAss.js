@@ -295,7 +295,6 @@ define(['app', 'moment'], function(app, moment) {
 
             if (saveForm.validate()) {
                 $scope.saving = true;
-                console.log($scope.model)
                 PsyChoService.save($scope.model).then(successCallback, failCallback);
             }
         };

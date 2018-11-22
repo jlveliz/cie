@@ -9,11 +9,11 @@ define(['app', 'moment'], function(app, moment) {
         var _this = this;
         _this.messageFlag = {};
 
-        _this.formatPatientUser = function(format,model) {
+        _this.formatPatientUser = function(format, model) {
             if (!format) return false;
             var stringRet = '';
-            switch(format) {
-                case 'name' :
+            switch (format) {
+                case 'name':
                     stringRet = model.last_name + ' ' + model.name;
                     break;
                 case 'dbirth':
@@ -101,7 +101,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('PhysicalAssCreateCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$state','$rootScope',function($scope, apiResource, DTOptionsBuilder, PysicalService, $state,$rootScope) {
+    app.register.controller('PhysicalAssCreateCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$state', '$rootScope', function($scope, apiResource, DTOptionsBuilder, PysicalService, $state, $rootScope) {
 
         $scope.loading = true;
         $scope.isEdit = false;
@@ -118,62 +118,63 @@ define(['app', 'moment'], function(app, moment) {
                 resource: 'physical-assessments'
             }
 
-            $rootScope.openModalSearchUser(params).then(function(patientUser){
+            $rootScope.openModalSearchUser(params).then(function(patientUser) {
                 $scope.existPatientUserSelected = true;
                 $scope.model.patientUser = patientUser;
-                $scope.model.patientUser.name = PysicalService.formatPatientUser('name',$scope.model.patientUser);
-                $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth',$scope.model.patientUser);
-                $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic',$scope.model.patientUser);
+                $scope.model.patientUser.name = PysicalService.formatPatientUser('name', $scope.model.patientUser);
+                $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth', $scope.model.patientUser);
+                $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic', $scope.model.patientUser);
                 // $scope.model.created_at = new moment();
-                $scope.model.creator = $rootScope.currentUser.person.last_name +' '+ $rootScope.currentUser.person.name;
+                $scope.model.creator = $rootScope.currentUser.person.last_name + ' ' + $rootScope.currentUser.person.name;
                 $scope.model.user_created_id = $rootScope.currentUser.id;
-                $scope.model.date_created_at = new moment().format('YYYY-MM-DD');
-                $scope.model.hour_created_at = new moment().format('HH:mm')
+                $scope.model.date_eval = new moment().format('YYYY-MM-DD');
+                $scope.model.hour_created_at = new moment().format('HH:mm');
+                $scope.model.patient_user_id = patientUser.id;
             })
         };
 
         $scope.validateOptions = {
-            rules : {
+            rules: {
                 'position[]': {
                     required: true,
-                    minlength:1
+                    minlength: 1
                 },
-                'muscular_tone[]' : {
+                'muscular_tone_general[]': {
                     required: true,
-                    minlength:1
+                    minlength: 1
                 },
-                cephalic_control :{
-                    required:true
+                cephalic_control: {
+                    required: true
                 },
-                'column[]' : {
+                'column[]': {
                     required: true,
-                    minlength:1
-                }, 
-                'muscular_tone_down[]' : {
-                    required : true,
-                    minlength:1
+                    minlength: 1
+                },
+                'muscular_tone_down[]': {
+                    required: true,
+                    minlength: 1
                 }
             },
-            messages :{
+            messages: {
                 'position[]': {
                     required: 'Seleccione al menos una postura o describa una',
-                    minlength:'Seleccione al menos una postura o describa una'
+                    minlength: 'Seleccione al menos una postura o describa una'
                 },
-                'muscular_tone[]' : {
+                'muscular_tone_general[]': {
                     required: 'Seleccione al menos un tono múscular o describa una',
-                    minlength:'Seleccione al menos un tono múscular o describa una'
+                    minlength: 'Seleccione al menos un tono múscular o describa una'
                 },
-                cephalic_control :{
-                    required:true
+                cephalic_control: {
+                    required: true
                 },
-                'column[]' : {
+                'column[]': {
                     required: 'Seleccione al menos una opción',
-                    minlength:'Seleccione al menos una opción',
-                }, 
-                'muscular_tone_down[]' : {
-                    required : 'Seleccione al menos una opción',
-                    minlength:'Seleccione al menos una opción'
-                } 
+                    minlength: 'Seleccione al menos una opción',
+                },
+                'muscular_tone_down[]': {
+                    required: 'Seleccione al menos una opción',
+                    minlength: 'Seleccione al menos una opción'
+                }
             }
         }
 
@@ -181,18 +182,189 @@ define(['app', 'moment'], function(app, moment) {
             $state.go('root.physicalAssessment')
         }
 
-        $scope.save = function(saveForm,returnIndex) {
-            console.log($scope.model)
+        $scope.save = function(saveForm, returnIndex) {
+
+            var successCallback = function(data) {
+                $scope.saving = false;
+                $scope.hasMessage = true;
+                apiResource.resource('physical-assessments').setOnCache(data);
+                PysicalService.messageFlag.title = "Valoración física de  " + $scope.model.patient_user.name + " Ingresada correctamente";
+                PysicalService.messageFlag.type = "info";
+                $scope.messages = PysicalService.messageFlag;
+                if (returnIndex) {
+                    $state.go('root.physicalAssessment');
+                } else {
+                    $state.go('root.physicalAssessment.edit', {
+                        physicalAssId: data.id
+                    })
+                }
+            }
+
+            var failCallback = function(reason) {
+                $scope.saving = false
+                $scope.existError = true;
+                $scope.messages.title = reason.data.title;
+                $scope.messages.type = 'error';
+                $scope.messages.details = [];
+                var json = JSON.parse(reason.data.detail);
+                angular.forEach(json, function(elem, idx) {
+                    angular.forEach(elem, function(el, idex) {
+                        $scope.messages.details.push(el)
+                    })
+                })
+            }
+
+
             if (saveForm.validate()) {
                 $scope.saving = true;
-                // PysicalService.save($scope.model).then(successCallback, failCallback);
+                delete $scope.model.patientUser;
+                PysicalService.save($scope.model).then(successCallback, failCallback);
             }
+        }
+
+
+        $scope.saveAndClose = function(saveForm) {
+            $scope.save(saveForm, true);
         }
 
 
     }])
 
-    app.register.controller('PhysicalAssEditCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$state', ($scope, apiResource, DTOptionsBuilder, PysicalService, $state) => {
+    app.register.controller('PhysicalAssEditCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$state', '$stateParams', function($scope, apiResource, DTOptionsBuilder, PysicalService, $state, $stateParams) {
+
+        $scope.loading = true;
+        $scope.isEdit = true;
+        $scope.model = {};
+        var physicalAssId = $stateParams.physicalAssId;
+        $scope.saving = false;
+        $scope.existError = false;
+        $scope.existPatientUserSelected = true;
+        $scope.messages = {};
+
+        $scope.validateOptions = {
+            rules: {
+                'position[]': {
+                    required: true,
+                    minlength: 1
+                },
+                'muscular_tone_general[]': {
+                    required: true,
+                    minlength: 1
+                },
+                cephalic_control: {
+                    required: true
+                },
+                'column[]': {
+                    required: true,
+                    minlength: 1
+                },
+                'muscular_tone_down[]': {
+                    required: true,
+                    minlength: 1
+                }
+            },
+            messages: {
+                'position[]': {
+                    required: 'Seleccione al menos una postura o describa una',
+                    minlength: 'Seleccione al menos una postura o describa una'
+                },
+                'muscular_tone_general[]': {
+                    required: 'Seleccione al menos un tono múscular o describa una',
+                    minlength: 'Seleccione al menos un tono múscular o describa una'
+                },
+                cephalic_control: {
+                    required: true
+                },
+                'column[]': {
+                    required: 'Seleccione al menos una opción',
+                    minlength: 'Seleccione al menos una opción',
+                },
+                'muscular_tone_down[]': {
+                    required: 'Seleccione al menos una opción',
+                    minlength: 'Seleccione al menos una opción'
+                }
+            }
+        }
+
+
+        $scope.goIndex = function() {
+            $state.go('root.physicalAssessment')
+        };
+
+
+        $scope.model = apiResource.resource('physical-assessments').get({ id: physicalAssId, noCache: true })
+            .then(function(result) {
+                $scope.model = result;
+                $scope.model.patientUser = $scope.model.patient_user;
+                $scope.existPatientUserSelected = true;
+                $scope.model.patientUser.name = PysicalService.formatPatientUser('name', $scope.model.patientUser);
+                $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth', $scope.model.patientUser);
+                $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic', $scope.model.patientUser);
+                $scope.model.user_created_id = $scope.model.creator.id;
+                debugger;
+                $scope.model.creator = $scope.model.creator.person.name + ' ' + $scope.model.creator.person.last_name;
+                $scope.model.hour_created_at = new moment($scope.model.created_at).format('HH:mm');
+                $scope.loading = false;
+            }, function(error) {
+                if (error.status == 404) {
+                    $state.go('root.physicalAssessment');
+                }
+            });
+
+
+        $scope.save = function(saveForm, returnIndex) {
+
+            var successCallback = function(data) {
+                $scope.saving = false;
+                $scope.hasMessage = true;
+
+                PysicalService.messageFlag.title = "Valoración física de  " + $scope.model.patient_user.name + " Actualizada correctamente";
+                PysicalService.messageFlag.type = "info";
+                $scope.messages = PysicalService.messageFlag;
+                if (returnIndex) {
+                    $state.go('root.physicalAssessment');
+                }
+                //reset
+                $scope.model = data;
+                $scope.model.patientUser = $scope.model.patient_user;
+                $scope.existPatientUserSelected = true;
+                $scope.model.patientUser.name = PysicalService.formatPatientUser('name', $scope.model.patientUser);
+                $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth', $scope.model.patientUser);
+                $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic', $scope.model.patientUser);
+                $scope.model.user_created_id = $scope.model.creator.id;
+
+                $scope.model.creator = $scope.model.creator.person.name + ' ' + $scope.model.creator.person.last_name;
+                $scope.model.hour_created_at = new moment($scope.model.created_at).format('HH:mm');
+                console.log(data);
+                apiResource.resource('physical-assessments').setOnCache(data);
+            }
+
+            var failCallback = function(reason) {
+                $scope.saving = false
+                $scope.existError = true;
+                $scope.messages.title = reason.data.title;
+                $scope.messages.type = 'error';
+                $scope.messages.details = [];
+                var json = JSON.parse(reason.data.detail);
+                angular.forEach(json, function(elem, idx) {
+                    angular.forEach(elem, function(el, idex) {
+                        $scope.messages.details.push(el)
+                    })
+                })
+            }
+
+
+            if (saveForm.validate()) {
+                $scope.saving = true;
+                delete $scope.model.patientUser;
+                PysicalService.save($scope.model).then(successCallback, failCallback);
+            }
+        }
+
+        $scope.saveAndClose = function(saveForm) {
+            $scope.save(saveForm, true)
+        }
+
 
     }])
 })

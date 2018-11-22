@@ -91,7 +91,7 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 
 			} else {
 
-				throw new PhysicalAssessmentException(['title'=>'No se puede buscar la entrevista psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+				throw new PhysicalAssessmentException(['title'=>'No se puede buscar la entrevista física','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
@@ -107,10 +107,10 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 
 
 		} else {
-			throw new PhysicalAssessmentException(['title'=>'No se puede buscar la Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
+			throw new PhysicalAssessmentException(['title'=>'No se puede buscar la Asistencia física','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
 
-		if (!$paUser) throw new PhysicalAssessmentException(['title'=>'No se puede buscar la Asistencia psicológica','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+		if (!$paUser) throw new PhysicalAssessmentException(['title'=>'No se puede buscar la Asistencia física','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 		
 		return $paUser;
 
@@ -129,7 +129,7 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 			$assessment->patientUser->save();
 			return $this->find($key);
 		} else {
-			throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia psicológica de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia física de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 		}
 			
 		
@@ -151,10 +151,10 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 				$assessment->patientUser->save();
 				return $this->find($key);
 			} else {
-				throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia psicológica de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+				throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia física de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 			}
 		} else {
-			throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia psicológica de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al guardar la Asistencia física de '.$data['patient_user_id'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 		}
 		 
 
@@ -169,7 +169,7 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 			$assessment->delete();
 			return true;
 		}
-		throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al eliminar la Asistencia psicológica ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		throw new PhysicalAssessmentException(['title'=>'Ha ocurrido un error al eliminar la Asistencia física ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 	}
 
 	/**
@@ -177,7 +177,7 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 	 */
 	public function getStatus()
 	{
-		return  StatePatientUser::select('id')->where('code','valorado_psicologicamente')->first()->id;
+		return  StatePatientUser::select('id')->where('code','valorado_fisicamente')->first()->id;
 	}
 
 

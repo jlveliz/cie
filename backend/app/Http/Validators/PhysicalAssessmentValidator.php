@@ -1,13 +1,13 @@
 <?php 
 namespace Cie\Http\Validators;
 
-use Cie\Exceptions\PsychologicalAssessmentException;
+use Cie\Exceptions\PhysicalAssessmentException;
 use Illuminate\Http\Request;
 use Validator;
 /**
 * 
 */
-class PsychologicalAssessmentValidator extends Validator implements ValidatorInterface
+class PhysicalAssessmentValidator extends Validator implements ValidatorInterface
 {
 	private $request;
 
@@ -22,7 +22,7 @@ class PsychologicalAssessmentValidator extends Validator implements ValidatorInt
 		$data = $request->all();
 		$validator =  parent::make($data,$this->rules($request->method()),$this->messages($request->method()));
         if ($validator->fails()){
-        	throw new PsychologicalAssessmentException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
+        	throw new PhysicalAssessmentException(['title'=>'Error de validación','detail'=>$validator->errors()->toJson(),'level'=>'error'],422);        
         } else {
         	return true;
         } 
@@ -33,17 +33,26 @@ class PsychologicalAssessmentValidator extends Validator implements ValidatorInt
 			'patient_user_id' =>'required|exists:patient_user,id',
 			'user_created_id' => 'required|exists:user,id',
 			'date_eval' => 'required|date',
+			'position' => 'required',
+			'muscular_tone_general' => 'required',
+			'muscular_tone' => 'required',
+			'cephalic_control' => 'required',
+			'column' => 'required'
 		];
 	}
 
 	public function messages($method = null) {
 		return [
-			'patient_user_id.required' => 'Por favor, Ingrese un paciente',
-			'patient_user_id.exists' => 'Por favor, ingrese un paciente existente',
-			'user_created_id.required' => 'Por favor, ingrese un usario que ingresa la valoración',
-			'user_created_id.exists' => 'Por favor, ingrese un usuario existente',
-			'date_eval.required' => 'Ingrese una fecha de ingreso de la valoración',
-			'date_eval.date' => 'Ingrese una fecha válida para la  valoración física',
+			'patient_user_id.required' =>'Usuario requerido',
+			'patient_user_id.exists' => 'El usuario que ingresa no existe',
+			'user_created_id.required' => 'El evaluador es requerido',
+			'user_created_id.exists' => 'El evaluador que ingresa la valoración no existe',
+			'date_eval.required' => 'Fecha de Evaluación requerida',
+			'position.required' => 'La posición del evaluado es requerida',
+			'muscular_tone.required' => 'El Tono Muscular del evaluado es requerida',
+			'muscular_tone_general.required' => 'El Tono Muscular General del evaluado es requerida',
+			'cephalic_control.required' => 'El control Cefálico del evaluado es requerido',
+			'column.required' => 'Los datos de la columna del evaluado es requerida'
 		];
 	}
 }
