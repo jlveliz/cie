@@ -6,6 +6,7 @@ use Cie\RepositoryInterface\PhysicalAssessmentRepositoryInterface;
 use Cie\Http\Validators\PhysicalAssessmentValidator; //TODO
 use Cie\Exceptions\PhysicalAssessmentException;
 use Illuminate\Http\Request;
+use PDF;
 
 
 
@@ -17,7 +18,7 @@ class PhysicalAssessmentController extends Controller
 
     public function __construct(PhysicalAssessmentRepositoryInterface $psAsse, Request $request)
     {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth')->except('generatePdF');
         // $this->middleware('checkrole:admin,doc-val-psic,dirTerapia');
         parent::__construct($request);
         $this->psAsse = $psAsse;
@@ -111,6 +112,19 @@ class PhysicalAssessmentController extends Controller
             }
         } catch (PhysicalAssessmentException $e) {
             return response()->json($e->getMessage(),$e->getCode());
+        }
+    }
+
+    public function generatePdF($id, Request $request)
+    {
+        
+        $physicalAss =  $this->psAsse->find($id);
+        // return view('pdf.puserinscriptions',compact('pUser'));
+        if ($request->has('download') && $request->get('download')) {
+            return PDF::loadView('pdf.physical-ass',compact('physicalAss'))->download('Valoración Física de  '.$physicalAss->last_name . ' ' . $physicalAss->name.'.pdf');
+        } else {
+            return PDF::loadView('pdf.physical-ass',compact('physicalAss'))->stream('Valoración Física de  ' . $physicalAss->last_name . ' ' . $physicalAss->name.'.pdf');
+            
         }
     }
 }

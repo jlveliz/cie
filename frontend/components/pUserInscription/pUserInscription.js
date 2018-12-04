@@ -891,7 +891,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies', '$http', '$q', '$state','authFactory',function($scope, apiResource, $stateParams, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies, $http, $q, $state, authFactory) {
+    app.register.controller('pUserInscriptionIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'PUserInscriptionService', '$rootScope', '$filter', 'envService', 'PermissionStrategies', '$http', '$q', '$state', 'authFactory', function($scope, apiResource, $stateParams, PUserInscriptionService, $rootScope, $filter, envService, PermissionStrategies, $http, $q, $state, authFactory) {
 
         $scope.inscriptions = [];
         $scope.loading = true;
@@ -929,7 +929,7 @@ define(['app', 'moment'], function(app, moment) {
 
 
         $scope.print = function(inscripId) {
-            apiResource.resource('puserinscriptions').getCopy(inscripId).then(function(result) {
+            apiResource.resource('puserinscriptions').getCopy({ id: inscripId, noCache: true }).then(function(result) {
                 var params = {
                     type: 'pdf',
                     content: envService.read('api') + 'pUsers/print-inscription/' + inscripId,
@@ -972,8 +972,8 @@ define(['app', 'moment'], function(app, moment) {
             $scope.existError = false;
             $scope.hasMessage = false;
             PUserInscriptionService.messageFlag = {};
-            
-           
+
+
             if (!query) {
                 loadList();
                 return;
@@ -983,7 +983,7 @@ define(['app', 'moment'], function(app, moment) {
             $scope.loading = true;
             var params = envService.read('api') + 'pUsers';
             var promise = null;
-           
+
             //si es cédula
             if (parseInt(query)) {
                 promise = loadData(params + '?num_identification=' + query);
@@ -1003,7 +1003,7 @@ define(['app', 'moment'], function(app, moment) {
                     } else {
                         $scope.inscriptions = decoded.data;
                         $scope.totalItems = decoded.total;
-                        
+
                     }
                     $scope.maxSize = 1 || decoded.total;
                     $scope.loading = false;
@@ -1037,12 +1037,12 @@ define(['app', 'moment'], function(app, moment) {
             $state.go('root.inscription.create');
         };
 
-        $scope.hasPermission = (permissionKey) =>{
+        $scope.hasPermission = (permissionKey) => {
             var hasAccess = false;
             if (authFactory.hasPermission(permissionKey)) {
                 hasAccess = true;
             }
-            
+
             return hasAccess;
         };
 
@@ -1059,7 +1059,7 @@ define(['app', 'moment'], function(app, moment) {
                     hasAccess = true;
                 }
             }
-            
+
             return hasAccess;
         }
 
@@ -2401,7 +2401,6 @@ define(['app', 'moment'], function(app, moment) {
             }
 
             var failCallback = function(reason) {
-                debugger
                 $scope.saving = false
                 $scope.existError = true;
                 $scope.messages.title = reason.data.title;
@@ -2490,7 +2489,7 @@ define(['app', 'moment'], function(app, moment) {
         ]);
 
         deps.then(function() {
-            apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(model) {
+            apiResource.resource('puserinscriptions').getCopy({id:inscriptionId,noCache:true}).then(function(model) {
                 $scope.model = model;
                 //attached
                 $scope.model.representant_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.representant_identification_card : null;
@@ -2635,7 +2634,7 @@ define(['app', 'moment'], function(app, moment) {
 
         $scope.loadDocs = function(option) {
             if (!option) $scope.loadingDocs = true;
-            apiResource.resource('puserinscriptions').getCopy(inscriptionId).then(function(result) {
+            apiResource.resource('puserinscriptions').getCopy({id:inscriptionId,noCache:true}).then(function(result) {
                 PUserInscriptionService.loadPrintsDocs(result).then(function(docDefinition) {
                     var token = 'token=' + authFactory.getToken();
                     var url = envService.read('api') + 'pUsers/print-inscription/' + inscriptionId;

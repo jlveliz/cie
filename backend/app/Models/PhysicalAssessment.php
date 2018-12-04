@@ -66,7 +66,7 @@ class PhysicalAssessment extends Model
 
     public function getMuscularToneAttribute($value)
     {
-        return json_decode($value);
+        return json_decode($value,true);
     }
 
     //Tono muscular General
@@ -77,7 +77,7 @@ class PhysicalAssessment extends Model
 
     public function getMuscularToneGeneralAttribute($value)
     {
-        return json_decode($value);
+        return json_decode($value,true);
     }
 
     //posición
@@ -88,7 +88,7 @@ class PhysicalAssessment extends Model
 
     public function getPositionAttribute($value)
     {
-        return json_decode($value);
+        return json_decode($value,true);
     }
 
     //Columna
@@ -99,6 +99,6 @@ class PhysicalAssessment extends Model
 
     public function getColumnAttribute($value)
     {
-        return json_decode($value);
+        return json_decode($value,true);
     }
 }

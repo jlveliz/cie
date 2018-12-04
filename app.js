@@ -333,7 +333,7 @@ define([
                                 return deferred.promise;
                             },
                             getCopy: function(params) {
-                                var param = angular.isObject(params) ? param : {
+                                var param = angular.isObject(params) ? params : {
                                     id: params
                                 };
                                 var deferred = $q.defer();
@@ -1248,13 +1248,13 @@ define([
 
                     
                     //check roles
-                    if ($rootScope.hasPermission(params.permissions.print) || $rootScope.hasRole(params.role)) {
-                        $scope.visiblePrint = true;
-                    }
+                    // if ($rootScope.hasPermission(params.permissions.print) || $rootScope.hasRole(params.role)) {
+                    //     $scope.visiblePrint = true;
+                    // }
 
-                    if ($rootScope.hasPermission(params.permissions.download) || $rootScope.hasRole(params.role)) {
-                        $scope.visibleDownload = true;
-                    }
+                    // if ($rootScope.hasPermission(params.permissions.download) || $rootScope.hasRole(params.role)) {
+                    //     $scope.visibleDownload = true;
+                    // }
                     
 
                     var token = 'token=' + authFactory.getToken();

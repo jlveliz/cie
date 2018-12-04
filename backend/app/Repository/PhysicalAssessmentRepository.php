@@ -95,15 +95,14 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			
-			if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) 
-			{
-				$paUser = PhysicalAssessment::find($field);
-			} 
-			elseif (Auth::user()->hasRole('doc-val-psic')) 
-			{
-				$paUser = PhysicalAssessment::where('created_user_id',Auth::user()->id)->where('id',$field)->first();
-			}
+			// if (Auth::user()->hasAnyRole(['admin','dirTerapia'])) 
+			// {
+				$paUser = PhysicalAssessment::with('patientUser')->find($field);
+			// } 
+			// elseif (Auth::user()->hasRole('doc-val-psic')) 
+			// {
+				// $paUser = PhysicalAssessment::where('created_user_id',Auth::user()->id)->where('id',$field)->first();
+			// }
 
 
 		} else {

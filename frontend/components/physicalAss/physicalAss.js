@@ -50,7 +50,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('PhysicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$rootScope', '$state', function($scope, apiResource, DTOptionsBuilder, PysicalService, $rootScope, $state) {
+    app.register.controller('PhysicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$rootScope', '$state', 'envService',function($scope, apiResource, DTOptionsBuilder, PysicalService, $rootScope, $state, envService) {
 
         $scope.models = [];
         $scope.loading = true;
@@ -67,6 +67,18 @@ define(['app', 'moment'], function(app, moment) {
                 PysicalService.messageFlag = {};
             }
         });
+
+
+        $scope.print = function(id) {
+            apiResource.resource('physical-assessments').getCopy({ id: id, noCache: true }).then(function(result) {
+                var params = {
+                    type: 'pdf',
+                    content: envService.read('api') + 'physical-assessments/print/' + id,
+                    title: result.patient_user.last_name + ' ' + result.patient_user.name
+                };
+                $rootScope.openPreviewModal(params);
+            });
+        }
 
 
         $scope.delete = function(id) {

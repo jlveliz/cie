@@ -64,7 +64,7 @@
                                                         <a title="Editar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Editar Usuario {{inscription.name}} {{inscription.last_name}}"  ui-sref="root.inscription.edit({pInsId:inscription.id})"> <i class="fa fa-pencil"></i> Editar</a>
                                                     </li>
                                                     <li ng-if="hasPermission('descargar_ficha_inscripcion')  || hasRole('admin')">
-                                                        <a title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}"   ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</a>
+                                                        <a title="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" alt="Imprimir Usuario {{inscription.name}} {{inscription.last_name}}" ng-click="print(inscription.id)"> <i class="fa fa-file-pdf-o" ></i> Imprimir</a>
                                                     </li>
                                                     <li ng-if="hasPermission('eliminar_ficha_inscripcion')  || hasRole('admin')">
                                                         <a title="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}" alt="Eliminar Usuario {{inscription.name}} {{inscription.last_name}}"  ng-click="delete(inscription.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
