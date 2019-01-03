@@ -313,7 +313,6 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth', $scope.model.patientUser);
                 $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic', $scope.model.patientUser);
                 $scope.model.user_created_id = $scope.model.creator.id;
-                debugger;
                 $scope.model.creator = $scope.model.creator.person.name + ' ' + $scope.model.creator.person.last_name;
                 $scope.model.hour_created_at = new moment($scope.model.created_at).format('HH:mm');
                 $scope.loading = false;

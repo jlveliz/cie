@@ -68,8 +68,8 @@
                                                     <div class="profile_title ng-scope">
                                                         <h2><b>Roles</b></h2>
                                                     </div>
-                                                    <ul class="list-unstyled list-roles">
-                                                        <li ng-repeat="(key, value) in roles">
+                                                    <ul class="list-unstyled list-roles list-inline">
+                                                        <li ng-repeat="(key, value) in roles" class="col-md-4 col-sm-3 col-xs-12">
                                                             <div class="checkbox checkbox-primary" style="margin:0px">
                                                                 <input id="checkbox_role_{{value.id}}" type="checkbox" ng-checked="checkRole(value.id,value)" ng-change="setRole(value.id,value.$selected)" ng-model="value.$selected" class="ng-pristine ng-untouched ng-valid ng-empty" checked="checked" aria-invalid="false">
                                                                 <label for="checkbox_role_{{value.id}}" class="ng-binding">

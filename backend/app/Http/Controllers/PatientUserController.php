@@ -7,6 +7,8 @@ use Cie\Http\Validators\PatientUserValidator;
 use Cie\Exceptions\PatientUserException;
 use Illuminate\Http\Request;
 use Cie\Events\PatientUserFormCreated;
+use Cie\Models\PatientUser;
+use Auth;
 use PDF;
 
 
@@ -19,8 +21,6 @@ class PatientUserController extends Controller
     public function __construct(PatientUserRepositoryInterface $pUserRepo, Request $request)
     {
         $this->middleware('jwt.auth',['except'=>['import']]);
-        // $this->middleware('checkrole:recepcion',['only'=>'store']);
-        // $this->middleware('checkrole:admin,director,dirTerapia,jefapsi,secretaria,asisjefatura,recepcion,medico,psicologia,tera-famil,tera-fisica,mecanoterapia,hidroterapia,psicopedagogia,equinoterapia,ocupacional,lenguaje,est-temprana,musicoterapia,bailoterapia,horticultura,arte,deportes',['except'=>'import']);
         parent::__construct($request);
         $this->pUserRepo = $pUserRepo;
     }

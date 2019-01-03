@@ -293,42 +293,42 @@ define([
                                 var r = this.create();
                                 var _this = this;
 
-                                if (params && params.noCache == true) {
 
+                                //exist in cache ?
+                                var keyCache = params.id + '_' + nameResource;
+                                if (params && params.parentId) {
+                                    keyCache += '/' + params.parentId;
+                                }
+
+                                var resource = getFromCache(keyCache);
+                                if (resource) {
+                                    deferred.resolve(resource);
+                                    return deferred.promise;
+                                }
+
+                                var keyCache = nameResource;
+                                var arrayCache = getFromCache(keyCache);
+
+                                if (arrayCache && arrayCache.length > 0) {
+                                    var idxArray = _.findIndex(arrayCache, function(item) {
+                                        return item.id == param.id;
+                                    });
+                                    if (idxArray > -1) {
+                                        deferred.resolve(arrayCache[idxArray]);
+                                        return deferred.promise;
+                                    }
+                                }                     
+
+
+                                if (!resource || !arrayCache) {
                                     r.$get(param).then(function(result) {
                                         _this.setOnCache(result, params && params.parentId ? params.parentId : null)
                                         deferred.resolve(result);
                                     }, function(error) {
                                         deferred.reject(error)
                                     })
-
-                                } else {
-                                    //exist in cache ?
-                                    var keyCache = params.id + '_' + nameResource;
-                                    if (params && params.parentId) {
-                                        keyCache += '/' + params.parentId;
-                                    }
-
-                                    var resource = getFromCache(keyCache);
-                                    if (resource) {
-                                        deferred.resolve(resource);
-                                        return deferred.promise;
-                                    }
-
-                                    var keyCache = nameResource;
-                                    var arrayCache = getFromCache(keyCache);
-
-                                    if (arrayCache && arrayCache.length > 0) {
-                                        var idxArray = _.findIndex(arrayCache, function(item) {
-                                            return item.id == param.id;
-                                        });
-                                        if (idxArray > -1) {
-                                            deferred.resolve(arrayCache[idxArray]);
-                                            return deferred.promise;
-                                        }
-                                    }                                    
+                                    
                                 }
-
 
                                 return deferred.promise;
                             },
@@ -1067,7 +1067,10 @@ define([
                     angular.forEach(role.permissions, function(permRole) {
                         permRoles.push(permRole.code);
                     })
-                    RoleStore.defineRole(role.code, permRoles);
+                    
+                    if (role.permissions.length > 0) {
+                        RoleStore.defineRole(role.code, permRoles);
+                    }
                 })
             }).then(function() {
                 // Once permissions are set-up 

@@ -4,6 +4,7 @@ namespace Cie\Http\Validators;
 use Cie\Exceptions\PatientUserException;
 use Illuminate\Http\Request;
 use Validator;
+use Auth;
 /**
 * 
 */
@@ -13,7 +14,16 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 
 	public function __construct(Request $request)
 	{
-		$this->make($this->request = $request);
+		$this->request = $request;
+
+		
+		if ($this->request->method() == 'POST' ) {
+			Auth::user()->can('create',new \Cie\Models\PatientUser);
+		} elseif($this->request->method() == 'PUT') {
+			Auth::user()->can('update',new \Cie\Models\PatientUser);
+		}
+
+		$this->make();
 	}
 
 

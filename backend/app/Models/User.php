@@ -64,7 +64,10 @@ class User extends Authenticatable
                 }
             }
         } else {
-            if ($this->hasRole($roles)) {
+            
+            if($roles == 'any') {
+                return true;
+            } elseif ($this->hasRole($roles)) {
                 return true;
             }
         }
