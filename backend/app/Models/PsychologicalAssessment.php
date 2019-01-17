@@ -115,6 +115,14 @@ class PsychologicalAssessment extends BaseModel
         return $this->belongsTo('Cie\Models\PatientUser','patient_user_id');
     }
 
+    public function getStatusCivilFather() {
+        return "Casado";
+    }
+    
+    public function getStatusCivilMother() {
+        return "Casado";
+    }
+
     public static function boot () {
         parent::boot();
 

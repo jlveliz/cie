@@ -6,6 +6,7 @@ use Cie\RepositoryInterface\PsychologicalAssessmentRepositoryInterface;
 use Cie\Http\Validators\PsychologicalAssessmentValidator; //TODO
 use Cie\Exceptions\PsychologicalAssessmentException;
 use Illuminate\Http\Request;
+use PDF;
 
 
 
@@ -111,6 +112,17 @@ class PsychologicalAssessmentController extends Controller
             }
         } catch (PsychologicalAssessmentException $e) {
             return response()->json($e->getMessage(),$e->getCode());
+        }
+    }
+
+    public function generatePdF($id, Request $request) {
+        $psychoAss =  $this->psAsse->find($id);
+        // return view('pdf.psychological-ass',compact('psychoAss'));
+        if ($request->has('download') && $request->get('download')) {
+            return PDF::loadView('pdf.psychological-ass',compact('psychoAss'))->download('Valoración Psicológica de  '.$psychoAss->last_name . ' ' . $psychoAss->name.'.pdf');
+        } else {
+            return PDF::loadView('pdf.psychological-ass',compact('psychoAss'))->stream('Valoración Psicológica de  ' . $psychoAss->last_name . ' ' . $psychoAss->name.'.pdf');
+            
         }
     }
 }

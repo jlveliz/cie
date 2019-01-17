@@ -131,7 +131,7 @@ define(['app', 'moment'], function(app, moment) {
         }
     }]);
 
-    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PsyChoService', '$rootScope', '$state',function($scope, apiResource, DTOptionsBuilder, PsyChoService, $rootScope,$state) {
+    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PsyChoService', '$rootScope', '$state','envService',function($scope, apiResource, DTOptionsBuilder, PsyChoService, $rootScope,$state,envService) {
 
         $scope.models = [];
         $scope.loading = true;
@@ -191,6 +191,18 @@ define(['app', 'moment'], function(app, moment) {
         $scope.goCreate = function() {
             $state.go('root.psychoAssessment.create')
         }
+
+        $scope.print = function(id) {
+            apiResource.resource('psycho-assessments').getCopy({ id: id, noCache: true }).then(function(result) {
+                var params = {
+                    type: 'pdf',
+                    content: envService.read('api') + 'psycho-assessments/print/' + id,
+                    title: result.patient_user.last_name + ' ' + result.patient_user.name
+                };
+                $rootScope.openPreviewModal(params);
+            });
+        }
+
     }]);
 
     app.register.controller('PsychologicalAssCreateCtrl', ['$scope', 'apiResource', 'PsyChoService', '$state', '$rootScope', function($scope, apiResource, PsyChoService, $state, $rootScope) {

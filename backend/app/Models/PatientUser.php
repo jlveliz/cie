@@ -261,6 +261,13 @@ class PatientUser extends BaseModel
         return $schoolingType;
     }
 
+    public function hasDiagnostic() {
+        if($this->diagnostic()) {
+            
+        }
+        return '';
+    }
+
    
 
 
