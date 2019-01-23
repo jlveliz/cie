@@ -60,5 +60,9 @@ class AppServiceProvider extends ServiceProvider
 
         //Physical Assessment
         $this->app->bind('Cie\RepositoryInterface\PhysicalAssessmentRepositoryInterface','Cie\Repository\PhysicalAssessmentRepository');
+        
+        //Carousel
+        $this->app->bind('Cie\RepositoryInterface\CarouselRepositoryInterface','Cie\Repository\CarouselRepository');
+        
     }
 }

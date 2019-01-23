@@ -1026,7 +1026,10 @@ define([
             id: '@id'
         }).register();
 
-
+        //carousels - RFV
+        apiResource.resource("carousels", envService.read('api') + 'carousels/:id', {
+            id: '@id'
+        }).register();
 
     }]);
 
@@ -2802,9 +2805,71 @@ define([
             }
         }));
 
+        /**
+            CAROUSEL -- RFV 
+        **/
+        $stateProvider.state('root.carousel', angularAMD.route({
+            url: 'carousel',
+            controllerUrl: 'frontend/components/carousel/carousel',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/carousel/index.html',
+                    controller: 'CarouselIdxCtrl'
+                }
 
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Carrusel de Fotos del Blog"
+            }
+        }));
 
+        $stateProvider.state('root.carousel.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/carousel/carousel',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/carousel/create.html',
+                    controller: 'CarouselCreateCtrl'
+                }
 
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Carrusel"
+            }
+        }));
+
+        $stateProvider.state('root.carousel.edit', angularAMD.route({
+            url: '/{carouselId:int}/edit',
+            controllerUrl: 'frontend/components/carousel/carousel',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/carousel/edit.html',
+                    controller: 'CarouselEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Módulos"
+            }
+        }));
+
+        
     }]);
 
 

@@ -36,7 +36,6 @@ class Permission extends BaseModel
         'code'
     ];
 
-
     public function module()
     {
         return $this->belongsTo('Cie\Models\Module','module_id');
