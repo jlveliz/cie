@@ -60,6 +60,7 @@ Route::group(['prefix'=>'api'],function() {
 	Route::resource('stapatients','StatePatientUserController',['except'=>['create']]);
     //////////////
     Route::resource('carousels','CarouselController',['except'=>['create']]);
+    Route::resource('requests','RequestController',['except'=>['create','store']]);
     ///////////////
     
 

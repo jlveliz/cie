@@ -1030,6 +1030,12 @@ define([
         apiResource.resource("carousels", envService.read('api') + 'carousels/:id', {
             id: '@id'
         }).register();
+       
+       
+        //carousels - RFV
+        apiResource.resource("requests", envService.read('api') + 'requests/:id', {
+            id: '@id'
+        }).register();
 
     }]);
 
@@ -2868,6 +2874,31 @@ define([
                 pageTitle: "Módulos"
             }
         }));
+
+
+
+         /**
+            REQUESTS
+        **/
+       $stateProvider.state('root.requests', angularAMD.route({
+        url: 'requests',
+        controllerUrl: 'frontend/components/request/request',
+        views: {
+            "content@root": {
+                templateUrl: 'frontend/components/request/index.html',
+                controller: 'RequestIdxCtrl'
+            }
+        },
+        data: {
+            permissions: {
+                // only: ['admin'],
+                except: ['anonymous'],
+                redirectTo: "adminAuth"
+            },
+            css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+            pageTitle: "Solicitudes De Fichas de Ingreso"
+        }
+    })); 
 
         
     }]);
