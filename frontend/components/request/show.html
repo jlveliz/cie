@@ -1,0 +1,375 @@
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Solicitudes de Pre Inscripción</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <h4 class="text-center" ng-if="loading">
+          <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+          <span class="sr-only">Cargando...</span>
+        </h4>
+        <uib-tabset active="0" ng-if="!loading">
+          <uib-tab index="0">
+            <uib-tab-heading>
+              <h5>
+                <b><i class="fa fa-list"></i>Ingresadas</b>
+              </h5>
+            </uib-tab-heading>
+
+            <div class="tab-index">
+              <uib-tabset active="1" ng-if="!loading">
+                <uib-tab index="0" select="goListIngresadas()">
+                  <uib-tab-heading>
+                    <h5>
+                      <b><i class="fa fa-list"></i> Listado</b>
+                    </h5>
+                  </uib-tab-heading>
+                </uib-tab>
+                <uib-tab index="1">
+                  <uib-tab-heading>
+                    <h5>
+                      <b><i class="fa fa-eye"></i> Ver</b>
+                    </h5>
+                  </uib-tab-heading>
+                  <form
+                    name="saveForm"
+                    ng-if="!loading"
+                    ng-validate="validateOptions"
+                  >
+                    <div class="tab-index">
+                      <div class="row" ng-if="existError || hasMessage">
+                        <div
+                          class="alert col-md-12 col-xs-12 col-sm-12"
+                          role="alert"
+                          ng-class="'alert-' + (messages.type || 'warning')"
+                        >
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="alert"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <p ng-if="hasMessage">{{ messages.title }}</p>
+                          <ul ng-if="messages.details.length">
+                            <li ng-repeat="ms in messages.details">{{ ms }}</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="tab-index">
+                          <div class="col-lg-8">
+                            <p class="section-inner">Datos del Usuario</p>
+                            <div class="row">
+                              <div
+                                class="col-md-4 col-sm-2 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  for="num_identification"
+                                  title="Cedula del Usuario"
+                                  class="control-label"
+                                  >Cédula del Usuario</label
+                                >
+                                <input
+                                  maxlength="10"
+                                  minlength="10"
+                                  ng-disabled="saving || isShow"
+                                  id="num_identification"
+                                  type="text"
+                                  class="form-control"
+                                  name="num_identification"
+                                  ng-model="model.num_identification_patient"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                              <div
+                                class="col-md-4 col-sm-3 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  class="control-label"
+                                  for="name"
+                                  title="Nombres del Usuario"
+                                  >Nombres</label
+                                >
+                                <input
+                                  ng-disabled="saving || isShow"
+                                  id="name"
+                                  type="text"
+                                  class="form-control"
+                                  name="name"
+                                  ng-model="model.name_patient"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                              <div
+                                class="col-md-4 col-sm-3 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  class="control-label "
+                                  for="last_name"
+                                  title="Apellidos del Usuario"
+                                  >Apellidos</label
+                                >
+                                <input
+                                  ng-disabled="saving || isShow"
+                                  id="last_name"
+                                  type="text"
+                                  class="form-control"
+                                  name="last_name"
+                                  ng-model="model.last_name_patient"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                            </div>
+                            <p class="section-inner">Datos del Representante</p>
+                            <div class="row">
+                              <div
+                                class="col-md-4 col-sm-2 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  for="num_identification_representant"
+                                  title="Cedula"
+                                  class="control-label"
+                                  >Cédula</label
+                                >
+                                <input
+                                  maxlength="10"
+                                  minlength="10"
+                                  ng-disabled="saving || isShow"
+                                  id="num_identification_representant"
+                                  type="text"
+                                  class="form-control"
+                                  name="num_identification_representant"
+                                  ng-model="model.num_identification_representant"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                              <div
+                                class="col-md-4 col-sm-3 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  class="control-label"
+                                  for="name_representant"
+                                  title="Nombres del Representante"
+                                  >Nombre</label
+                                >
+                                <input
+                                  ng-disabled="saving || isShow"
+                                  id="name"
+                                  type="text"
+                                  class="form-control"
+                                  name="name"
+                                  ng-model="model.name_representant"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                              <div
+                                class="col-md-4 col-sm-3 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  class="control-label "
+                                  for="last_name_representant"
+                                  title="Apellidos del Representante"
+                                  >Apellidos</label
+                                >
+                                <input
+                                  ng-disabled="saving || isShow"
+                                  id="last_name_representant"
+                                  type="text"
+                                  class="form-control"
+                                  name="last_name_representant"
+                                  ng-model="model.last_name_representant"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div
+                                class="col-md-4 col-sm-2 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  for="email"
+                                  title="Email"
+                                  class="control-label"
+                                  >Email</label
+                                >
+                                <input
+                                  ng-disabled="saving || isShow"
+                                  id="email"
+                                  type="text"
+                                  class="form-control"
+                                  name="email"
+                                  ng-model="model.email"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                              <div
+                                class="col-md-4 col-sm-3 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  class="control-label"
+                                  for="name_representant"
+                                  title="Teléfono"
+                                  >Teléfono</label
+                                >
+                                <input
+                                  ng-disabled="saving || isShow"
+                                  id="name"
+                                  type="text"
+                                  class="form-control"
+                                  name="name"
+                                  ng-model="model.telephone"
+                                  disabled
+                                  readonly
+                                />
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div
+                                class="col-md-12 col-sm-12 col-xs-12 form-group"
+                                ng-if="!loading"
+                              >
+                                <label
+                                  class="control-label"
+                                  for="observation"
+                                  title="Observación"
+                                  >Observación</label
+                                >
+                                <textarea
+                                  name="observation"
+                                  class="form-control no-resize"
+                                  id="observation"
+                                  rows="5"
+                                  disabled
+                                  readonly
+                                >{{ model.observation }}</textarea>
+                              </div>
+                            </div>
+                            <!-- citas -->
+                            <p class="section-inner">Agendamiento de Cita</p>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 col-xs-12 form-group" ng-if="!loading">
+                                    <label
+                                    class="control-label"
+                                    for="begin_date"
+                                    title="Fecha desde"
+                                    >Fecha Desde</label>
+                                    <input type="date" name="begin_date" id="begin_date" class="form-control" ng-model="model.begin_date" min="{{model.begin_date}}" ng-disabled="model.status == 'A'">
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12 form-group" ng-if="!loading">
+                                    <label
+                                    class="control-label"
+                                    for="end_date"
+                                    title="Fecha Hasta"
+                                    >Fecha Hasta</label>
+                                    <input type="date" name="end_date" id="end_date" class="form-control" ng-model="model.end_date" ng-disabled="model.status == 'A'">
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <p class="section-inner">Documentos</p>
+                            <button class="btn btn-default btn-block text-left" style="text-align:left!important"> <i class="fa fa-photo"></i>     Foto del Usuario</button>
+                            <button class="btn btn-default btn-block" style="text-align:left!important"><i class="fa fa-file"></i> Identificación del Usuario</button>
+                            <button class="btn btn-default btn-block" style="text-align:left!important"><i class="fa fa-file"></i> Ficha de Diagnóstico del Usuario</button>
+                            <button class="btn btn-default btn-block" style="text-align:left!important"><i class="fa fa-file"></i> Identificación del Representante</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-if="existError || hasMessage">
+                        <div
+                          class="alert col-md-12 col-xs-12 col-sm-12"
+                          role="alert"
+                          ng-class="'alert-' + (messages.type || 'warning')"
+                        >
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="alert"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <p ng-if="hasMessage">{{ messages.title }}</p>
+                          <ul ng-if="messages.details.length">
+                            <li ng-repeat="ms in messages.details">{{ ms }}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Nav tabs -->
+                    <div class="clearfix "></div>
+                    <div class="ln_solid " ng-if="!loading "></div>
+                    <div class="form-group " ng-if="!loading ">
+                        <!-- guarda  -->
+                        <button
+                        ng-if="model.status == 'I'"
+                        type="submit"
+                        class="btn btn-default"
+                        ng-disabled="saving"
+                        ng-click="saveAndClose(saveForm)"
+                      >
+                        <span ng-if="!saving"
+                          ><i class="fa fa-save"></i> Guardar y cerrar</span
+                        >
+                        <span ng-if="saving">
+                          <i class="fa fa-spinner fa-spin" ng-if="saving"></i>
+                          Guardando...</span
+                        >
+                      </button>
+                    <!-- convierte en una solicitud -->
+                      <button
+                        ng-if="model.status == 'A'"
+                        type="submit"
+                        class="btn btn-primary"
+                        ng-disabled="saving"
+                        ng-click="createPatientUser(saveForm)"
+                      >
+                        <span ng-if="!saving"
+                          ><i class="fa fa-plus"></i> Crear Ficha de Inscripción</span
+                        >
+                        <span ng-if="saving">
+                          <i class="fa fa-spinner fa-spin" ng-if="saving"></i>
+                          Creando...</span
+                        >
+                      </button>
+                      <a class="btn btn-link" ui-sref="root.inscription"
+                        >Cancelar</a
+                      >
+                    </div>
+                  </form>
+                </uib-tab>
+              </uib-tabset>
+            </div>
+          </uib-tab>
+          <uib-tab index="1" select="goListCitasAgendadas()">
+            <uib-tab-heading>
+              <a title="Citas Agendadas"
+                ><h5>
+                  <b><i class="fa fa-list"></i> Citas Agendadas</b>
+                </h5></a
+              >
+            </uib-tab-heading>
+          </uib-tab>
+        </uib-tabset>
+      </div>
+    </div>
+  </div>
+</div>

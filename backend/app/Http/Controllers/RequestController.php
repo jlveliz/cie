@@ -50,9 +50,9 @@ class RequestController extends Controller
     {
         try {
             $data = $request->all();
-            $module = $this->requestRepo->save($data)->toJson();
-            $module = $this->encodeResponse($module);
-            return response()->json($module,200);
+            $request = $this->requestRepo->save($data)->toJson();
+            $request = $this->encodeResponse($request);
+            return response()->json($request,200);
         } catch (RequestException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -68,9 +68,9 @@ class RequestController extends Controller
     {
         
         try {
-            $module = $this->requestRepo->find($id)->toJson();
-            $module = $this->encodeResponse($module);
-            return response()->json($module,200);
+            $request = $this->requestRepo->find($id)->toJson();
+            $request = $this->encodeResponse($request);
+            return response()->json($request,200);
         } catch (RequestException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
@@ -84,12 +84,12 @@ class RequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ModuleValidator $validator, Request $request, $id)
+    public function update(RequestValidator $validator, Request $request, $id)
     {
         try {
-            $module = $this->requestRepo->edit($id, $request->all())->tojson();
-            $module = $this->encodeResponse($module);
-            return response()->json($module,200);
+            $request = $this->requestRepo->edit($id, $request->all())->tojson();
+            $request = $this->encodeResponse($request);
+            return response()->json($request,200);
         } catch (RequestException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }

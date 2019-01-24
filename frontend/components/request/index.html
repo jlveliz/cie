@@ -10,76 +10,83 @@
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
                     <span class="sr-only">Cargando...</span>
                 </h4>
-                <uib-tabset active="0" ng-if="!loading">
+                <uib-tabset active="tabActive" ng-if="!loading">
                     <uib-tab index="0">
                         <uib-tab-heading>
-                            <h5><b><i class="fa fa-list"></i> Listado de Ingresadas</b></h5>
+                            <h5><b><i class="fa fa-list"></i> Ingresadas</b></h5>
                         </uib-tab-heading>
                         <div class="tab-index">
-                            <div class="row" ng-if="existError || hasMessage">
-                                <div class="alert col-md-12 col-xs-12 col-sm-12" model="alert" ng-class="'alert-' + (messages.type || 'warning')">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <ul ng-if="messages.details.length > 0">
-                                        <li ng-repeat="(key, value) in messages.details">{{value}}</li>
-                                    </ul>
-                                    <p ng-if="hasMessage">{{messages.title}}</p>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
-                                <form name="form" ng-submit="find()" class="form-inline">
-                                    <div class="form-group">
-                                        <input type="text" name="find" class="form-control" placeholder="Buscar nombre o cédula" ng-model="options.query">
+                            <uib-tabset active="0" ng-if="!loading">
+                                <uib-tab index="0">
+                                    <uib-tab-heading>
+                                        <h5><b><i class="fa fa-list"></i> Listado</b></h5>
+                                    </uib-tab-heading>
+                                    <div class="row" ng-if="existError || hasMessage">
+                                        <div class="alert col-md-12 col-xs-12 col-sm-12" model="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <ul ng-if="messages.details.length > 0">
+                                                <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                            </ul>
+                                            <p ng-if="hasMessage">{{messages.title}}</p>
+                                        </div>
                                     </div>
-                                    <button ng-disabled="loading" type="submit" class="btn btn-primary no-margin-bottom"><i ng-if="!loading" class="fa fa-search"></i> <span ng-if="!loading">Buscar</span> <i class="fa fa-spinner fa-spin" ng-if="loading"></i> </button>
-                                </form>
-                            </div>    
-                            
-                            <table id="request-list" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Num Identificación </th>
-                                        <th>Representante </th>
-                                        <th>Para</th>
-                                        <th>Contacto</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="(key, model) in models   | filter:{ status:'I'}">
-                                        <td><a ui-sref="root.requests.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.num_identification_representant}}</a></td>
-                                        <td><a ui-sref="root.requests.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.last_name_representant}} {{model.name_representant}}    </a></td>
-                                        <td>{{model.name_patient}} {{model.last_name_patient}}</td>
-                                        <td>{{model.email}} / {{model.telephone}}</td>
-                                        <td>
-
-                                            <div class="btn-group"  role="group" ng-hide="model.$deleting">
-                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fa fa-cog"></i> Opciones
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li ng-if="hasPermission('ver_ficha_inscripcion')  || hasRole('admin')">
-                                                        <a title="Ver Solicitud {{model.last_name_representant}} {{model.name_representant}}" alt="Ver Solicitud {{model.last_name_representant}} {{model.name_representant}}"  ui-sref="root.requests.show({requestId:model.id})"> <i class="fa fa-eye"></i> Ver</a>
-                                                    </li>
-                                                    <li ng-if="hasPermission('eliminar_ficha_inscripcion')  || hasRole('admin')">
-                                                        <a title="Eliminar Solicitud {{model.last_name_representant}} {{model.name_representant}}" alt="Eliminar Solicitud {{model.last_name_representant}} {{model.name_representant}}"  ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
-                                                    </li>
-                                                </ul>
+                                    
+                                    <div class="col-md-4 col-sm-6 col-xs-12 pull-right" style="margin-top:1.0rem">
+                                        <form name="form" ng-submit="find()" class="form-inline">
+                                            <div class="form-group">
+                                                <input type="text" name="find" class="form-control" placeholder="Buscar nombre o cédula" ng-model="options.query">
                                             </div>
-                                            <p ng-show="model.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="col-md-12 col-xs-12 text-right" ng-if="!hidePaginator">
-                                <ul boundary-links="true" boundary-link-numbers="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" class="pagination-sm" uib-pagination max-size="maxSize" total-items="totalItems" ng-model="currentPage" ng-change="changePage(currentPage)"></ul>
-                            </div>
+                                            <button ng-disabled="loading" type="submit" class="btn btn-primary no-margin-bottom"><i ng-if="!loading" class="fa fa-search"></i> <span ng-if="!loading">Buscar</span> <i class="fa fa-spinner fa-spin" ng-if="loading"></i> </button>
+                                        </form>
+                                    </div>    
+                                    
+                                    <table id="request-list" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Num Identificación </th>
+                                                <th>Representante </th>
+                                                <th>Para</th>
+                                                <th>Contacto</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="(key, model) in models   | filter:{ status:'I'}">
+                                                <td><a ui-sref="root.requests.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.num_identification_representant}}</a></td>
+                                                <td><a ui-sref="root.requests.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.last_name_representant}} {{model.name_representant}}    </a></td>
+                                                <td>{{model.name_patient}} {{model.last_name_patient}}</td>
+                                                <td>{{model.email}} / {{model.telephone}}</td>
+                                                <td>
+        
+                                                    <div class="btn-group"  role="group" ng-hide="model.$deleting">
+                                                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fa fa-cog"></i> Opciones
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li ng-if="hasPermission('ver_ficha_inscripcion')  || hasRole('admin')">
+                                                                <a title="Ver Solicitud {{model.last_name_representant}} {{model.name_representant}}" alt="Ver Solicitud {{model.last_name_representant}} {{model.name_representant}}"  ui-sref="root.requests.show({requestId:model.id})"> <i class="fa fa-eye"></i> Ver</a>
+                                                            </li>
+                                                            <li ng-if="hasPermission('eliminar_ficha_inscripcion')  || hasRole('admin')">
+                                                                <a title="Eliminar Solicitud {{model.last_name_representant}} {{model.name_representant}}" alt="Eliminar Solicitud {{model.last_name_representant}} {{model.name_representant}}"  ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <p ng-show="model.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-12 col-xs-12 text-right" ng-if="!hidePaginator">
+                                        <!-- <ul boundary-links="true" boundary-link-numbers="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" class="pagination-sm" uib-pagination max-size="maxSize" total-items="totalItems" ng-model="currentPage" ng-change="changePage(currentPage)"></ul> -->
+                                    </div>
+                                </uib-tab>
+                            </uib-tabset>
                         </div>
                     </uib-tab>
-                    <uib-tab index="1" select="goCreate()">
+                    <uib-tab index="1">
                         <uib-tab-heading>
-                            <a title="Crear Ficha de Inscripción"><h5><b><i class="fa fa-list"></i> Citas Agendadas</b></h5></a>
+                            <a title="Citas Agendadas"><h5><b><i class="fa fa-list"></i> Citas Agendadas</b></h5></a>
                         </uib-tab-heading>
                         <div class="tab-index">
                                 <div class="row" ng-if="existError || hasMessage">
@@ -112,9 +119,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="(key, model) in models   | filter:{ status:'A'}">
-                                            <td><a ui-sref="root.model.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.num_identification_representant}}</a></td>
-                                            <td><a ui-sref="root.model.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.last_name_representant}} {{model.name_representant}}    </a></td>
+                                        <tr ng-repeat="(key, model) in models   | filter:{ status:'A'} | orderBy:'end_date' ">
+                                            <td><a ui-sref="root.requests.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.num_identification_representant}}</a></td>
+                                            <td><a ui-sref="root.requests.show({requestId:model.id})" title="ver {{model.last_name_representant}} {{model.name_representant}}">{{model.last_name_representant}} {{model.name_representant}}    </a></td>
                                             <td>{{model.name_patient}} {{model.last_name_patient}}</td>
                                             <td>{{model.email}} / {{model.telephone}}</td>
                                             <td>
@@ -126,10 +133,10 @@
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a title="Ver Solicitud de {{model.name}} {{model.last_name}}" alt="Ver Solicitud de {{model.name}} {{model.last_name}}"  ui-sref="root.model.show({requestId:model.id})"> <i class="fa fa-eye"></i> Ver</a>
+                                                            <a title="Ver Solicitud de {{model.name}} {{model.last_name}}" alt="Ver Solicitud de {{model.name}} {{model.last_name}}"  ui-sref="root.requests.show({requestId:model.id})"> <i class="fa fa-eye"></i> Ver</a>
                                                         </li>
-                                                        <li ng-if="hasPermission('eliminar_ficha_inscripcion')  || hasRole('admin')">
-                                                            <a title="Eliminar Usuario {{model.name}} {{model.last_name}}" alt="Eliminar Usuario {{model.name}} {{model.last_name}}"  ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                        <li>
+                                                            <a title="Crear Solicitud Inscripción" alt="Crear Solicitud Inscripción"> <i class="fa fa-plus" aria-hidden="true"></i> Crear Solicitud</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -139,9 +146,8 @@
                                     </tbody>
                                 </table>
                                 <div class="col-md-12 col-xs-12 text-right" ng-if="!hidePaginator">
-                                    <ul boundary-links="true" boundary-link-numbers="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" class="pagination-sm" uib-pagination max-size="maxSize" total-items="totalItems" ng-model="currentPage" ng-change="changePage(currentPage)"></ul>
+                                    <!-- <ul boundary-links="true" boundary-link-numbers="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" class="pagination-sm" uib-pagination max-size="maxSize" total-items="totalItems" ng-model="currentPage" ng-change="changePage(currentPage)"></ul> -->
                                 </div>
-                            </div>
                         </div>
                     </uib-tab>
                 </uib-tabset>

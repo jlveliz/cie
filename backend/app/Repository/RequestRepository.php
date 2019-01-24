@@ -66,16 +66,16 @@ class RequestRepository implements RequestRepositoryInterface
 
 	public function edit($id,$data)
 	{
-		// $Request = Request::find($id);
-		// if ($Request) {
-		// 	$Request->fill($data);
-		// 	if($Request->update()){
-		// 		$key = $Request->getKey();
-		// 		return $this->find($key);
-		// 	}
-		// } else {
-		// 	throw new RequestException(['title'=>'Ha ocurrido un error al actualizar el módulo '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
-		// }
+		$request = Request::find($id);
+		if ($request) {
+			$request->fill($data);
+			if($request->update()){
+				$key = $request->getKey();
+				return $this->find($key);
+			}
+		} else {
+			throw new RequestException(['title'=>'Ha ocurrido un error al actualizar la solicitud de  '.$data['name_representant'].' '.$data['last_name_representant'],'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		}
 
 
 	}
