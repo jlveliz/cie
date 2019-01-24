@@ -16,14 +16,14 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 	{
 		$this->request = $request;
 
-		
+		// dd($this->request->all());
 		if ($this->request->method() == 'POST' ) {
 			Auth::user()->can('create',new \Cie\Models\PatientUser);
 		} elseif($this->request->method() == 'PUT') {
 			Auth::user()->can('update',new \Cie\Models\PatientUser);
 		}
 
-		$this->make();
+		$this->make($this->request);
 	}
 
 
@@ -93,7 +93,8 @@ class PatientUserValidator extends Validator implements ValidatorInterface
 		// ];
 
 		$rules = [
-			'num_identification' => 'min:10|max:10|is_valid_id',
+			// 'num_identification' => 'min:10|max:10|is_valid_id',
+			'num_identification' => 'min:10|max:10',
 			'name' => 'required',
 			'last_name' => 'required',
 			//'date_birth' => 'date',

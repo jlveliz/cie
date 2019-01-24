@@ -88,4 +88,12 @@ class RequestRepository implements RequestRepositoryInterface
 		// }
 		// throw new RequestException(['title'=>'Ha ocurrido un error al eliminar el módulo ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 	}
+
+	public function getRequestInserteds() {
+		return Request::where('status','=','I')->count();
+	}
+	
+	public function datesInAgend() {
+		return Request::where('status','=','A')->count();
+	}
 }

@@ -1,7 +1,7 @@
 define(['app'], function(app) {
 
 
-    app.register.controller('DashboardCtrl', ['$scope', 'envService', 'apiResource', '$rootScope', function($scope, envService, apiResource, $rootScope) {
+    app.register.controller('DashboardCtrl', ['$scope', 'envService', 'apiResource', '$rootScope', '$state',function($scope, envService, apiResource, $rootScope, $state) {
 
         $scope.loading = true;
 
@@ -14,6 +14,8 @@ define(['app'], function(app) {
 
         apiResource.loadFromApi(req).then(function(dashboard) {
             $scope.totalUsersToday = dashboard.total_users_today;
+            $scope.requestsForView = dashboard.requests_for_view;
+            $scope.totalDates = dashboard.total_dates;
             $scope.loading = false;
         });
 
@@ -138,6 +140,10 @@ define(['app'], function(app) {
                 role: 'admin'
             };
             $rootScope.openPreviewModal(params);
+        }
+
+        $scope.gotRequest = function() {
+            $state.go('root.requests');
         }
 
     }]);

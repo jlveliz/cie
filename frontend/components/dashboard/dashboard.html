@@ -12,6 +12,24 @@
             <p>Que se han ingresado Ficha de Inscripción hoy.</p>
         </div>
     </div>
+    
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable" ng-click="gotRequest()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-file-text"></i></div>
+            <div class="count">{{requestsForView || '0'}}</div>
+            <h3>Personas</h3>
+            <p>Han Registrado una solicitud de Preinscripción.</p>
+        </div>
+    </div>
+    
+    <div class="animated flipInY col-lg-3 col-md-4 col-sm-4 col-xs-6 clickable"  ng-click="gotRequest()">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-calendar"></i></div>
+            <div class="count">{{totalDates || '0'}}</div>
+            <h3>Citas</h3>
+            <p>Esperan ser atendidas por el encargado de Recepción.</p>
+        </div>
+    </div>
 </div>
 <div class="row" ng-if="!loading">
     <h2 class="section_dashboard">Formatos de Documentos Descargables</h2>

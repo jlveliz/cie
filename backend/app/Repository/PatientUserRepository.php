@@ -362,7 +362,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 	//ingresadas en el día corriente
 	public function getTotalUserToday()
 	{
-		return PatientUser::withoutGlobalScopes()->whereRaw('DATE_FORMAT(created_at,"%Y-%m-%d") = DATE_FORMAT(now(),"%Y-%m-%d")')->count();
+		return PatientUser::withoutGlobalScopes()->whereRaw('DATE_FORMAT(created_at,"%Y-%m-%d") = DATE_FORMAT(now(),"%Y-%m-%d") and deleted_at is null')->count();
 	}
 
 

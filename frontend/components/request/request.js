@@ -105,7 +105,7 @@ define(['app','moment'],function(app,moment){
                 }else {
                     $scope.model.end_date = new Date()
                 }
-                
+
                 $scope.loading = false;
             },
             function(err) {
@@ -151,10 +151,41 @@ define(['app','moment'],function(app,moment){
             }
 
             if (saveForm.validate()) {
-                debugger;
                 $scope.saving = true;
                 $scope.model.status ="A";
                 RequestService.save($scope.model).then(successCallback, failCallback);
+            }
+        }
+
+
+        $scope.createPatientUser = function(saveForm) {
+            if (saveForm.validate()) { 
+                $scope.patienUser =  apiResource.resource('puserinscriptions').create({
+                    num_identification: $scope.model.num_identification_patient,
+                    name: $scope.model.name_patient,
+                    last_name: $scope.model.last_name_patient,
+                    state: 2,
+                    has_mother: 0,
+                    has_father: 0,
+                    representant: {
+                        name: $scope.model.name_representant,
+                        last_name: $scope.model.last_name_representant,
+                        num_identification: $scope.model.num_identification_representant,
+                        email: $scope.model.email,
+                        phone: $scope.model.telephone
+                    },
+                });
+                
+                $scope.patienUser.$save().then( function(model) {
+                    $scope.saving =  true;
+                    $scope.model.status = "D";
+                    $scope.model.$update(requestId).then(function() {
+                        $state.go('root.inscription.edit',{
+                            pInsId: model.id
+                        })
+                        $scope.saving =  false;
+                    });
+                });
             }
         }
 
