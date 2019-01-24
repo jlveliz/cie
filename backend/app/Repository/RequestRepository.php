@@ -11,6 +11,12 @@ use Cie\Models\Request;
 class RequestRepository implements RequestRepositoryInterface
 {
 	
+	public function paginate()
+	{
+		return Request::paginate(10);
+	}
+
+	
 	public function enum($params = null)
 	{
 		$requests = Request::get();

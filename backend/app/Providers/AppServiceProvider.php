@@ -64,5 +64,8 @@ class AppServiceProvider extends ServiceProvider
         //Carousel
         $this->app->bind('Cie\RepositoryInterface\CarouselRepositoryInterface','Cie\Repository\CarouselRepository');
         
+        //Requests
+        $this->app->bind('Cie\RepositoryInterface\RequestRepositoryInterface','Cie\Repository\RequestRepository');
+        
     }
 }

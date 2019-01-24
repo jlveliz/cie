@@ -2880,25 +2880,44 @@ define([
          /**
             REQUESTS
         **/
-       $stateProvider.state('root.requests', angularAMD.route({
-        url: 'requests',
-        controllerUrl: 'frontend/components/request/request',
-        views: {
-            "content@root": {
-                templateUrl: 'frontend/components/request/index.html',
-                controller: 'RequestIdxCtrl'
-            }
-        },
-        data: {
-            permissions: {
-                // only: ['admin'],
-                except: ['anonymous'],
-                redirectTo: "adminAuth"
+        $stateProvider.state('root.requests', angularAMD.route({
+            url: 'requests',
+            controllerUrl: 'frontend/components/request/request',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/request/index.html',
+                    controller: 'RequestIdxCtrl'
+                }
             },
-            css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
-            pageTitle: "Solicitudes De Fichas de Ingreso"
-        }
-    })); 
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+                pageTitle: "Solicitudes De Fichas de Ingreso"
+            }
+        })); 
+        
+        $stateProvider.state('root.requests.show', angularAMD.route({
+            url: '/{requestId:int}',
+            controllerUrl: 'frontend/components/request/request',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/request/show.html',
+                    controller: 'ShowCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Solicitudes De Fichas de Ingreso"
+            }
+        })); 
 
         
     }]);

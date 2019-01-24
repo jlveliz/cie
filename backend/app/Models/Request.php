@@ -21,6 +21,10 @@ class Request extends BaseModel
         'city_id'
     ];
 
+    const STATENDIDO = "A";
+
+    const STINGRESADO = "I";
+
     public function city()
     {
     	return $this->belongsTo('Cie\Models\City','city_id');

@@ -25,10 +25,18 @@ class RequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $requests = $this->requestRepo->enum()->toJson();
-        $requests = $this->encodeResponse($requests);
+        try {
+            if ($request->has('page')) {
+                $requests = $this->requestRepo->paginate()->toJson();
+            } else {
+                $requests = $this->requestRepo->enum()->toJson();
+            }
+            $requests = $this->encodeResponse($requests);
+        } catch (RequestException $e) {
+            return response()->json($e->getMessage(),$e->getCode());
+        }
         return response()->json($requests,200);
     }
 
