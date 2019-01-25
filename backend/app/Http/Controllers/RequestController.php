@@ -29,7 +29,7 @@ class RequestController extends Controller
     {
         try {
             if ($request->has('page')) {
-                $requests = $this->requestRepo->paginate()->toJson();
+                $requests = $this->requestRepo->enum()->toJson();
             } else {
                 $requests = $this->requestRepo->enum()->toJson();
             }
