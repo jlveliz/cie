@@ -67,5 +67,14 @@ class AppServiceProvider extends ServiceProvider
         //Requests
         $this->app->bind('Cie\RepositoryInterface\RequestRepositoryInterface','Cie\Repository\RequestRepository');
         
+        //Building
+        $this->app->bind('Cie\RepositoryInterface\BuildingRepositoryInterface','Cie\Repository\BuildingRepository');
+        
+        //Therapy
+        $this->app->bind('Cie\RepositoryInterface\TherapyRepositoryInterface','Cie\Repository\TherapyRepository');
+        
+        //Building Therapy User
+        $this->app->bind('Cie\RepositoryInterface\BuildingTherapyUserRepositoryInterface','Cie\Repository\BuildingTherapyUserRepository');
+        
     }
 }
