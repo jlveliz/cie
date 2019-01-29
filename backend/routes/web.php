@@ -66,8 +66,10 @@ Route::group(['prefix'=>'api'],function() {
 	//schedules
     Route::resource('buildings','BuildingController',['except'=> ['create','store']]);
     Route::resource('therapies','TherapyController',['except'=>['create','store']]);
-    Route::resource('schedule-maker','RequestController',['except'=>['create','store']]);
+    Route::resource('buildingtherapyUser','BuildingTherapyUserController',['except'=>['create','store']]);
 
+    //helpers
 	Route::get('validator/{method}','HelperController@validation');
 	Route::get('menu','HelperController@loadMenu');
+	Route::get('load-parameter/{key}','HelperController@loadKeysParameter');
 });

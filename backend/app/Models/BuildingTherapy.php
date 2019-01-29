@@ -10,6 +10,8 @@ class BuildingTherapy extends BaseModel
 
     protected $primaryKey = "id";
 
+    protected $with = ['therapy'];
+
     protected $fillable = [
     	'therapy_id',
         'build_id',
@@ -25,5 +27,14 @@ class BuildingTherapy extends BaseModel
     
     public function therapy() {
         return $this->betongsTo('Cie\Models\Therapy','therapy_id');
+    }
+
+
+    public function setScheduleAttribute($data) {
+        $this->attributes['schedule'] = serialize($data);
+    }
+    
+    public function getScheduleAttribute() {
+        return  unserialize( $this->attributes['schedule'] );
     }
 }

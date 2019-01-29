@@ -99,4 +99,14 @@ class HelperController extends Controller
 			return response()->json($menu,200);
 		}
 	}
+
+
+	public function loadKeysParameter($key)
+	{
+		$parameters = DB::table('parameter')->where('idgroup',$key)->get();
+		if(count($parameters) > 0) {
+			return response()->json($parameters,200);
+		}
+		return response()->json(['error' => 'Parametros no encontrados'],404);
+	}
 }

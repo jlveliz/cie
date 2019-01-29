@@ -10,6 +10,12 @@ class BuildingTherapyUser extends BaseModel
 
     protected $primaryKey = "id";
 
+    // protected $with = ['patient','buildingTherapy'];
+    
+    protected $casts = [ 
+        'patient_user_id' => 'int'
+    ];
+
     protected $fillable = [
     	'patient_user_id',
         'year',
@@ -20,15 +26,16 @@ class BuildingTherapyUser extends BaseModel
         'end_date',
     ];
 
-    public function patientUser() {
-        return $this->betongsTo('Cie\Models\PatientUser','patient_user_id');
+    public function patient() {
+        return $this->belongsTo('Cie\Models\PatientUser','patient_user_id');
     }
 
-    public function building() {
-        return $this->betongsTo('Cie\Models\Building','build_id');
-    }
     
-    public function therapy() {
-        return $this->betongsTo('Cie\Models\Therapy','therapy_id');
+
+    public function buildingTherapy() {
+        return $this->belongsTo('Cie\Models\BuildingTherapy','building_therapy_id');
     }
+
+
+    
 }

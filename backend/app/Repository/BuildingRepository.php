@@ -13,12 +13,12 @@ class BuildingRepository implements BuildingRepositoryInterface
 	
 	public function enum($params = null)
 	{
-		$building = Building::get();
+		$buildings = Building::get();
 
-		if (!$building) {
+		if (!$buildings) {
 			throw new BuildingException(['title'=>'No se han encontrado el listado de edificios','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 		}
-		return $building;
+		return $buildings;
 	}
 
 

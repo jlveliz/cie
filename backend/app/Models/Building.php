@@ -10,9 +10,9 @@ class Building extends BaseModel
 
     protected $primaryKey = "id";
 
-    // protected $casts = [
-    //     'schedule' => 'array',
-    // ];
+    protected $with = [
+        'therapies',
+    ];
 
     protected $fillable = [
     	'name',
@@ -20,14 +20,14 @@ class Building extends BaseModel
     ];
 
     public function therapies() {
-        return $this->belongsToMany('Cie\Models\Therapy','building_therapy','build_id','therapy_id');   
+        return $this->hasMany('Cie\Models\BuildingTherapy','build_id');   
     }
 
     public function setScheduleAttribute($data) {
         $this->attributes['schedule'] = serialize($data);
     }
     
-    public function getScheduleAttribute($data) {
+    public function getScheduleAttribute() {
         return  unserialize( $this->attributes['schedule'] );
     }
 }

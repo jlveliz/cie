@@ -13,7 +13,7 @@ class BuildingTherapyUserController extends Controller
     protected $buildtUserRepo;
 
 
-    public function __construct(BuildingTherapyUserRepositoryInterface $buildtUserRepo)
+    public function __construct(BuildingTherapyUserRepositoryInterface $buildtUserRepo, Request $request)
     {
         $this->middleware('jwt.auth');
         parent::__construct($request);
@@ -24,9 +24,9 @@ class BuildingTherapyUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $btures = $this->buildtUserRepo->enum()->toJson();
+        $btures = $this->buildtUserRepo->enum($request->all())->toJson();
         $btures = $this->encodeResponse($btures);
         return response()->json($btures,200);
     }

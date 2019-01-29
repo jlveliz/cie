@@ -1046,6 +1046,11 @@ define([
                 apiResource.resource('therapies', envService.read('api') + 'therapies/:id', {
                     id: '@id'
                 }).register();
+
+                //building therapy user
+                apiResource.resource('buildingtherapyUser', envService.read('api') + 'buildingtherapyUser/:id', {
+                    id: '@id'
+                }).register();
     }]);
 
 /** 
@@ -2942,7 +2947,49 @@ cie.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'envSer
                 except: ['anonymous'],
                 redirectTo: "adminAuth"
             },
-            pageTitle: "Asignación de Horarios"
+            pageTitle: "Asignación de Horarios",
+            css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+            
+        }
+    }));
+
+    $stateProvider.state('root.scheduleMaker.create', angularAMD.route({
+        url: '/create',
+        controllerUrl: 'frontend/components/scheduleMaker/scheduleMaker',
+        views: {
+            "content@root": {
+                templateUrl: 'frontend/components/scheduleMaker/create-edit.html',
+                controller: 'ScheduleCreateCtrl'
+            }
+        },
+        data: {
+            permissions: {
+                // only: ['admin'],
+                except: ['anonymous'],
+                redirectTo: "adminAuth"
+            },
+            pageTitle: "Asignación de Horarios",
+            
+        }
+    }));
+
+    $stateProvider.state('root.scheduleMaker.edit', angularAMD.route({
+        url: '/{pUserId:int}/edit',
+        controllerUrl: 'frontend/components/scheduleMaker/scheduleMaker',
+        views: {
+            "content@root": {
+                templateUrl: 'frontend/components/scheduleMaker/create-edit.html',
+                controller: 'ScheduleEditCtrl'
+            }
+        },
+        data: {
+            permissions: {
+                // only: ['admin'],
+                except: ['anonymous'],
+                redirectTo: "adminAuth"
+            },
+            pageTitle: "Editar Asignación de Horarios",
+            
         }
     }));
 

@@ -203,6 +203,12 @@ class PatientUser extends BaseModel
     }
 
 
+    public function therapies() 
+    {
+        return $this->hasMany('Cie\Models\BuildingTherapyUser','patient_user_id');
+    }
+
+
     //FUNCIONES
     public function hasAllDocumentAttached()
     {

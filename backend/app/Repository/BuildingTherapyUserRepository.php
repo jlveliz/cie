@@ -3,7 +3,7 @@ namespace Cie\Repository;
 
 use Cie\RepositoryInterface\BuildingTherapyUserRepositoryInterface;
 use Cie\Exceptions\BuildingTherapyUserException;
-use Cie\Models\BuildingTherapyUser;
+use Cie\Models\PatientUser;
 
 
 /**
@@ -14,7 +14,31 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 	
 	public function enum($params = null)
 	{
-		$buildingTherapyUsers = BuildingTherapyUser::get();
+
+
+		if ($params) {
+
+			if (array_key_exists('num_identification', $params)) {
+
+				$buildingTherapyUsers = PatientUser::doesntHave('therapies')->where('state_id',4)->where('num_identification',$params['num_identification'])->first();
+				
+
+				if(!count($buildingTherapyUsers)) {
+					throw new BuildingTherapyUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista médica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+				}
+
+				return $buildingTherapyUsers;
+
+			} 
+
+		} else {
+
+			$buildingTherapyUsers = PatientUser::has('therapies')->get();	
+		}
+
+		foreach ($buildingTherapyUsers as $key => $buildUser) {
+			$buildUser->load('therapies');
+		}
 
 		if (!$buildingTherapyUsers) {
 			throw new BuildingTherapyUserException(['title'=>'No se han encontrado el listado de  terapias','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -42,6 +66,10 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 		}
 
 		if (!$buildingTherapyUser) throw new BuildingTherapyUserException(['title'=>'No se puede buscar al módulo','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+		
+		$buildingTherapyUser->load('patient','buildingTherapy');
+		
+		$buildingTherapyUser->patient->load('person');
 		
 		return $buildingTherapyUser;
 

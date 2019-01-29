@@ -1,0 +1,120 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Horarios</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <h4 class="text-center" ng-if="loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Cargando...</span>
+                </h4>
+                <uib-tabset active="1" ng-if="!loading">
+                    <uib-tab index="0" select="goToIndex()">
+                        <uib-tab-heading>
+                            <a ui-sref="root.scheduleMaker" title="Listar Horarios"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
+                        </uib-tab-heading>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <a ng-if="!isEdit" title="Crear Horarios"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                            <a ng-if="isEdit" title="Editar Horarios"><h5><b><i class="fa fa-pencil"></i> Editar</b></h5></a>
+                        </uib-tab-heading>
+                        <h4 class="text-center" ng-if="loading">
+                            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Cargando...</span>
+                        </h4>
+                        <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
+                            <div class="tab-index">
+                                <div class="row" ng-if="existError || hasMessage">
+                                    <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <ul ng-if="messages.details.length > 0">
+                                            <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                        </ul>
+                                        <p ng-if="hasMessage">{{messages.title}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div ng-if="!isEdit" class="col-md-3 col-md-offset-4 col-xs-12">
+                                        <button type="button" ng-click="openModalSearchUser()" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Buscar Usuario</button>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="foundUser">
+                                    <p class="col-md-12"><b>Datos De usuario</b></p>
+                                    <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Cédula <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.num_identification" ng-disabled="true == true" disabled="" readonly="">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Nombres <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.name" ng-disabled="true == true" disabled="" readonly="">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Apellidos <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.last_name" ng-disabled="true == true" disabled="" readonly="">
+                                    </div>
+                                    <div class="col-md-2 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Género <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.genre" ng-disabled="true == true" disabled="" readonly="">
+                                    </div>
+                                    <div class="col-md-1 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Edad <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.age" ng-disabled="true == true" disabled="" readonly="">
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="foundUser">
+                                    <p class="col-md-12"><b>Datos De Representante</b></p>
+                                    
+                                    <p ng-if="!model.patientUser.representant_id" class="col-md-12 text-secondary text-center">No Tiene Representante</p>
+                                    
+                                    <div ng-hide="!model.patientUser.representant_id">
+                                        <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                            <label class="control-label">Cédula <span class="text-danger">*</span></label>
+                                            <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.representant.num_identification" ng-disabled="true == true" disabled="" readonly="">
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading || !model.representant_id">
+                                            <label class="control-label">Nombres <span class="text-danger">*</span></label>
+                                            <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.name" ng-disabled="true == true" disabled="" readonly="">
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading || !model.representant_id">
+                                            <label class="control-label">Apellidos <span class="text-danger">*</span></label>
+                                            <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.last_name" ng-disabled="true == true" disabled="" readonly="">
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-xs-12 form-group" ng-if="!loading || !model.representant_id">
+                                            <label class="control-label">Género <span class="text-danger">*</span></label>
+                                            <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.genre" ng-disabled="true == true" disabled="" readonly="">
+                                        </div>
+                                        <div class="col-md-1 col-sm-2 col-xs-12 form-group" ng-if="!loading || !model.representant_id">
+                                            <label class="control-label">Edad <span class="text-danger">*</span></label>
+                                            <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.age" ng-disabled="true == true" disabled="" readonly="">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" ng-show="foundUser">
+                                	<div class="col-md-12">
+                                		<p><b>Asignación de Terapias</b> </p>
+                                		<table class="table table-bordered">
+                                			<tr>
+                                				<td>Días</td>
+                                				<td class="vcenter" rowspan="2" ng-repeat="day in daysOfWeek|orderBy:'value2'">{{day.value| capitalize:'oneLetter'}}</td>
+                                			</tr>
+                                            <tr>
+                                                <td>Terapias</td>
+                                            </tr>
+                                            <tr ng-repeat="value in buildingTherapy">
+                                                <td>{{value}}</td>
+                                            </tr>
+                                		</table>
+                                	</div>
+                                </div>
+                            </div>
+                        </form>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>
