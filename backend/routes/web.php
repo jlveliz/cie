@@ -61,9 +61,15 @@ Route::group(['prefix'=>'api'],function() {
     //////////////
     Route::resource('carousels','CarouselController',['except'=>['create']]);
     Route::resource('requests','RequestController',['except'=>['create','store']]);
-    ///////////////
-    
+	///////////////
+	
+	//schedules
+    Route::resource('buildings','BuildingController',['except'=> ['create','store']]);
+    Route::resource('therapies','TherapyController',['except'=>['create','store']]);
+    Route::resource('buildingtherapyUser','BuildingTherapyUserController',['except'=>['create']]);
 
+    //helpers
 	Route::get('validator/{method}','HelperController@validation');
 	Route::get('menu','HelperController@loadMenu');
+	Route::get('load-parameter/{key}','HelperController@loadKeysParameter');
 });
