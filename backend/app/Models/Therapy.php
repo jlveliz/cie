@@ -10,7 +10,7 @@ class Therapy extends BaseModel
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['type'];
+    protected $with = ['type','buildingTherapies'];
 
     protected $primaryKey = "id";
 
@@ -28,5 +28,10 @@ class Therapy extends BaseModel
 
     public function type() {
         return $this->belongsTo('Cie\Models\TypeTherapy','type_therapy_id');
+    }
+
+    public function buildingTherapies()
+    {
+        return $this->hasMany('Cie\Models\BuildingTherapy','therapy_id');
     }
 }

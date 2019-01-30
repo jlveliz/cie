@@ -27,14 +27,14 @@ class BuildingTherapyUserValidator extends Validator implements ValidatorInterfa
 	}
 
 	public function rules($method = null) {
-		$rules = [
-			'name' => 'required|unique:module,name',
-		];
+		// $rules = [
+		// 	'name' => 'required|unique:module,name',
+		// ];
 
-		if ($method == 'PUT') {
-			$rules['name'] = 'required|unique:module,name,'.$this->request->get('key');
-		}
-
+		// if ($method == 'PUT') {
+		// 	$rules['name'] = 'required|unique:module,name,'.$this->request->get('key');
+		// }
+		return [];
 		return $rules;
 	}
 

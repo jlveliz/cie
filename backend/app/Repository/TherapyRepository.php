@@ -14,7 +14,7 @@ class TherapyRepository implements TherapyRepositoryInterface
 	
 	public function enum($params = null)
 	{
-		$therapies = Therapy::with('permissions')->get();
+		$therapies = Therapy::all();
 
 		if (!$therapies) {
 			throw new TherapyException(['title'=>'No se han encontrado el listado de terapias','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");

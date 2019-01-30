@@ -98,17 +98,51 @@
                                 		<p><b>Asignación de Terapias</b> </p>
                                 		<table class="table table-bordered">
                                 			<tr>
-                                				<td>Días</td>
-                                				<td class="vcenter" rowspan="2" ng-repeat="day in daysOfWeek|orderBy:'value2'">{{day.value| capitalize:'oneLetter'}}</td>
+                                				<td></td>
+                                				<td class="vcenter" rowspan="2" ng-repeat="day in daysOfWeek|orderBy:'value2'"><b>{{day.value| capitalize:'oneLetter'}}</b></td>
                                 			</tr>
                                             <tr>
-                                                <td>Terapias</td>
+                                                <td></td>
                                             </tr>
-                                            <tr ng-repeat="value in buildingTherapy">
-                                                <td>{{value}}</td>
+                                            <tr ng-repeat="therapy in therapiesOfBuilding">
+                                                <td class="vcenter"><b>{{therapy.name | capitalize:'oneLetter'}}</b></td>
+                                                <td class="vcenter" ng-repeat="(key, value) in therapy.building_therapies" ng-class="{'danger':value.availability==0,'info':value.availability>0}">
+                                                    <div class="checkbox text-center">
+                                                      <label ng-if="value.availability>0" style="padding-left: 0px!important">
+                                                        <input type="checkbox" name="" id="" ng-model="value.$selected" ng-change="addToSchedule(value.id,value.$selected)" ng-disabled="value.availability==0" style="display: block;margin: 0 auto; text-align: center;margin-left: 60px">
+                                                        <br>
+                                                        <ul class="list-unstyled">
+                                                            <li><b>Disponibilidad:</b> {{value.availability}} </li>
+                                                            <li><b>Horario:</b> {{value.schedule.start}} - {{value.schedule.end}} </li>
+                                                        </ul>
+                                                      </label>
+                                                      <label ng-if="value.availability==0" style="padding-left: 0px!important">
+                                                        <b>Ocupado</b>
+                                                      </label>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
                                             </tr>
                                 		</table>
                                 	</div>
+                                </div>
+
+                                <div ng-show="foundUser">
+                                    
+                                    <div class="clearfix "></div>
+                                    <div class="ln_solid " ng-if="!loading "></div>
+                                    <div class="form-group " ng-if="!loading ">
+                                        <button ng-if="!isShow" type="submit" class="btn btn-primary" ng-disabled="saving" ng-click="save(saveForm)">
+                                            <span ng-if="!saving"><i class="fa fa-save"></i> Guardar</span>
+                                            <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                                        </button>
+                                        <button ng-if="!isShow" type="submit" class="btn btn-default" ng-disabled="saving" ng-click="saveAndClose(saveForm)">
+                                            <span ng-if="!saving"><i class="fa fa-save"></i> Guardar y cerrar</span>
+                                            <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                                        </button>
+                                        <a class="btn btn-link" ui-sref="root.inscription">Cancelar</a>
+                                    </div>
                                 </div>
                             </div>
                         </form>

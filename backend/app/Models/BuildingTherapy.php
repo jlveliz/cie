@@ -10,7 +10,7 @@ class BuildingTherapy extends BaseModel
 
     protected $primaryKey = "id";
 
-    protected $with = ['therapy'];
+    // protected $with = ['therapy'];
 
     protected $fillable = [
     	'therapy_id',

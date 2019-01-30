@@ -4,6 +4,7 @@ namespace Cie\Repository;
 use Cie\RepositoryInterface\BuildingTherapyUserRepositoryInterface;
 use Cie\Exceptions\BuildingTherapyUserException;
 use Cie\Models\PatientUser;
+use Cie\Models\BuildingTherapyUser;
 
 
 /**
@@ -78,14 +79,24 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 	//TODO
 	public function save($data)
 	{
-		$buildingTherapyUser = new BuildingTherapyUser();
-		$buildingTherapyUser->fill($data);
-		if ($buildingTherapyUser->save()) {
-			$key = $buildingTherapyUser->getKey();
-			return  $this->find($key);
-		} else {
-			throw new BuildingTherapyUserException(['title'=>'Ha ocurrido un error al asignar la terapia al usuario '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
-		}		
+		foreach ($data['building_therapies'] as $key => $value) {
+			$datSave = [];
+			$datSave['patient_user_id'] = $data['patient_user_id'];
+			$datSave['year'] = $data['year'];
+			$datSave['group_time_id'] = $data['group_time_id'];
+			$datSave['timeframe_id'] = $data['timeframe_id'];
+			$datSave['building_therapy_id'] = $value;
+			$buildingTherapyUser = new BuildingTherapyUser();
+			$buildingTherapyUser->fill($datSave);
+			if ($buildingTherapyUser->save()) {
+				$key = $buildingTherapyUser->getKey();
+				// return  $this->find($key);
+			} else {
+				throw new BuildingTherapyUserException(['title'=>'Ha ocurrido un error al asignar la terapia al usuario '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			}
+		}
+
+		return PatientUser::find($data['patient_user_id']);
 	}
 
 	public function edit($id,$data)
