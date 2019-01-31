@@ -20,7 +20,6 @@ define(['app'], function(app) {
                 if(foundDay) foundDay.$selected = true;
             });
 
-            console.log(scheduleModel)
             return scheduleModel;
         }
     })
@@ -154,7 +153,6 @@ define(['app'], function(app) {
                 // item.end = $filter('date')(item.end,'HH:mm'); 
             });
 
-            console.log($scope.model)
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {

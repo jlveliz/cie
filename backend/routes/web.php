@@ -65,7 +65,8 @@ Route::group(['prefix'=>'api'],function() {
 	
 	//schedules
     Route::resource('buildings','BuildingController',['except'=> ['create']]);
-    Route::resource('therapies','TherapyController',['except'=>['create','store']]);
+    Route::resource('therapies','TherapyController',['except'=>['create']]);
+    Route::resource('type-therapies','TypeTherapyController',['except'=>['create']]);
     Route::resource('buildingtherapyUser','BuildingTherapyUserController',['except'=>['create']]);
 
     //helpers

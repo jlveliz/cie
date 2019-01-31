@@ -1,0 +1,73 @@
+<div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Terapias</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <h4 class="text-center" ng-if="loading">
+                        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Cargando...</span>
+                    </h4>
+                    <uib-tabset active="0" ng-if="!loading">
+                        <uib-tab index="0">
+                            <uib-tab-heading>
+                                <h5><b><i class="fa fa-list"></i> Listado</b></h5>
+                            </uib-tab-heading>
+                            <div class="tab-index">
+                                <div class="row" ng-if="existError || hasMessage">
+                                    <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <ul ng-if="messages.details.length > 0">
+                                            <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                        </ul>
+                                        <p ng-if="hasMessage">{{messages.title}}</p>
+                                    </div>
+                                </div>
+                                <table datatable="ng" dt-options="dtOptions" id="therapy-list" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>F. Creación/Modificación</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="therapy in therapies">
+                                            <td> <a  ui-sref="root.therapy.edit({therapyId:therapy.id})" title="{{therapy.name | capitalize:'oneLetter'}}"> {{therapy.name | capitalize:'oneLetter'}}</a></td>
+                                            <td> {{therapy.type.name}}</td>
+                                            <td>{{therapy.created_at | filterTimestamp }} - {{therapy.updated_at | filterTimestamp }}</td>
+                                            <td>
+                                                <div class="btn-group" role="group" ng-hide="therapy.$deleting">
+                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fa fa-cog"></i> Opciones
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ui-sref="root.therapy.edit({therapyId:therapy.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="delete(therapy.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <p ng-show="therapy.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </uib-tab>
+                        <uib-tab index="1" select="goToCreate()">
+                            <uib-tab-heading>
+                                <a ui-sref="root.therapy.create" title="Crear Ciudad"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                            </uib-tab-heading>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
+            </div>
+        </div>
+    </div>

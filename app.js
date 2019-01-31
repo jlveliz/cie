@@ -1046,6 +1046,11 @@ define([
         apiResource.resource('therapies', envService.read('api') + 'therapies/:id', {
             id: '@id'
         }).register();
+        
+        //Type therapies
+        apiResource.resource('tp-therapies', envService.read('api') + 'type-therapies/:id', {
+            id: '@id'
+        }).register();
 
         //building therapy user
         apiResource.resource('buildingtherapyUser', envService.read('api') + 'buildingtherapyUser/:id', {
@@ -3053,6 +3058,70 @@ define([
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Edificios"
+            }
+        }));
+
+
+
+         // THERAPY
+         $stateProvider.state('root.therapy', angularAMD.route({
+            url: 'therapies',
+            controllerUrl: 'frontend/components/therapy/therapy',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapy/index.html',
+                    controller: 'TherapyIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Terapias",
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+
+            }
+        }));
+
+         $stateProvider.state('root.therapy.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/therapy/therapy',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapy/create-edit.html',
+                    controller: 'TherapyCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Crear Terapia",
+
+            }
+        }));
+
+         $stateProvider.state('root.therapy.edit', angularAMD.route({
+            url: '/{therapyId:int}/edit',
+            controllerUrl: 'frontend/components/therapy/therapy',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapy/create-edit.html',
+                    controller: 'TherapyEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Terapias"
             }
         }));
 
