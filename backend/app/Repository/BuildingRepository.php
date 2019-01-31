@@ -52,6 +52,7 @@ class BuildingRepository implements BuildingRepositoryInterface
 		$building->fill($data);
 		if ($building->save()) {
 			$key = $building->getKey();
+
 			return  $this->find($key);
 		} else {
 			throw new BuildingException(['title'=>'Ha ocurrido un error al guardar el edificio '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
@@ -64,6 +65,49 @@ class BuildingRepository implements BuildingRepositoryInterface
 		if ($building) {
 			$building->fill($data);
 			if($building->update()){
+
+				if (array_key_exists('therapies', $data)) {
+					$therapiesOnDb = $building->therapies->toArray();
+					$therapiesToInsert = [];
+					$therapiesToUpdate = [];
+					$therapiesToDelete = [];
+					foreach ($data['therapies'] as $key => $therapy) {
+						//to insert
+						if (!array_key_exists('id', $therapy)) {
+							$therapiesToInsert[] = $therapy;
+						} else {
+							
+							$keyFounded = array_search($therapy['id'], array_column($therapiesOnDb, 'id'));
+							
+							if($keyFounded >= 0) {
+								$therapiesToUpdate[] = $therapy;
+							}
+							
+						}
+					}
+
+					//to delete
+					if (count($therapiesOnDb) > 0) {
+						
+						foreach ($therapiesOnDb as $key => $therapyOnDb) {
+							
+							$founded = true;
+							
+							foreach ($data['therapies'] as $key => $trOnRequest) {
+								$founded = !array_search($therapyOnDb['id'], $trOnRequest);
+							}
+
+							
+							if(!$founded) {
+								$therapiesToDelete[] = $therapyOnDb;
+							}
+						}
+						
+					}
+
+					dd($therapiesToInsert, $therapiesToUpdate, $therapiesToDelete);
+				}
+
 				$key = $building->getKey();
 				return $this->find($key);
 			}

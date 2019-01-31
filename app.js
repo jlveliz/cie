@@ -1042,11 +1042,12 @@ define([
             id: '@id'
         }).register();
 
+       
         //therapies
         apiResource.resource('therapies', envService.read('api') + 'therapies/:id', {
             id: '@id'
         }).register();
-        
+
         //Type therapies
         apiResource.resource('tp-therapies', envService.read('api') + 'type-therapies/:id', {
             id: '@id'
@@ -1061,6 +1062,7 @@ define([
         apiResource.resource('therapists', envService.read('api') + 'therapists/:id', {
             id: '@id'
         }).register();
+
     }]);
 
     /** 
@@ -3026,7 +3028,7 @@ define([
             }
         }));
 
-         $stateProvider.state('root.building.create', angularAMD.route({
+        $stateProvider.state('root.building.create', angularAMD.route({
             url: '/create',
             controllerUrl: 'frontend/components/building/building',
             views: {
@@ -3046,7 +3048,7 @@ define([
             }
         }));
 
-         $stateProvider.state('root.building.edit', angularAMD.route({
+        $stateProvider.state('root.building.edit', angularAMD.route({
             url: '/{buildingId:int}/edit',
             controllerUrl: 'frontend/components/building/building',
             views: {
@@ -3068,8 +3070,8 @@ define([
 
 
 
-         // THERAPY
-         $stateProvider.state('root.therapy', angularAMD.route({
+        // THERAPY
+        $stateProvider.state('root.therapy', angularAMD.route({
             url: 'therapies',
             controllerUrl: 'frontend/components/therapy/therapy',
             views: {
@@ -3090,7 +3092,7 @@ define([
             }
         }));
 
-         $stateProvider.state('root.therapy.create', angularAMD.route({
+        $stateProvider.state('root.therapy.create', angularAMD.route({
             url: '/create',
             controllerUrl: 'frontend/components/therapy/therapy',
             views: {
@@ -3110,7 +3112,7 @@ define([
             }
         }));
 
-         $stateProvider.state('root.therapy.edit', angularAMD.route({
+        $stateProvider.state('root.therapy.edit', angularAMD.route({
             url: '/{therapyId:int}/edit',
             controllerUrl: 'frontend/components/therapy/therapy',
             views: {

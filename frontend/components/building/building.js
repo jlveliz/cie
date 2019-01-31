@@ -20,9 +20,9 @@ define(['app'], function(app) {
                 let foundDay = _.findWhere(daysOfWeek, { idparameter: idx });
                 if (foundDay) {
                     foundDay.$selected = true;
-                    scheduleModel[idx].$selected = true;  
+                    scheduleModel[idx].$selected = true;
                 } else {
-                    scheduleModel[idx].$selected = false;  
+                    scheduleModel[idx].$selected = false;
                 }
 
             });
@@ -196,8 +196,7 @@ define(['app'], function(app) {
             $scope.messages = {};
             angular.forEach($scope.model.schedule, function(item) {
                 if (!item.$selected) { delete item }
-                // item.start = $filter('date')(item.start,'HH:mm'); 
-                // item.end = $filter('date')(item.end,'HH:mm'); 
+
             });
 
             if (form.validate()) {
@@ -282,6 +281,8 @@ define(['app'], function(app) {
                 }
                 $scope.model.schedule = BuildingService.formatSchedule($scope.model, $scope.daysWeek);
                 $scope.loading = false;
+
+
             });
         })
 
@@ -306,18 +307,26 @@ define(['app'], function(app) {
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
             if (form.validate()) {
+                angular.forEach($scope.model.schedule, function(item,idex) {
+                    if (!item.$selected) { 
+                       delete $scope.model.schedule[idex]
+                    }
+                });
+                
                 $scope.saving = true;
                 $scope.model.key = buildingId;
-                $scope.model.$update(buildingId, function(data) {
+                $scope.model.$update(buildingId, function(dataModel) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
-                    apiResource.resource('buildings').setOnCache(data);
+                    apiResource.resource('buildings').setOnCache(dataModel);
                     BuildingService.messageFlag.title = "Edificio " + $scope.model.name + " Actualizado correctamente";
                     BuildingService.messageFlag.type = "info";
                     $scope.messages = BuildingService.messageFlag;
                     if (returnIndex) {
                         $state.go('root.building');
                     }
+
+
                 }, function(reason) {
                     $scope.saving = false;
                     $scope.existError = true;
