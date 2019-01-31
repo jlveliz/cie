@@ -1,28 +1,75 @@
-
 /**
  ** Building controller
  **/
 define(['app'], function(app) {
 
-    app.register.service('BuildingService', function() {
+    app.register.service('BuildingService', ['$filter', function($filter) {
 
         var _this = this;
 
         _this.messageFlag = {};
 
-        _this.formatSchedule = function(model,daysOfWeek) {
+        _this.formatSchedule = function(model, daysOfWeek) {
+            debugger;
             var scheduleModel = model.schedule;
-            angular.forEach(scheduleModel, function(el,idx) {
+
+            angular.forEach(scheduleModel, function(el, idx) {
                 el.start = new Date(el.start);
                 el.end = new Date(el.end);
 
-                let foundDay = _.findWhere(daysOfWeek,{idparameter:idx});
-                if(foundDay) foundDay.$selected = true;
+                let foundDay = _.findWhere(daysOfWeek, { idparameter: idx });
+                if (foundDay) {
+                    foundDay.$selected = true;
+                    scheduleModel[idx].$selected = true;  
+                } else {
+                    scheduleModel[idx].$selected = false;  
+                }
+
             });
 
             return scheduleModel;
+        };
+
+
+        _this.getDay = function(keyDay, daysOfWeek) {
+            var foundDay = _.findWhere(daysOfWeek, { idparameter: keyDay });
+            if (foundDay) {
+                return $filter('capitalize')(foundDay.value, 'oneLetter');
+            }
+
+            return "-"
         }
-    })
+
+
+        _this.getTherapiesFromDay = function(keyDay, getTherapiesFromDay) {
+            var therapiesFromDay = [];
+            var foundTherapy = _.findWhere(getTherapiesFromDay, { key_day: keyDay });
+
+            if (foundTherapy) {
+                therapiesFromDay.push(foundTherapy)
+            }
+
+            return therapiesFromDay;
+        };
+
+        _this.addBuildingTherapy = function(keyDay, model) {
+            let buildTherapy = {
+                key_day: keyDay,
+                build_id: model.id,
+                therapist_user_id: null,
+                capacity: 0,
+                availability: 0,
+                schedule: {
+                    start: $filter('date')(model.schedule[keyDay].start, 'HH:mm'),
+                    end: $filter('date')(model.schedule[keyDay].end, 'HH:mm'),
+                }
+            }
+
+            return buildTherapy;
+        }
+
+
+    }])
 
     app.register.controller('BuildingIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'BuildingService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, BuildingService, $rootScope, $state) {
 
@@ -87,7 +134,7 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('BuildingCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', 'envService','$filter',function($scope, apiResource, $stateParams, $state, BuildingService, $q,envService, $filter) {
+    app.register.controller('BuildingCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', 'envService', '$filter', function($scope, apiResource, $stateParams, $state, BuildingService, $q, envService, $filter) {
 
         $scope.saving = false;
         $scope.loading = true;
@@ -117,7 +164,7 @@ define(['app'], function(app) {
             })
 
             $scope.loading = false;
-            $scope.model = apiResource.resource('buildings').create({name:'',schedule:{}});
+            $scope.model = apiResource.resource('buildings').create({ name: '', schedule: {} });
         })
 
 
@@ -147,8 +194,8 @@ define(['app'], function(app) {
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
-            angular.forEach($scope.model.schedule,function(item) {
-                if (!item.$selected) {  delete item }
+            angular.forEach($scope.model.schedule, function(item) {
+                if (!item.$selected) { delete item }
                 // item.start = $filter('date')(item.start,'HH:mm'); 
                 // item.end = $filter('date')(item.end,'HH:mm'); 
             });
@@ -194,11 +241,13 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('BuildingEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q','envService', function($scope, apiResource, $stateParams, $state, BuildingService, $q, envService) {
+    app.register.controller('BuildingEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', 'envService', function($scope, apiResource, $stateParams, $state, BuildingService, $q, envService) {
 
         var buildingId = $stateParams.buildingId;
         $scope.isEdit = true;
         $scope.daysWeek = [];
+        $scope.therapies = [];
+        $scope.therapists = [];
 
 
         var reqKeyParameter = {
@@ -209,6 +258,12 @@ define(['app'], function(app) {
         var deps = $q.all([
             apiResource.loadFromApi(reqKeyParameter).then(function(daysWeek) {
                 $scope.daysWeek = daysWeek;
+            }),
+            apiResource.resource('therapies').queryCopy().then(function(therapies) {
+                $scope.therapies = therapies;
+            }),
+            apiResource.resource('therapists').queryCopy().then(function(therapists) {
+                $scope.therapists = therapists;
             })
         ])
 
@@ -225,35 +280,28 @@ define(['app'], function(app) {
                     $scope.hasMessage = true;
                     BuildingService.messageFlag = {};
                 }
-                $scope.model.schedule = BuildingService.formatSchedule($scope.model,$scope.daysWeek);
+                $scope.model.schedule = BuildingService.formatSchedule($scope.model, $scope.daysWeek);
                 $scope.loading = false;
             });
         })
 
 
-        // $scope.validateOptions = {
-        //     rules: {
-        //         name: {
-        //             required: true,
-        //             // unique: 'building,name,' + buildingId
-        //         },
-        //         province_id: {
-        //             required: true,
-        //             valueNotEquals: '?',
-        //         }
-        //     },
-        //     messages: {
-        //         name: {
-        //             required: "Campo requerido",
-        //             // unique: 'la Edificio ya fue tomada'
-        //         },
-        //         province_id: {
-        //             required: "Campo requerido",
-        //             valueNotEquals: 'Campo requerido',
-        //         }
-        //     }
+        $scope.getDay = function(keyDay) {
+            return BuildingService.getDay(keyDay, $scope.daysWeek);
+        }
 
-        // };
+        $scope.getTherapiesFromDay = function(keyDay, therapiesBuilding) {
+            return BuildingService.getTherapiesFromDay(keyDay, therapiesBuilding);
+        }
+
+        $scope.addBuildingTherapy = function(keyDay) {
+            let buildTherapy = BuildingService.addBuildingTherapy(keyDay, $scope.model);
+            $scope.model.therapies.push(buildTherapy)
+        }
+
+        $scope.deleteTherapy = function(key) {
+            $scope.model.therapies.splice(key, 1);
+        }
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};

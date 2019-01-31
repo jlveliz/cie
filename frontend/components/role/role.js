@@ -201,11 +201,11 @@ define(['app'], function(app) {
         }
 
         $scope.filterTypePermissionMenu = function(value) {
-            return RoleService.filterTypePermission(value, 'menu');
+            return RoleService.filterTypePermission(value, 'MENU');
         }
 
         $scope.filterTypePermissionOption = function(value) {
-            return RoleService.filterTypePermission(value, 'opcion');
+            return RoleService.filterTypePermission(value, 'OPCION');
         }
 
         $scope.save = function(form, returnIndex) {

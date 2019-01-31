@@ -1056,6 +1056,11 @@ define([
         apiResource.resource('buildingtherapyUser', envService.read('api') + 'buildingtherapyUser/:id', {
             id: '@id'
         }).register();
+
+        //therapists
+        apiResource.resource('therapists', envService.read('api') + 'therapists/:id', {
+            id: '@id'
+        }).register();
     }]);
 
     /** 
@@ -3026,7 +3031,7 @@ define([
             controllerUrl: 'frontend/components/building/building',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/building/create-edit.html',
+                    templateUrl: 'frontend/components/building/create.html',
                     controller: 'BuildingCreateCtrl'
                 }
             },
@@ -3046,7 +3051,7 @@ define([
             controllerUrl: 'frontend/components/building/building',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/building/create-edit.html',
+                    templateUrl: 'frontend/components/building/edit.html',
                     controller: 'BuildingEditCtrl'
                 }
 

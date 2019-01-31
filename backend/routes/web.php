@@ -68,6 +68,7 @@ Route::group(['prefix'=>'api'],function() {
     Route::resource('therapies','TherapyController',['except'=>['create']]);
     Route::resource('type-therapies','TypeTherapyController',['except'=>['create']]);
     Route::resource('buildingtherapyUser','BuildingTherapyUserController',['except'=>['create']]);
+    Route::resource('therapists','TherapistController',['only'=>['index']]);
 
     //helpers
 	Route::get('validator/{method}','HelperController@validation');
