@@ -1,3 +1,4 @@
+
 /**
  ** Building controller
  **/
@@ -8,6 +9,20 @@ define(['app'], function(app) {
         var _this = this;
 
         _this.messageFlag = {};
+
+        _this.formatSchedule = function(model,daysOfWeek) {
+            var scheduleModel = model.schedule;
+            angular.forEach(scheduleModel, function(el,idx) {
+                el.start = new Date(el.start);
+                el.end = new Date(el.end);
+
+                let foundDay = _.findWhere(daysOfWeek,{idparameter:idx});
+                if(foundDay) foundDay.$selected = true;
+            });
+
+            console.log(scheduleModel)
+            return scheduleModel;
+        }
     })
 
     app.register.controller('BuildingIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'BuildingService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, BuildingService, $rootScope, $state) {
@@ -73,7 +88,7 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('BuildingCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', 'envService',function($scope, apiResource, $stateParams, $state, BuildingService, $q,envService) {
+    app.register.controller('BuildingCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', 'envService','$filter',function($scope, apiResource, $stateParams, $state, BuildingService, $q,envService, $filter) {
 
         $scope.saving = false;
         $scope.loading = true;
@@ -133,8 +148,10 @@ define(['app'], function(app) {
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
-            angular.forEach($scope.model.buildings,function(item) {
+            angular.forEach($scope.model.schedule,function(item) {
                 if (!item.$selected) {  delete item }
+                // item.start = $filter('date')(item.start,'HH:mm'); 
+                // item.end = $filter('date')(item.end,'HH:mm'); 
             });
 
             console.log($scope.model)
@@ -179,15 +196,21 @@ define(['app'], function(app) {
 
     }]);
 
-    app.register.controller('BuildingEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', function($scope, apiResource, $stateParams, $state, BuildingService, $q) {
+    app.register.controller('BuildingEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q','envService', function($scope, apiResource, $stateParams, $state, BuildingService, $q, envService) {
 
         var buildingId = $stateParams.buildingId;
         $scope.isEdit = true;
-        $scope.provinces = [];
+        $scope.daysWeek = [];
+
+
+        var reqKeyParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/WEEK_DAYS'
+        };
 
         var deps = $q.all([
-            apiResource.resource('provinces').query().then(function(provinces) {
-                $scope.provinces = provinces
+            apiResource.loadFromApi(reqKeyParameter).then(function(daysWeek) {
+                $scope.daysWeek = daysWeek;
             })
         ])
 
@@ -197,13 +220,14 @@ define(['app'], function(app) {
         $scope.existError = false;
 
         deps.then(function() {
-            apiResource.resource('buildings').getCopy(buildingId).then(function(model) {
+            apiResource.resource('buildings').get(buildingId).then(function(model) {
                 $scope.model = model;
                 $scope.messages = BuildingService.messageFlag;
                 if (!_.isEmpty($scope.messages)) {
                     $scope.hasMessage = true;
                     BuildingService.messageFlag = {};
                 }
+                $scope.model.schedule = BuildingService.formatSchedule($scope.model,$scope.daysWeek);
                 $scope.loading = false;
             });
         })
