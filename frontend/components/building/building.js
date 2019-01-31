@@ -1,0 +1,278 @@
+/**
+ ** Building controller
+ **/
+define(['app'], function(app) {
+
+    app.register.service('BuildingService', function() {
+
+        var _this = this;
+
+        _this.messageFlag = {};
+    })
+
+    app.register.controller('BuildingIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'BuildingService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, BuildingService, $rootScope, $state) {
+
+        $scope.buildings = [];
+        $scope.loading = true;
+        $scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
+        $scope.messages = {};
+        $scope.hasMessage = false;
+
+        angular.extend($scope.dtOptions, {
+            orderable: false,
+            columnDefs: [{
+                orderable: false,
+                targets: 2
+            }],
+            order: [
+                [0, 'asc'],
+                [1, 'asc'],
+            ],
+            responsive: true
+        });
+
+        apiResource.resource('buildings').query().then(function(results) {
+            $scope.loading = false;
+            $scope.buildings = results;
+            $scope.messages = BuildingService.messageFlag;
+            if (!_.isEmpty($scope.messages)) {
+                $scope.hasMessage = true;
+                BuildingService.messageFlag = {};
+            }
+        });
+
+        $scope.delete = function(id) {
+            apiResource.resource('buildings').getCopy(id).then(function(object) {
+                var params = {
+                    title: 'Atención',
+                    text: 'Desea eliminar el edificio ' + object.name + '.?'
+                }
+                $rootScope.openDeleteModal(params).then(function() {
+                    var idx = _.findIndex($scope.buildings, function(el) {
+                        return el.id == object.id;
+                    });
+                    if (idx > -1) {
+                        $scope.buildings[idx].$deleting = true;
+                        object.$delete(function() {
+                            BuildingService.messageFlag.title = "Edificio eliminada correctamente";
+                            BuildingService.messageFlag.type = "info";
+                            $scope.messages = BuildingService.messageFlag;
+                            $scope.hasMessage = true;
+                            $scope.buildings[idx].$deleting = false;
+                            $scope.buildings.splice(idx, 1);
+                            apiResource.resource('buildings').removeFromCache(id);
+                        })
+                    }
+                })
+            });
+        };
+
+        $scope.goToCreate = function() {
+            $state.go('root.building.create')
+        }
+
+    }]);
+
+    app.register.controller('BuildingCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', 'envService',function($scope, apiResource, $stateParams, $state, BuildingService, $q,envService) {
+
+        $scope.saving = false;
+        $scope.loading = true;
+        $scope.model = {};
+        $scope.listPermissions = [];
+        $scope.messages = [];
+        $scope.provinces = [];
+
+        $scope.daysWeek = [];
+
+
+        var reqKeyParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/WEEK_DAYS'
+        };
+
+        var deps = $q.all([
+            apiResource.loadFromApi(reqKeyParameter).then(function(daysWeek) {
+                $scope.daysWeek = daysWeek;
+            })
+        ])
+
+        deps.then(function() {
+
+            angular.forEach($scope.daysWeek, function(day) {
+                day.$selected = false;
+            })
+
+            $scope.loading = false;
+            $scope.model = apiResource.resource('buildings').create({name:'',schedule:{}});
+        })
+
+
+        // $scope.validateOptions = {
+        //     rules: {
+        //         name: {
+        //             required: true,
+        //             // unique: 'building,name'
+        //         },
+        //         province_id: {
+        //             required: true,
+        //             valueNotEquals: '?',
+        //         }
+        //     },
+        //     messages: {
+        //         name: {
+        //             required: "Campo requerido",
+        //             // unique: 'La Edificio ya fue tomada'
+        //         },
+        //         province_id: {
+        //             required: "Campo requerido",
+        //             valueNotEquals: 'Campo requerido',
+        //         }
+        //     }
+
+        // };
+
+        $scope.save = function(form, returnIndex) {
+            $scope.messages = {};
+            angular.forEach($scope.model.buildings,function(item) {
+                if (!item.$selected) {  delete item }
+            });
+
+            console.log($scope.model)
+            if (form.validate()) {
+                $scope.saving = true;
+                $scope.model.$save(function(data) {
+                    apiResource.resource('buildings').setOnCache(data);
+                    BuildingService.messageFlag.title = "Edificio creado correctamente";
+                    BuildingService.messageFlag.type = "info";
+                    if (returnIndex) {
+                        $state.go('root.building');
+                    } else {
+                        $state.go('root.building.edit', {
+                            buildingId: data.id
+                        })
+                    }
+
+
+                }, function(reason) {
+                    $scope.saving = false;
+                    $scope.existError = true;
+                    $scope.messages.title = reason.data.title;
+                    $scope.messages.details = [];
+                    var json = JSON.parse(reason.data.detail);
+                    angular.forEach(json, function(elem, idx) {
+                        angular.forEach(elem, function(el, idex) {
+                            $scope.messages.details.push(el)
+                        })
+                    })
+                });
+            }
+        }
+
+
+        $scope.saveAndClose = function(form) {
+            $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.building')
+        }
+
+    }]);
+
+    app.register.controller('BuildingEditCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'BuildingService', '$q', function($scope, apiResource, $stateParams, $state, BuildingService, $q) {
+
+        var buildingId = $stateParams.buildingId;
+        $scope.isEdit = true;
+        $scope.provinces = [];
+
+        var deps = $q.all([
+            apiResource.resource('provinces').query().then(function(provinces) {
+                $scope.provinces = provinces
+            })
+        ])
+
+        $scope.loading = true;
+        $scope.model = {};
+        $scope.messages = {};
+        $scope.existError = false;
+
+        deps.then(function() {
+            apiResource.resource('buildings').getCopy(buildingId).then(function(model) {
+                $scope.model = model;
+                $scope.messages = BuildingService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    BuildingService.messageFlag = {};
+                }
+                $scope.loading = false;
+            });
+        })
+
+
+        // $scope.validateOptions = {
+        //     rules: {
+        //         name: {
+        //             required: true,
+        //             // unique: 'building,name,' + buildingId
+        //         },
+        //         province_id: {
+        //             required: true,
+        //             valueNotEquals: '?',
+        //         }
+        //     },
+        //     messages: {
+        //         name: {
+        //             required: "Campo requerido",
+        //             // unique: 'la Edificio ya fue tomada'
+        //         },
+        //         province_id: {
+        //             required: "Campo requerido",
+        //             valueNotEquals: 'Campo requerido',
+        //         }
+        //     }
+
+        // };
+
+        $scope.save = function(form, returnIndex) {
+            $scope.messages = {};
+            if (form.validate()) {
+                $scope.saving = true;
+                $scope.model.key = buildingId;
+                $scope.model.$update(buildingId, function(data) {
+                    $scope.saving = false;
+                    $scope.hasMessage = true;
+                    apiResource.resource('buildings').setOnCache(data);
+                    BuildingService.messageFlag.title = "Edificio " + $scope.model.name + " Actualizado correctamente";
+                    BuildingService.messageFlag.type = "info";
+                    $scope.messages = BuildingService.messageFlag;
+                    if (returnIndex) {
+                        $state.go('root.building');
+                    }
+                }, function(reason) {
+                    $scope.saving = false;
+                    $scope.existError = true;
+                    $scope.messages.title = reason.data.title;
+                    $scope.messages.details = [];
+                    var json = JSON.parse(reason.data.detail);
+                    angular.forEach(json, function(elem, idx) {
+                        angular.forEach(elem, function(el, idex) {
+                            $scope.messages.details.push(el)
+                        })
+                    })
+                });
+            }
+        }
+
+
+        $scope.saveAndClose = function(form) {
+            $scope.save(form, true);
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.building')
+        }
+
+    }]);
+
+
+});
