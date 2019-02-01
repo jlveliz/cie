@@ -2987,11 +2987,11 @@ define([
         }));
 
         $stateProvider.state('root.scheduleMaker.edit', angularAMD.route({
-            url: '/{pUserId:int}/edit',
+            url: '/{schedule:int}/edit',
             controllerUrl: 'frontend/components/scheduleMaker/scheduleMaker',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/scheduleMaker/create-edit.html',
+                    templateUrl: 'frontend/components/scheduleMaker/edit.html',
                     controller: 'ScheduleEditCtrl'
                 }
             },
