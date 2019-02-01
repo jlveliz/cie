@@ -109,9 +109,12 @@ define(['app'], function(app) {
         $scope.loading = false;
         $scope.models = [];
         $scope.isEdit = false
-        $scope.foundUser = false;
+        $scope.foundUser = true;
         $scope.daysOfWeek = [];
-        var arrBuildTherapies = [];
+        $scope.buildings = [];
+        $scope.opt = {
+            building : null
+        } 
         var arrTherapies = [];
         $scope.therapiesOfBuilding = [];
 
@@ -124,8 +127,8 @@ define(['app'], function(app) {
             apiResource.loadFromApi(reqKeyParameter).then(function(daysOfWeek) {
                 $scope.daysOfWeek = daysOfWeek;
             }),
-            apiResource.resource('buildings').query().then(function(buildingTherapy) {
-                arrBuildTherapies = buildingTherapy;
+            apiResource.resource('buildings').query().then(function(buildings) {
+                $scope.buildings = buildings;
             }),
             apiResource.resource('therapies').query().then(function(therapies) {
                 arrTherapies = therapies;

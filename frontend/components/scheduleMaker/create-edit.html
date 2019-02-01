@@ -94,6 +94,13 @@
                                 </div>
 
                                 <div class="row" ng-show="foundUser">
+                                    <div class="col-md-4 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Seleccione un centro de atención <span class="text-danger">*</span></label>
+                                        <select class="form-control" name="building" id="building" ng-model="opt.building" ng-options="building.id as building.name for building in buildings"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row" ng-show="foundUser && opt.building">
                                 	<div class="col-md-12">
                                 		<p><b>Asignación de Terapias</b> </p>
                                 		<table class="table table-bordered">
