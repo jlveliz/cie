@@ -1,0 +1,164 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Edificios</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <uib-tabset active="1">
+                    <uib-tab index="0" select="goToIndex()">
+                        <uib-tab-heading>
+                            <a ui-sref="root.building" title="Listado"><h5><b><i class="fa fa-list"></i> Listado</b></h5></a>
+                        </uib-tab-heading>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <h5 ng-if="isEdit"><b><i class="fa fa-edit"></i> Editar</b></h5>
+                        </uib-tab-heading>
+                        <h4 class="text-center" ng-if="loading">
+                            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Cargando...</span>
+                        </h4>
+                        <!-- is editing -->
+                        <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
+                            <uib-tabset active="0" style="margin-top:10px">
+                                <uib-tab index="0">
+                                    <uib-tab-heading>
+                                        <h5><b><i class="fa fa-field"></i> Cancha</b></h5>
+                                    </uib-tab-heading>
+                                    <div class="tab-index">
+                                        <div class="row" ng-if="existError || hasMessage">
+                                            <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <ul ng-if="messages.details.length > 0">
+                                                    <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                                </ul>
+                                                <p ng-if="hasMessage">{{messages.title}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
+                                                <label class="control-label" title="Nombre de la ciudad">Nombre <span class="text-danger">*</span></label>
+                                                <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-lg-offset-3">
+                                                <table class="table  table-bordered" id="shcedule-field">
+                                                    <thead>
+                                                        <tr>
+                                                            <td class="text-center col-lg-1"><b> Día</b></td>
+                                                            <td class="text-center col-lg-2" colspan="2"><b>Horario de Atención</b></td>
+                                                        </tr>
+                                                        <tr ng-repeat="(key, day) in daysWeek |orderBy:'value2'">
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" ng-model="day.$selected" ng-change="model.schedule[day.idparameter].$selected =! model.schedule[day.idparameter].$selected" type="checkbox" id="{{key}}_day">
+                                                                    <label class="form-check-label" for="{{key}}_day">
+                                                                        <b>{{day.value | capitalize:'oneLetter' }} </b>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <input type="time" ng-model="model.schedule[day.idparameter].start" class="form-control" ng-disabled="!day.$selected" min="08:00">
+                                                            </td>
+                                                            <td>
+                                                                <input type="time" ng-model="model.schedule[day.idparameter].end" class="form-control" ng-disabled="!day.$selected" min="08:00">
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab index="1">
+                                    <uib-tab-heading>
+                                        <h5><b>Terapias</b></h5>
+                                    </uib-tab-heading>
+                                    <!-- building therapy -->
+                                    <div class="row">
+                                        <div class="col-lg-12 col-xs-12" style="margin-top:10px">
+                                            <!-- day -->
+                                            <uib-accordion close-others="oneAtATime">
+                                                <div uib-accordion-group class="panel-default" heading="{{getDay(keyDay)}}  ({{day.start | date:'HH:mm' }} - {{day.end | date:'HH:mm' }})" ng-repeat="(keyDay,day) in model.schedule" ng-if="day.$selected">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-xs-12">
+                                                            <button class="btn btn-primary btn-sm pull-right"  ng-click="addBuildingTherapy(keyDay)"><i class="fa fa-plus"></i></button>
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="col-lg-3 col-md-4">
+                                                                            Terapia
+                                                                        </th>
+                                                                        <th class="col-lg-3 col-md-4">
+                                                                            Terapeuta
+                                                                        </th>
+                                                                        <th class="col-lg-1 col-md-2">
+                                                                            Capacidad
+                                                                        </th>
+                                                                        <th class="col-lg-1 col-md-2">
+                                                                            Hora de Inicio
+                                                                        </th>
+                                                                        <th class="col-lg-1 col-md-2">
+                                                                            Hora Fin
+                                                                        </th>
+                                                                        <th class="col-md-1 col-lg-1">Acción</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="(keyTherapy, therapy) in model.therapies" ng-if="keyDay == therapy.key_day && model.therapies.length > 0">
+                                                                        
+                                                                        <td>
+                                                                            <select name="therapy_{{keyDay}}_{{keyTherapy}}" id="therapy_{{keyDay}}_{{keyTherapy}}" class="form-control" ng-model="model.therapies[keyTherapy].therapy_id" ng-options="therapy.id as therapy.name for therapy in therapies | orderBy:'name'" ng-disabled="saving"></select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <select name="therapeust_{{keyDay}}_{{keyTherapy}}" id="therapeust_{{keyDay}}_{{keyTherapy}}" class="form-control" ng-model="model.therapies[keyTherapy].therapist_user_id" ng-options="therapist.id as (therapist.person.name + ' '+therapist.person.last_name) for therapist in therapists | orderBy:'person.name'" ng-disabled="saving"></select>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <input type="text" class="form-control" ng-model="model.therapies[keyTherapy].capacity" ng-disabled="saving">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="form-control" ng-model="model.therapies[keyTherapy].schedule.start" min="{{day.start | date:'HH:mm'}}" ng-min="day.start" max="{{day.end | date:'HH:mm'}}" ng-max="day.end" ng-disabled="saving">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="form-control" ng-model="model.therapies[keyTherapy].schedule.end" ng-disabled="saving">
+                                                                        </td>
+                                                                        <td><button class="btn btn-danger btn-sm" ng-disabled="saving" ng-click="deleteTherapy(keyTherapy)"><i class="fa fa-trash" ></i></button></td>
+                                                                    </tr>
+                                                                    <tr ng-if="model.therapies.length == 0 && keyDay == therapy.key_day">
+                                                                        <td colspan="5">No existen Terapias para este día</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </uib-accordion>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                            </uib-tabset>
+                    </uib-tab>
+                </uib-tabset>
+                <!-- Nav tabs -->
+                <div class="clearfix "></div>
+                <div class="ln_solid " ng-if="!loading "></div>
+                <div class="form-group " ng-if="!loading ">
+                    <button type="submit" class="btn btn-primary" ng-disabled="saving" ng-click="save(saveForm)">
+                        <span ng-if="!saving"><i class="fa fa-save"></i> Guardar</span>
+                        <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                    </button>
+                    <button type="submit" class="btn btn-default" ng-disabled="saving" ng-click="saveAndClose(saveForm)">
+                        <span ng-if="!saving"><i class="fa fa-save"></i> Guardar y cerrar</span>
+                        <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                    </button>
+                    <a class="btn btn-link" ui-sref="root.building">Cancelar</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

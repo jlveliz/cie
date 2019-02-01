@@ -3,7 +3,7 @@
  **/
 define(['app'], function(app) {
 
-    app.register.service('ScheduleMakerService', ['apiResource', '$q', function(apiResource, $q) {
+    app.register.service('ScheduleMakerService', ['apiResource', '$q', '$filter', function(apiResource, $q, $filter) {
 
 
         var _this = this;
@@ -24,16 +24,44 @@ define(['app'], function(app) {
 
         };
 
-        _this.updateBuildingsTherapies = function(currentBuildingTherapies, buildingTherapyId, selected) {
-            if (selected) {
-                currentBuildingTherapies.push(buildingTherapyId);
-            } else {
-                let idx = _.indexOf(currentBuildingTherapies, buildingTherapyId);
-                if (idx > -1) currentBuildingTherapies.splice(idx, 1);
-            }
+        _this.makeVisibleTherapies = function(therapies, buildingTherapies) {
+            angular.forEach(therapies, function(therapy) {
+                therapy.$existSchedule = false;
+                let founded = _.findWhere(buildingTherapies, { therapy_id: therapy.id })
+                if (founded) {
+                    therapy.$existSchedule = true;
+                }
+            });
 
-            return currentBuildingTherapies;
+            return therapies;
         };
+
+        _this.getDay = function(keyDay, daysOfWeek) {
+            let found = _.findWhere(daysOfWeek, { idparameter: keyDay });
+            if (found) return $filter('capitalize')(found.value, 'oneLetter')
+        };
+
+
+        _this.getTherapist = function(therapistUserId, therapists) {
+            let found = _.findWhere(therapists, { id: therapistUserId });
+            if (found) return $filter('capitalize')(found.person.name, 'oneLetter') + ' ' + $filter('capitalize')(found.person.last_name, 'oneLetter');
+
+            return "-";
+        };
+
+
+        _this.addRemoveTherapyUser = function(therapyBuild, selected, therapyUser) {
+
+            if (selected) {
+                therapyUser.push(therapyBuild)
+            } else {
+                let idx = therapyUser.indexOf(therapyBuild)
+                if (idx > -1) {
+                    therapyUser.splice(idx, 1);
+                }
+            }
+            return therapyUser;
+        }
 
 
         _this.save = function(model) {
@@ -55,6 +83,44 @@ define(['app'], function(app) {
             }
 
             return deferred.promise;
+        };
+
+
+        _this.getBuilding = function(therapies) {
+            let buildId = null;
+
+            buildings = [];
+            angular.forEach(therapies, function(therapy) {
+                buildings.push(therapy.building_therapy.build_id)
+            });
+
+
+
+            return buildId = buildings[0];
+        }
+
+
+        _this.getSelecteds = function(buildingTherapies, therapiesUser) {
+            angular.forEach(therapiesUser, function(theraUser) {
+                let found = _.findWhere(buildingTherapies, { id: theraUser.building_therapy_id });
+                if (found) {
+                    found.$selected = true;
+                } else {
+                    found.$selected = false;
+                }
+            })
+
+            return buildingTherapies;
+        };
+
+
+        _this.formatBuildingTherayUser = function(therapiesUser) {
+            let therapyUsers = [];
+            angular.forEach(therapiesUser, function(therapyUser) {
+                therapyUsers.push(therapyUser.building_therapy_id)
+            })
+
+            return therapyUsers;
         }
 
 
@@ -111,7 +177,12 @@ define(['app'], function(app) {
         $scope.isEdit = false
         $scope.foundUser = false;
         $scope.daysOfWeek = [];
-        var arrBuildTherapies = [];
+        $scope.buildings = [];
+        $scope.therapies = [];
+        $scope.therapists = [];
+        $scope.opt = {
+            building: null
+        }
         var arrTherapies = [];
         $scope.therapiesOfBuilding = [];
 
@@ -124,23 +195,25 @@ define(['app'], function(app) {
             apiResource.loadFromApi(reqKeyParameter).then(function(daysOfWeek) {
                 $scope.daysOfWeek = daysOfWeek;
             }),
-            apiResource.resource('buildings').query().then(function(buildingTherapy) {
-                arrBuildTherapies = buildingTherapy;
+            apiResource.resource('buildings').query().then(function(buildings) {
+                $scope.buildings = buildings;
             }),
             apiResource.resource('therapies').query().then(function(therapies) {
-                arrTherapies = therapies;
+                $scope.therapies = therapies;
             }),
+            apiResource.resource('therapists').queryCopy().then(function(therapists) {
+                $scope.therapists = therapists;
+            })
         ]);
 
 
         deps.then(function() {
-            $scope.therapiesOfBuilding = ScheduleMakerService.getTherapiesOfBuilding(arrTherapies, arrBuildTherapies[0]);
             angular.forEach($scope.therapiesOfBuilding, function(building) {
                 angular.forEach(building.therapies, function(therapy) {
                     therapy.$selected = false;
                 })
             })
-            $scope.model = apiResource.resource('buildingtherapyUser').create();
+            $scope.model = apiResource.resource('buildingtherapyUser').create({ building_therapies: [] });
         })
 
         $scope.goToIndex = function() {
@@ -156,9 +229,9 @@ define(['app'], function(app) {
                 $scope.model.year = 2019;
                 $scope.model.group_time_id = "YEAR_QUARTER";
                 $scope.model.timeframe_id = "FIRST";
-                $scope.model.start_date = "2019-01-25";
-                $scope.model.end_date = "2019-04-30";
-                $scope.model.building_therapies = [];
+                $scope.model.start_date = new Date("2019-01-25");
+                $scope.model.end_date = new Date("2019-04-30");
+                $scope.model.building_therapies = []
 
                 if (!$scope.model.patientUser.representant_id) {
                     $scope.foundUser = true;
@@ -170,6 +243,31 @@ define(['app'], function(app) {
 
         $scope.addToSchedule = function(buildingTherapyId, Selected) {
             $scope.model.building_therapies = ScheduleMakerService.updateBuildingsTherapies($scope.model.building_therapies, buildingTherapyId, Selected);
+        };
+
+        $scope.selectBuilding = function(buildingId) {
+            let building = _.findWhere($scope.buildings, {
+                id: buildingId
+            });
+
+            if (building) {
+                $scope.therapiesOfBuilding = building.therapies;
+                $scope.therapies = ScheduleMakerService.makeVisibleTherapies($scope.therapies, building.therapies);
+
+            }
+        };
+
+
+        $scope.getDay = function(keyday) {
+            return ScheduleMakerService.getDay(keyday, $scope.daysOfWeek);
+        }
+
+        $scope.getTherapist = function(therapistUserId) {
+            return ScheduleMakerService.getTherapist(therapistUserId, $scope.therapists)
+        }
+
+        $scope.inserToTherapyUser = function(therapyBuild, selected) {
+            $scope.model.building_therapies = ScheduleMakerService.addRemoveTherapyUser(therapyBuild, selected, $scope.model.building_therapies)
         }
 
 
@@ -215,18 +313,130 @@ define(['app'], function(app) {
 
     }])
 
-    app.register.controller('ScheduleEditCtrl', ['$scope', 'apiResource', '$stateParams', 'ScheduleMakerService', '$rootScope', '$state', '$rootScope', function($scope, apiResource, $stateParams, ScheduleMakerService, $rootScope, $state, $rootScope) {
+    app.register.controller('ScheduleEditCtrl', ['$scope', 'apiResource', '$stateParams', 'ScheduleMakerService', '$rootScope', '$state', '$rootScope', 'envService', '$q', function($scope, apiResource, $stateParams, ScheduleMakerService, $rootScope, $state, $rootScope, envService, $q) {
 
         $scope.loading = true;
+        var scheduleId = $stateParams.schedule;
+        $scope.models = [];
         $scope.isEdit = true
-        $scope.models = {};
-        let pUserId = $stateParams.pUserId;
+        $scope.foundUser = true;
+        $scope.daysOfWeek = [];
+        $scope.buildings = [];
+        $scope.therapies = [];
+        $scope.therapists = [];
+        $scope.opt = {
+            building: null
+        }
 
+        var reqKeyParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/WEEK_DAYS'
+        };
 
-        apiResource.resource('buildingtherapyUser').getCopy(pUserId).then(function(result) {
-            $scope.loading = false;
-            $scope.model = result;
+        var deps = $q.all([
+            apiResource.loadFromApi(reqKeyParameter).then(function(daysOfWeek) {
+                $scope.daysOfWeek = daysOfWeek;
+            }),
+            apiResource.resource('buildings').query().then(function(buildings) {
+                $scope.buildings = buildings;
+            }),
+            apiResource.resource('therapies').query().then(function(therapies) {
+                $scope.therapies = therapies;
+            }),
+            apiResource.resource('therapists').queryCopy().then(function(therapists) {
+                $scope.therapists = therapists;
+            })
+        ]);
+
+        deps.then(function() {
+            apiResource.resource('buildingtherapyUser').getCopy(scheduleId).then(function(result) {
+
+                $scope.model = result;
+                $scope.opt.building = ScheduleMakerService.getBuilding(result.therapies);
+
+                if ($scope.opt.building) {
+                    let building = _.findWhere($scope.buildings, {
+                        id: $scope.opt.building
+                    });
+                    $scope.therapiesOfBuilding = ScheduleMakerService.getSelecteds(building.therapies, $scope.model.therapies);
+                    $scope.therapies = ScheduleMakerService.makeVisibleTherapies($scope.therapies, building.therapies);
+                }
+
+                $scope.model.building_therapies = ScheduleMakerService.formatBuildingTherayUser($scope.model.therapies);
+                $scope.loading = false;
+            });
         });
+
+        $scope.getDay = function(keyday) {
+            return ScheduleMakerService.getDay(keyday, $scope.daysOfWeek);
+        }
+
+        $scope.getTherapist = function(therapistUserId) {
+            return ScheduleMakerService.getTherapist(therapistUserId, $scope.therapists)
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.scheduleMaker')
+        };
+
+        $scope.inserToTherapyUser = function(therapyBuild, selected) {
+            $scope.model.building_therapies = ScheduleMakerService.addRemoveTherapyUser(therapyBuild, selected, $scope.model.building_therapies)
+        };
+
+
+        $scope.save = function(saveForm, returnIndex) {
+
+            var successCallback = function(data) {
+                $scope.saving = false;
+                $scope.hasMessage = true;
+                apiResource.resource('buildingtherapyUser').setOnCache(data);
+
+                $scope.model = data;
+                $scope.opt.building = ScheduleMakerService.getBuilding(data.therapies);
+
+                if ($scope.opt.building) {
+                    let building = _.findWhere($scope.buildings, {
+                        id: $scope.opt.building
+                    });
+                    $scope.therapiesOfBuilding = ScheduleMakerService.getSelecteds(building.therapies, $scope.model.therapies);
+                    $scope.therapies = ScheduleMakerService.makeVisibleTherapies($scope.therapies, building.therapies);
+                }
+
+                $scope.model.building_therapies = ScheduleMakerService.formatBuildingTherayUser($scope.model.therapies);
+
+
+                ScheduleMakerService.messageFlag.title = "Se ha actualizado el horario correctamente";
+                ScheduleMakerService.messageFlag.type = "info";
+                $scope.messages = ScheduleMakerService.messageFlag;
+                if (returnIndex) {
+                    $state.go('root.scheduleMaker');
+                }
+            }
+
+            var failCallback = function(reason) {
+                $scope.saving = false
+                $scope.existError = true;
+                $scope.messages.title = reason.data.title;
+                $scope.messages.type = 'error';
+                $scope.messages.details = [];
+                var json = JSON.parse(reason.data.detail);
+                angular.forEach(json, function(elem, idx) {
+                    angular.forEach(elem, function(el, idex) {
+                        $scope.messages.details.push(el)
+                    })
+                })
+            }
+
+
+            if (saveForm.validate()) {
+                $scope.saving = true;
+                console.log($scope.model)
+                ScheduleMakerService.save($scope.model).then(successCallback, failCallback);
+            }
+        }
+
+
+
 
     }])
 

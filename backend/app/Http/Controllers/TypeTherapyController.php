@@ -2,23 +2,23 @@
 
 namespace Cie\Http\Controllers;
 
-use Cie\RepositoryInterface\TherapyRepositoryInterface;
+use Cie\RepositoryInterface\TypeTherapyRepositoryInterface;
 use Cie\Http\Validators\TherapyValidator;
-use Cie\Exceptions\TherapyException;
+use Cie\Exceptions\TypeTherapyException;
 use Illuminate\Http\Request;
 
-class TherapyController extends Controller
+class TypeTherapyController extends Controller
 {
     
-    protected $therapyRepo;
+    protected $typeTherapyRepo;
 
 
-    public function __construct(TherapyRepositoryInterface $therapyRepo, Request $request)
+    public function __construct(TypeTherapyRepositoryInterface $typeTherapyRepo, Request $request)
     {
         $this->middleware('jwt.auth');
         // $this->middleware('checkrole:admin');
         parent::__construct($request);
-        $this->therapyRepo = $therapyRepo;
+        $this->typeTherapyRepo = $typeTherapyRepo;
     }
     /**
      * Display a listing of the resource.
@@ -27,9 +27,9 @@ class TherapyController extends Controller
      */
     public function index()
     {
-        $building = $this->therapyRepo->enum()->toJson();
-        $building = $this->encodeResponse($building);
-        return response()->json($building,200);
+        $typeTherapies = $this->typeTherapyRepo->enum()->toJson();
+        $typeTherapies = $this->encodeResponse($typeTherapies);
+        return response()->json($typeTherapies,200);
     }
 
     /**
@@ -42,10 +42,10 @@ class TherapyController extends Controller
     {
         try {
             $data = $request->all();
-            $building = $this->therapyRepo->save($data)->toJson();
-            $building = $this->encodeResponse($building);
-            return response()->json($building,200);
-        } catch (TherapyException $e) {
+            $typeTherapies = $this->typeTherapyRepo->save($data)->toJson();
+            $typeTherapies = $this->encodeResponse($typeTherapies);
+            return response()->json($typeTherapies,200);
+        } catch (TypeTherapyException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
     }
@@ -60,10 +60,10 @@ class TherapyController extends Controller
     {
         
         try {
-            $building = $this->therapyRepo->find($id)->toJson();
-            $building = $this->encodeResponse($building);
-            return response()->json($building,200);
-        } catch (TherapyException $e) {
+            $typeTherapies = $this->typeTherapyRepo->find($id)->toJson();
+            $typeTherapies = $this->encodeResponse($typeTherapies);
+            return response()->json($typeTherapies,200);
+        } catch (TypeTherapyException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
     }
@@ -79,10 +79,10 @@ class TherapyController extends Controller
     public function update(TherapyValidator $validator, Request $request, $id)
     {
         try {
-            $building = $this->therapyRepo->edit($id, $request->all())->tojson();
-            $building = $this->encodeResponse($building);
-            return response()->json($building,200);
-        } catch (TherapyException $e) {
+            $typeTherapies = $this->typeTherapyRepo->edit($id, $request->all())->tojson();
+            $typeTherapies = $this->encodeResponse($typeTherapies);
+            return response()->json($typeTherapies,200);
+        } catch (TypeTherapyException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
     }
@@ -96,12 +96,12 @@ class TherapyController extends Controller
     public function destroy($id)
     {
         try {
-            $removed = $this->therapyRepo->remove($id);
+            $removed = $this->typeTherapyRepo->remove($id);
             if ($removed) {
                 $removed = $this->encodeResponse(json_encode(['exitoso'=>true]));
                 return response()->json($removed,200);
             }
-        } catch (TherapyException $e) {
+        } catch (TypeTherapyException $e) {
             return response()->json($e->getMessage(),$e->getCode());
         }
     }

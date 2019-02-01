@@ -34,4 +34,17 @@ class Therapy extends BaseModel
     {
         return $this->hasMany('Cie\Models\BuildingTherapy','therapy_id');
     }
+
+    public static function boot()
+    {
+        $istance = new Static;
+        parent::boot();
+        static::saving(function($therapy) use($istance){
+            $therapy->code =  str_slug($therapy->name);
+        });
+
+        static::updating(function($therapy) use($istance) {
+            $therapy->code =  str_slug($therapy->name);
+        });
+    }
 }
