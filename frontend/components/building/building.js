@@ -10,7 +10,6 @@ define(['app'], function(app) {
         _this.messageFlag = {};
 
         _this.formatSchedule = function(model, daysOfWeek) {
-            debugger;
             var scheduleModel = model.schedule;
 
             angular.forEach(scheduleModel, function(el, idx) {
