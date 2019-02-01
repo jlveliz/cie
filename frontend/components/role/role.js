@@ -50,8 +50,8 @@ define(['app'], function(app) {
 
         }
 
-        _this.filterTypePermission = function(value, type) {
-            if (value && value.type.code == type) return value;
+        _this.filterTypePermission = function(value, type, type2) {
+            if ( (value && value.type.code == type) || (value && value.type.code == type2)) return value;
             return false
         }
     }]);
@@ -201,11 +201,11 @@ define(['app'], function(app) {
         }
 
         $scope.filterTypePermissionMenu = function(value) {
-            return RoleService.filterTypePermission(value, 'MENU');
+            return RoleService.filterTypePermission(value, 'MENU','menu');
         }
 
         $scope.filterTypePermissionOption = function(value) {
-            return RoleService.filterTypePermission(value, 'OPCION');
+            return RoleService.filterTypePermission(value, 'OPCION','opcion');
         }
 
         $scope.save = function(form, returnIndex) {
@@ -363,11 +363,11 @@ define(['app'], function(app) {
         }
 
         $scope.filterTypePermissionMenu = function(value) {
-            return RoleService.filterTypePermission(value, 'menu');
+            return RoleService.filterTypePermission(value, 'menu','MENU');
         }
 
         $scope.filterTypePermissionOption = function(value) {
-            return RoleService.filterTypePermission(value, 'menu');
+            return RoleService.filterTypePermission(value, 'opcion','OPCION');
         }
 
 

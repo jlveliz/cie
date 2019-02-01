@@ -10,7 +10,7 @@ define(['app'], function(app) {
         _this.messageFlag = {};
 
         _this.filterTypePermission = function(value) {
-            if (value && value.type.code == 'menu') return value;
+            if ((value && value.type.code == 'menu')|| (value && value.type.code == 'MENU')) return value;
             return false
         }
     })
