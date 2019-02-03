@@ -35,7 +35,8 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="model in models">
-                                        <td><a ui-sref="root.scheduleMaker.edit({pUserId:model.id})" title="{{model.name | capitalize:'oneLetter'}}">{{model.last_name | capitalize:'oneLetter'}} {{model.name | capitalize:'oneLetter'}}</a></td>
+                                        
+                                        <td><a ui-sref="root.scheduleMaker.edit({schedule:model.id})" title="{{model.name | capitalize:'oneLetter'}}">{{model.last_name | capitalize:'oneLetter'}} {{model.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{ model.therapies.length || 0 }}</td>
                                         <td>
                                             <div class="btn-group" role="group" ng-hide="model.$deleting">
@@ -44,7 +45,7 @@
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li> <a ui-sref="root.scheduleMaker.edit({pUserId:model.id})"> <i class="fa fa-pencil"></i> Editar</a></li>
+                                                    <li> <a ui-sref="root.scheduleMaker.edit({schedule:model.id})"> <i class="fa fa-pencil"></i> Editar</a></li>
                                                     <li>
                                                         <a ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
                                                     </li>

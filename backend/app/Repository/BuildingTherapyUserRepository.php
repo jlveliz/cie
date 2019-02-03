@@ -54,23 +54,23 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 		if (is_array($field)) {
 
 			if (array_key_exists('patient_user_id', $field)) { 
-				$buildingTherapyUser = BuildingTherapyUser::where('patient_user_id',$field['patient_user_id'])->first();	
+				$buildingTherapyUser = PatientUser::where('patient_user.id',$field['patient_user_id'])->first();	
 			} else {
 
 				throw new BuildingTherapyUserException(['title'=>'No se puede encontrar el listado','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
 		} elseif (is_string($field) || is_int($field)) {
-			$buildingTherapyUser = BuildingTherapyUser::where('id',$field)->first();
+			$buildingTherapyUser = PatientUser::where('patient_user.id',$field)->first();
 		} else {
 			throw new BuildingTherapyUserException(['title'=>'No se puede encontrar la terapía','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
 		}
 
 		if (!$buildingTherapyUser) throw new BuildingTherapyUserException(['title'=>'No se puede buscar al módulo','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 		
-		$buildingTherapyUser->load('patient','buildingTherapy');
+		$buildingTherapyUser->load('therapies');
 		
-		$buildingTherapyUser->patient->load('person');
+		$buildingTherapyUser->load('person');
 		
 		return $buildingTherapyUser;
 
@@ -96,18 +96,32 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 			}
 		}
 
-		return PatientUser::find($data['patient_user_id']);
+		return $this->find($data['patient_user_id']);
 	}
 
 	public function edit($id,$data)
 	{
-		$buildingTherapyUser = BuildingTherapyUser::find($id);
+		$buildingTherapyUser = PatientUser::find($id);
 		if ($buildingTherapyUser) {
-			$buildingTherapyUser->fill($data);
-			if($buildingTherapyUser->update()){
-				$key = $buildingTherapyUser->getKey();
-				return $this->find($key);
+
+			$buildingTherapyUser->therapies()->delete();
+			
+			
+			foreach ($data['building_therapies'] as $key => $value) {
+				$datSave = [];
+				$datSave['patient_user_id'] = $data['id'];
+				$datSave['year'] = 2019;
+				$datSave['group_time_id'] = "YEAR_QUARTER";
+				$datSave['timeframe_id'] = "FIRST";
+				$datSave['building_therapy_id'] = $value;
+				$buildingTherapyUser = new BuildingTherapyUser();
+				$buildingTherapyUser->fill($datSave);
+				$buildingTherapyUser->save();
 			}
+
+			return $this->find($data['id']);
+
+			
 		} else {
 			throw new BuildingTherapyUserException(['title'=>'Ha ocurrido un error al asignar las terapias al usuario '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 		}

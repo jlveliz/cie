@@ -100,7 +100,7 @@ define(['app','moment'],function(app,moment){
                     $scope.model.begin_date = new Date()
                 }
                 
-                if($scope.model.begin_date) {
+                if($scope.model.end_date) {
                     $scope.model.end_date = new Date($scope.model.end_date)
                 }else {
                     $scope.model.end_date = new Date()

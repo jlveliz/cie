@@ -4,7 +4,7 @@ namespace Cie\Exceptions;
 /**
 * 
 */
-class TherapyException extends AppException
+class TherapistException extends AppException
 {
 	
 	public function __construct(array $params,$status)

@@ -36,32 +36,27 @@
                                         <p ng-if="hasMessage">{{messages.title}}</p>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div ng-if="!isEdit" class="col-md-3 col-md-offset-4 col-xs-12">
-                                        <button type="button" ng-click="openModalSearchUser()" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Buscar Usuario</button>
-                                    </div>
-                                </div>
                                 <div class="row" ng-show="foundUser">
                                     <p class="col-md-12"><b>Datos De usuario</b></p>
                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Cédula <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.num_identification" ng-disabled="true == true" disabled="" readonly="">
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.num_identification" ng-disabled="true == true" disabled="" readonly="">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Nombres <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.name" ng-disabled="true == true" disabled="" readonly="">
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.name" ng-disabled="true == true" disabled="" readonly="">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Apellidos <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.last_name" ng-disabled="true == true" disabled="" readonly="">
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.last_name" ng-disabled="true == true" disabled="" readonly="">
                                     </div>
                                     <div class="col-md-2 col-sm-3 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Género <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.genre" ng-disabled="true == true" disabled="" readonly="">
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.genre" ng-disabled="true == true" disabled="" readonly="">
                                     </div>
                                     <div class="col-md-1 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Edad <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.patientUser.age" ng-disabled="true == true" disabled="" readonly="">
+                                        <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.age" ng-disabled="true == true" disabled="" readonly="">
                                     </div>
                                 </div>
                                 <div class="row" ng-show="foundUser">
@@ -93,10 +88,10 @@
                                 <div class="row" ng-show="foundUser">
                                     <div class="col-md-4 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                         <label class="control-label">Seleccione un centro de atención <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="building" id="building" ng-model="opt.building" ng-options="building.id as building.name for building in buildings" ng-change="selectBuilding(opt.building)"></select>
+                                        <select class="form-control" name="building" id="building" ng-model="opt.building" ng-options="building.id as building.name for building in buildings" ng-change="selectBuilding(opt.building)" ng-disabled="true"></select>
                                     </div>
                                 </div>
-                                <div class="row" ng-show="foundUser && opt.building">
+                                <div class="row" ng-show="opt.building">
                                     <div class="col-md-12">
                                         <p><b>Asignación de Terapias</b> </p>
                                         <div class="row">

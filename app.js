@@ -1042,8 +1042,14 @@ define([
             id: '@id'
         }).register();
 
+       
         //therapies
         apiResource.resource('therapies', envService.read('api') + 'therapies/:id', {
+            id: '@id'
+        }).register();
+
+        //Type therapies
+        apiResource.resource('tp-therapies', envService.read('api') + 'type-therapies/:id', {
             id: '@id'
         }).register();
 
@@ -1051,6 +1057,12 @@ define([
         apiResource.resource('buildingtherapyUser', envService.read('api') + 'buildingtherapyUser/:id', {
             id: '@id'
         }).register();
+
+        //therapists
+        apiResource.resource('therapists', envService.read('api') + 'therapists/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     /** 
@@ -2975,11 +2987,11 @@ define([
         }));
 
         $stateProvider.state('root.scheduleMaker.edit', angularAMD.route({
-            url: '/{pUserId:int}/edit',
+            url: '/{schedule:int}/edit',
             controllerUrl: 'frontend/components/scheduleMaker/scheduleMaker',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/scheduleMaker/create-edit.html',
+                    templateUrl: 'frontend/components/scheduleMaker/edit.html',
                     controller: 'ScheduleEditCtrl'
                 }
             },
@@ -3016,12 +3028,12 @@ define([
             }
         }));
 
-         $stateProvider.state('root.building.create', angularAMD.route({
+        $stateProvider.state('root.building.create', angularAMD.route({
             url: '/create',
             controllerUrl: 'frontend/components/building/building',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/building/create-edit.html',
+                    templateUrl: 'frontend/components/building/create.html',
                     controller: 'BuildingCreateCtrl'
                 }
             },
@@ -3036,12 +3048,12 @@ define([
             }
         }));
 
-         $stateProvider.state('root.building.edit', angularAMD.route({
+        $stateProvider.state('root.building.edit', angularAMD.route({
             url: '/{buildingId:int}/edit',
             controllerUrl: 'frontend/components/building/building',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/building/create-edit.html',
+                    templateUrl: 'frontend/components/building/edit.html',
                     controller: 'BuildingEditCtrl'
                 }
 
@@ -3053,6 +3065,70 @@ define([
                     redirectTo: "adminAuth"
                 },
                 pageTitle: "Edificios"
+            }
+        }));
+
+
+
+        // THERAPY
+        $stateProvider.state('root.therapy', angularAMD.route({
+            url: 'therapies',
+            controllerUrl: 'frontend/components/therapy/therapy',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapy/index.html',
+                    controller: 'TherapyIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Terapias",
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+
+            }
+        }));
+
+        $stateProvider.state('root.therapy.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/therapy/therapy',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapy/create-edit.html',
+                    controller: 'TherapyCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Crear Terapia",
+
+            }
+        }));
+
+        $stateProvider.state('root.therapy.edit', angularAMD.route({
+            url: '/{therapyId:int}/edit',
+            controllerUrl: 'frontend/components/therapy/therapy',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapy/create-edit.html',
+                    controller: 'TherapyEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Terapias"
             }
         }));
 

@@ -10,7 +10,7 @@ class BuildingTherapyUser extends BaseModel
 
     protected $primaryKey = "id";
 
-    // protected $with = ['patient','buildingTherapy'];
+    protected $with = ['buildingTherapy'];
     
     protected $casts = [ 
         'patient_user_id' => 'int'
