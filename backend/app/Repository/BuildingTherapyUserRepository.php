@@ -119,6 +119,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				$datSave['patient_user_id'] = $data['id'];
 				$datSave['year'] = 2019;
 				$datSave['group_time_id'] = "YEAR_QUARTER";
+				$groupTime = $datSave['group_time_id'];
 				$datSave['timeframe_id'] = "FIRST";
 				$datSave['building_therapy_id'] = $value;
 				
