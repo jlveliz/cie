@@ -101,21 +101,32 @@
                                         <p><b>Asignación de Terapias</b> </p>
                                         <div class="row">
                                             <div class="col-lg-12">
+                                                <div class="row">
+                                                    <button class="btn btn-primary pull-right" ng-click="openModalSearchBuildingTherapy()"><i class="fa fa-plus"></i> Agregar Terapia</button>
+                                                </div>
                                                 <uib-accordion close-others="oneAtATime">
-                                                    <div uib-accordion-group class="panel-default" heading="{{therapy.name}}" ng-repeat="therapy in therapies | orderBy:'name'" ng-if="therapy.$existSchedule" is-open="true">
-                                                        <ul class="list-unstyled">
-                                                            <li ng-repeat="(key, therapyBuild) in therapiesOfBuilding" ng-if="therapyBuild.therapy_id == therapy.id">
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" ng-disabled="therapyBuild.availability == 0" ng-model="therapyBuild.$selected"  ng-change="therapyBuild.$selected != therapyBuild.$selected; inserToTherapyUser(therapyBuild.id, therapyBuild.$selected)"><b>{{getDay(therapyBuild.key_day)}}</b> - <i class="fa fa-user"></i> {{getTherapist(therapyBuild.therapist_user_id)}} - <i class="fa fa-ticket"></i> <span ng-if="therapyBuild.availability == 0">No Hay Cupo</span>
-
-                                                                        <span ng-if="therapyBuild.availability > 0">{{therapyBuild.availability}} Cupo(s) disponibles</span> -
-                                                                        <i class="fa fa-calendar"></i> 
-                                                                        {{therapyBuild.schedule.start}} - {{therapyBuild.schedule.end}}
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
+                                                    <div uib-accordion-group class="panel-default" heading="{{therapy.name}}" is-open="true">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Terapia</th>
+                                                                <th>Día y Horas</th>
+                                                                <th>Desde</th>
+                                                                <th>Hasta</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>   
                                                     </div>
                                                 </uib-accordion>
                                             </div>

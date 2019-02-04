@@ -1,0 +1,64 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" ng-click="$dismiss()"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Buscar Terapias</h4>
+</div>
+<div class="modal-body">
+    <div class="panel panel-default">
+        <div class="panel-body" style="padding: 10px">
+            <form ng-submit="search()">
+                <div class="form-group col-lg-4">
+                    <label for="" class="control-label">Terapias <span class="text-danger">*</span></label>
+                    <select name="" id="" class="form-control" ng-model="query.therapies"></select>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="">Terapauta <span class="text-danger">*</span></label>
+                    <select name="" id="" class="form-control" ng-model="query.therapist" ng-disabled="!query.therapies"></select>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="">Días <span class="text-danger">*</span></label>
+                    <select name="" id="" class="form-control" ng-model="query.day" ng-disabled="!query.therapies && !query.therapist"></select>
+                </div>
+
+                <div class="form-group col-lg-12">
+                    <button class="btn btn-primary pull-right"><i class="fa fa-search"></i> Buscar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <!-- IF HAS ERROR -->
+    <div class="row" ng-if="existError">
+        <div class="alert col-md-12 col-xs-12 col-sm-12 alert-danger" role="alert ">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p>{{model.errors}}</p>
+        </div>
+    </div>
+    <!-- QUERY SHOW -->
+    <p ng-if="searching" class="text-center">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Cargando...</span>
+    </p>
+    <table class="table table-striped" ng-if="!searching">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Horario</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-if="users.length" ng-repeat="user in users | orderBy:'last_name' ">
+                <td>{{user.last_name}} {{user.name}} <small>({{user.num_identification}})</small> </td>
+                <td>
+                    <button class="btn btn-default btn-xs" ng-click="selectAndClose(user)"><i class="fa fa-check"></i></button>
+                </td>
+            </tr>
+            <tr ng-if="!users.length">
+                <td colspan="2" class="text-center">No se han encontrado usuarios</td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="clear:both"></div>
+</div>
+<div class="modal-footer">
+</div>

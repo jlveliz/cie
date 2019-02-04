@@ -3,7 +3,7 @@
  **/
 define(['app'], function(app) {
 
-    app.register.service('ScheduleMakerService', ['apiResource', '$q', '$filter', function(apiResource, $q, $filter) {
+    app.register.service('ScheduleMakerService', ['apiResource', '$q', '$filter', '$uibModal', function(apiResource, $q, $filter, $uibModal) {
 
 
         var _this = this;
@@ -121,6 +121,33 @@ define(['app'], function(app) {
             })
 
             return therapyUsers;
+        };
+
+
+        _this.openModalSearchBuildingTherapy = function(buildingTherapyId) {
+            var deferred = $q.defer();
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: false,
+                templateUrl: 'frontend/components/scheduleMaker/modal-search-building-therapy.html',
+                resolve: {
+                    modalContent: function() {
+                        return buildingTherapyId
+                    }
+                },
+                controller: function($scope, modalContent, $uibModalInstance) {
+                    $scope.modalContent = modalContent;
+                    $scope.ok = function(person) {
+                        $uibModalInstance.close();
+                        deferred.resolve(person);
+                    }
+                }
+
+            });
+
+
+            return deferred.promise;
         }
 
 
@@ -175,7 +202,7 @@ define(['app'], function(app) {
         $scope.loading = false;
         $scope.models = [];
         $scope.isEdit = false
-        $scope.foundUser = false;
+        $scope.foundUser = true;
         $scope.daysOfWeek = [];
         $scope.buildings = [];
         $scope.therapies = [];
@@ -256,6 +283,12 @@ define(['app'], function(app) {
 
             }
         };
+
+        $scope.openModalSearchBuildingTherapy = function() {
+            ScheduleMakerService.openModalSearchBuildingTherapy($scope.opt.building).then(function(result) {
+
+            })
+        }
 
 
         $scope.getDay = function(keyday) {
