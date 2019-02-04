@@ -49,18 +49,62 @@ define(['app'], function(app) {
             return "-";
         };
 
+        _this.getTherapy = function(therapyId, therapies) {
+            let found = _.findWhere(therapies, { id: therapyId });
+            if (found) return found.name;
 
-        _this.addRemoveTherapyUser = function(therapyBuild, selected, therapyUser) {
+            return "-";
+        };
 
-            if (selected) {
-                therapyUser.push(therapyBuild)
-            } else {
-                let idx = therapyUser.indexOf(therapyBuild)
-                if (idx > -1) {
-                    therapyUser.splice(idx, 1);
+
+        _this.filterTherapistFromBuildingTherapist = function(therapyId, buildingTherapies) {
+            var filtered = _.filter(buildingTherapies, function(buildTherapy) {
+                return buildTherapy.therapy_id == therapyId;
+            });
+            return _.unique(filtered, function(fil) {
+                return fil.therapist_user_id;
+            });
+        }
+
+        _this.filterDaysFromBuildingTherapy = function(therapistId, therapyId, buildingTherapies) {
+            var filtered = _.filter(buildingTherapies, function(buildTherapy) {
+                return buildTherapy.therapy_id == therapyId && buildTherapy.therapist_user_id == therapistId;
+            });
+
+            return filtered;
+        }
+
+
+
+        _this.addRemoveTherapyUser = function(buildingTherapyId, buildingId, action, therapiesSelecteds) {
+            therapiesSelecteds = therapiesSelecteds || [];
+
+            var deferred = $q.defer();
+
+            apiResource.resource('buildings').queryCopy().then(function(results) {
+                building = _.findWhere(results, { id: buildingId });
+
+                if (building) {
+                    var therapyBuilding = _.findWhere(building.therapies, { id: buildingTherapyId });
+
+                    if (therapyBuilding) {
+                        if (action == 'insert') {
+                            therapiesSelecteds.push(therapyBuilding)
+                        } else {
+                            let idx = _.findIndex(therapiesSelecteds, { id: buildingTherapyId })
+                            if (idx > -1) {
+                                therapiesSelecteds.splice(idx, 1);
+                            }
+                        }
+                        deferred.resolve(therapiesSelecteds);
+                    }
                 }
-            }
-            return therapyUser;
+
+
+
+            })
+            return deferred.promise;
+
         }
 
 
@@ -101,16 +145,15 @@ define(['app'], function(app) {
 
 
         _this.getSelecteds = function(buildingTherapies, therapiesUser) {
+            var buildingsTherapies = [];
             angular.forEach(therapiesUser, function(theraUser) {
                 let found = _.findWhere(buildingTherapies, { id: theraUser.building_therapy_id });
                 if (found) {
-                    found.$selected = true;
-                } else {
-                    found.$selected = false;
+                    buildingsTherapies.push(found);
                 }
             })
 
-            return buildingTherapies;
+            return buildingsTherapies;
         };
 
 
@@ -125,6 +168,7 @@ define(['app'], function(app) {
 
 
         _this.openModalSearchBuildingTherapy = function(buildingTherapyId) {
+
             var deferred = $q.defer();
 
             var modalInstance = $uibModal.open({
@@ -136,18 +180,23 @@ define(['app'], function(app) {
                         return buildingTherapyId
                     }
                 },
-                controller: function($scope, modalContent, $uibModalInstance) {
-                    $scope.modalContent = modalContent;
-                    $scope.ok = function(person) {
-                        $uibModalInstance.close();
-                        deferred.resolve(person);
-                    }
-                }
+                controller: 'BuildingTherapy'
 
             });
 
-
+            modalInstance.result.then(function(result) {
+                deferred.resolve(result)
+            })
             return deferred.promise;
+        };
+
+        _this.filterBuildingTherapies = function(query, buildingTherapies) {
+            var filtered = _.filter(buildingTherapies, function(buildTherapy) {
+                return buildTherapy.therapy_id == query.therapies && buildTherapy.therapist_user_id == query.therapist && buildTherapy.key_day == query.day;
+            });
+            return filtered;
+
+
         }
 
 
@@ -202,9 +251,10 @@ define(['app'], function(app) {
         $scope.loading = false;
         $scope.models = [];
         $scope.isEdit = false
-        $scope.foundUser = true;
+        $scope.foundUser = false;
         $scope.daysOfWeek = [];
         $scope.buildings = [];
+        $scope.therapiesSelecteds = []
         $scope.therapies = [];
         $scope.therapists = [];
         $scope.opt = {
@@ -268,9 +318,26 @@ define(['app'], function(app) {
         };
 
 
-        $scope.addToSchedule = function(buildingTherapyId, Selected) {
-            $scope.model.building_therapies = ScheduleMakerService.updateBuildingsTherapies($scope.model.building_therapies, buildingTherapyId, Selected);
+        $scope.addToSchedule = function(buildingTherapyId) {
+            $scope.model.building_therapies.push(buildingTherapyId);
+            ScheduleMakerService.addRemoveTherapyUser(buildingTherapyId, $scope.opt.building, 'insert', $scope.therapiesSelecteds).then(function(results) {
+                $scope.therapiesSelecteds = results
+            })
+            console.log($scope.model)
         };
+
+        $scope.removeSchedule = function(therapyBuild) {
+
+            var idx = $scope.model.building_therapies.indexOf(therapyBuild);
+            if (idx > -1) $scope.model.building_therapies.splice(idx, 1);
+
+            ScheduleMakerService.addRemoveTherapyUser(therapyBuild, $scope.opt.building, 'remove', $scope.therapiesSelecteds).then(function(results) {
+                $scope.therapiesSelecteds = results
+            })
+
+
+        };
+
 
         $scope.selectBuilding = function(buildingId) {
             let building = _.findWhere($scope.buildings, {
@@ -286,7 +353,7 @@ define(['app'], function(app) {
 
         $scope.openModalSearchBuildingTherapy = function() {
             ScheduleMakerService.openModalSearchBuildingTherapy($scope.opt.building).then(function(result) {
-
+                $scope.addToSchedule(result)
             })
         }
 
@@ -299,9 +366,14 @@ define(['app'], function(app) {
             return ScheduleMakerService.getTherapist(therapistUserId, $scope.therapists)
         }
 
-        $scope.inserToTherapyUser = function(therapyBuild, selected) {
-            $scope.model.building_therapies = ScheduleMakerService.addRemoveTherapyUser(therapyBuild, selected, $scope.model.building_therapies)
+        $scope.getTherapy = function(therapyId) {
+            return ScheduleMakerService.getTherapy(therapyId, $scope.therapies)
         }
+
+        $scope.inserToTherapyUser = function(therapyBuildId, selected) {
+            $scope.model.building_therapies = ScheduleMakerService.addRemoveTherapyUser(therapyBuildId, selected, $scope.model.building_therapies)
+        }
+
 
 
         $scope.save = function(saveForm, returnIndex) {
@@ -350,6 +422,7 @@ define(['app'], function(app) {
 
         $scope.loading = true;
         var scheduleId = $stateParams.schedule;
+        $scope.therapiesSelecteds = [];
         $scope.models = [];
         $scope.isEdit = true
         $scope.foundUser = true;
@@ -386,19 +459,46 @@ define(['app'], function(app) {
 
                 $scope.model = result;
                 $scope.opt.building = ScheduleMakerService.getBuilding(result.therapies);
-
+                console.log($scope.model)
                 if ($scope.opt.building) {
                     let building = _.findWhere($scope.buildings, {
                         id: $scope.opt.building
                     });
-                    $scope.therapiesOfBuilding = ScheduleMakerService.getSelecteds(building.therapies, $scope.model.therapies);
-                    $scope.therapies = ScheduleMakerService.makeVisibleTherapies($scope.therapies, building.therapies);
+                    // $scope.therapies = ScheduleMakerService.makeVisibleTherapies($scope.therapies, building.therapies);
+                    $scope.therapiesSelecteds = ScheduleMakerService.getSelecteds(building.therapies, $scope.model.therapies);
                 }
 
                 $scope.model.building_therapies = ScheduleMakerService.formatBuildingTherayUser($scope.model.therapies);
                 $scope.loading = false;
             });
         });
+
+
+        $scope.addToSchedule = function(buildingTherapyId) {
+            $scope.model.building_therapies.push(buildingTherapyId);
+            ScheduleMakerService.addRemoveTherapyUser(buildingTherapyId, $scope.opt.building, 'insert', $scope.therapiesSelecteds).then(function(results) {
+                $scope.therapiesSelecteds = results
+            })
+            console.log($scope.model)
+        };
+
+        $scope.removeSchedule = function(therapyBuild) {
+
+            var idx = $scope.model.building_therapies.indexOf(therapyBuild);
+            if (idx > -1) $scope.model.building_therapies.splice(idx, 1);
+
+            ScheduleMakerService.addRemoveTherapyUser(therapyBuild, $scope.opt.building, 'remove', $scope.therapiesSelecteds).then(function(results) {
+                $scope.therapiesSelecteds = results
+            })
+
+
+        };
+
+        $scope.openModalSearchBuildingTherapy = function() {
+            ScheduleMakerService.openModalSearchBuildingTherapy($scope.opt.building).then(function(result) {
+                $scope.addToSchedule(result)
+            })
+        }
 
         $scope.getDay = function(keyday) {
             return ScheduleMakerService.getDay(keyday, $scope.daysOfWeek);
@@ -408,13 +508,20 @@ define(['app'], function(app) {
             return ScheduleMakerService.getTherapist(therapistUserId, $scope.therapists)
         }
 
+        $scope.getTherapy = function(therapyId) {
+            return ScheduleMakerService.getTherapy(therapyId, $scope.therapies)
+        }
+
+
         $scope.goToIndex = function() {
             $state.go('root.scheduleMaker')
         };
 
-        $scope.inserToTherapyUser = function(therapyBuild, selected) {
+        $scope.inserToTherapyUser = function(therapyBuild) {
             $scope.model.building_therapies = ScheduleMakerService.addRemoveTherapyUser(therapyBuild, selected, $scope.model.building_therapies)
         };
+
+
 
 
         $scope.save = function(saveForm, returnIndex) {
@@ -468,8 +575,79 @@ define(['app'], function(app) {
             }
         }
 
+    }])
 
 
+    app.register.controller('BuildingTherapy', ['$scope', 'modalContent', '$uibModalInstance', '$q', 'apiResource', 'ScheduleMakerService', 'envService', function($scope, modalContent, $uibModalInstance, $q, apiResource, ScheduleMakerService, envService) {
+
+        var buildId = modalContent;
+        var deferred = $q.defer();
+        var therapiesArray = [];
+        var therapistsArray = [];
+        var daysOfWeekArray = [];
+        $scope.therapists = [];
+        $scope.building = {};
+        $scope.query = {
+            therapies: false,
+            therapist: false,
+            day: false
+        };
+
+        var reqKeyParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/WEEK_DAYS'
+        };
+
+
+
+        var deps = $q.all([
+            apiResource.loadFromApi(reqKeyParameter).then(function(daysOfWeek) {
+                daysOfWeekArray = daysOfWeek;
+            }),
+            apiResource.resource('therapies').query().then(function(therapies) {
+                therapiesArray = therapies;
+            }),
+            apiResource.resource('therapists').queryCopy().then(function(therapists) {
+                therapistsArray = therapists;
+            })
+        ])
+
+        deps.then(function() {
+            apiResource.resource('buildings').getCopy(buildId).then(function(result) {
+                $scope.building = result;
+                $scope.therapies = ScheduleMakerService.makeVisibleTherapies(therapiesArray, $scope.building.therapies);
+            });
+        });
+
+
+        $scope.filterTherapist = function(therapyId) {
+            $scope.therapists = ScheduleMakerService.filterTherapistFromBuildingTherapist(therapyId, $scope.building.therapies);
+        }
+
+        $scope.getTherapist = function(therapistUserId) {
+            return ScheduleMakerService.getTherapist(therapistUserId, therapistsArray);
+        }
+
+
+        $scope.filterDays = function(therapistId) {
+            $scope.daysTherapy = ScheduleMakerService.filterDaysFromBuildingTherapy(therapistId, $scope.query.therapies, $scope.building.therapies)
+        }
+
+        $scope.getDay = function(keyday) {
+            return ScheduleMakerService.getDay(keyday, daysOfWeekArray);
+        }
+
+        $scope.selectBuildingTherapy = function() {
+            $scope.loading = true;
+            $scope.buildingTherapies = ScheduleMakerService.filterBuildingTherapies($scope.query, $scope.building.therapies);
+            $scope.loading = false;
+        }
+
+
+        $scope.selectAndClose = function(buildtherapyId) {
+            deferred.resolve(buildtherapyId);
+            $uibModalInstance.close(buildtherapyId);
+        }
 
     }])
 

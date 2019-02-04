@@ -111,19 +111,18 @@
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Terapia</th>
+                                                                <th>Terapeuta</th>
                                                                 <th>Día y Horas</th>
-                                                                <th>Desde</th>
-                                                                <th>Hasta</th>
-                                                                <th></th>
+                                                                <th>Acción</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
+                                                            <tr ng-repeat="(key, value) in therapiesSelecteds">
+                                                                <td>{{key+1}}</td>
+                                                                <td>{{getTherapy(value.therapy_id)}}</td>
+                                                                <td>{{getTherapist(value.therapist_user_id)}}</td>
+                                                                <td>{{getDay(value.key_day)}} - {{value.schedule.start}} - {{value.schedule.end}}</td>
+                                                                <td><button class="btn btn-danger btn-sm" ng-click="removeSchedule(value.id)"><i class="fa fa-trash"></i> Eliminar</button></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>   
