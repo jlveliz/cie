@@ -54,10 +54,10 @@
             </tr>
             <tr ng-if="buildingTherapies.length > 0 || !searching" ng-repeat="(index,buildtherapy ) in buildingTherapies | orderBy:'last_name' ">
                 <td>{{index+1}}</td>
-                <td>{{buildtherapy.schedule.start}} - {{buildtherapy.schedule.end}}</td>
-                <td>{{buildtherapy.availability}}</td>
+                <td>{{getSchedule(buildtherapy.building_therapy_id)}}</td>
+                <td>{{buildtherapy.avalability}}</td>
                 <td>
-                    <button class="btn btn-default btn-xs" ng-click="selectAndClose(buildtherapy.id)"><i class="fa fa-check"></i></button>
+                    <button ng-disabled="buildtherapy.availability == 0" class="btn btn-default btn-xs" ng-click="selectAndClose(buildtherapy.building_therapy_id)"><i class="fa fa-check"></i></button>
                 </td>
             </tr>
             <tr ng-if="buildingTherapies.length == 0">

@@ -10,7 +10,7 @@ class BuildingTherapy extends BaseModel
 
     protected $primaryKey = "id";
 
-    // protected $with = ['therapy'];
+    protected $with = ['availables'];
 
     protected $fillable = [
     	'therapy_id',
@@ -27,6 +27,10 @@ class BuildingTherapy extends BaseModel
     
     public function therapy() {
         return $this->betongsTo('Cie\Models\Therapy','therapy_id');
+    }
+
+    public function availables() {
+        return $this->hasMany('Cie\Models\BuildingTherapyAvailable','building_therapy_id');
     }
 
 

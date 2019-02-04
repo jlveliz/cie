@@ -141,6 +141,19 @@ define(['app'], function(app) {
 
 
             return buildId = buildings[0];
+        };
+
+
+        _this.getCurrentQuarter = function(quartersArray) {
+            let currentMonth  = (new Date()).getMonth();
+            var founded = null
+            quartersArray.forEach(function(element, index) {
+                if (currentMonth >= parseInt(element.value) && currentMonth <= parseInt(element.value2)) {
+                    founded = element;
+                }
+            });
+
+            return founded;
         }
 
 
@@ -194,9 +207,26 @@ define(['app'], function(app) {
             var filtered = _.filter(buildingTherapies, function(buildTherapy) {
                 return buildTherapy.therapy_id == query.therapies && buildTherapy.therapist_user_id == query.therapist && buildTherapy.key_day == query.day;
             });
-            return filtered;
+            var filteres = [];
+            filtered.forEach(function(element, index) {
+                element.availables.forEach( function(available, index) {
+                    if (available.year == query.year && available.timeframe_id == query.currentQuarter.idparameter && query.currentQuarter.idgroup == 'YEAR_QUARTER') {
+                        filteres.push(available)
+                    }
+                });
+            });
+
+            
+            return filteres;
 
 
+        }
+
+        _this.getScheduleBuildingTherapy = function(buildingTherpyId, buildingTherapies) {
+            var buildTherapyF = _.findWhere(buildingTherapies, {id : buildingTherpyId}) ;
+
+            if (buildTherapyF)
+                return buildTherapyF.schedule.start +' - ' + buildTherapyF.schedule.end;
         }
 
 
@@ -251,12 +281,14 @@ define(['app'], function(app) {
         $scope.loading = false;
         $scope.models = [];
         $scope.isEdit = false
-        $scope.foundUser = false;
+        $scope.foundUser = true;
         $scope.daysOfWeek = [];
         $scope.buildings = [];
         $scope.therapiesSelecteds = []
         $scope.therapies = [];
         $scope.therapists = [];
+        $scope.therapists = [];
+        $scope.quarters = [];
         $scope.opt = {
             building: null
         }
@@ -268,12 +300,21 @@ define(['app'], function(app) {
             url: envService.read('api') + 'load-parameter/WEEK_DAYS'
         };
 
+        var reqKeyQuarterParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/YEAR_QUARTER'
+        };
+
         var deps = $q.all([
+            apiResource.loadFromApi(reqKeyQuarterParameter).then(function(quarters) {
+                $scope.quarters = quarters;
+            }),
             apiResource.loadFromApi(reqKeyParameter).then(function(daysOfWeek) {
                 $scope.daysOfWeek = daysOfWeek;
             }),
             apiResource.resource('buildings').query().then(function(buildings) {
                 $scope.buildings = buildings;
+                console.log(buildings)
             }),
             apiResource.resource('therapies').query().then(function(therapies) {
                 $scope.therapies = therapies;
@@ -285,11 +326,11 @@ define(['app'], function(app) {
 
 
         deps.then(function() {
-            angular.forEach($scope.therapiesOfBuilding, function(building) {
-                angular.forEach(building.therapies, function(therapy) {
-                    therapy.$selected = false;
-                })
-            })
+            // angular.forEach($scope.therapiesOfBuilding, function(building) {
+            //     angular.forEach(building.therapies, function(therapy) {
+            //         therapy.$selected = false;
+            //     })
+            // })
             $scope.model = apiResource.resource('buildingtherapyUser').create({ building_therapies: [] });
         })
 
@@ -303,7 +344,7 @@ define(['app'], function(app) {
                 $scope.existPatientUserSelected = true;
                 $scope.model.patientUser = patientUser;
                 $scope.model.patient_user_id = $scope.model.patientUser.id;
-                $scope.model.year = 2019;
+                $scope.model.year = new(Date()).format('YYYY');
                 $scope.model.group_time_id = "YEAR_QUARTER";
                 $scope.model.timeframe_id = "FIRST";
                 $scope.model.start_date = new Date("2019-01-25");
@@ -323,7 +364,6 @@ define(['app'], function(app) {
             ScheduleMakerService.addRemoveTherapyUser(buildingTherapyId, $scope.opt.building, 'insert', $scope.therapiesSelecteds).then(function(results) {
                 $scope.therapiesSelecteds = results
             })
-            console.log($scope.model)
         };
 
         $scope.removeSchedule = function(therapyBuild) {
@@ -389,7 +429,7 @@ define(['app'], function(app) {
                     $state.go('root.scheduleMaker');
                 } else {
                     $state.go('root.scheduleMaker.edit', {
-                        pUserId: data.id
+                        schedule: data.id
                     })
                 }
             }
@@ -584,12 +624,15 @@ define(['app'], function(app) {
         var therapiesArray = [];
         var therapistsArray = [];
         var daysOfWeekArray = [];
+        var quartersArray = [];
         $scope.therapists = [];
         $scope.building = {};
         $scope.query = {
             therapies: false,
             therapist: false,
-            day: false
+            day: false,
+            year: (new Date()).getFullYear(),
+            currentQuarter : {}
         };
 
         var reqKeyParameter = {
@@ -597,9 +640,17 @@ define(['app'], function(app) {
             url: envService.read('api') + 'load-parameter/WEEK_DAYS'
         };
 
+        var reqKeyQuarterParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/YEAR_QUARTER'
+        };
+
 
 
         var deps = $q.all([
+            apiResource.loadFromApi(reqKeyQuarterParameter).then(function(quarters) {
+                quartersArray = quarters;
+            }),
             apiResource.loadFromApi(reqKeyParameter).then(function(daysOfWeek) {
                 daysOfWeekArray = daysOfWeek;
             }),
@@ -614,6 +665,9 @@ define(['app'], function(app) {
         deps.then(function() {
             apiResource.resource('buildings').getCopy(buildId).then(function(result) {
                 $scope.building = result;
+                $scope.query.grouptime_id = "YEAR_QUARTER";
+                $scope.query.currentQuarter = ScheduleMakerService.getCurrentQuarter(quartersArray);
+                
                 $scope.therapies = ScheduleMakerService.makeVisibleTherapies(therapiesArray, $scope.building.therapies);
             });
         });
@@ -640,6 +694,11 @@ define(['app'], function(app) {
             $scope.loading = true;
             $scope.buildingTherapies = ScheduleMakerService.filterBuildingTherapies($scope.query, $scope.building.therapies);
             $scope.loading = false;
+        }
+
+
+        $scope.getSchedule = function(buildingTherpyId) {
+            return ScheduleMakerService.getScheduleBuildingTherapy(buildingTherpyId, $scope.building.therapies);
         }
 
 

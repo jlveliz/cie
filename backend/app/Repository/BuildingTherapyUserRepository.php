@@ -86,17 +86,18 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 			// $response = [];
 			foreach ($data['building_therapies'] as $key => $value) {
 				$datSave = [];
-				$datSave['patient_user_id'] = $data['patient_user_id'];
+				$pUserId = $data['patient_user_id'];
 				$datSave['year'] = $data['year'];
 				$groupTime = $data['group_time_id'];
 				$datSave['timeframe_id'] = $data['timeframe_id'];
 				$datSave['building_therapy_id'] = $value;
-				$response  = DB::select('call therapyuserassistance_pr_ingresadiasterapia(?,?,?,?,?,?,?)',
-					array($datSave['patient_user_id'], 2019,"'$groupTime'", "'FIRST'", $datSave['building_therapy_id'], "'25/01/2019'", "'30/04/2019'")
-				);
+				// dd(array($datSave['patient_user_id'], 2019,"'$groupTime'", "'FIRST'", $datSave['building_therapy_id'], "'25/01/2019'", "'30/04/2019'"));
+				$response  = DB::select(
+					"call therapyuserassistance_pr_ingresadiasterapia($pUserId,2019,'$groupTime','FIRST',$value,'25/01/2019','30/04/2019')");
+				
 				// dd($response[0]);
-				if ($response[0]->ov_error != null) {
-					throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+				if ($response[0]->ov_error != '0') {
+					throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>$response[0]->ov_mensaje,'level'=>'error'],"500");
 				}
 			}
 
@@ -117,7 +118,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 			foreach ($data['building_therapies'] as $key => $value) {
 				$datSave = [];
 				$datSave['patient_user_id'] = $data['id'];
-				$datSave['year'] = 2019;
+				$datSave['year'] = $data['year'];
 				$datSave['group_time_id'] = "YEAR_QUARTER";
 				$groupTime = $datSave['group_time_id'];
 				$datSave['timeframe_id'] = "FIRST";
