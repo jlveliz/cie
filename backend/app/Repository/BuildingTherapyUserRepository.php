@@ -121,9 +121,14 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				$datSave['group_time_id'] = "YEAR_QUARTER";
 				$datSave['timeframe_id'] = "FIRST";
 				$datSave['building_therapy_id'] = $value;
-				$buildingTherapyUser = new BuildingTherapyUser();
-				$buildingTherapyUser->fill($datSave);
-				$buildingTherapyUser->save();
+				
+				$response  = DB::select('call therapyuserassistance_pr_ingresadiasterapia(?,?,?,?,?,?,?)',
+					array($datSave['patient_user_id'], 2019,"'$groupTime'", "'FIRST'", $datSave['building_therapy_id'], "'25/01/2019'", "'30/04/2019'")
+				);
+				// dd($response[0]);
+				if ($response[0]->ov_error != null) {
+					throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+				}
 			}
 
 			return $this->find($data['id']);

@@ -570,7 +570,6 @@ define(['app'], function(app) {
 
             if (saveForm.validate()) {
                 $scope.saving = true;
-                console.log($scope.model)
                 ScheduleMakerService.save($scope.model).then(successCallback, failCallback);
             }
         }
