@@ -1042,7 +1042,13 @@ define([
             id: '@id'
         }).register();
 
-       
+        //buildingtherapyavailable
+        apiResource.resource('buildingtherapyavailable', envService.read('api') + 'therapies/:parentId/availables/:id', {
+            parentId: '@parentId',
+            id: '@id'
+        }).register();
+
+
         //therapies
         apiResource.resource('therapies', envService.read('api') + 'therapies/:id', {
             id: '@id'
@@ -3132,6 +3138,28 @@ define([
             }
         }));
 
+
+        //Building Therapy Available
+        $stateProvider.state('root.buildingtherapyavailable', angularAMD.route({
+            url: 'therapies',
+            controllerUrl: 'frontend/components/therapyavailable/therapyavailable',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapyavailable/index.html',
+                    controller: 'TherapyAvailableIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Terapias",
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+
+            }
+        }));
 
     }]);
 
