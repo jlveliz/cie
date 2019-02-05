@@ -146,16 +146,20 @@ class BuildingRepository implements BuildingRepositoryInterface
 					unset($therapy['created_at']);
 					unset($therapy['updated_at']);
 					unset($therapy['$$hashKey']);
+					unset($therapy['availables']);
 					$serialized = serialize($therapy['schedule']);
 					$therapy['schedule'] = $serialized;
 					$newTherapies[] = $therapy;
 				}
 
 				$params = (str_replace('\\' , "\\\\" ,(json_encode($newTherapies, JSON_FORCE_OBJECT ))));
+				// dd($params);
 
 				// foreach ($newTherapies as $key => $th) {
 					$query = DB::select("call buildingtherapy_pr_mantenimiento('$params')") ;
 				// }
+
+				dd($query);
 
 				
 	
