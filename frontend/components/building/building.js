@@ -53,6 +53,7 @@ define(['app'], function(app) {
 
         _this.addBuildingTherapy = function(keyDay, model) {
             let buildTherapy = {
+                id:0,
                 key_day: keyDay,
                 build_id: model.id,
                 therapist_user_id: null,
