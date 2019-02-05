@@ -154,7 +154,7 @@ class BuildingRepository implements BuildingRepositoryInterface
 				$params = (str_replace('\\' , "\\\\" ,(json_encode($newTherapies, JSON_FORCE_OBJECT ))));
 
 				// foreach ($newTherapies as $key => $th) {
-					$query = DB::select("call buildingtherapy_pr_mantenimiento($params)") ;
+					$query = DB::select("call buildingtherapy_pr_mantenimiento('$params')") ;
 				// }
 
 				
