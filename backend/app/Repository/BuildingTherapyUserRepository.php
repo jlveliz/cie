@@ -22,7 +22,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 
 			if (array_key_exists('num_identification', $params)) {
 
-				$buildingTherapyUsers = PatientUser::doesntHave('therapies')->where('state_id',4)->where('num_identification',$params['num_identification'])->first();
+				$buildingTherapyUsers = PatientUser::doesntHave('therapies')->where('num_identification',$params['num_identification'])->first();
 				
 
 				if(!count($buildingTherapyUsers)) {
