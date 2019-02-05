@@ -519,8 +519,9 @@ define(['app'], function(app) {
             $scope.model.building_therapies.push(buildingTherapyId);
             ScheduleMakerService.addRemoveTherapyUser(buildingTherapyId, $scope.opt.building, 'insert', $scope.therapiesSelecteds).then(function(results) {
                 $scope.therapiesSelecteds = results
+                $scope.model.therapies.push({id:0,patient_user_id:$scope.model.id,year:"2019",grouptime_id:"YEAR_QUARTER",timeframe_id:"FIRST", building_therapy_id: buildingTherapyId});
             })
-            console.log($scope.model)
+            
         };
 
         $scope.removeSchedule = function(therapyBuild) {
@@ -530,6 +531,10 @@ define(['app'], function(app) {
 
             ScheduleMakerService.addRemoveTherapyUser(therapyBuild, $scope.opt.building, 'remove', $scope.therapiesSelecteds).then(function(results) {
                 $scope.therapiesSelecteds = results
+                var idx = _.findIndex($scope.model.therapies,function(item){
+                    return item.building_therapy_id == therapyBuild;
+                });
+                $scope.model.therapies.splice(idx,1);
             })
 
 
@@ -617,6 +622,7 @@ define(['app'], function(app) {
                 $scope.model.timeframe_id = $scope.model.therapies[0].timeframe_id;
                 $scope.model.grouptime_id = $scope.model.therapies[0].grouptime_id;
                 $scope.model.patient_user_id = $scope.model.therapies[0].patient_user_id;
+                $scope.model.therapyUsersSelecteds = $scope.therapiesSelecteds;
                 ScheduleMakerService.save($scope.model).then(successCallback, failCallback);
             }
         }

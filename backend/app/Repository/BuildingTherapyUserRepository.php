@@ -111,15 +111,17 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 		if ($buildingTherapyUser) {
 			
 			$dataFinalSave = [];
-			foreach ($data['building_therapies'] as $key => $value) {
+		
+			foreach ($data['therapies'] as $key => $value) {
 				$datSave = [];
-				$datSave['patient_user_id'] = $data['id'];
-				$datSave['year'] = $data['year'];
-				$datSave['grouptime_id'] = $data['grouptime_id'];
-				$datSave['timeframe_id'] = $data['timeframe_id'];
-				$datSave['building_therapy_id'] = $value;
+				$datSave['patient_user_id'] = $data['patient_user_id'];
+				$datSave['year'] = $value['year'];
+				$datSave['grouptime_id'] = $value['grouptime_id'];
+				$datSave['timeframe_id'] = $value['timeframe_id'];
 				$datSave['start_date'] = '25/01/2019';
 				$datSave['end_date'] = '25/01/2019';
+				$datSave['building_therapy_id'] = $value['building_therapy_id'];
+				$datSave['id'] = $value['id'];
 				$dataFinalSave[] = $datSave;
 			}
 
@@ -127,7 +129,6 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 			
 			$response  = DB::select("call therapyuserassistance_pr_actualizadiasterapia('$data')");
 			
-			dd($response[0]);
 			if ($response[0]->ov_error != null) {
 				throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 			}
