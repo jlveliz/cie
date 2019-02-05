@@ -148,7 +148,7 @@ class BuildingRepository implements BuildingRepositoryInterface
 					unset($therapy['$$hashKey']);
 					unset($therapy['availables']);
 					unset($therapy['$selected']);
-					$serialized = serialize($therapy['schedule']);
+					$serialized = $therapy['schedule'];
 					$therapy['schedule'] = $serialized;
 					$newTherapies[] = $therapy;
 				}
