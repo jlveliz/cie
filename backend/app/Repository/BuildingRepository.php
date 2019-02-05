@@ -161,7 +161,7 @@ class BuildingRepository implements BuildingRepositoryInterface
 				
 
 				
-				// dd($query);
+				dd($query);
 
 				
 	
