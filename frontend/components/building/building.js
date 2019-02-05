@@ -274,6 +274,7 @@ define(['app'], function(app) {
         deps.then(function() {
             apiResource.resource('buildings').get(buildingId).then(function(model) {
                 $scope.model = model;
+                console.log(model)
                 $scope.messages = BuildingService.messageFlag;
                 if (!_.isEmpty($scope.messages)) {
                     $scope.hasMessage = true;

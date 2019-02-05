@@ -21,6 +21,12 @@ class BuildingTherapy extends BaseModel
         'schedule',
     ];
 
+    protected $casts = [
+        'build_id' => 'int',
+        'therapy_id' => 'int',
+        'therapist_user_id' => 'int'
+    ];
+
     public function building() {
         return $this->betongsTo('Cie\Models\Building','build_id');
     }

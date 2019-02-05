@@ -158,12 +158,6 @@ class BuildingRepository implements BuildingRepositoryInterface
 				// dd($params);
 
 				$query = DB::select("call buildingtherapy_pr_mantenimiento('$params')");
-
-				
-
-				
-				dd($query);
-
 				
 	
 	// 			call new_ciex.buildingtherapy_pr_mantenimiento(

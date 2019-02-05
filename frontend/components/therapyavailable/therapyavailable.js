@@ -11,7 +11,13 @@ define(['app'], function(app) {
 	}]);
 
 
-	app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope, $state) { }])
+	app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope, $state) { 
+
+		$scope.loading =  true;
+
+		
+
+	}])
 
 
 
