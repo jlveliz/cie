@@ -1791,14 +1791,18 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.specialist_certificate = $scope.model.attached ? envService.read('public') + $scope.model.attached.specialist_certificate : null;
                 $scope.model.date_birth = new Date($scope.model.date_birth);
                 $scope.model.date_admission = new Date($scope.model.date_admission);
+                $scope.model.has_representant = false;
+
                 if ($scope.model.mother)
                     $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
 
                 if ($scope.model.father)
                     $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
 
-                if ($scope.model.representant)
+                if ($scope.model.representant) {
                     $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
+                    $scope.model.has_representant = true;
+                }
 
                 if ($scope.model.mother && ($scope.model.representant_id == $scope.model.mother.id)) {
                     $scope.model.mother.is_representant = 1;
@@ -2491,6 +2495,7 @@ define(['app', 'moment'], function(app, moment) {
         deps.then(function() {
             apiResource.resource('puserinscriptions').getCopy({id:inscriptionId,noCache:true}).then(function(model) {
                 $scope.model = model;
+                $scope.model.has_representant = false;
                 //attached
                 $scope.model.representant_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.representant_identification_card : null;
                 $scope.model.user_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.user_identification_card : null;
@@ -2505,8 +2510,10 @@ define(['app', 'moment'], function(app, moment) {
                 if ($scope.model.father)
                     $scope.model.father.date_birth = new Date($scope.model.father.date_birth);
 
-                if ($scope.model.representant)
+                if ($scope.model.representant) {
                     $scope.model.representant.date_birth = new Date($scope.model.representant.date_birth);
+                    $scope.model.has_representant = true;
+                }
 
                 if ($scope.model.mother && ($scope.model.representant_id == $scope.model.mother.id)) {
                     $scope.model.mother.is_representant = 1;

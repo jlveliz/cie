@@ -2367,7 +2367,7 @@ define([
             controllerUrl: 'frontend/components/pUserInscription/pUserInscription',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/pUserInscription/create-edit.html',
+                    templateUrl: 'frontend/components/pUserInscription/show.html',
                     controller: 'pUserInscriptionShowCtrl'
                 }
             },
