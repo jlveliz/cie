@@ -91,9 +91,10 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				$groupTime = $data['group_time_id'];
 				$datSave['timeframe_id'] = $data['timeframe_id'];
 				$datSave['building_therapy_id'] = $value;
+				$datebegin = date('d/m/y');
 				// dd(array($datSave['patient_user_id'], 2019,"'$groupTime'", "'FIRST'", $datSave['building_therapy_id'], "'25/01/2019'", "'30/04/2019'"));
 				$response  = DB::select(
-					"call therapyuserassistance_pr_ingresadiasterapia($pUserId,2019,'$groupTime','FIRST',$value,'25/01/2019','30/04/2019')");
+					"call therapyuserassistance_pr_ingresadiasterapia($pUserId,2019,'$groupTime','FIRST',$value,'$datebegin','30/04/2019')");
 				
 				// dd($response[0]);
 				if ($response[0]->ov_error != '0') {
@@ -118,8 +119,8 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				$datSave['year'] = $value['year'];
 				$datSave['grouptime_id'] = $value['grouptime_id'];
 				$datSave['timeframe_id'] = $value['timeframe_id'];
-				$datSave['start_date'] = '25/01/2019';
-				$datSave['end_date'] = '25/01/2019';
+				$datSave['start_date'] = date('d/m/y');
+				$datSave['end_date'] = '30/04/2019';
 				$datSave['building_therapy_id'] = $value['building_therapy_id'];
 				$datSave['id'] = $value['id'];
 				$dataFinalSave[] = $datSave;
