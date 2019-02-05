@@ -153,7 +153,7 @@ class BuildingRepository implements BuildingRepositoryInterface
 					$newTherapies[] = $therapy;
 				}
 				
-				$params = (str_replace('\\' , '\\\\',(json_encode($newTherapies))));
+				$params = (json_encode($newTherapies));
 				// $params = (str_replace("\\" , '\\\\',(json_encode($newTherapies))));
 				// dd($params);
 

@@ -66,6 +66,15 @@ define(['app'], function(app) {
             }
 
             return buildTherapy;
+        };
+
+
+        _this.formatScheduleTherapies = function(therapiesModel) {
+            therapiesModel.forEach(function(element, index) {
+                element.schedule = element.schedule.start +'|'+element.schedule.end
+            });
+
+            return therapiesModel;
         }
 
 
@@ -130,6 +139,10 @@ define(['app'], function(app) {
 
         $scope.goToCreate = function() {
             $state.go('root.building.create')
+        }
+
+        $scope.gotoAvailables = function() {
+            $state.go('root.buildingtherapyavailable')
         }
 
     }]);
@@ -313,7 +326,9 @@ define(['app'], function(app) {
                        delete $scope.model.schedule[idex]
                     }
                 });
-                
+                //hack
+                $scope.model.therapies = BuildingService.formatScheduleTherapies($scope.model.therapies);
+
                 $scope.saving = true;
                 $scope.model.key = buildingId;
                 $scope.model.$update(buildingId, function(dataModel) {
