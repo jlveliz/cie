@@ -26,7 +26,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				
 
 				if(!count($buildingTherapyUsers)) {
-					throw new BuildingTherapyUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista médica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+					throw new BuildingTherapyUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe un horario creado. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 				}
 
 				return $buildingTherapyUsers;
@@ -101,8 +101,6 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				}
 			}
 
-			// dd($response);
-			
 			return  $this->find($data['patient_user_id']);
 			
 	}
@@ -111,26 +109,27 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 	{
 		$buildingTherapyUser = PatientUser::find($id);
 		if ($buildingTherapyUser) {
-
-			$buildingTherapyUser->therapies()->delete();
 			
-			
+			$dataFinalSave = [];
 			foreach ($data['building_therapies'] as $key => $value) {
 				$datSave = [];
 				$datSave['patient_user_id'] = $data['id'];
 				$datSave['year'] = $data['year'];
-				$datSave['group_time_id'] = "YEAR_QUARTER";
-				$groupTime = $datSave['group_time_id'];
-				$datSave['timeframe_id'] = "FIRST";
+				$datSave['grouptime_id'] = $data['grouptime_id'];
+				$datSave['timeframe_id'] = $data['timeframe_id'];
 				$datSave['building_therapy_id'] = $value;
-				
-				$response  = DB::select('call therapyuserassistance_pr_ingresadiasterapia(?,?,?,?,?,?,?)',
-					array($datSave['patient_user_id'], 2019,"'$groupTime'", "'FIRST'", $datSave['building_therapy_id'], "'25/01/2019'", "'30/04/2019'")
-				);
-				// dd($response[0]);
-				if ($response[0]->ov_error != null) {
-					throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
-				}
+				$datSave['start_date'] = '25/01/2019';
+				$datSave['end_date'] = '25/01/2019';
+				$dataFinalSave[] = $datSave;
+			}
+
+			$data = json_encode($dataFinalSave);
+			
+			$response  = DB::select("call therapyuserassistance_pr_actualizadiasterapia('$data')");
+			
+			dd($response[0]);
+			if ($response[0]->ov_error != null) {
+				throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 			}
 
 			return $this->find($data['id']);

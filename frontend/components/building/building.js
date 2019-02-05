@@ -327,6 +327,7 @@ define(['app'], function(app) {
                     }
                 });
                 //hack
+                console.log($scope.model)
                 $scope.model.therapies = BuildingService.formatScheduleTherapies($scope.model.therapies);
 
                 $scope.saving = true;

@@ -13,7 +13,8 @@ class BuildingTherapyUser extends BaseModel
     protected $with = ['buildingTherapy'];
     
     protected $casts = [ 
-        'patient_user_id' => 'int'
+        'patient_user_id' => 'int',
+        'building_therapy_id' => 'int',
     ];
 
     protected $fillable = [

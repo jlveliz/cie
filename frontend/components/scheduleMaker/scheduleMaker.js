@@ -158,6 +158,7 @@ define(['app'], function(app) {
 
 
         _this.getSelecteds = function(buildingTherapies, therapiesUser) {
+
             var buildingsTherapies = [];
             angular.forEach(therapiesUser, function(theraUser) {
                 let found = _.findWhere(buildingTherapies, { id: theraUser.building_therapy_id });
@@ -261,7 +262,7 @@ define(['app'], function(app) {
                     if (idx > -1) {
                         $scope.models[idx].$deleting = true;
                         object.$delete(function() {
-                            ScheduleMakerService.messageFlag.title = "orario eliminado correctamente";
+                            ScheduleMakerService.messageFlag.title = "horario eliminado correctamente";
                             ScheduleMakerService.messageFlag.type = "info";
                             $scope.messages = ScheduleMakerService.messageFlag;
                             $scope.hasMessage = true;
@@ -281,7 +282,7 @@ define(['app'], function(app) {
         $scope.loading = false;
         $scope.models = [];
         $scope.isEdit = false
-        $scope.foundUser = true;
+        $scope.foundUser = false;
         $scope.daysOfWeek = [];
         $scope.buildings = [];
         $scope.therapiesSelecteds = []
@@ -344,7 +345,7 @@ define(['app'], function(app) {
                 $scope.existPatientUserSelected = true;
                 $scope.model.patientUser = patientUser;
                 $scope.model.patient_user_id = $scope.model.patientUser.id;
-                $scope.model.year = new(Date()).format('YYYY');
+                $scope.model.year = (new Date()).getFullYear();
                 $scope.model.group_time_id = "YEAR_QUARTER";
                 $scope.model.timeframe_id = "FIRST";
                 $scope.model.start_date = new Date("2019-01-25");
@@ -417,6 +418,7 @@ define(['app'], function(app) {
 
 
         $scope.save = function(saveForm, returnIndex) {
+            
 
             var successCallback = function(data) {
                 $scope.saving = false;
@@ -499,7 +501,6 @@ define(['app'], function(app) {
 
                 $scope.model = result;
                 $scope.opt.building = ScheduleMakerService.getBuilding(result.therapies);
-                console.log($scope.model)
                 if ($scope.opt.building) {
                     let building = _.findWhere($scope.buildings, {
                         id: $scope.opt.building
@@ -565,7 +566,7 @@ define(['app'], function(app) {
 
 
         $scope.save = function(saveForm, returnIndex) {
-
+            console.log($scope.model)
             var successCallback = function(data) {
                 $scope.saving = false;
                 $scope.hasMessage = true;
@@ -593,6 +594,8 @@ define(['app'], function(app) {
                 }
             }
 
+
+
             var failCallback = function(reason) {
                 $scope.saving = false
                 $scope.existError = true;
@@ -610,6 +613,10 @@ define(['app'], function(app) {
 
             if (saveForm.validate()) {
                 $scope.saving = true;
+                $scope.model.year = $scope.model.therapies[0].year;
+                $scope.model.timeframe_id = $scope.model.therapies[0].timeframe_id;
+                $scope.model.grouptime_id = $scope.model.therapies[0].grouptime_id;
+                $scope.model.patient_user_id = $scope.model.therapies[0].patient_user_id;
                 ScheduleMakerService.save($scope.model).then(successCallback, failCallback);
             }
         }
