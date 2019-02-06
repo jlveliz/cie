@@ -84,6 +84,9 @@ class AppServiceProvider extends ServiceProvider
 
         //Therpists 
         $this->app->bind('Cie\RepositoryInterface\TherapistRepositoryInterface','Cie\Repository\TherapistRepository');
+
+        //Holidays 
+        $this->app->bind('Cie\RepositoryInterface\HolidayRepositoryInterface','Cie\Repository\HolidayRepository');
         
     }
 }

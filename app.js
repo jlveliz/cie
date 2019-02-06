@@ -1069,6 +1069,11 @@ define([
             id: '@id'
         }).register();
 
+        //holidays
+        apiResource.resource('holidays', envService.read('api') + 'holidays/:id', {
+            id: '@id'
+        }).register();
+
     }]);
 
     /** 
@@ -3158,6 +3163,69 @@ define([
                 pageTitle: "Terapias",
                 css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
 
+            }
+        }));
+
+
+        //Holidays
+        $stateProvider.state('root.holiday', angularAMD.route({
+            url: 'holidays',
+            controllerUrl: 'frontend/components/holiday/holiday',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/holiday/index.html',
+                    controller: 'HolidayIdxCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Feriados",
+                css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+
+            }
+        }));
+
+        $stateProvider.state('root.holiday.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/holiday/holiday',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/holiday/create-edit.html',
+                    controller: 'HolidayCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Crear Feriado",
+
+            }
+        }));
+
+        $stateProvider.state('root.holiday.edit', angularAMD.route({
+            url: '/{holidayId:int}/edit',
+            controllerUrl: 'frontend/components/holiday/holiday',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/holiday/create-edit.html',
+                    controller: 'HolidayEditCtrl'
+                }
+
+            },
+            data: {
+                permissions: {
+                    only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Editar Feriado"
             }
         }));
 
