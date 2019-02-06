@@ -27,15 +27,16 @@ class CarouselValidator extends Validator implements ValidatorInterface
 	}
 
 	public function rules($method = null) {
-		$rules = [
-			'name' => 'required|unique:onlcarousel,name',
-		];
+		// $rules = [
+		// 	'name' => 'required|unique:onlcarousel,name',
+		// ];
 
-		if ($method == 'PUT') {
-			$rules['name'] = 'required|unique:onlcarousel,name,'.$this->request->get('key');
-		}
+		// if ($method == 'PUT') {
+		// 	$rules['name'] = 'required|unique:onlcarousel,name,'.$this->request->get('key');
+		// }
 
-		return $rules;
+		// return $rules;
+		return [];
 	}
 
 	public function messages($method = null) {

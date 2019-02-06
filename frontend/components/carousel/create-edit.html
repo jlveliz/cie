@@ -14,7 +14,8 @@
                     </uib-tab>
                     <uib-tab index="1">
                         <uib-tab-heading>
-                            <h5><b><i class="fa fa-plus"></i> Crear</b></h5>
+                            <h5 ng-if="!isEdit"><b><i class="fa fa-plus"></i> Crear</b></h5>
+                            <h5 ng-if="isEdit"><b><i class="fa fa-edit"></i> Editar</b></h5>
                         </uib-tab-heading>
                         <h4 class="text-center" ng-if="loading">
                             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -32,13 +33,25 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Nombre  <span class="text-danger">*</span></label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Nombre <span class="text-danger">*</span></label>
                                         <input ng-disabled="saving" id="name" type="text" class="form-control" name="name" ng-model="model.name" autofocus>
                                     </div>
-                                    <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
-                                        <label class="control-label">Orden  <span class="text-danger">*</span></label>
-                                        <input ng-disabled="saving" id="order" type="number" class="form-control" name="order" ng-model="model.order" min="0" max="10">
+                                    <div class="col-md-8 col-sm-8 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Descripción <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="description" type="text" class="form-control" name="name" ng-model="model.description" autofocus>
+                                    </div>
+                                    <div class="col-md-3 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Imagen <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="image" type="text" class="form-control" name="image" ng-model="model.image">
+                                    </div>
+                                    <div class="col-md-6 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Url <span class="text-danger">*</span></label>
+                                        <input ng-disabled="saving" id="url" type="text" class="form-control" name="url" ng-model="model.url">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                        <label class="control-label">Mostrar <span class="text-danger">*</span></label>
+                                        <select ng-disabled="saving" class="form-control" name="show" id="show" ng-model="model.show" ng-options="select.val as select.label for select in showOptions"></select>
                                     </div>
                                 </div>
                             </div>

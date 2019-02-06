@@ -8,9 +8,16 @@ define(['app'], function(app) {
         var _this = this;
 
         _this.messageFlag = {};
+
+        _this.getShowOptions = function() {
+            return [
+                { val: 'S', label: 'Si' },
+                { val: 'N', label: 'No' },
+            ];
+        }
     })
 
-    app.register.controller('CarouselIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'CarouselService', '$rootScope', '$state',function($scope, apiResource, $stateParams, DTOptionsBuilder, CarouselService, $rootScope, $state) {
+    app.register.controller('CarouselIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'CarouselService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, CarouselService, $rootScope, $state) {
 
         $scope.carousels = [];
         $scope.loading = true;
@@ -45,7 +52,7 @@ define(['app'], function(app) {
             apiResource.resource('carousels').getCopy(id).then(function(object) {
                 var params = {
                     title: 'Atención',
-                    text: 'Desea eliminar la Provincia ' + object.name + '.?'
+                    text: 'Desea eliminar la Slider ' + object.name + '.?'
                 }
                 $rootScope.openDeleteModal(params).then(function() {
                     var idx = _.findIndex($scope.carousels, function(el) {
@@ -54,7 +61,7 @@ define(['app'], function(app) {
                     if (idx > -1) {
                         $scope.carousels[idx].$deleting = true;
                         object.$delete(function() {
-                            CarouselService.messageFlag.title = "Provincia eliminado correctamente";
+                            CarouselService.messageFlag.title = "Slider eliminado correctamente";
                             CarouselService.messageFlag.type = "info";
                             $scope.messages = CarouselService.messageFlag;
                             $scope.hasMessage = true;
@@ -76,36 +83,39 @@ define(['app'], function(app) {
     app.register.controller('CarouselCreateCtrl', ['$scope', 'apiResource', '$stateParams', '$state', 'CarouselService', function($scope, apiResource, $stateParams, $state, CarouselService) {
 
         $scope.saving = false;
+        $scope.isEdit = false;
         $scope.model = {};
         $scope.messages = [];
+        $scope.showOptions = CarouselService.getShowOptions();
 
 
-        $scope.model = apiResource.resource('carousels').create();
+        $scope.model = apiResource.resource('carousels').create({status: 'A'});
 
-        $scope.validateOptions = {
-            rules: {
-                name: {
-                    required: true,
-                    unique: 'carousel,name'
-                }
-            },
-            messages: {
-                name: {
-                    required: "Campo requerido",
-                    unique: 'La Provincia ya fue tomada'
-                }
-            }
+        // $scope.validateOptions = {
+        //     rules: {
+        //         name: {
+        //             required: true,
+        //             unique: 'carousel,name'
+        //         }
+        //     },
+        //     messages: {
+        //         name: {
+        //             required: "Campo requerido",
+        //             unique: 'La Slider ya fue tomada'
+        //         }
+        //     }
 
-        };
+        // };
 
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
+            $scope.existError = false;
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
                     apiResource.resource('carousels').setOnCache(data);
-                    CarouselService.messageFlag.title = "Provincia creada correctamente";
+                    CarouselService.messageFlag.title = "Slider creada correctamente";
                     CarouselService.messageFlag.type = "info";
                     if (returnIndex) {
                         $state.go('root.carousel');
@@ -149,9 +159,11 @@ define(['app'], function(app) {
 
 
         $scope.loading = true;
+        $scope.isEdit = true;
         $scope.model = {};
         $scope.messages = {};
         $scope.existError = false;
+        $scope.showOptions = CarouselService.getShowOptions();
 
         apiResource.resource('carousels').getCopy(carouselId).then(function(model) {
             $scope.model = model;
@@ -163,21 +175,21 @@ define(['app'], function(app) {
             $scope.loading = false;
         });
 
-        $scope.validateOptions = {
-            rules: {
-                name: {
-                    required: true,
-                    unique: 'carousel,name,' + carouselId
-                }
-            },
-            messages: {
-                name: {
-                    required: "Campo requerido",
-                    unique: 'El Provincia ya fue tomado'
-                }
-            }
+        // $scope.validateOptions = {
+        //     rules: {
+        //         name: {
+        //             required: true,
+        //             unique: 'carousel,name,' + carouselId
+        //         }
+        //     },
+        //     messages: {
+        //         name: {
+        //             required: "Campo requerido",
+        //             unique: 'El Slider ya fue tomado'
+        //         }
+        //     }
 
-        };
+        // };
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
@@ -188,7 +200,7 @@ define(['app'], function(app) {
                     $scope.saving = false;
                     $scope.hasMessage = true;
                     apiResource.resource('carousels').setOnCache(data);
-                    CarouselService.messageFlag.title = "Provincia " + $scope.model.name + " Actualizada correctamente";
+                    CarouselService.messageFlag.title = "Slider " + $scope.model.name + " Actualizada correctamente";
                     CarouselService.messageFlag.type = "info";
                     $scope.messages = CarouselService.messageFlag;
                     if (returnIndex) {
@@ -214,7 +226,7 @@ define(['app'], function(app) {
             $scope.save(form, true);
         };
 
-         $scope.goToIndex = function() {
+        $scope.goToIndex = function() {
             $state.go('root.carousel');
         }
 

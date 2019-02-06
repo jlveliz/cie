@@ -2852,7 +2852,7 @@ define([
             CAROUSEL -- RFV 
         **/
         $stateProvider.state('root.carousel', angularAMD.route({
-            url: 'carousel',
+            url: 'carousels',
             controllerUrl: 'frontend/components/carousel/carousel',
             views: {
                 "content@root": {
@@ -2877,7 +2877,7 @@ define([
             controllerUrl: 'frontend/components/carousel/carousel',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/carousel/create.html',
+                    templateUrl: 'frontend/components/carousel/create-edit.html',
                     controller: 'CarouselCreateCtrl'
                 }
 
@@ -2888,7 +2888,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                pageTitle: "Carrusel"
+                pageTitle: "Sliders"
             }
         }));
 
@@ -2897,7 +2897,7 @@ define([
             controllerUrl: 'frontend/components/carousel/carousel',
             views: {
                 "content@root": {
-                    templateUrl: 'frontend/components/carousel/edit.html',
+                    templateUrl: 'frontend/components/carousel/create-edit.html',
                     controller: 'CarouselEditCtrl'
                 }
 
@@ -2908,7 +2908,7 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                pageTitle: "Módulos"
+                pageTitle: "Sliders"
             }
         }));
 

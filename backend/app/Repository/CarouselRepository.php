@@ -10,26 +10,15 @@ use Cie\Models\Carousel;
 */
 class CarouselRepository implements CarouselRepositoryInterface
 {
-	private $parentId;
 	
-	
-	public function setParent($parentId)
-	{
-		$this->parentId = $parentId;
-		return $this;
-	}
-
-
 	public function enum($params = null)
 	{
-		if ($this->parentId) {
-			$carousels = Carousel::where('carousel_id',$this->parentId)->get();
-		} else {
-			$carousels = Carousel::all();
-		}
+		
+		$carousels = Carousel::all();
+		
 
 		if (!$carousels) {
-			throw new CarouselException(['title'=>'No se han encontrado el listado de  Ciudades','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+			throw new CarouselException(['title'=>'No se han encontrado el listado de Sliders','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 		}
 		return $carousels;
 	}
@@ -38,22 +27,14 @@ class CarouselRepository implements CarouselRepositoryInterface
 
 	public function find($field)
 	{
-		if (is_array($field)) {
-
-			if (array_key_exists('name', $field)) { 
-				$carousel = Carousel::where('name',$field['name'])->first();	
-			} else {
-
-				throw new CarouselException(['title'=>'No se puede buscar la Ciudad','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
-			}
-
-		} elseif (is_string($field) || is_int($field)) {
-			$carousel = Carousel::where('id',$field)->first();
-		} else {
-			throw new CarouselException(['title'=>'Se ha producido un error al buscar la Ciudad','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
+		
+		$carousel = Carousel::where('id',$field)->first();
+		
+		if (!$carousel) {
+			throw new CarouselException(['title'=>'Se ha producido un error al buscar el Slider','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");			
 		}
 
-		if (!$carousel) throw new CarouselException(['title'=>'No se puede buscar la Ciudad','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+		if (!$carousel) throw new CarouselException(['title'=>'No se puede buscar el Slider','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 		
 		return $carousel;
 
@@ -68,7 +49,7 @@ class CarouselRepository implements CarouselRepositoryInterface
 			$key = $carousel->getKey();
 			return  $this->find($key);
 		} else {
-			throw new CarouselException(['title'=>'Ha ocurrido un error al guardar la Ciudad '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			throw new CarouselException(['title'=>'Ha ocurrido un error al guardar el Slider '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 		}		
 	}
 
@@ -82,7 +63,7 @@ class CarouselRepository implements CarouselRepositoryInterface
 				return $this->find($key);
 			}
 		} else {
-			throw new CarouselException(['title'=>'Ha ocurrido un error al actualizar la Ciudad '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			throw new CarouselException(['title'=>'Ha ocurrido un error al actualizar el Slider '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 		}
 
 
@@ -94,6 +75,6 @@ class CarouselRepository implements CarouselRepositoryInterface
 			$carousel->delete();
 			return true;
 		}
-		throw new CarouselException(['title'=>'Ha ocurrido un error al eliminar la Ciudad ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		throw new CarouselException(['title'=>'Ha ocurrido un error al eliminar el Slider ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 	}
 }

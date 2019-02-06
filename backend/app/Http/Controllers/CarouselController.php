@@ -17,7 +17,7 @@ class CarouselController extends Controller
     {
         parent::__construct($request);
         $this->middleware('jwt.auth');
-        $this->middleware('checkrole:admin',['except'=>['index']]);
+        // $this->middleware('checkrole:admin',['except'=>['index']]);
         $this->carouselRepo = $carouselRepo;
     }
     /**

@@ -87,6 +87,9 @@ class AppServiceProvider extends ServiceProvider
 
         //Holidays 
         $this->app->bind('Cie\RepositoryInterface\HolidayRepositoryInterface','Cie\Repository\HolidayRepository');
+
+        //Carousel 
+        $this->app->bind('Cie\RepositoryInterface\CarouselRepositoryInterface','Cie\Repository\CarouselRepository');
         
     }
 }

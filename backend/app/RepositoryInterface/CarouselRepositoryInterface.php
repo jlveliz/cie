@@ -5,6 +5,5 @@ namespace Cie\RepositoryInterface;
 
 
 interface CarouselRepositoryInterface extends CoreRepositoryInterface {
-	
-	public function setParent($parentId);
+
 }
