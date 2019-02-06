@@ -10,6 +10,10 @@ class Request extends BaseModel
 
     protected $primaryKey = "id";
 
+    protected $casts = [
+    	'representant_type' => 'int'
+    ];
+
    
     protected $fillable = [
     	'begin_date',

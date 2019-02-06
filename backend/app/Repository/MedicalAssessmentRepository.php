@@ -32,7 +32,7 @@ use Auth;
 						$join->on('patient_user.id','=','medical_assessment.patient_user_id')->whereRaw('medical_assessment.deleted_at is null');
 					})->where(function($query) use ($params){
 						$query->where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%');
-					})->where('patient_user.state_id','<',$this->getStatusInscrito())->whereNull('medical_assessment.id')->get();
+					})->where('patient_user.state_id','=',$this->getStatusValoradoPsicologicamente())->whereNull('medical_assessment.id')->get();
 					
 					if(!count($paUsers))
 						throw new MedicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista médica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -76,7 +76,7 @@ use Auth;
 				//USADO PARA BUSCAR UNA EVALUACIÓN PSICOLÓGICA POR CÉDULA EN EL MODAL DE CREACIÓN Y EVALUACIÓN PSICOLOGICA
 				$paUser = PatientUser::leftJoin('medical_assessment',function($join){
 						$join->on('patient_user.id','=','medical_assessment.patient_user_id')->whereRaw('medical_assessment.deleted_at is null');
-					})->where('person.num_identification',$field['num_identification'])->whereNull('medical_assessment.id')->first();
+					})->where('person.num_identification',$field['num_identification'])->where('patient_user.state_id','=',$this->getStatusValoradoPsicologicamente())->whereNull('medical_assessment.id')->first();
 				
 				if(!$paUser)
 					throw new MedicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista médica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -134,7 +134,7 @@ use Auth;
 			if($assessment->update()){
 				$key = $assessment->getKey();
 				//update status
-				$assessment->patientUser->state_id = $this->getStatus();
+				// $assessment->patientUser->state_id = $this->getStatus();
 				$assessment->patientUser->save();
 				return $this->find($key);
 			} else {
@@ -165,15 +165,15 @@ use Auth;
 	 */
 	public function getStatus()
 	{
-		return  StatePatientUser::select('id')->where('code','valorado_fisicamente')->first()->id;
+		return  StatePatientUser::select('id')->where('code','valorado_medicamente')->first()->id;
 	}
 
 	/**
 	 * return default state 
 	 */
-	public function getStatusInscrito()
+	public function getStatusValoradoPsicologicamente()
 	{
-		return  StatePatientUser::select('id')->where('code','inscrito')->first()->id;
+		return  StatePatientUser::select('id')->where('code','valorado_psicologicamente')->first()->id;
 	}
 
  } 

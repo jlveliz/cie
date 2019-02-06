@@ -36,7 +36,7 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 						$join->on('patient_user.id','=','physical_assessment.patient_user_id')->whereRaw('physical_assessment.deleted_at is null');
 					})->where(function($query) use ($params){
 						$query->where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%');
-					})->where('patient_user.state_id','<',$this->getStatusInscrito())->whereNull('physical_assessment.id')->get();
+					})->where('patient_user.state_id','=',$this->getStatusValoradoMedicamente())->whereNull('physical_assessment.id')->get();
 					if(!count($paUsers))
 						throw new PhysicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista psicológica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 					
@@ -84,7 +84,7 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 				//USADO PARA BUSCAR UNA EVALUACIÓN PSICOLÓGICA POR CÉDULA EN EL MODAL DE CREACIÓN Y EVALUACIÓN PSICOLOGICA
 				$paUser = PatientUser::leftJoin('physical_assessment',function($join){
 						$join->on('patient_user.id','=','physical_assessment.patient_user_id')->whereRaw('physical_assessment.deleted_at is null');
-					})->where('person.num_identification',$field['num_identification'])->whereNull('physical_assessment.id')->first();
+					})->where('person.num_identification',$field['num_identification'])->where('patient_user.state_id','=',$this->getStatusValoradoMedicamente())->whereNull('physical_assessment.id')->first();
 				
 				if(!$paUser)
 					throw new PhysicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista psicológica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -146,7 +146,7 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 			if($assessment->update()){
 				$key = $assessment->getKey();
 				//update status
-				$assessment->patientUser->state_id = $this->getStatus();
+				// $assessment->patientUser->state_id = $this->getStatus();
 				$assessment->patientUser->save();
 				return $this->find($key);
 			} else {
@@ -183,8 +183,8 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 	/**
 	 * return default state 
 	 */
-	public function getStatusInscrito()
+	public function getStatusValoradoMedicamente()
 	{
-		return  StatePatientUser::select('id')->where('code','inscrito')->first()->id;
+		return  StatePatientUser::select('id')->where('code','valorado_medicamente')->first()->id;
 	}
 }

@@ -915,6 +915,7 @@ define(['app', 'moment'], function(app, moment) {
 
                 $scope.messages = PUserInscriptionService.messageFlag;
                 if (!_.isEmpty($scope.messages)) {
+
                     $scope.hasMessage = true;
                     PUserInscriptionService.messageFlag = {};
                 }
@@ -1789,9 +1790,21 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.user_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.user_identification_card : null;
                 $scope.model.conadis_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.conadis_identification_card : null;
                 $scope.model.specialist_certificate = $scope.model.attached ? envService.read('public') + $scope.model.attached.specialist_certificate : null;
-                $scope.model.date_birth = new Date($scope.model.date_birth);
-                $scope.model.date_admission = new Date($scope.model.date_admission);
+                
+                if (!$scope.model.date_birth) {
+                    $scope.model.date_birth = new Date();
+                } else {
+                    $scope.model.date_birth = new Date($scope.model.date_birth);
+                }
+                
+                if (!$scope.model.date_admission) {
+                    $scope.model.date_admission = new Date();
+                } else {
+                    $scope.model.date_admission = new Date($scope.model.date_admission);    
+                }
+                
                 $scope.model.has_representant = false;
+
 
                 if ($scope.model.mother)
                     $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
@@ -2031,7 +2044,7 @@ define(['app', 'moment'], function(app, moment) {
                     // required: true
                 },
                 assist_other_therapeutic_center: {
-                    valueNotEquals: '?'
+                    // valueNotEquals: '?'
                 },
                 therapeutic_center_name: {
                     // required: function(element) {
@@ -2415,6 +2428,7 @@ define(['app', 'moment'], function(app, moment) {
                         $scope.messages.details.push(el)
                     })
                 })
+                PUserInscriptionService.messageFlag = {}
             }
 
             if (saveForm.validate()) {
@@ -2503,7 +2517,13 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.specialist_certificate = $scope.model.attached ? envService.read('public') + $scope.model.attached.specialist_certificate : null;
 
                 $scope.model.date_birth = new Date($scope.model.date_birth);
-                $scope.model.date_admission = new Date($scope.model.date_admission);
+
+                if (!$scope.model.date_admission) {
+                    $scope.model.date_admission = new Date();
+                } else {
+                    $scope.model.date_admission = new Date($scope.model.date_admission);    
+                }
+                
                 if ($scope.model.mother)
                     $scope.model.mother.date_birth = new Date($scope.model.mother.date_birth);
 

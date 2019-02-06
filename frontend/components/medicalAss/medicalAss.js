@@ -265,6 +265,12 @@ define(['app', 'moment'], function(app, moment) {
             $scope.model.patientUser.personal_data_procedence = MedicalAssService.formatPatientUser('procedence', model.patient_user);
             $scope.model.patient_user_id = model.patient_user.id;
             $scope.loading = false;
+            $scope.messages = MedicalAssService.messageFlag;
+            
+            if (!_.isEmpty($scope.messages)) {
+                $scope.hasMessage = true;
+                MedicalAssService.messageFlag = {};
+            }
         });
 
         $scope.save = function(saveForm, returnIndex) {

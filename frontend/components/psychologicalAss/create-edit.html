@@ -16,6 +16,7 @@
                         <uib-tab-heading>
                             <h5 ng-if="!isEdit"><b><i class="fa fa-plus"></i> Crear</b></h5>
                             <h5 ng-if="isEdit"><b><i class="fa fa-edit"></i> Editar</b></h5>
+                            {{hasMessage}}
                         </uib-tab-heading>
                         <h4 class="text-center" ng-if="loading">
                             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -23,6 +24,7 @@
                         </h4>
                         <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
                             <div class="tab-index">
+
                                 <div class="row" ng-if="existError || hasMessage">
                                     <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -96,20 +98,20 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Cedula de la Madre del Usuario" class="control-label">Nombre de la Madre</label>
-                                                        <input ng-disabled="saving || !existPatientUserSelected || model.patientUser.mother" id="mother_name" type="text" class="form-control" name="mother_name" ng-model="model.mother_name">
+                                                        <input ng-disabled="saving || existPatientUserSelected || model.patientUser.mother" id="mother_name" type="text" class="form-control" name="mother_name" ng-model="model.mother_name" disabled>
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Edad de la madre del Usuario" for="father_age">Edad</label>
-                                                        <input ng-disabled=" saving || !existPatientUserSelected " maxlength="2" minlength="1" id="mother_age" type="text" class="form-control" name="mother_age" ng-model="model.mother_age">
+                                                        <input ng-disabled=" saving || existPatientUserSelected " maxlength="2" minlength="1" id="mother_age" type="text" class="form-control" name="mother_age" ng-model="model.mother_age" disabled>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Estado civil de la madre del usuario" for="mother_status_civil_id">Estado Civil</label>
-                                                        <select ng-disabled="saving || !existPatientUserSelected" class="form-control" name="mother_status_civil_id" id="mother_status_civil_id" ng-model="model.mother_state_civil_id" ng-options="sc.id as sc.value for sc in statusCivil">
+                                                        <select ng-disabled="saving || existPatientUserSelected" class="form-control" name="mother_status_civil_id" id="mother_status_civil_id" ng-model="model.mother_state_civil_id" ng-options="sc.id as sc.value for sc in statusCivil" disabled>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Escolaridad de la Madre del usuario" for="mother_schooling">Escolaridad</label>
-                                                        <select ng-disabled="saving || !existPatientUserSelected" class="form-control" name="mother_schooling" id="mother_schooling" ng-model="model.mother_schooling" ng-options="sc.id as sc.value for sc in schoolingParents">
+                                                        <select ng-disabled="saving || existPatientUserSelected" class="form-control" name="mother_schooling" id="mother_schooling" ng-model="model.mother_schooling" ng-options="sc.id as sc.value for sc in schoolingParents" disabled>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -117,27 +119,27 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group" ng-if="!loading">
                                                         <label for="father_num_identification" title="Nombre del Padre del Usuario" class="control-label">Nombre del Padre</label>
-                                                        <input ng-disabled=" saving || !existPatientUserSelected" id="father_name" type="text" class="form-control" name="father_name" ng-model="model.father_name">
+                                                        <input ng-disabled=" saving || existPatientUserSelected" id="father_name" type="text" class="form-control" name="father_name" ng-model="model.father_name" disabled="">
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Edad del Padre Usuario" for="father_age">Edad</label>
-                                                        <input ng-disabled="saving || !existPatientUserSelected" maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father_age">
+                                                        <input ng-disabled="saving || existPatientUserSelected" maxlength="2" minlength="1" id="father_age" type="text" class="form-control" name="father_age" ng-model="model.father_age" disabled="">
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Estado Civil del Padre del usuario" for="father_status_civil">Estado Civil</label>
-                                                        <select ng-disabled="saving || !existPatientUserSelected" class="form-control" name="father_status_civil" id="father_status_civil" ng-model="model.father_state_civil_id" ng-options="sc.id as sc.value for sc in statusCivil">
+                                                        <select ng-disabled="saving || existPatientUserSelected" class="form-control" name="father_status_civil" id="father_status_civil" ng-model="model.father_state_civil_id" ng-options="sc.id as sc.value for sc in statusCivil" disabled="">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group ng-scope" ng-if="!loading">
                                                         <label class="control-label" title="Escolaridad del Padre del usuario" for="father_schooling">Escolaridad</label>
-                                                        <select ng-disabled="saving || !existPatientUserSelected" class="form-control" name="father_schooling" id="father_schooling" ng-model="model.father_schooling" ng-options="sc.id as sc.value for sc in schoolingParents">
+                                                        <select ng-disabled="saving || existPatientUserSelected" class="form-control" name="father_schooling" id="father_schooling" ng-model="model.father_schooling" ng-options="sc.id as sc.value for sc in schoolingParents" disabled="">
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 col-xs-12 col-sm-12 form-group">
                                                         <label class="control-label" title="Descripción o Observación">Observación</label>
-                                                        <textarea class="form-control no-resize" name="family_history_observation" ng-model="model.family_history_observation" id="family_history_observation" ng-disabled="saving || !existPatientUserSelected" ng-disabled="loading"></textarea>
+                                                        <textarea class="form-control no-resize" name="family_history_observation" ng-model="model.family_history_observation" id="family_history_observation" ng-disabled="saving || existPatientUserSelected" ng-disabled="loading" disabled=""></textarea>
                                                     </div>
                                                 </div>
                                             </div>

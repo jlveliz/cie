@@ -5,6 +5,7 @@ use Cie\RepositoryInterface\BuildingTherapyUserRepositoryInterface;
 use Cie\Exceptions\BuildingTherapyUserException;
 use Cie\Models\PatientUser;
 use Cie\Models\BuildingTherapyUser;
+use Cie\Models\StatePatientUser;
 use DB;
 
 
@@ -17,12 +18,12 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 	public function enum($params = null)
 	{
 
-
+		$buildingTherapyUsers = null;
 		if ($params) {
 
 			if (array_key_exists('num_identification', $params)) {
 
-				$buildingTherapyUsers = PatientUser::doesntHave('therapies')->where('num_identification',$params['num_identification'])->first();
+				$buildingTherapyUsers = PatientUser::with('therapies')->doesntHave('therapies')->where('num_identification',$params['num_identification'])->where('state_id','=',$this->getStatusValoracionFisica())->first();
 				
 
 				if(!count($buildingTherapyUsers)) {
@@ -31,16 +32,26 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 
 				return $buildingTherapyUsers;
 
-			} 
+			} elseif (array_key_exists('name', $params)) {
+				
+				$buildingTherapyUsers = PatientUser::with('therapies')->doesntHave('therapies')->where(function($query) use ($params){
+						$query->where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%');
+					})->where('patient_user.state_id','=',$this->getStatusValoracionFisica())->get();
+
+				if(!count($buildingTherapyUsers)) {
+					throw new BuildingTherapyUserException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe un horario creado. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
+				}
+			} else {
+
+				throw new BuildingTherapyUserException(['title'=>'Parámetros inválidos','detail'=>'parametros invalidos','level'=>'error'],"500");
+			}
 
 		} else {
 
 			$buildingTherapyUsers = PatientUser::has('therapies')->get();	
 		}
 
-		foreach ($buildingTherapyUsers as $key => $buildUser) {
-			$buildUser->load('therapies');
-		}
+		
 
 		if (!$buildingTherapyUsers) {
 			throw new BuildingTherapyUserException(['title'=>'No se han encontrado el listado de  terapias','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -96,13 +107,20 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				$response  = DB::select(
 					"call therapyuserassistance_pr_ingresadiasterapia($pUserId,2019,'$groupTime','FIRST',$value,'$datebegin','30/04/2019')");
 				
-				// dd($response[0]);
+					
 				if ($response[0]->ov_error != '0') {
 					throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>$response[0]->ov_mensaje,'level'=>'error'],"500");
-				}
+				} 
 			}
 
-			return  $this->find($data['patient_user_id']);
+
+			$puser = PatientUser::find($data['patient_user_id']);
+
+			if ($puser) {
+				$puser->state_id = $this->getStatus();
+				return  $this->find($data['patient_user_id']);
+			}
+
 			
 	}
 
@@ -147,9 +165,22 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 	public function remove($id)
 	{
 		if ($buildingTherapyUser = $this->find($id)) {
-			$buildingTherapyUser->delete();
+			$buildingTherapyUser->therapies()->delete();
+			$buildingTherapyUser->state_id = $this->getStatusValoracionFisica();
+			$buildingTherapyUser->save();
 			return true;
 		}
 		throw new BuildingTherapyUserException(['title'=>'Ha ocurrido un error al eliminar la terapia ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+	}
+
+
+	public function getStatus()
+	{
+		return  StatePatientUser::select('id')->where('code','inscrito')->first()->id;
+	}
+
+	public function getStatusValoracionFisica()
+	{
+		return  StatePatientUser::select('id')->where('code','valorado_fisicamente')->first()->id;
 	}
 }

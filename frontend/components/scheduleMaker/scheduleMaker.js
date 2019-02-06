@@ -315,7 +315,6 @@ define(['app'], function(app) {
             }),
             apiResource.resource('buildings').query().then(function(buildings) {
                 $scope.buildings = buildings;
-                console.log(buildings)
             }),
             apiResource.resource('therapies').query().then(function(therapies) {
                 $scope.therapies = therapies;
@@ -342,6 +341,7 @@ define(['app'], function(app) {
         $scope.openModalSearchUser = function() {
             let params = { resource: 'buildingtherapyUser' };
             $rootScope.openModalSearchUser(params).then(function(patientUser) {
+
                 $scope.existPatientUserSelected = true;
                 $scope.model.patientUser = patientUser;
                 $scope.model.patient_user_id = $scope.model.patientUser.id;
@@ -351,10 +351,9 @@ define(['app'], function(app) {
                 $scope.model.start_date = new Date("2019-01-25");
                 $scope.model.end_date = new Date("2019-04-30");
                 $scope.model.building_therapies = []
-
-                if (!$scope.model.patientUser.representant_id) {
+                // if (!$scope.model.patientUser.representant_id) {
                     $scope.foundUser = true;
-                }
+                // }
 
             });
         };
@@ -468,6 +467,8 @@ define(['app'], function(app) {
         $scope.models = [];
         $scope.isEdit = true
         $scope.foundUser = true;
+        $scope.hasMessage = false;
+        $scope.hasError = false;
         $scope.daysOfWeek = [];
         $scope.buildings = [];
         $scope.therapies = [];
@@ -511,6 +512,11 @@ define(['app'], function(app) {
 
                 $scope.model.building_therapies = ScheduleMakerService.formatBuildingTherayUser($scope.model.therapies);
                 $scope.loading = false;
+                $scope.messages = ScheduleMakerService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    ScheduleMakerService.messageFlag = {};
+                }
             });
         });
 
@@ -571,7 +577,6 @@ define(['app'], function(app) {
 
 
         $scope.save = function(saveForm, returnIndex) {
-            console.log($scope.model)
             var successCallback = function(data) {
                 $scope.saving = false;
                 $scope.hasMessage = true;

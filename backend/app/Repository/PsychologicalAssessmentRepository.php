@@ -36,7 +36,7 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 						$join->on('patient_user.id','=','psychological_assessment.patient_user_id')->whereRaw('psychological_assessment.deleted_at is null');
 					})->where(function($query) use ($params){
 						$query->where('person.name','like','%'.$params['name'].'%')->orWhere('person.last_name','like','%'.$params['name'].'%');
-					})->where('patient_user.state_id','<',$this->getStatusInscrito())->whereNull('psychological_assessment.id')->get();
+					})->where('patient_user.state_id','=',$this->getStatusRegistrado())->whereNull('psychological_assessment.id')->get();
 					if(!count($paUsers))
 						throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista psicológica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
 					
@@ -84,7 +84,7 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 				//USADO PARA BUSCAR UNA EVALUACIÓN PSICOLÓGICA POR CÉDULA EN EL MODAL DE CREACIÓN Y EVALUACIÓN PSICOLOGICA
 				$paUser = PatientUser::leftJoin('psychological_assessment',function($join){
 						$join->on('patient_user.id','=','psychological_assessment.patient_user_id')->whereRaw('psychological_assessment.deleted_at is null');
-					})->where('person.num_identification',$field['num_identification'])->whereNull('psychological_assessment.id')->first();
+					})->where('person.num_identification',$field['num_identification'])->where('patient_user.state_id','=',$this->getStatusRegistrado())->whereNull('psychological_assessment.id')->first();
 				
 				if(!$paUser)
 					throw new PsychologicalAssessmentException(['title'=>'No se han encontrado el listado de usuarios','detail'=>'No se han encontrado usuarios con este criterio de busqueda o ya existe una entrevista psicológica creada. Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
@@ -125,7 +125,7 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 		if ($assessment->save()) {
 			$key = $assessment->getKey();
 			//update status
-			$assessment->patientUser->state_id = $this->getStatus();
+			$assessment->patientUser->state_id = $this->getStatusValoradoPsicologicamente();
 			$assessment->patientUser->save();
 			return $this->find($key);
 		} else {
@@ -147,7 +147,7 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 			if($assessment->update()){
 				$key = $assessment->getKey();
 				//update status
-				$assessment->patientUser->state_id = $this->getStatus();
+				// $assessment->patientUser->state_id = $this->getStatusValoradoPsicologicamente();
 				$assessment->patientUser->save();
 				return $this->find($key);
 			} else {
@@ -175,7 +175,7 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 	/**
 	 * return default state 
 	 */
-	public function getStatus()
+	public function getStatusValoradoPsicologicamente()
 	{
 		return  StatePatientUser::select('id')->where('code','valorado_psicologicamente')->first()->id;
 	}
@@ -184,8 +184,8 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 	/**
 	 * return default state 
 	 */
-	public function getStatusInscrito()
+	public function getStatusRegistrado()
 	{
-		return  StatePatientUser::select('id')->where('code','inscrito')->first()->id;
+		return  StatePatientUser::select('id')->where('code','registrado')->first()->id;
 	}
 }

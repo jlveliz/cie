@@ -47,9 +47,9 @@
                                                     <li ng-if="hasPermission('edi_ev_psicologica') || hasRole('admin')">
                                                         <a title="Editar Entrevista {{model.models.name}} {{model.patient_user.last_name}}" alt="Editar Usuario {{model.patient_user.name}} {{model.patient_user.last_name}}"  ui-sref="root.psychoAssessment.edit({psychoAssId:model.id})"> <i class="fa fa-pencil"></i> Editar</a>
                                                     </li>
-                                                    <li>
+                                                    <!-- <li>
                                                         <a title="Imprimir Entrevista Psicológica de {{model.patient_user.name}} {{model.patient_user.last_name}}" alt="Imprimir entrevista Psicológica de  {{model.patient_user.name}} {{model.patient_user.last_name}}"  ng-click="print(model.id)"> <i class="fa fa-print"></i> Imprimir</a>
-                                                    </li>
+                                                    </li> -->
                                                     <li ng-if="hasPermission('eli_eva_psicologica') || hasRole('admin')">
                                                         <a title="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" alt="Eliminar Entrevista {{model.patient_user.name}} {{model.patient_user.last_name}}" ng-click="delete(model.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
                                                     </li>

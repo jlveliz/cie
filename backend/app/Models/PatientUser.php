@@ -77,7 +77,7 @@ class PatientUser extends BaseModel
   
     protected $casts = [
         // 'date_birth' => 'date',
-        // 'date_admission' => 'date',
+        'date_admission' => 'date',
         'person_id' => 'int',
         'physical_disability' => 'int',
         'visual_disability' => 'int',
@@ -283,6 +283,10 @@ class PatientUser extends BaseModel
         static::creating(function($pUser){
             // $puser->state_id =  self::STATEREGISTRED;
             $pUser->created_user_id = Auth::user() ? Auth::user()->id : 1;
+        });
+
+        static::created(function($pUser){
+            $pUser->date_admission = (new \Datetime($pUser->date_admission))->format('Y-m-d');
         });
 
         static::deleted(function($pUser){

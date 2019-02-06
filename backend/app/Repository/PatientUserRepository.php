@@ -168,7 +168,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 		if ($pUPerson->save()) {
 			$personKey = $pUPerson->getKey();
 			$pUPatient = new PatientUser();
-			$data['state_id'] = 4;
+			$data['state_id'] = $this->getStateInitial();
 			$data['person_id'] = $personKey;
 			$data['father_id'] = $fatherKey;
 			$data['mother_id'] = $motherKey;
@@ -294,7 +294,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 			$data['person_type_id'] = $this->getPersonType();
 			$data['identification_type_id'] = $this->getIdentification('cedula');
 			$paUser->person->update($data);
-			$paUser->state = 4;
+			// $paUser->state = 4;
 			$paUser->fill($data);
 			if($paUser->update()){
 				//save de last data on the historical
@@ -338,7 +338,7 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 
     public function getStateInitial()
     {
-    	return  StatePatientUser::select('id')->where('code','inscrito')->first()->id;
+    	return  StatePatientUser::select('id')->where('code','registrado')->first()->id;
     }
 
 

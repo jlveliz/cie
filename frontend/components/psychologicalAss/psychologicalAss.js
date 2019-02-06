@@ -131,7 +131,7 @@ define(['app', 'moment'], function(app, moment) {
         }
     }]);
 
-    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PsyChoService', '$rootScope', '$state','envService',function($scope, apiResource, DTOptionsBuilder, PsyChoService, $rootScope,$state,envService) {
+    app.register.controller('PsychologicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PsyChoService', '$rootScope', '$state', 'envService', function($scope, apiResource, DTOptionsBuilder, PsyChoService, $rootScope, $state, envService) {
 
         $scope.models = [];
         $scope.loading = true;
@@ -211,6 +211,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.loading = true;
         $scope.saving = false;
         $scope.existError = false;
+        $scope.hasMessage = false;
         $scope.existPatientUserSelected = false;
         $scope.statusCivil = PsyChoService.statusCivil;
         $scope.schoolingParents = PsyChoService.schoolingParents;
@@ -328,6 +329,7 @@ define(['app', 'moment'], function(app, moment) {
         var psychoAssId = $stateParams.psychoAssId;
         $scope.saving = false;
         $scope.existError = false;
+        $scope.hasMessage = false;
         $scope.existPatientUserSelected = true;
         $scope.statusCivil = PsyChoService.statusCivil;
         $scope.schoolingParents = PsyChoService.schoolingParents;
@@ -374,6 +376,12 @@ define(['app', 'moment'], function(app, moment) {
             $scope.model.father_name = PsyChoService.formatPatientUser('father', $scope.model.patientUser);
             $scope.model.father_age = $scope.model.patientUser.has_father ? $scope.model.patientUser.father.age : '';
             $scope.loading = false;
+
+            $scope.messages = PsyChoService.messageFlag;
+            if (!_.isEmpty($scope.messages)) {
+                $scope.hasMessage = true;
+                PsyChoService.messageFlag = {};
+            }
         }, function(error) {
             if (error.status == 404) {
                 $state.go('root.psychoAssessment');

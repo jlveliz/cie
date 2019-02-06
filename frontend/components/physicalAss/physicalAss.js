@@ -50,7 +50,7 @@ define(['app', 'moment'], function(app, moment) {
 
     }]);
 
-    app.register.controller('PhysicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$rootScope', '$state', 'envService',function($scope, apiResource, DTOptionsBuilder, PysicalService, $rootScope, $state, envService) {
+    app.register.controller('PhysicalAssIdxCtrl', ['$scope', 'apiResource', 'DTOptionsBuilder', 'PysicalService', '$rootScope', '$state', 'envService', function($scope, apiResource, DTOptionsBuilder, PysicalService, $rootScope, $state, envService) {
 
         $scope.models = [];
         $scope.loading = true;
@@ -250,6 +250,7 @@ define(['app', 'moment'], function(app, moment) {
         var physicalAssId = $stateParams.physicalAssId;
         $scope.saving = false;
         $scope.existError = false;
+        $scope.hasMessage = false;
         $scope.existPatientUserSelected = true;
         $scope.messages = {};
 
@@ -316,6 +317,13 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.creator = $scope.model.creator.person.name + ' ' + $scope.model.creator.person.last_name;
                 $scope.model.hour_created_at = new moment($scope.model.created_at).format('HH:mm');
                 $scope.loading = false;
+               
+
+                $scope.messages = PysicalService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+                    $scope.hasMessage = true;
+                    PysicalService.messageFlag = {};
+                }
             }, function(error) {
                 if (error.status == 404) {
                     $state.go('root.physicalAssessment');
