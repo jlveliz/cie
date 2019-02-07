@@ -152,7 +152,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 			}
 
-			return $this->find($data['id']);
+			return $this->find($id);
 
 			
 		} else {
