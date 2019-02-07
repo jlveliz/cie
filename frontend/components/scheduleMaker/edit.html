@@ -67,7 +67,7 @@
                                 <div class="row" ng-show="foundUser">
                                     <p class="col-md-12"><b>Datos De Representante</b></p>
                                     <!-- <p ng-if="!model.patientUser.representant_id" class="col-md-12 text-secondary text-center">No Tiene Representante</p> -->
-                                    <div ng-hide="!model.patientUser.representant_id">
+                                    <div>
                                         <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                             <label class="control-label">Cédula <span class="text-danger">*</span></label>
                                             <input ng-disabled="saving" id="code" type="text" class="form-control" name="code" ng-model="model.representant.num_identification" ng-disabled="true == true" disabled="" readonly="">
