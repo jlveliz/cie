@@ -266,7 +266,7 @@
                             <!-- citas -->
                             <p class="section-inner">Agendamiento de Cita</p>
                             <div class="row">
-                                <div class="col-md-4 col-sm-6 col-xs-12 form-group" ng-if="!loading">
+                                <div class="col-md-4 col-sm-6 col-xs-12 form-group ng-hide" ng-if="!loading" >
                                     <label
                                     class="control-label"
                                     for="begin_date"
@@ -278,9 +278,9 @@
                                     <label
                                     class="control-label"
                                     for="end_date"
-                                    title="Fecha Hasta"
-                                    >Fecha Hasta</label>
-                                    <input type="datetime-local" name="end_date" id="end_date" class="form-control" ng-model="model.end_date" ng-disabled="model.status == 'A'">
+                                    title="Fecha y hora de la cita"
+                                    >Fecha y hora de la cita</label>
+                                    <input type="datetime-local" name="end_date" id="end_date" class="form-control" ng-model="model.end_date" ng-disabled="model.status == 'A'" >
                                 </div>
                             </div>
                           </div>

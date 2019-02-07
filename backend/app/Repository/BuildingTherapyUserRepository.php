@@ -105,7 +105,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 				$datebegin = date('d/m/y');
 				// dd(array($datSave['patient_user_id'], 2019,"'$groupTime'", "'FIRST'", $datSave['building_therapy_id'], "'25/01/2019'", "'30/04/2019'"));
 				$response  = DB::select(
-					"call therapyuserassistance_pr_ingresadiasterapia($pUserId,2019,'$groupTime','FIRST',$value,'$datebegin','30/04/2019')");
+					"call therapyuserassistance_pr_ingresadiasterapia($pUserId,2019,'$groupTime','FIRST',$value,'$datebegin','30/04/2019', true)");
 				
 					
 				if ($response[0]->ov_error != '0') {
