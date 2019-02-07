@@ -57,7 +57,7 @@
                 <td>{{getSchedule(buildtherapy.building_therapy_id)}}</td>
                 <td>{{buildtherapy.avalability}}</td>
                 <td>
-                    <button ng-disabled="buildtherapy.availability == 0" class="btn btn-default btn-xs" ng-click="selectAndClose(buildtherapy.building_therapy_id)"><i class="fa fa-check"></i></button>
+                    <button ng-disabled="buildtherapy.avalability == 0" class="btn btn-default btn-xs" ng-click="selectAndClose(buildtherapy.building_therapy_id)"><i class="fa fa-check"></i></button>
                 </td>
             </tr>
             <tr ng-if="buildingTherapies.length == 0">

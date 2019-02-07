@@ -166,6 +166,8 @@ class PsychologicalAssessmentRepository implements PsychologicalAssessmentReposi
 		
 		$assessment = $this->find($id);
 		if ($assessment) {
+			$assessment->patientUser->state_id = $this->getStatusRegistrado();
+			$assessment->patientUser->save();
 			$assessment->delete();
 			return true;
 		}

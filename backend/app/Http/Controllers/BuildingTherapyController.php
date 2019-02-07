@@ -46,7 +46,8 @@ class BuildingTherapyController extends Controller
             $building = $this->encodeResponse($building);
             return response()->json($building,200);
         } catch (BuildingTherapyException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+            $btures = $this->encodeResponse(json_encode(['title' => $e->getMessage()]));
+            return response()->json($btures,$e->getCode());
         }
     }
 
@@ -64,7 +65,8 @@ class BuildingTherapyController extends Controller
             $building = $this->encodeResponse($building);
             return response()->json($building,200);
         } catch (BuildingTherapyException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+            $btures = $this->encodeResponse(json_encode(['title' => $e->getMessage()]));
+            return response()->json($btures,$e->getCode());
         }
     }
 
@@ -83,7 +85,8 @@ class BuildingTherapyController extends Controller
             $building = $this->encodeResponse($building);
             return response()->json($building,200);
         } catch (BuildingTherapyException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+            $btures = $this->encodeResponse(json_encode(['title' => $e->getMessage()]));
+            return response()->json($btures,$e->getCode());
         }
     }
 

@@ -71,6 +71,9 @@ define(['app'], function(app) {
                 return buildTherapy.therapy_id == therapyId && buildTherapy.therapist_user_id == therapistId;
             });
 
+            return _.unique(filtered, function(fil) {
+                return fil.key_day;
+            });
             return filtered;
         }
 

@@ -260,6 +260,7 @@ define(['app'], function(app) {
         $scope.daysWeek = [];
         $scope.therapies = [];
         $scope.therapists = [];
+        $scope.messages = {}
 
 
         var reqKeyParameter = {
@@ -287,7 +288,7 @@ define(['app'], function(app) {
         deps.then(function() {
             apiResource.resource('buildings').get(buildingId).then(function(model) {
                 $scope.model = model;
-                console.log(model)
+                
                 $scope.messages = BuildingService.messageFlag;
                 if (!_.isEmpty($scope.messages)) {
                     $scope.hasMessage = true;
@@ -349,12 +350,14 @@ define(['app'], function(app) {
                     $scope.existError = true;
                     $scope.messages.title = reason.data.title;
                     $scope.messages.details = [];
-                    var json = JSON.parse(reason.data.detail);
-                    angular.forEach(json, function(elem, idx) {
-                        angular.forEach(elem, function(el, idex) {
-                            $scope.messages.details.push(el)
+                    if (reason.data.detail) {
+                        var json = JSON.parse(reason.data.detail);
+                        angular.forEach(json, function(elem, idx) {
+                            angular.forEach(elem, function(el, idex) {
+                                $scope.messages.details.push(el)
+                            })
                         })
-                    })
+                    }
                 });
             }
         }

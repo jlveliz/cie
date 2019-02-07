@@ -85,6 +85,9 @@ class BuildingRepository implements BuildingRepositoryInterface
 			
 				$query = DB::select("call buildingtherapy_pr_mantenimiento('$params')");
 				
+				if ($query[0]->ov_error != '0') { 
+					throw new BuildingTherapyUserException(['title'=>$query[0]->ov_mensaje,'detail'=>$query[0]->ov_mensaje,'level'=>'error'],"500");
+				}
 	
 				$key = $building->getKey();
 				return $this->find($key);
