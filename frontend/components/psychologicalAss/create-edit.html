@@ -16,7 +16,6 @@
                         <uib-tab-heading>
                             <h5 ng-if="!isEdit"><b><i class="fa fa-plus"></i> Crear</b></h5>
                             <h5 ng-if="isEdit"><b><i class="fa fa-edit"></i> Editar</b></h5>
-                            {{hasMessage}}
                         </uib-tab-heading>
                         <h4 class="text-center" ng-if="loading">
                             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -151,21 +150,21 @@
                                             <div class="tab-index">
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Motivo de Consulta" for="father_age">Motivo de Consulta <span class="text-danger">*</span></label>
+                                                        <label class="control-label" title="Motivo de Consulta" for="father_age">Motivo de Consulta </label>
                                                         <textarea name="reason_consultation" id="reason_consultation" ng-model="model.reason_consultation" class="form-control no-resize" rows="3"></textarea>
                                                     </div>
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Antecendentes de la consulta" for="background">Antecedentes <span class="text-danger">*</span></label>
+                                                        <label class="control-label" title="Antecendentes de la consulta" for="background">Antecedentes </label>
                                                         <textarea name="background" id="background" ng-model="model.background" class="form-control no-resize" rows="3"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Situación Actual" for="current_situation">Situación Actual <span class="text-danger">*</span></label>
+                                                        <label class="control-label" title="Situación Actual" for="current_situation">Situación Actual</label>
                                                         <input type="text" name="current_situation" class="form-control" ng-model="model.current_situation">
                                                     </div>
                                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
-                                                        <label class="control-label" title="Descripción del Beneficiario" for="description_beneficiary">Descripción del Beneficiario <span class="text-danger">*</span></label>
+                                                        <label class="control-label" title="Descripción del Beneficiario" for="description_beneficiary">Descripción del Beneficiario</label>
                                                         <input type="text" name="description_beneficiary" class="form-control" ng-model="model.description_beneficiary">
                                                     </div>
                                                 </div>

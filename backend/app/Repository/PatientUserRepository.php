@@ -305,7 +305,6 @@ class PatientUserRepository implements PatientUserRepositoryInterface
 				return $this->find($key);
 			}
 
-
 		} else {
 			throw new PatientUserException(['title'=>'Ha ocurrido un error al actualizar los datos del usuario '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 		}

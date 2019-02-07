@@ -48,7 +48,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 
 		} else {
 
-			$buildingTherapyUsers = PatientUser::has('therapies')->get();	
+			$buildingTherapyUsers = PatientUser::with('therapies')->has('therapies')->get();	
 		}
 
 		

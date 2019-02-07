@@ -1124,7 +1124,7 @@ define(['app', 'moment'], function(app, moment) {
         deps.then(function() {
             $scope.model = apiResource.resource('puserinscriptions').create({
                 has_diagnostic: null,
-                city_id: null,
+                city_id: '',
                 parish_id: null,
                 assist_other_therapeutic_center: null,
                 receives_medical_attention: null,
@@ -1791,16 +1791,24 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.conadis_identification_card = $scope.model.attached ? envService.read('public') + $scope.model.attached.conadis_identification_card : null;
                 $scope.model.specialist_certificate = $scope.model.attached ? envService.read('public') + $scope.model.attached.specialist_certificate : null;
                 
+
+                $scope.model.entity_send_diagnostic == null || $scope.model.entity_send_diagnostic == 'NULL' ?  $scope.model.entity_send_diagnostic = '' : $scope.model.entity_send_diagnostic;
+                $scope.model.other_diagnostic == null || $scope.model.other_diagnostic == 'NULL' ? $scope.model.other_diagnostic = '' : $scope.model.other_diagnostic; 
+                
+                $scope.model.observation == null || $scope.model.observation == 'NULL' ? $scope.model.observation = '' : $scope.model.observation; 
+              
                 if (!$scope.model.date_birth) {
                     $scope.model.date_birth = new Date();
                 } else {
                     $scope.model.date_birth = new Date($scope.model.date_birth);
                 }
+
+                $scope.calculateAge($scope.model.date_birth)
                 
                 if (!$scope.model.date_admission) {
                     $scope.model.date_admission = new Date();
                 } else {
-                    $scope.model.date_admission = new Date($scope.model.date_admission);    
+                    $scope.model.date_admission = new Date($scope.model.date_admission); 
                 }
                 
                 $scope.model.has_representant = false;

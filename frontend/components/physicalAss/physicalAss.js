@@ -313,8 +313,9 @@ define(['app', 'moment'], function(app, moment) {
                 $scope.model.patientUser.name = PysicalService.formatPatientUser('name', $scope.model.patientUser);
                 $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth', $scope.model.patientUser);
                 $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic', $scope.model.patientUser);
-                $scope.model.user_created_id = $scope.model.creator.id;
-                $scope.model.creator = $scope.model.creator.person.name + ' ' + $scope.model.creator.person.last_name;
+                $scope.model.user_created_id = (typeof $scope.model.creator == 'string') ? $scope.model.user_created_id : $scope.model.creator.id ;
+                $scope.model.creator = (typeof $scope.model.creator == 'object') ? $scope.model.creator.person.name + ' ' + $scope.model.creator.person.last_name : $scope.model.creator;
+                
                 $scope.model.hour_created_at = new moment($scope.model.created_at).format('HH:mm');
                 $scope.loading = false;
                
@@ -344,13 +345,14 @@ define(['app', 'moment'], function(app, moment) {
                     $state.go('root.physicalAssessment');
                 }
                 //reset
+
                 $scope.model = data;
                 $scope.model.patientUser = $scope.model.patient_user;
                 $scope.existPatientUserSelected = true;
                 $scope.model.patientUser.name = PysicalService.formatPatientUser('name', $scope.model.patientUser);
                 $scope.model.patientUser.date_birth = PysicalService.formatPatientUser('dbirth', $scope.model.patientUser);
                 $scope.model.patientUser.diagnostic = PysicalService.formatPatientUser('diagnostic', $scope.model.patientUser);
-                $scope.model.user_created_id = $scope.model.creator.id;
+                // $scope.model.user_created_id = $scope.model.creator.id;
 
                 $scope.model.creator = $scope.model.creator.person.name + ' ' + $scope.model.creator.person.last_name;
                 $scope.model.hour_created_at = new moment($scope.model.created_at).format('HH:mm');

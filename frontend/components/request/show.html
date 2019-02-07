@@ -264,9 +264,9 @@
                               </div>
                             </div>
                             <!-- citas -->
-                            <p class="section-inner">Agendamiento de Cita</p>
-                            <div class="row">
-                                <div class="col-md-4 col-sm-6 col-xs-12 form-group ng-hide" ng-if="!loading" >
+                            <p class="section-inner" ng-if="!existError">Agendamiento de Cita</p>
+                            <div class="row" ng-if="!existError">
+                                <div class="col-md-4 col-sm-6 col-xs-12 form-group" ng-hide="true" ng-if="!loading" >
                                     <label
                                     class="control-label"
                                     for="begin_date"
@@ -280,7 +280,7 @@
                                     for="end_date"
                                     title="Fecha y hora de la cita"
                                     >Fecha y hora de la cita</label>
-                                    <input type="datetime-local" name="end_date" id="end_date" class="form-control" ng-model="model.end_date" ng-disabled="model.status == 'A'" >
+                                    <input type="datetime-local" name="end_date" id="end_date" class="form-control" ng-model="model.end_date" ng-min="model.end_date" min="{{model.end_date}}" ng-disabled="model.status == 'A'" >
                                 </div>
                             </div>
                           </div>
@@ -323,7 +323,7 @@
                         ng-if="model.status == 'I'"
                         type="submit"
                         class="btn btn-default"
-                        ng-disabled="saving"
+                        ng-disabled="saving || existError"
                         ng-click="saveAndClose(saveForm)"
                       >
                         <span ng-if="!saving"
@@ -339,7 +339,7 @@
                         ng-if="model.status == 'A'"
                         type="submit"
                         class="btn btn-primary"
-                        ng-disabled="saving"
+                        ng-disabled="saving || existError"
                         ng-click="createPatientUser(saveForm)"
                       >
                         <span ng-if="!saving"

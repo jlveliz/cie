@@ -165,6 +165,8 @@ class PhysicalAssessmentRepository implements PhysicalAssessmentRepositoryInterf
 		
 		$assessment = $this->find($id);
 		if ($assessment) {
+			$assessment->patientUser->state_id = $this->getStatusValoradoMedicamente();
+			$assessment->patientUser->save();
 			$assessment->delete();
 			return true;
 		}

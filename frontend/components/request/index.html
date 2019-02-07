@@ -135,7 +135,7 @@
                                             <p ng-show="model.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr ng-if="dates.length == 0">
                                         <td class="text-center" colspan="5">No existen Citas Disponibles</td>
                                     </tr>
                                 </tbody>

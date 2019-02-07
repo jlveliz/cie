@@ -35,7 +35,6 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="model in models">
-                                        
                                         <td><a ui-sref="root.scheduleMaker.edit({schedule:model.id})" title="{{model.name | capitalize:'oneLetter'}}">{{model.last_name | capitalize:'oneLetter'}} {{model.name | capitalize:'oneLetter'}}</a></td>
                                         <td>{{ model.therapies.length || 0 }}</td>
                                         <td>

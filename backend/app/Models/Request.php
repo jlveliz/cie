@@ -24,4 +24,13 @@ class Request extends BaseModel
     const STATENDIDO = "A";
 
     const STINGRESADO = "I";
+
+
+    public static function boot()
+    {
+        // parent::boot();
+        // static::updating(function($request){
+        //     dd($request);
+        // });
+    }
 }

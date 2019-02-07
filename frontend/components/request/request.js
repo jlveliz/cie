@@ -3,7 +3,7 @@
 */
 define(['app', 'moment'], function(app, moment) {
 
-    app.register.service('RequestService', ['$q', 'apiResource', function($q, apiResource) {
+    app.register.service('RequestService', ['$q', 'apiResource', 'envService', function($q, apiResource, envService) {
 
         var _this = this;
         _this.messageFlag = {};
@@ -99,6 +99,29 @@ define(['app', 'moment'], function(app, moment) {
 
             return deferred.promise
 
+        };
+
+        _this.validateIfExistPatientUser = function(numIdentification) {
+            var deferred = $q.defer();
+
+            let urlGet = envService.read('api') + 'validator/uniquePatient?columnname=num_identification&value=' + numIdentification;
+            // if (id) urlGet += '&id=' + id;
+
+            $.ajax({
+                url: urlGet,
+                type: 'GET',
+                async: false,
+                success: function(result) {
+                    success = result === "ok" ? true : false;
+                    if (success)
+                        deferred.resolve(success);
+                    else
+                        deferred.reject(success);
+
+                }
+
+            });
+            return deferred.promise;
         }
 
 
@@ -148,6 +171,7 @@ define(['app', 'moment'], function(app, moment) {
         $scope.loading = true;
         $scope.messages = {};
         $scope.existError = false;
+        $scope.hasMessage = false;
         $scope.model = {
 
         };
@@ -169,6 +193,17 @@ define(['app', 'moment'], function(app, moment) {
             apiResource.resource('requests').getCopy({ id: requestId, noCache: true }).then(
                 function(result) {
                     $scope.model = result;
+
+                    RequestService.validateIfExistPatientUser($scope.model.num_identification_patient).then(
+                        function(result) {
+                        },
+                        function(exist) {
+                            $scope.existError = true;
+                            $scope.messages.title = "Ya existe una ficha de inscripción vigente";
+                            $scope.hasMessage = true;
+                        })
+
+
                     if ($scope.model.begin_date) {
                         $scope.model.begin_date = new Date($scope.model.begin_date)
                     } else {
@@ -230,7 +265,21 @@ define(['app', 'moment'], function(app, moment) {
             if (saveForm.validate()) {
                 $scope.saving = true;
                 $scope.model.status = "A";
+                $scope.model.end_date = moment($scope.model.end_date).format('YYYY-MM-DD HH:mm');
                 RequestService.save($scope.model).then(successCallback, failCallback);
+            }
+        }
+
+        $scope.validateOptions = {
+            rules: {
+                num_identification: {
+                    uniquePatient: 'num_identification'
+                }
+            },
+            messages: {
+                num_identification: {
+                    uniquePatient: 'Ya existe un usuario registrado'
+                }
             }
         }
 
@@ -238,11 +287,11 @@ define(['app', 'moment'], function(app, moment) {
         $scope.createPatientUser = function(saveForm) {
             if (saveForm.validate()) {
                 $scope.saving = true;
-                debugger;
-                RequestService.createPatientUserStructure($scope.model).then(function(pUser) {
-                    pUser.$save().then(function(model) {
-                        $scope.model.status = "D";
-                        $scope.model.$update(requestId).then(function() {
+                $scope.end_date = moment($scope.end_date).format('YYYY-MM-DD HH:mm');
+                $scope.model.$update(requestId).then(function() {
+                    $scope.model.status = "D";
+                    RequestService.createPatientUserStructure($scope.model).then(function(pUser) {
+                        pUser.$save().then(function(model) {
                             $state.go('root.inscription.edit', {
                                 pInsId: model.id
                             })
