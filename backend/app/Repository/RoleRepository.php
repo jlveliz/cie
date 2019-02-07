@@ -33,6 +33,13 @@ class RoleRepository implements RoleRepositoryInterface
 				throw new RoleException(['title'=>'No se puede buscar el rol','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
 			}
 
+			if (array_key_exists('code', $field)) { 
+				$role = Role::with('permissions')->where('code',$field['code'])->first();	
+			} else {
+
+				throw new RoleException(['title'=>'No se puede buscar el rol','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");	
+			}
+
 		} elseif (is_string($field) || is_int($field)) {
 			$role = Role::with('permissions')->where('id',$field)->first();
 		} else {

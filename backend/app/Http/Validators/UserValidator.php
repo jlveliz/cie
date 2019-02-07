@@ -27,21 +27,23 @@ class UserValidator extends Validator implements ValidatorInterface
 	}
 
 	public function rules($method = null) {
-		$rules = [
-			'name' => 'required',
-			'last_name'=>'required',
-			'username'=>'required|unique:user,username',
-			'password'=>'required',
-			'repeat_password'=>'required|same:password',
-			'email'=>'required|email|unique:person,email'
-		];
+		// $rules = [
+		// 	'name' => 'required',
+		// 	'last_name'=>'required',
+		// 	'username'=>'required|unique:user,username',
+		// 	'password'=>'required',
+		// 	'repeat_password'=>'required|same:password',
+		// 	'email'=>'required|email|unique:person,email'
+		// ];
 
-		if ($method == 'PUT') {
-			$rules['email'] = 'required|email|unique:person,email,'.$this->request->get('person_id');
-			$rules['username'] = 'required|unique:user,username,'.$this->request->get('key');
-			$rules['password'] = 'required_with:password';
-			$rules['repeat_password'] = 'required_with:password|same:password';
-		}
+		// if ($method == 'PUT') {
+		// 	$rules['email'] = 'required|email|unique:person,email,'.$this->request->get('person_id');
+		// 	$rules['username'] = 'required|unique:user,username,'.$this->request->get('key');
+		// 	$rules['password'] = 'required_with:password';
+		// 	$rules['repeat_password'] = 'required_with:password|same:password';
+		// }
+
+		return [];
 
 		return $rules;
 	}

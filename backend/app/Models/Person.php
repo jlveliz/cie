@@ -81,6 +81,11 @@ class Person extends BaseModel
         return $this->belongsTo('Cie\Models\IdentificationType','identification_type_id');
     }
 
+    public function user()
+    {
+        return $this->hasOne('Cie\Models\User','person_id');
+    }
+
     public function getMale()
     {
         return $this->male;

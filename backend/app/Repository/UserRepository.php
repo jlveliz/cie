@@ -51,25 +51,40 @@ class UserRepository implements UserRepositoryInterface
 	//TODO
 	public function save($data)
 	{
-		$person = new Person();
-		$data['person_type_id'] = $this->getPersonType();
-		$person->fill($data);
-		if ($person->save()) {
-			$personId = $person->getKey();
-			$data['password'] = \Hash::make($data['password']);
-			$data['person_id'] = $personId;
+		if (array_key_exists('person_id', $data)) {
+			$person = Person::find($data['person_id']);
 			$user = new User();
+			$data['password'] = \Hash::make($data['password']);
+			$data['person_id'] = $person->id;
 			$user->fill($data);
+			$user->save();
 			if ($user->save()) {
 				$user->roles()->sync($data['roles']);
 				$key = $user->getKey();
 				return  $this->find($key);
+			}
+			return  $this->find($key);
 		} else {
-			throw new UserException(['title'=>'Ha ocurrido un error al guardar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
-		}
-		
-		} else {
-			throw new UserException(['title'=>'Ha ocurrido un error al guardar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			$person = new Person();
+			$data['person_type_id'] = $this->getPersonType();
+			$person->fill($data);
+			if ($person->save()) {
+				$personId = $person->getKey();
+				$data['password'] = \Hash::make($data['password']);
+				$data['person_id'] = $personId;
+				$user = new User();
+				$user->fill($data);
+				if ($user->save()) {
+					$user->roles()->sync($data['roles']);
+					$key = $user->getKey();
+					return  $this->find($key);
+			} else {
+				throw new UserException(['title'=>'Ha ocurrido un error al guardar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			}
+			
+			} else {
+				throw new UserException(['title'=>'Ha ocurrido un error al guardar el usuario '.$data['username'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+			}
 		}
 		
 	}
@@ -111,5 +126,22 @@ class UserRepository implements UserRepositoryInterface
 
 	public function getPersonType() {
 		return PersonType::select('id')->where('code','usuario')->first()->id;
+	}
+
+
+	public function finUserByPerson($personId)
+	{
+		$person = Person::find($personId);
+		if (!$person) {
+			throw new UserException(['title'=>'Ha ocurrido un error al encontrar el usuario ','detail'=>'Persona no encontrada','level'=>'error'],"500");
+		}
+
+		if ($person->user) {
+			return $person->user;
+		}
+
+		throw new UserException(['title'=>'Ha ocurrido un error al encontrar el usuario ','detail'=>'Persona no encontrada','level'=>'error'],"500");
+		
+
 	}
 }

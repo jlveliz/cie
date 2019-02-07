@@ -106,4 +106,19 @@ class UserController extends Controller
         }
     }
 
+
+    public function finUserByPerson($personId)
+    {
+        try {
+            $removed = $this->userRepo->finUserByPerson($personId);
+            if ($removed) {
+                $user = $this->encodeResponse(json_encode(['exitoso'=>true]));
+                return response()->json($user,200);
+            }
+        } catch (UserException $e) {
+           
+            return response()->json($e->getMessage(),$e->getCode());
+        }
+    }
+
 }

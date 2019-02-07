@@ -3,7 +3,7 @@
  **/
 define(['app'], function(app) {
 
-    app.register.service('ScheduleMakerService', ['apiResource', '$q', '$filter', '$uibModal', function(apiResource, $q, $filter, $uibModal) {
+    app.register.service('ScheduleMakerService', ['apiResource', '$q', '$filter', '$uibModal', 'envService', function(apiResource, $q, $filter, $uibModal, envService) {
 
 
         var _this = this;
@@ -105,7 +105,8 @@ define(['app'], function(app) {
 
 
 
-            })
+            });
+
             return deferred.promise;
 
         }
@@ -148,7 +149,7 @@ define(['app'], function(app) {
 
 
         _this.getCurrentQuarter = function(quartersArray) {
-            let currentMonth  = (new Date()).getMonth();
+            let currentMonth = (new Date()).getMonth();
             var founded = null
             quartersArray.forEach(function(element, index) {
                 if (currentMonth >= parseInt(element.value) && currentMonth <= parseInt(element.value2)) {
@@ -213,24 +214,78 @@ define(['app'], function(app) {
             });
             var filteres = [];
             filtered.forEach(function(element, index) {
-                element.availables.forEach( function(available, index) {
+                element.availables.forEach(function(available, index) {
                     if (available.year == query.year && available.timeframe_id == query.currentQuarter.idparameter && query.currentQuarter.idgroup == 'YEAR_QUARTER') {
                         filteres.push(available)
                     }
                 });
             });
 
-            
             return filteres;
+
+            // var deferred = $q.defer();
+            // apiResource.resource('buildingtherapyavailable').query({parentId:query.therapies}).then(
+            //     function(result) {
+            //         console.log(result)
+            //         deferred.resolve(result)
+            //     },
+            //     function(notexist) {
+            //         console.log(notexist)
+            //         deferred.reject(notexist)
+
+            //     })
+
+            // return promise;
+
 
 
         }
 
         _this.getScheduleBuildingTherapy = function(buildingTherpyId, buildingTherapies) {
-            var buildTherapyF = _.findWhere(buildingTherapies, {id : buildingTherpyId}) ;
+            var buildTherapyF = _.findWhere(buildingTherapies, { id: buildingTherpyId });
 
             if (buildTherapyF)
-                return buildTherapyF.schedule.start +' - ' + buildTherapyF.schedule.end;
+                return buildTherapyF.schedule.start + ' - ' + buildTherapyF.schedule.end;
+        }
+
+
+        _this.findUserForRepresentant = function(representantId) {
+
+            var deferred = $q.defer();
+            var keyRepresentant = {
+                method: 'GET',
+                url: envService.read('api') + 'user/person/' + representantId
+            };
+            apiResource.loadFromApi(keyRepresentant).then(
+                function(result) {
+                    deferred.resolve(result)
+                },
+                function(notexist) {
+                    debugger;
+                    deferred.reject(notexist)
+
+                })
+
+
+            return deferred.promise
+
+        }
+
+
+        _this.getRepresentantRole = function() {
+            var deferred = $q.defer();
+            var roleId = []
+            apiResource.resource('roles').query().then(function(result) {
+                angular.forEach(result, function(element, index) {
+                    if (element.code == 'representante')
+                        roleId.push(element.id)
+
+                });
+
+            })
+
+            deferred.resolve(roleId)
+            return deferred.promise
         }
 
 
@@ -356,7 +411,7 @@ define(['app'], function(app) {
                 $scope.model.end_date = new Date("2019-04-30");
                 $scope.model.building_therapies = []
                 // if (!$scope.model.patientUser.representant_id) {
-                    $scope.foundUser = true;
+                $scope.foundUser = true;
                 // }
 
             });
@@ -421,22 +476,61 @@ define(['app'], function(app) {
 
 
         $scope.save = function(saveForm, returnIndex) {
-            
+
 
             var successCallback = function(data) {
                 $scope.saving = false;
                 $scope.hasMessage = true;
                 apiResource.resource('buildingtherapyUser').setOnCache(data);
-                ScheduleMakerService.messageFlag.title = "Se ha asignado el horario correctamente";
-                ScheduleMakerService.messageFlag.type = "info";
-                $scope.messages = ScheduleMakerService.messageFlag;
-                if (returnIndex) {
-                    $state.go('root.scheduleMaker');
-                } else {
-                    $state.go('root.scheduleMaker.edit', {
-                        schedule: data.id
+                //save user
+                var existRepresentant = ScheduleMakerService.findUserForRepresentant(data.representant_id);
+
+
+                existRepresentant.then(
+                    function(existUser) {
+                        existUser.$update(existUser.id, function(resultUser) {
+                            ScheduleMakerService.messageFlag.title = "Se ha asignado el horario correctamente";
+                            ScheduleMakerService.messageFlag.type = "info";
+                            $scope.messages = ScheduleMakerService.messageFlag;
+                            if (returnIndex) {
+                                $state.go('root.scheduleMaker');
+                            } else {
+                                $state.go('root.scheduleMaker.edit', {
+                                    schedule: data.id
+                                })
+                            }
+
+                        });
+                    },
+                    //not exist 
+                    function(notExistUser) {
+                        var user = apiResource.resource('users').create(data.representant);
+                        user.username = data.representant.email;
+                        user.password = 123;
+                        user.repeat_password = 123;
+                        user.person_id = data.representant_id;
+                        user.roles = []
+
+
+                        ScheduleMakerService.getRepresentantRole().then(function(roleId) {
+                            user.roles = roleId;
+                            delete user.id;
+                            user.$save(function(result) {
+                                ScheduleMakerService.messageFlag.title = "Se ha asignado el horario correctamente";
+                                ScheduleMakerService.messageFlag.type = "info";
+                                $scope.messages = ScheduleMakerService.messageFlag;
+                                if (returnIndex) {
+                                    $state.go('root.scheduleMaker');
+                                } else {
+                                    $state.go('root.scheduleMaker.edit', {
+                                        schedule: data.id
+                                    })
+                                }
+                            });
+                        })
+
                     })
-                }
+
             }
 
             var failCallback = function(reason) {
@@ -445,7 +539,7 @@ define(['app'], function(app) {
                 $scope.messages.title = reason.data.title;
                 $scope.messages.type = 'error';
                 $scope.messages.details = [];
-                 if (reason.data.detail) {
+                if (reason.data.detail) {
                     var json = JSON.parse(reason.data.detail);
                     angular.forEach(json, function(elem, idx) {
                         angular.forEach(elem, function(el, idex) {
@@ -505,7 +599,7 @@ define(['app'], function(app) {
 
         deps.then(function() {
             apiResource.resource('buildingtherapyUser').getCopy(scheduleId).then(function(result) {
-
+                console.log(result)
                 $scope.model = result;
                 $scope.opt.building = ScheduleMakerService.getBuilding(result.therapies);
                 if ($scope.opt.building) {
@@ -531,9 +625,9 @@ define(['app'], function(app) {
             $scope.model.building_therapies.push(buildingTherapyId);
             ScheduleMakerService.addRemoveTherapyUser(buildingTherapyId, $scope.opt.building, 'insert', $scope.therapiesSelecteds).then(function(results) {
                 $scope.therapiesSelecteds = results
-                $scope.model.therapies.push({id:0,patient_user_id:$scope.model.id,year:"2019",grouptime_id:"YEAR_QUARTER",timeframe_id:"FIRST", building_therapy_id: buildingTherapyId});
+                $scope.model.therapies.push({ id: 0, patient_user_id: $scope.model.id, year: "2019", grouptime_id: "YEAR_QUARTER", timeframe_id: "FIRST", building_therapy_id: buildingTherapyId });
             })
-            
+
         };
 
         $scope.removeSchedule = function(therapyBuild) {
@@ -543,10 +637,10 @@ define(['app'], function(app) {
 
             ScheduleMakerService.addRemoveTherapyUser(therapyBuild, $scope.opt.building, 'remove', $scope.therapiesSelecteds).then(function(results) {
                 $scope.therapiesSelecteds = results
-                var idx = _.findIndex($scope.model.therapies,function(item){
+                var idx = _.findIndex($scope.model.therapies, function(item) {
                     return item.building_therapy_id == therapyBuild;
                 });
-                $scope.model.therapies.splice(idx,1);
+                $scope.model.therapies.splice(idx, 1);
             })
 
 
@@ -658,7 +752,7 @@ define(['app'], function(app) {
             therapist: false,
             day: false,
             year: (new Date()).getFullYear(),
-            currentQuarter : {}
+            currentQuarter: {}
         };
 
         var reqKeyParameter = {
@@ -693,7 +787,7 @@ define(['app'], function(app) {
                 $scope.building = result;
                 $scope.query.grouptime_id = "YEAR_QUARTER";
                 $scope.query.currentQuarter = ScheduleMakerService.getCurrentQuarter(quartersArray);
-                
+
                 $scope.therapies = ScheduleMakerService.makeVisibleTherapies(therapiesArray, $scope.building.therapies);
             });
         });

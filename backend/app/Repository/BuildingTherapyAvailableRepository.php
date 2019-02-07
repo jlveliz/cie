@@ -22,7 +22,7 @@ class BuildingTherapyAvailableRepository implements BuildingTherapyAvailableRepo
 
 	public function enum($params = null)
 	{
-		$availables = BuildingTherapyAvailable::where('buildin_therapy_id',$this->parent)->get();
+		$availables = BuildingTherapyAvailable::where('building_therapy_id',$this->parent)->get();
 
 		if (!$availables) {
 			throw new BuildingTherapyException(['title'=>'No se han encontrado el listado de edificios','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"404");
