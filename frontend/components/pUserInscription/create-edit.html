@@ -338,6 +338,12 @@
                                                         </label>
                                                         <input ng-disabled="saving" id="father_activity" type="text" class="form-control" name="father_activity" ng-model="model.father.activity">
                                                     </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="representant_activity" title="Email del Representante">Email
+                                                            <!-- <span class="text-danger">*</span> -->
+                                                        </label>
+                                                        <input ng-disabled="saving" id="representant_activity" type="text" class="form-control" name="representant_activity" ng-model="model.father.email">
+                                                    </div>
                                                 </div>
 
                                                 <!-- NO FATHER -->
@@ -404,6 +410,12 @@
                                                             <!-- <span class="text-danger">*</span> -->
                                                         </label>
                                                         <input ng-disabled="saving" id="mother_activity" type="text" class="form-control" name="mother_activity" ng-model="model.mother.activity">
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="representant_activity" title="Email del Representante">Email
+                                                            <!-- <span class="text-danger">*</span> -->
+                                                        </label>
+                                                        <input ng-disabled="saving" id="representant_activity" type="text" class="form-control" name="representant_activity" ng-model="model.mother.email">
                                                     </div>
                                                 </div>
 
@@ -485,6 +497,12 @@
                                                             <!-- <span class="text-danger">*</span> -->
                                                         </label>
                                                         <input ng-disabled="saving" id="representant_activity" type="text" class="form-control" name="representant_activity" ng-model="model.representant.activity">
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                        <label class="control-label" for="representant_activity" title="Email del Representante">Email
+                                                            <!-- <span class="text-danger">*</span> -->
+                                                        </label>
+                                                        <input ng-disabled="saving" id="representant_activity" type="text" class="form-control" name="representant_activity" ng-model="model.representant.email">
                                                     </div>
                                                 </div>
                                                 <div class="row" ng-if="model.has_representant">

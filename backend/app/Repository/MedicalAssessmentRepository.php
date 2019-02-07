@@ -153,6 +153,8 @@ use Auth;
 		
 		$assessment = $this->find($id);
 		if ($assessment) {
+			$assessment->patientUser->state_id = $this->getStatusValoradoPsicologicamente();
+			$assessment->patientUser->save();
 			$assessment->delete();
 			return true;
 		}

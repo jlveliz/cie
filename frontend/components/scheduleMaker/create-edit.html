@@ -33,7 +33,7 @@
                                         <ul ng-if="messages.details.length > 0">
                                             <li ng-repeat="(key, value) in messages.details">{{value}}</li>
                                         </ul>
-                                        <p ng-if="hasMessage">{{messages.title}}</p>
+                                        <p ng-if="existError || hasMessage">{{messages.title}}</p>
                                     </div>
                                 </div>
                                 <div class="row">

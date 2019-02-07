@@ -290,6 +290,7 @@ define(['app'], function(app) {
         $scope.therapists = [];
         $scope.therapists = [];
         $scope.quarters = [];
+        $scope.messages = {};
         $scope.opt = {
             building: null
         }
@@ -441,12 +442,14 @@ define(['app'], function(app) {
                 $scope.messages.title = reason.data.title;
                 $scope.messages.type = 'error';
                 $scope.messages.details = [];
-                var json = JSON.parse(reason.data.detail);
-                angular.forEach(json, function(elem, idx) {
-                    angular.forEach(elem, function(el, idex) {
-                        $scope.messages.details.push(el)
+                 if (reason.data.detail) {
+                    var json = JSON.parse(reason.data.detail);
+                    angular.forEach(json, function(elem, idx) {
+                        angular.forEach(elem, function(el, idex) {
+                            $scope.messages.details.push(el)
+                        })
                     })
-                })
+                }
             }
 
 
@@ -612,12 +615,14 @@ define(['app'], function(app) {
                 $scope.messages.title = reason.data.title;
                 $scope.messages.type = 'error';
                 $scope.messages.details = [];
-                var json = JSON.parse(reason.data.detail);
-                angular.forEach(json, function(elem, idx) {
-                    angular.forEach(elem, function(el, idex) {
-                        $scope.messages.details.push(el)
+                if (reason.data.detail) {
+                    var json = JSON.parse(reason.data.detail);
+                    angular.forEach(json, function(elem, idx) {
+                        angular.forEach(elem, function(el, idex) {
+                            $scope.messages.details.push(el)
+                        })
                     })
-                })
+                }
             }
 
 
