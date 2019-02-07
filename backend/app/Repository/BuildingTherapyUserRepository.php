@@ -149,7 +149,7 @@ class BuildingTherapyUserRepository implements BuildingTherapyUserRepositoryInte
 			$response  = DB::select("call therapyuserassistance_pr_actualizadiasterapia('$data')");
 			
 			if ($response[0]->ov_error != null) {
-				throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+				throw new BuildingTherapyUserException(['title'=>$response[0]->ov_mensaje,'detail'=>$response[0]->ov_mensaje,'level'=>'error'],"500");
 			}
 
 			return $this->find($id);
