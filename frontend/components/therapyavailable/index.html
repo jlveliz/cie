@@ -32,7 +32,7 @@
                                             <ul ng-if="messages.details.length > 0">
                                                 <li ng-repeat="(key, value) in messages.details">{{value}}</li>
                                             </ul>
-                                            <p ng-if="hasMessage">{{messages.title}}</p>
+                                            <p ng-if="existError || hasMessage">{{messages.title}}</p>
                                         </div>
                                     </div>
                                     <!-- filtros -->
@@ -81,7 +81,7 @@
                                                 <td><span class="badge">{{model.day | capitalize:'oneLetter' }} - <small>{{model.schedule.start}} {{model.schedule.end}}</small></span> </td>
                                                 <td><span ng-class="{'text-danger': model.avalability == 0, 'text-success':  model.avalability > 0}"> {{model.avalability}} cupo(s) </span></td>
                                                 <td>
-                                                    <div class="btn-group" role="group" ng-hide="building.$deleting">
+                                                    <div class="btn-group" role="group" ng-hide="model.$deleting">
                                                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="fa fa-cog"></i> Opciones
                                                             <span class="caret"></span>
@@ -91,11 +91,11 @@
                                                                 <a ui-sref="root.buildingtherapyavailable.edit({availableId:model.building_therapy_id})"> <i class="fa fa-pencil"></i> Editar</a>
                                                             </li>
                                                             <li>
-                                                                <a ng-click="delete(building.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                                <a ng-click="delete(model.building_therapy_id, model)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <p ng-show="building.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
+                                                    <p ng-show="model.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
                                                 </td>
                                             </tr>
                                             <tr ng-if="models.length == 0">

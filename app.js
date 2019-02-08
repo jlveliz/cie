@@ -3198,7 +3198,7 @@ define([
 
         //Building Therapy Available
         $stateProvider.state('root.buildingtherapyavailable.edit', angularAMD.route({
-            url: '{availableId:int}/edit',
+            url: '/{availableId:int}/edit',
             controllerUrl: 'frontend/components/therapyavailable/therapyavailable',
             views: {
                 "content@root": {

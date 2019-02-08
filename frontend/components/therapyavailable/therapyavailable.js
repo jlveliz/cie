@@ -230,6 +230,52 @@ define(['app'], function(app) {
         };
 
 
+        $scope.delete = function(availableId, model) {
+
+            // apiResource.resource('buildingtherapyavailable').getCopy(availableId).then(function(object) {
+                var params = {
+                    title: 'Atención',
+                    text: 'Desea eliminar la disponibilidad.?'
+                }
+                $rootScope.openDeleteModal(params).then(function() {
+                    var idx = _.findIndex($scope.models, function(el) {
+                        return el.building_therapy_id == availableId;
+                    });
+                    if (idx > -1) {
+                        $scope.models[idx] = model;
+                        $scope.models[idx].$deleting = true;
+                        $scope.models[idx].id = $scope.models[idx].building_therapy_id;
+                        $scope.models[idx].$delete(function() {
+                            TherapyAvailableService.messageFlag.title = "Disponibilidad eliminada correctamente";
+                            TherapyAvailableService.messageFlag.type = "info";
+                            $scope.messages = TherapyAvailableService.messageFlag;
+                            $scope.hasMessage = true;
+                            $scope.models[idx].$deleting = false;
+                            $scope.models.splice(idx, 1);
+                            apiResource.resource('buildingtherapyavailable').removeFromCache(id);
+                        }, function(reason) {
+                            $scope.saving = false;
+                            $scope.models[idx].$deleting = false;
+                            $scope.existError = true;
+                            $scope.messages.title = reason.data.title;
+                            $scope.messages.type = 'error';
+                            if (reason.data.detail) {
+                                $scope.messages.details = [];
+                                var json = JSON.parse(reason.data.detail);
+                                angular.forEach(json, function(elem, idx) {
+                                    angular.forEach(elem, function(el, idex) {
+                                        $scope.messages.details.push(el)
+                                    })
+                                })
+
+                            }
+                        })
+                    }
+                })
+            // });
+        }
+
+
 
 
 
@@ -486,8 +532,8 @@ define(['app'], function(app) {
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.id = availableId;
-                $scope.model.$update(availableId,function(data) {
-                
+                $scope.model.$update(availableId, function(data) {
+
 
                     apiResource.resource('buildingtherapyavailable').setOnCache(data);
                     TherapyAvailableService.messageFlag.title = "Disponibilidad Actualizada correctamente";

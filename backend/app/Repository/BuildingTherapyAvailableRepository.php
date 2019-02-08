@@ -128,9 +128,22 @@ class BuildingTherapyAvailableRepository implements BuildingTherapyAvailableRepo
 	public function remove($id)
 	{
 		if ($available = $this->find($id)) {
-			$available->delete();
+
+
+			$buildingTherapyId = $available->building_therapy_id;
+			$year = $available->year;
+			$timeframeId = $available->timeframe_id;
+
+
+			$available = DB::select(" call therapyavailable_pr_eliminar($buildingTherapyId, $year, '$timeframeId');");
+
+			if ($available[0]->title != null) {
+				throw new BuildingTherapyException(['title'=>$available[0]->title,'detail'=>$available[0]->detail,'level'=>'error'],"500");
+			}
+
 			return true;
 		}
+
 		throw new BuildingTherapyException(['title'=>'Ha ocurrido un error al eliminar la disponibilidad ','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
 	}
 }
