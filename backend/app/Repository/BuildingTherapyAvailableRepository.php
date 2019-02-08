@@ -72,7 +72,7 @@ class BuildingTherapyAvailableRepository implements BuildingTherapyAvailableRepo
 	public function find($field)
 	{
 		
-		$available = BuildingTherapyAvailable::where('id',$field)->first();
+		$available = BuildingTherapyAvailable::where('building_therapy_id',$field)->first();
 		
 		if (!$available) {
 			throw new BuildingTherapyException(['title'=>'Se ha producido un error al buscar la disponibilidad','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");	
@@ -105,16 +105,22 @@ class BuildingTherapyAvailableRepository implements BuildingTherapyAvailableRepo
 
 	public function edit($id,$data)
 	{
-		$available = BuildingTherapyAvailable::find($id);
-		if ($available) {
-			$available->fill($data);
-			if($available->update()){
-				$key = $available->getKey();
-				return $this->find($key);
-			}
-		} else {
-			throw new BuildingTherapyException(['title'=>'Ha ocurrido un error al actualizar la disponibilidad '.$data['name'].'','detail'=>'Intente nuevamente o comuniquese con el administrador','level'=>'error'],"500");
+		
+		$buildingTherapyId = $data['in_building_therapy_id'];
+		$year = $data['year'];
+		$timefrimeId = $data['timeframe_id'];
+		$available = $data['iv_avalability'];
+
+
+		$available = DB::select(" call therapyavailable_pr_editar($buildingTherapyId, $year, '$timefrimeId' , $available);");
+
+		
+		if ($available[0]->title != null) {
+			throw new BuildingTherapyException(['title'=>$available[0]->title,'detail'=>$available[0]->detail,'level'=>'error'],"500");
 		}
+
+		return BuildingTherapyAvailable::where('building_therapy_id',$buildingTherapyId)->where('year',$year)->where('timeframe_id',$timefrimeId)->first();
+
 
 
 	}

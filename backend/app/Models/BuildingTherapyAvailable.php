@@ -20,6 +20,11 @@ class BuildingTherapyAvailable extends BaseModel
         'avalability',
     ];
 
+
+    protected $casts = [
+        'avalability' => 'int'
+    ];
+
     public function buildingTherapy() {
         return $this->betongsTo('Cie\Models\BuildingTherapy','building_therapy_id');
     }

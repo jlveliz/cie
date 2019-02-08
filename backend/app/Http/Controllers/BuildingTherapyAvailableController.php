@@ -57,7 +57,7 @@ class BuildingTherapyAvailableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($buildId,$id)
+    public function show($id)
     {
         
         try {
@@ -77,7 +77,7 @@ class BuildingTherapyAvailableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BuildingTherapyValidator $validator, Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $building = $this->buildingRepo->edit($id, $request->all())->tojson();

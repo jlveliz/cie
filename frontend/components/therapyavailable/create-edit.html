@@ -71,7 +71,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
-                                                <label class="control-label" title="Terapias">Disponibilidad <span class="text-danger">*</span></label>
+                                                <label class="control-label" title="Terapias">Disponibilidad <span class="text-primary" ng-if="model.in_building_therapy_id">({{maxVailable}})</span><span class="text-danger">*</span></label>
                                                 <input type="text" ng-disabled="!model.in_building_therapy_id" numbers-only class="form-control" ng-model="model.iv_avalability" max="{{maxVailable}}" ng-max="maxVailable">
                                             </div>
                                         </div>

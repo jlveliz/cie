@@ -81,15 +81,15 @@ define(['app'], function(app) {
             if (found) return $filter('capitalize')(found.value, 'oneLetter')
         };
 
-    	_this.getMaxAvailable = function(schedules, idSchedule) {
-    		var found = _.findWhere(schedules,{id:idSchedule});
+        _this.getMaxAvailable = function(schedules, idSchedule) {
+            var found = _.findWhere(schedules, { id: idSchedule });
 
-    		if (found)
-    			return found.capacity;
+            if (found)
+                return found.capacity;
 
-    		return 0
+            return 0
 
-    	}
+        }
 
 
         _this.save = function(model) {
@@ -112,6 +112,31 @@ define(['app'], function(app) {
 
             return deferred.promise;
         };
+
+
+        _this.getTherapyId = function(queryBuilding, buildingTherapyid, buildings) {
+            if (!queryBuilding) return false;
+
+            var building = _.findWhere(buildings, { id: queryBuilding });
+
+            if (building) {
+                let found = _.findWhere(building.therapies, { id: buildingTherapyid });
+
+                return found.therapy_id;
+            }
+        }
+
+        _this.getTherapistId = function(queryBuilding, buildingTherapyid, buildings) {
+            if (!queryBuilding) return false;
+
+            var building = _.findWhere(buildings, { id: queryBuilding });
+
+            if (building) {
+                let found = _.findWhere(building.therapies, { id: buildingTherapyid });
+
+                return found.therapist_user_id;
+            }
+        }
 
 
     }]);
@@ -202,13 +227,16 @@ define(['app'], function(app) {
 
         $scope.gotoCreate = function() {
             $state.go('root.buildingtherapyavailable.create')
-        }
+        };
+
+
+
 
 
     }]);
 
 
-    app.register.controller('TherapyAvailableCreateCtrl', ['$scope', '$q', 'apiResource', 'TherapyAvailableService', 'envService', function($scope, $q, apiResource, TherapyAvailableService, envService) {
+    app.register.controller('TherapyAvailableCreateCtrl', ['$scope', '$q', 'apiResource', 'TherapyAvailableService', 'envService', '$state', function($scope, $q, apiResource, TherapyAvailableService, envService, $state) {
 
 
         $scope.loading = true;
@@ -287,7 +315,7 @@ define(['app'], function(app) {
         }
 
         $scope.getMaxAvailable = function() {
-        	$scope.maxVailable = TherapyAvailableService.getMaxAvailable($scope.schedules,$scope.model.in_building_therapy_id);
+            $scope.maxVailable = TherapyAvailableService.getMaxAvailable($scope.schedules, $scope.model.in_building_therapy_id);
         }
 
         $scope.getDayValue = function(keyday) {
@@ -297,10 +325,11 @@ define(['app'], function(app) {
 
         $scope.save = function(form, returnIndex) {
             $scope.messages = {};
-            console.log($scope.model)
+
             if (form.validate()) {
                 $scope.saving = true;
                 $scope.model.$save(function(data) {
+
                     apiResource.resource('buildingtherapyavailable').setOnCache(data);
                     TherapyAvailableService.messageFlag.title = "Disponibilidad creada correctamente";
                     TherapyAvailableService.messageFlag.type = "info";
@@ -308,26 +337,25 @@ define(['app'], function(app) {
                         $state.go('root.buildingtherapyavailable');
                     } else {
                         $state.go('root.buildingtherapyavailable.edit', {
-                            availableId: data.id
+                            availableId: data.building_therapy_id
                         })
                     }
 
 
                 }, function(reason) {
-                	debugger;
                     $scope.saving = false;
                     $scope.existError = true;
                     $scope.messages.title = reason.data.title;
                     $scope.messages.type = 'error';
                     if (reason.data.detail) {
-                    	$scope.messages.details = [];
-	                    var json = JSON.parse(reason.data.detail);
-	                    angular.forEach(json, function(elem, idx) {
-	                        angular.forEach(elem, function(el, idex) {
-	                            $scope.messages.details.push(el)
-	                        })
-	                    })
-                    	
+                        $scope.messages.details = [];
+                        var json = JSON.parse(reason.data.detail);
+                        angular.forEach(json, function(elem, idx) {
+                            angular.forEach(elem, function(el, idex) {
+                                $scope.messages.details.push(el)
+                            })
+                        })
+
                     }
                 });
             }
@@ -346,6 +374,172 @@ define(['app'], function(app) {
         $scope.goToIndex = function() {
             $state.go('root.buildingtherapyavailable')
         }
+
+    }]);
+
+
+    app.register.controller('TherapyAvailableEditCtrl', ['$scope', '$q', 'apiResource', 'TherapyAvailableService', 'envService', '$state', '$stateParams', function($scope, $q, apiResource, TherapyAvailableService, envService, $state, $stateParams) {
+
+
+        var availableId = $stateParams.availableId;
+
+        $scope.loading = true;
+        $scope.messages = [];
+        $existError = false;
+        $hasMessage = false;
+        $scope.messages = {};
+        $scope.query = {
+
+        };
+
+        $scope.model = {};
+
+        $scope.buildings = [];
+        $scope.therapies = [];
+        $scope.therapists = [];
+        $scope.maxVailable = 0;
+        $scope.schedules = []
+        var days = [];
+
+
+        var reqWeekDayParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/WEEK_DAYS'
+        };
+
+
+
+        var deps = $q.all([
+            apiResource.resource('buildings').query().then(function(buildings) {
+                $scope.buildings = buildings;
+                $scope.query.building = $scope.buildings[0].id;
+            }),
+
+            apiResource.resource('therapies').query().then(function(therapies) {
+                $scope.therapies = therapies;
+            }),
+
+            apiResource.resource('therapists').query().then(function(therapists) {
+                $scope.therapists = therapists;
+            }),
+            apiResource.loadFromApi(reqWeekDayParameter).then(function(daysOfWeek) {
+                days = daysOfWeek;
+            }),
+
+        ]);
+
+
+        deps.then(function() {
+            apiResource.resource('buildingtherapyavailable').get(availableId).then(function(result) {
+                $scope.model = result;
+                $scope.model.iv_avalability = $scope.model.avalability
+                $scope.filterTherapies();
+                $scope.query.therapy_id = TherapyAvailableService.getTherapyId($scope.query.building, $scope.model.building_therapy_id, $scope.buildings);
+                $scope.filterTerapists();
+                $scope.query.therapist_id = TherapyAvailableService.getTherapistId($scope.query.building, $scope.model.building_therapy_id, $scope.buildings);
+                $scope.getDaysSchedule();
+                $scope.model.in_building_therapy_id = $scope.model.building_therapy_id;
+                $scope.getMaxAvailable()
+                $scope.loading = false;
+            });
+        });
+
+
+        $scope.filterTherapies = function() {
+
+            if ($scope.query.therapy_id) $scope.query.therapy_id = null;
+
+            if ($scope.query.therapist_id) $scope.query.therapist_id = null;
+
+            if ($scope.query.key_day) $scope.query.key_day = null;
+
+            $scope.therapies = TherapyAvailableService.filterTherapies($scope.query.building, $scope.buildings, $scope.therapies);
+        }
+
+
+
+        $scope.filterTerapists = function() {
+
+            if ($scope.query.therapist_id) $scope.query.therapist_id = null;
+
+            if ($scope.model.in_building_therapy_id) $scope.model.in_building_therapy_id = null;
+
+            $scope.therapists = TherapyAvailableService.filterTerapists($scope.query, $scope.buildings, $scope.therapists);
+        }
+
+        $scope.getDaysSchedule = function() {
+            $scope.schedules = TherapyAvailableService.getDays($scope.query, $scope.buildings);
+        }
+
+        $scope.getMaxAvailable = function() {
+            $scope.maxVailable = TherapyAvailableService.getMaxAvailable($scope.schedules, $scope.model.in_building_therapy_id);
+        }
+
+        $scope.getDayValue = function(keyday) {
+            return TherapyAvailableService.getDay(keyday, days);
+        }
+
+
+        $scope.save = function(form, returnIndex) {
+            $scope.messages = {};
+
+            if (form.validate()) {
+                $scope.saving = true;
+                $scope.model.id = availableId;
+                $scope.model.$update(availableId,function(data) {
+                
+
+                    apiResource.resource('buildingtherapyavailable').setOnCache(data);
+                    TherapyAvailableService.messageFlag.title = "Disponibilidad Actualizada correctamente";
+                    TherapyAvailableService.messageFlag.type = "info";
+                    $scope.hasMessage = true;
+                    $scope.messages = TherapyAvailableService.messageFlag;
+                    $scope.saving = false;
+                    if (returnIndex) {
+                        $state.go('root.buildingtherapyavailable');
+                    } else {
+                        $state.go('root.buildingtherapyavailable.edit', {
+                            availableId: data.building_therapy_id
+                        })
+                    }
+
+
+                }, function(reason) {
+                    $scope.saving = false;
+                    $scope.existError = true;
+                    $scope.messages.title = reason.data.title;
+                    $scope.messages.type = 'error';
+                    if (reason.data.detail) {
+                        $scope.messages.details = [];
+                        var json = JSON.parse(reason.data.detail);
+                        angular.forEach(json, function(elem, idx) {
+                            angular.forEach(elem, function(el, idex) {
+                                $scope.messages.details.push(el)
+                            })
+                        })
+
+                    }
+                });
+            }
+        }
+
+
+        $scope.saveAndClose = function(form) {
+            $scope.save(form, true);
+        }
+
+
+        $scope.gotoBuilding = function() {
+            $state.go('root.building')
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.buildingtherapyavailable')
+        }
+
+
+
+
 
     }])
 
