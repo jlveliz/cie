@@ -25,9 +25,9 @@ class BuildingTherapyAvailableController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($buildinTherapyId)
+    public function index(Request $request)
     {
-        $building = $this->buildingRepo->setParent($buildinTherapyId)->enum()->toJson();
+        $building = $this->buildingRepo->enum($request->all())->toJson();
         $building = $this->encodeResponse($building);
         return response()->json($building,200);
     }
@@ -38,7 +38,7 @@ class BuildingTherapyAvailableController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BuildingTherapyValidator $validator, Request $request, $buildId)
+    public function store(Request $request)
     {
         try {
             $data = $request->all();
@@ -46,7 +46,8 @@ class BuildingTherapyAvailableController extends Controller
             $building = $this->encodeResponse($building);
             return response()->json($building,200);
         } catch (BuildingTherapyException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+            $btures = $this->encodeResponse(json_encode(['title' => $e->getMessage()]));
+            return response()->json($btures,$e->getCode());
         }
     }
 
@@ -83,7 +84,8 @@ class BuildingTherapyAvailableController extends Controller
             $building = $this->encodeResponse($building);
             return response()->json($building,200);
         } catch (BuildingTherapyException $e) {
-            return response()->json($e->getMessage(),$e->getCode());
+            $btures = $this->encodeResponse(json_encode(['title' => $e->getMessage()]));
+            return response()->json($btures,$e->getCode());
         }
     }
 

@@ -245,18 +245,27 @@ define([
                                 var _this = this;
                                 var deferred = $q.defer();
                                 var r = _this.create();
-                                var keyCache = nameResource;
-                                //if nested resource
-                                if (params) {
-                                    if (params.parentId) {
-                                        keyCache += '/' + params.parentId;
-                                    }
+                                let searchOnCache = true;
+
+                                if (angular.isObject(params) && params.nocache == true) {
+                                    searchOnCache = false;
                                 }
 
-                                var existOnCache = getFromCache(keyCache);
-                                if (existOnCache) {
-                                    deferred.resolve(existOnCache);
-                                    return deferred.promise;
+
+                                if (searchOnCache) {
+                                    var keyCache = nameResource;
+                                    //if nested resource
+                                    if (params) {
+                                        if (params.parentId) {
+                                            keyCache += '/' + params.parentId;
+                                        }
+                                    }
+
+                                    var existOnCache = getFromCache(keyCache);
+                                    if (existOnCache) {
+                                        deferred.resolve(existOnCache);
+                                        return deferred.promise;
+                                    }
                                 }
 
                                 r.$query(params).then(function(result) {
@@ -1043,8 +1052,7 @@ define([
         }).register();
 
         //buildingtherapyavailable
-        apiResource.resource('buildingtherapyavailable', envService.read('api') + 'therapies/:parentId/availables/:id', {
-            parentId: '@parentId',
+        apiResource.resource('buildingtherapyavailable', envService.read('api') + 'thavailables/:id', {
             id: '@id'
         }).register();
 
@@ -3160,8 +3168,51 @@ define([
                     except: ['anonymous'],
                     redirectTo: "adminAuth"
                 },
-                pageTitle: "Terapias",
+                pageTitle: "Disponbilidades de Horarios",
                 css: ['frontend/bower_components/angular-datatables/dist/css/angular-datatables.min.css', 'frontend/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css'],
+
+            }
+        }));
+
+        //Building Therapy Available
+        $stateProvider.state('root.buildingtherapyavailable.create', angularAMD.route({
+            url: '/create',
+            controllerUrl: 'frontend/components/therapyavailable/therapyavailable',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapyavailable/create-edit.html',
+                    controller: 'TherapyAvailableCreateCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Disponbilidades de Horarios",
+
+            }
+        }));
+
+
+        //Building Therapy Available
+        $stateProvider.state('root.buildingtherapyavailable.edit', angularAMD.route({
+            url: '{availableId:int}/edit',
+            controllerUrl: 'frontend/components/therapyavailable/therapyavailable',
+            views: {
+                "content@root": {
+                    templateUrl: 'frontend/components/therapyavailable/create-edit.html',
+                    controller: 'TherapyAvailableEditCtrl'
+                }
+            },
+            data: {
+                permissions: {
+                    // only: ['admin'],
+                    except: ['anonymous'],
+                    redirectTo: "adminAuth"
+                },
+                pageTitle: "Disponbilidades de Horarios",
 
             }
         }));

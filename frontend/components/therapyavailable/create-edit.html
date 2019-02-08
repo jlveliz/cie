@@ -1,0 +1,101 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Disponibilidades</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <h4 class="text-center" ng-if="loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Cargando...</span>
+                </h4>
+                <uib-tabset active="1" ng-if="!loading">
+                    <uib-tab index="0" select="gotoBuilding()">
+                        <uib-tab-heading>
+                            <h5><a ui-sref="root.building"><b><i class=""></i> Edificios</b></a></h5>
+                        </uib-tab-heading>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <h5><a><b>Disponibilidades</b></a></h5>
+                        </uib-tab-heading>
+                        <uib-tabset active="1" ng-if="!loading" style="margin-top:10px ">
+                            <uib-tab index="0" select="goToIndex()">
+                                <uib-tab-heading>
+                                    <h5><b><i class="fa fa-list"></i> Listado</b></h5>
+                                </uib-tab-heading>
+                            </uib-tab>
+                            <uib-tab index="1">
+                                <uib-tab-heading>
+                                    <a title="Crear Ciudad"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                                </uib-tab-heading>
+                                <form name="saveForm" ng-if="!loading" ng-validate="validateOptions">
+                                    <div class="tab-index">
+                                        <div class="row" ng-if="existError || hasMessage">
+                                            <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <ul ng-if="messages.details.length > 0">
+                                                    <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                                </ul>
+                                                <p ng-if="existError || hasMessage">{{messages.title}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-md-1 col-sm-1 col-xs-12 form-group" ng-if="!loading">
+                                                <label class="control-label" title="Nombre de la Edificio">Año <span class="text-danger">*</span></label>
+                                                <p>2019</p>
+                                            </div>
+
+                                            <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                <label class="control-label" title="Nombre de la Edificio">Edificio <span class="text-danger">*</span></label>
+                                                <select class="form-control" ng-model="query.building" ng-options="build.id as build.name | capitalize:'oneLetter'  for build in buildings" id="" ng-change="filterTherapies()"></select>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                <label class="control-label" title="Terapias">Terapia <span class="text-danger">*</span></label>
+                                                <select ng-disabled="!query.building" class="form-control" ng-model="query.therapy_id" ng-options="therapy.id as therapy.name | capitalize:'oneLetter'  for therapy in therapies | filter:{$visible: true} | orderBy:'nombre' " ng-change="filterTerapists()" id=""></select>
+                                            </div>
+
+                                            <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                <label class="control-label" title="Terapias">Terapista <span class="text-danger">*</span></label>
+                                                <select ng-disabled="!query.therapy_id" class="form-control" ng-model="query.therapist_id" ng-options="thera.id as ( thera.person.name +' ' + thera.person.last_name) | capitalize:'oneLetter'  for thera in therapists | filter:{$visible: true} | orderBy:'nombre' " id="" ng-change="getDaysSchedule()"></select>
+                                            </div>
+
+                                            <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                <label class="control-label" title="Terapias">Día <span class="text-danger">*</span></label>
+                                                
+                                                <select ng-disabled="!query.therapist_id" class="form-control" ng-model="model.in_building_therapy_id" ng-options="day.id as ( getDayValue(day.key_day) + ' ' + day.schedule.start + '-' + day.schedule.end) for day in schedules" id="" ng-change="getMaxAvailable()"></select>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
+                                                <label class="control-label" title="Terapias">Disponibilidad <span class="text-danger">*</span></label>
+                                                <input type="text" ng-disabled="!model.in_building_therapy_id" numbers-only class="form-control" ng-model="model.iv_avalability" max="{{maxVailable}}" ng-max="maxVailable">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Nav tabs -->
+                                    <div class="clearfix "></div>
+                                    <div class="ln_solid " ng-if="!loading "></div>
+                                    <div class="form-group " ng-if="!loading ">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="saving" ng-click="save(saveForm)">
+                                            <span ng-if="!saving"><i class="fa fa-save"></i> Guardar</span>
+                                            <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                                        </button>
+                                        <button type="submit" class="btn btn-default" ng-disabled="saving" ng-click="saveAndClose(saveForm)">
+                                            <span ng-if="!saving"><i class="fa fa-save"></i> Guardar y cerrar</span>
+                                            <span ng-if="saving"> <i class="fa fa-spinner fa-spin" ng-if="saving"></i> Guardando...</span>
+                                        </button>
+                                        <a class="btn btn-link" ui-sref="root.buildingtherapyavailable">Cancelar</a>
+                                    </div>
+                                </form>
+                            </uib-tab>
+                        </uib-tabset>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Disponibilidades</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <h4 class="text-center" ng-if="loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Cargando...</span>
+                </h4>
+                <uib-tabset active="1" ng-if="!loading">
+                    <uib-tab index="0" select="gotoBuilding()">
+                        <uib-tab-heading>
+                            <h5><a ui-sref="root.building"><b><i class=""></i> Edificios</b></a></h5>
+                        </uib-tab-heading>
+                    </uib-tab>
+                    <uib-tab index="1">
+                        <uib-tab-heading>
+                            <h5><a><b>Disponibilidades</b></a></h5>
+                        </uib-tab-heading>
+                        <uib-tabset active="0" ng-if="!loading" style="margin-top:10px ">
+                            <uib-tab index="0">
+                                <uib-tab-heading>
+                                    <h5><b><i class="fa fa-list"></i> Listado</b></h5>
+                                </uib-tab-heading>
+                                <div class="tab-index">
+                                    <div class="row" ng-if="existError || hasMessage">
+                                        <div class="alert col-md-12 col-xs-12 col-sm-12" role="alert" ng-class="'alert-' + (messages.type || 'warning')">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <ul ng-if="messages.details.length > 0">
+                                                <li ng-repeat="(key, value) in messages.details">{{value}}</li>
+                                            </ul>
+                                            <p ng-if="hasMessage">{{messages.title}}</p>
+                                        </div>
+                                    </div>
+                                    <!-- filtros -->
+                                    <div class="row">
+                                        <div class="col-lg-12 col-xs-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Filtros
+                                                </div>
+                                                <div class="penel-body" style="padding: 5px">
+                                                    <div class="row">
+                                                        <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                            <label class="control-label" title="Nombre de la Edificio">Edificio <span class="text-danger">*</span></label>
+                                                            <select class="form-control" ng-model="query.building" ng-options="build.id as build.name | capitalize:'oneLetter'  for build in buildings" id="" ng-change="loadList();filterTherapies()"></select>
+                                                        </div>
+
+                                                        <div class="col-md-3 col-sm-3 col-xs-12 form-group" ng-if="!loading">
+                                                            <label class="control-label" title="Nombre de la Edificio">Terapia <span class="text-danger">*</span></label>
+                                                            <select ng-disabled="!query.building" class="form-control" ng-model="query.therapy" ng-options="therapy.id as therapy.name | capitalize:'oneLetter'  for therapy in therapies | filter:{$visible: true} | orderBy:'nombre' " id="" ng-change="loadList()"></select>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fin filtros -->
+                                    <table id="available-list" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Año</th>
+                                                <th>Trimestre</th>
+                                                <th>Terapia</th>
+                                                <th>Terapeuta</th>
+                                                <th>Día - Horario</th>
+                                                <th>Disponibilidad</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-if="models.length > 0" ng-repeat="model in models">
+                                                <td>{{model.year}}</td>
+                                                <td>{{model.timeframe_iddes | capitalize:'oneLetter'}} </td>
+                                                <td>{{model.nombre | capitalize:'oneLetter' }} </td>
+                                                <td>{{model.nombre_terapeuta | capitalize:'oneLetter' }} </td>
+                                                <td><span class="badge">{{model.day | capitalize:'oneLetter' }} - <small>{{model.schedule.start}} {{model.schedule.end}}</small></span> </td>
+                                                <td><span ng-class="{'text-danger': model.avalability == 0, 'text-success':  model.avalability > 0}"> {{model.avalability}} cupo(s) </span></td>
+                                                <td>
+                                                    <div class="btn-group" role="group" ng-hide="building.$deleting">
+                                                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fa fa-cog"></i> Opciones
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a ui-sref="root.building.edit({buildingId:building.id})"> <i class="fa fa-pencil"></i> Editar</a>
+                                                            </li>
+                                                            <li>
+                                                                <a ng-click="delete(building.id)"> <i class="fa fa-trash" aria-hidden="true"></i> Eliminar</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <p ng-show="building.$deleting"><i class="fa fa-spinner fa-spin fa-fw"></i></p>
+                                                </td>
+                                            </tr>
+                                            <tr ng-if="models.length == 0">
+                                                <td colspan="7" class="text-center">No existen Datos para mostrar</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </uib-tab>
+                            <uib-tab index="1" select="goToCreate()">
+                                <uib-tab-heading>
+                                    <a ui-sref="root.buildingtherapyavailable.create" title="Crear Disponibilidad"><h5><b><i class="fa fa-plus"></i> Crear</b></h5></a>
+                                </uib-tab-heading>
+                            </uib-tab>
+                        </uib-tabset>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

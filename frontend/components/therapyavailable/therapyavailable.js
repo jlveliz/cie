@@ -1,23 +1,353 @@
 /**
  ** Therapy available controller
  **/
-define(['app'], function(app) { 
+define(['app'], function(app) {
 
 
-	app.register.service('TherapyAvailableService', ['apiResource', function(apiResource) {
-		var _this = this;
+    app.register.service('TherapyAvailableService', ['apiResource', '$filter', '$q', function(apiResource, $filter, $q) {
+        var _this = this;
 
         _this.messageFlag = {};
-	}]);
+
+        _this.filterTherapies = function(queryBuilding, buildingsCollections, therapiesCollection) {
+            if (!queryBuilding) return false;
+
+            var building = _.findWhere(buildingsCollections, { id: queryBuilding });
+
+            if (building) {
+                angular.forEach(therapiesCollection, function(therapy) {
+                    therapy.$visible = false;
+
+                    let founded = _.findWhere(building.therapies, { therapy_id: therapy.id })
+                    if (founded) {
+                        therapy.$visible = true;
+                    }
+                });
+
+                return therapiesCollection;
+            }
 
 
-	app.register.controller('RoleIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'RoleService', '$rootScope', '$state', function($scope, apiResource, $stateParams, DTOptionsBuilder, RoleService, $rootScope, $state) { 
+            return false;
+        }
 
-		$scope.loading =  true;
+        _this.filterTerapists = function(query, buildingsCollections, therapistsArray) {
 
-		
+            if (!query.building || !query.therapy_id) return false;
 
-	}])
+            var building = _.findWhere(buildingsCollections, { id: query.building });
+
+            if (building) {
+                angular.forEach(therapistsArray, function(therapist) {
+                    therapist.$visible = false;
+                    let founded = _.find(building.therapies, function(therapyBuilding) {
+                        return therapyBuilding.therapist_user_id == therapist.id && therapyBuilding.therapy_id == query.therapy_id
+                    })
+                    if (founded) {
+                        therapist.$visible = true;
+                    }
+                });
+                return therapistsArray;
+            }
+
+
+            return false;
+        }
+
+        _this.getDays = function(query, buildingsCollections) {
+
+            if (!query.building || !query.therapy_id || !query.therapist_id) return false;
+
+            var building = _.findWhere(buildingsCollections, { id: query.building });
+
+            if (building) {
+                var daysReturn = [];
+
+                let filter = _.filter(building.therapies, function(therapyBuilding) {
+                    return therapyBuilding.build_id == query.building && therapyBuilding.therapy_id == query.therapy_id && therapyBuilding.therapist_user_id == query.therapist_id
+                })
+                if (filter) {
+                    return filter;
+                }
+
+            }
+
+
+            return false;
+        }
+
+        _this.getDay = function(keyDay, daysOfWeek) {
+            let found = _.findWhere(daysOfWeek, { idparameter: keyDay });
+            if (found) return $filter('capitalize')(found.value, 'oneLetter')
+        };
+
+    	_this.getMaxAvailable = function(schedules, idSchedule) {
+    		var found = _.findWhere(schedules,{id:idSchedule});
+
+    		if (found)
+    			return found.capacity;
+
+    		return 0
+
+    	}
+
+
+        _this.save = function(model) {
+
+            var deferred = $q.defer();
+
+            var successCallback = function(model) {
+                deferred.resolve(model);
+            }
+
+            var failCallback = function(error) {
+                deferred.reject(error);
+            }
+
+            if (model.id) {
+                model.$update(model.id, successCallback, failCallback);
+            } else {
+                model.$save(successCallback, failCallback);
+            }
+
+            return deferred.promise;
+        };
+
+
+    }]);
+
+
+    app.register.controller('TherapyAvailableIdxCtrl', ['$scope', 'apiResource', '$stateParams', 'DTOptionsBuilder', 'TherapyAvailableService', '$rootScope', '$state', '$q', 'envService', function($scope, apiResource, $stateParams, DTOptionsBuilder, TherapyAvailableService, $rootScope, $state, $q, envService) {
+
+        $scope.loading = true;
+        $scope.buildings = [];
+        $scope.query = {
+
+        };
+
+
+
+        var deps = $q.all([
+            apiResource.resource('buildings').query().then(function(buildings) {
+                $scope.buildings = buildings;
+                $scope.query.building = $scope.buildings[0].id;
+            }),
+
+            apiResource.resource('therapies').query().then(function(therapies) {
+                $scope.therapies = therapies;
+            }),
+
+            apiResource.resource('therapies').query().then(function(therapies) {
+                $scope.therapies = therapies;
+            }),
+
+
+        ]);
+
+
+        deps.then(function() {
+            $scope.loadList();
+            $scope.filterTherapies();
+        });
+
+
+        $scope.filterTherapies = function() {
+
+            if ($scope.query.therapy_id) $scope.query.therapy_id = null;
+
+            if ($scope.query.therapist_id) $scope.query.therapist_id = null;
+
+            if ($scope.query.key_day) $scope.query.key_day = null;
+
+            $scope.therapies = TherapyAvailableService.filterTherapies($scope.query.building, $scope.buildings, $scope.therapies);
+        }
+
+        $scope.loadList = function() {
+            $scope.loading = true;
+
+            let params = {
+                building: $scope.query.building,
+                nocache: true,
+            }
+
+            if ($scope.query.therapy) {
+                params.therapyId = $scope.query.therapy;
+            }
+
+            apiResource.resource('buildingtherapyavailable').query(params).then(function(results) {
+                angular.forEach(results, function(value, key) {
+                    value.therapist_user_id = parseInt(value.therapist_user_id);
+                    value.avalability = parseInt(value.avalability);
+                });
+
+                $scope.models = results;
+                $scope.loading = false;
+                $scope.inscriptions = results.data;
+                $scope.totalItems = results.total;
+                $scope.maxSize = 5;
+
+                $scope.messages = TherapyAvailableService.messageFlag;
+                if (!_.isEmpty($scope.messages)) {
+
+                    $scope.hasMessage = true;
+                    PUserInscriptionService.messageFlag = {};
+                }
+            });
+        };
+
+        $scope.gotoBuilding = function() {
+            $state.go('root.building')
+        }
+
+
+        $scope.gotoCreate = function() {
+            $state.go('root.buildingtherapyavailable.create')
+        }
+
+
+    }]);
+
+
+    app.register.controller('TherapyAvailableCreateCtrl', ['$scope', '$q', 'apiResource', 'TherapyAvailableService', 'envService', function($scope, $q, apiResource, TherapyAvailableService, envService) {
+
+
+        $scope.loading = true;
+        $scope.messages = [];
+        $existError = false;
+        $hasMessage = false;
+        $scope.messages = {};
+        $scope.query = {
+
+        };
+
+        $scope.model = {};
+
+        $scope.buildings = [];
+        $scope.therapies = [];
+        $scope.therapists = [];
+        $scope.maxVailable = 0;
+        var days = [];
+
+
+        var reqWeekDayParameter = {
+            method: 'GET',
+            url: envService.read('api') + 'load-parameter/WEEK_DAYS'
+        };
+
+
+
+        var deps = $q.all([
+            apiResource.resource('buildings').query().then(function(buildings) {
+                $scope.buildings = buildings;
+                $scope.query.building = $scope.buildings[0].id;
+            }),
+
+            apiResource.resource('therapies').query().then(function(therapies) {
+                $scope.therapies = therapies;
+            }),
+
+            apiResource.resource('therapists').query().then(function(therapists) {
+                $scope.therapists = therapists;
+            }),
+            apiResource.loadFromApi(reqWeekDayParameter).then(function(daysOfWeek) {
+                days = daysOfWeek;
+            }),
+
+        ]);
+
+        deps.then(function() {
+            $scope.model = apiResource.resource('buildingtherapyavailable').create({ in_year: 2019, iv_timeframe_id: 'FIRST' });
+            $scope.filterTherapies();
+            $scope.loading = false;
+        });
+
+
+        $scope.filterTherapies = function() {
+
+            if ($scope.query.therapy_id) $scope.query.therapy_id = null;
+
+            if ($scope.query.therapist_id) $scope.query.therapist_id = null;
+
+            if ($scope.query.key_day) $scope.query.key_day = null;
+
+            $scope.therapies = TherapyAvailableService.filterTherapies($scope.query.building, $scope.buildings, $scope.therapies);
+        }
+
+        $scope.filterTerapists = function() {
+
+            if ($scope.query.therapist_id) $scope.query.therapist_id = null;
+
+            if ($scope.model.in_building_therapy_id) $scope.model.in_building_therapy_id = null;
+
+            $scope.therapists = TherapyAvailableService.filterTerapists($scope.query, $scope.buildings, $scope.therapists);
+        }
+
+        $scope.getDaysSchedule = function() {
+            $scope.schedules = TherapyAvailableService.getDays($scope.query, $scope.buildings);
+        }
+
+        $scope.getMaxAvailable = function() {
+        	$scope.maxVailable = TherapyAvailableService.getMaxAvailable($scope.schedules,$scope.model.in_building_therapy_id);
+        }
+
+        $scope.getDayValue = function(keyday) {
+            return TherapyAvailableService.getDay(keyday, days);
+        }
+
+
+        $scope.save = function(form, returnIndex) {
+            $scope.messages = {};
+            console.log($scope.model)
+            if (form.validate()) {
+                $scope.saving = true;
+                $scope.model.$save(function(data) {
+                    apiResource.resource('buildingtherapyavailable').setOnCache(data);
+                    TherapyAvailableService.messageFlag.title = "Disponibilidad creada correctamente";
+                    TherapyAvailableService.messageFlag.type = "info";
+                    if (returnIndex) {
+                        $state.go('root.buildingtherapyavailable');
+                    } else {
+                        $state.go('root.buildingtherapyavailable.edit', {
+                            availableId: data.id
+                        })
+                    }
+
+
+                }, function(reason) {
+                	debugger;
+                    $scope.saving = false;
+                    $scope.existError = true;
+                    $scope.messages.title = reason.data.title;
+                    $scope.messages.type = 'error';
+                    if (reason.data.detail) {
+                    	$scope.messages.details = [];
+	                    var json = JSON.parse(reason.data.detail);
+	                    angular.forEach(json, function(elem, idx) {
+	                        angular.forEach(elem, function(el, idex) {
+	                            $scope.messages.details.push(el)
+	                        })
+	                    })
+                    	
+                    }
+                });
+            }
+        }
+
+
+        $scope.saveAndClose = function(form) {
+            $scope.save(form, true);
+        }
+
+
+        $scope.gotoBuilding = function() {
+            $state.go('root.building')
+        }
+
+        $scope.goToIndex = function() {
+            $state.go('root.buildingtherapyavailable')
+        }
+
+    }])
 
 
 
