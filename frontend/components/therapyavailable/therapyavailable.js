@@ -306,7 +306,7 @@ define(['app'], function(app) {
         $scope.validateOptions = {
             rules: {
                 maxVailable: {
-                    max: $scope.maxVailable
+                    max: ($scope.maxVailable + 1 )
                 }
             },
             messages: {
@@ -465,7 +465,7 @@ define(['app'], function(app) {
         $scope.validateOptions = {
             rules: {
                 maxVailable: {
-                    max: $scope.maxVailable
+                    max:  ($scope.maxVailable + 1) 
                 }
             },
             messages: {
