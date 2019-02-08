@@ -84,7 +84,8 @@ define(['app'], function(app) {
         $scope.messages = [];
         $scope.typeTherapies = [];
 
-       
+
+      
 
         var deps = $q.all([
             apiResource.resource('tp-therapies').query().then(function(therapies) {

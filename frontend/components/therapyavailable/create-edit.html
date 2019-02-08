@@ -73,9 +73,6 @@
                                             <div class="col-md-2 col-sm-2 col-xs-12 form-group" ng-if="!loading">
                                                 <label class="control-label" title="Terapias">Disponibilidad <span class="text-primary" ng-if="model.in_building_therapy_id">({{maxVailable}})</span><span class="text-danger">*</span></label>
                                                 <input type="text" ng-disabled="!model.in_building_therapy_id" numbers-only name="maxVailable" class="form-control" ng-model="model.iv_avalability" max="{{maxVailable}}" ng-max="maxVailable">
-                                                <div ng-show="saveForm.maxVailable.$error" style="color:maroon" role="alert">
-                                                    <div ng-message="max">Disponibilidad Excedida</div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
