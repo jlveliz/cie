@@ -556,6 +556,10 @@ define(['app'], function(app) {
             }
         }
 
+        $scope.saveAndClose = function(saveForm) {
+            $scope.save(saveForm, true)
+        }
+
 
     }])
 
@@ -732,6 +736,10 @@ define(['app'], function(app) {
                 $scope.model.therapyUsersSelecteds = $scope.therapiesSelecteds;
                 ScheduleMakerService.save($scope.model).then(successCallback, failCallback);
             }
+        }
+
+        $scope.saveAndClose = function(saveForm) {
+            $scope.save(saveForm, true)
         }
 
     }])
