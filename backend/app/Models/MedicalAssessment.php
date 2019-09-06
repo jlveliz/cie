@@ -452,6 +452,7 @@ class MedicalAssessment extends BaseModel
 		'current_socio_economic_report_mixed'=> 'int',
 		'current_socio_economic_report_sewerage'=> 'int',
 		'current_socio_economic_report_electricity'=> 'int',
+		'post_natal_breastmilk' => 'int',
     ];
 
      public function patientUser()

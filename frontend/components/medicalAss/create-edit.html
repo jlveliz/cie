@@ -207,7 +207,8 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group">
                                                         <label for="post_natal_breastmilk" title="Pecho materno" class="control-label">Pecho Materno</label>
-                                                        <input type="text" ng-disabled="saving  || !existPatientUserSelected" name="post_natal_breastmilk" id="post_natal_breastmilk" ng-model="model.post_natal_breastmilk" class="form-control">
+                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="post_natal_breastmilk" id="post_natal_breastmilk" ng-model="model.post_natal_breastmilk" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12 form-group">
                                                         <label for="post_natal_formula" title="Formula" class="control-label">Formula</label>
@@ -1158,7 +1159,7 @@
                                                     </div>
                                                     <div class="col-md-6 col-sm-6 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Observación" for="current_social_develop_observation"><small></small>Observación</label>
-                                                        <textarea name="current_social_develop_observation" id="current_social_develop_like_music" ng-model="model.current_social_develop_like_music" class="form-control no-resize" ng-disabled="saving  || !existPatientUserSelected"></textarea>
+                                                        <textarea name="current_social_develop_observation" id="current_social_develop_observation" ng-model="model.current_social_develop_observation" class="form-control no-resize" ng-disabled="saving  || !existPatientUserSelected"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -1255,7 +1256,7 @@
                                                     </div>
                                                     <div class="col-md-1 col-sm-1 col-xs-2 form-group" ng-if="!loading">
                                                         <label class="control-label" title="Trae" for="current_perceptive_bring">Trae</label>
-                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="current_perceptive_bring" id="current_perceptive_bring" ng-model="model.current_perceptive_save" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
+                                                        <select ng-disabled="saving  || !existPatientUserSelected" name="current_perceptive_bring" id="current_perceptive_bring" ng-model="model.current_perceptive_bring" class="form-control" ng-options="sc.value as sc.label for sc in answersClosed">
                                                         </select>
                                                     </div>
                                                 </div>

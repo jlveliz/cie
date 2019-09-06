@@ -303,18 +303,18 @@ define(['app'], function(app) {
         var days = [];
 
 
-        $scope.validateOptions = {
-            rules: {
-                maxVailable: {
-                    max: ($scope.maxVailable + 1 )
-                }
-            },
-            messages: {
-                maxVailable: {
-                    max: "Capacidad excedida"
-                }
-            }
-        }
+        // $scope.validateOptions = {
+        //     rules: {
+        //         maxVailable: {
+        //             max: ($scope.maxVailable + 1 )
+        //         }
+        //     },
+        //     messages: {
+        //         maxVailable: {
+        //             max: "Capacidad excedida"
+        //         }
+        //     }
+        // }
 
 
 
@@ -345,7 +345,11 @@ define(['app'], function(app) {
         ]);
 
         deps.then(function() {
-            $scope.model = apiResource.resource('buildingtherapyavailable').create({ in_year: 2019, iv_timeframe_id: 'FIRST' });
+            $scope.model = apiResource.resource('buildingtherapyavailable').create({ 
+                in_year: 2019, 
+                iv_timeframe_id: 'SECOND', 
+                iv_avalability : null 
+            });
             $scope.filterTherapies();
             $scope.loading = false;
         });
@@ -385,6 +389,7 @@ define(['app'], function(app) {
 
 
         $scope.save = function(form, returnIndex) {
+            debugger;
             $scope.messages = {};
 
             if (form.validate()) {

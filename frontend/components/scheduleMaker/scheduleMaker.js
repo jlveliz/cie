@@ -400,15 +400,14 @@ define(['app'], function(app) {
         $scope.openModalSearchUser = function() {
             let params = { resource: 'buildingtherapyUser' };
             $rootScope.openModalSearchUser(params).then(function(patientUser) {
-
                 $scope.existPatientUserSelected = true;
                 $scope.model.patientUser = patientUser;
                 $scope.model.patient_user_id = $scope.model.patientUser.id;
                 $scope.model.year = (new Date()).getFullYear();
                 $scope.model.group_time_id = "YEAR_QUARTER";
-                $scope.model.timeframe_id = "FIRST";
-                $scope.model.start_date = new Date("2019-01-25");
-                $scope.model.end_date = new Date("2019-04-30");
+                $scope.model.timeframe_id = "SECOND";
+                $scope.model.start_date = new Date("2019-08-28");
+                $scope.model.end_date = new Date("2019-11-28");
                 $scope.model.building_therapies = []
                 // if (!$scope.model.patientUser.representant_id) {
                 $scope.foundUser = true;

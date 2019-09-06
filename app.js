@@ -1430,22 +1430,22 @@ define([
         //PDF CONFIG FONTS
         envServiceProvider.config({
             domains: {
-                development: ['cie2.local'],
-                home: ['cie.local'],
+                development: ['cie.test'],
+                home: ['cie.test'],
                 server_develop_public: ['10.101.0.51'],
                 server_prod_public: ['cie.guayas.gob.ec']
             },
             vars: {
                 development: {
-                    authorization: 'http://cie2.local/backend/api/authenticate/login',
-                    api: 'http://cie2.local/backend/api/',
-                    public: 'http://cie2.local/backend/public/',
+                    authorization: 'http://cie.test/backend/api/authenticate/login',
+                    api: 'http://cie.test/backend/api/',
+                    public: 'http://cie.test/backend/public/',
                 },
                 home: {
-                    assets: 'http://cie.local/frontend/assets',
-                    authorization: 'http://cie.local/backend/api/authenticate/login',
-                    api: 'http://cie.local/backend/api/',
-                    public: 'http://cie.local/backend/public/',
+                    assets: 'http://cie.test/frontend/assets',
+                    authorization: 'http://cie.test/backend/api/authenticate/login',
+                    api: 'http://cie.test/backend/api/',
+                    public: 'http://cie.test/backend/public/',
                 },
                 server_develop_public: {
                     assets: 'http://10.101.0.51/frontend/assets',
